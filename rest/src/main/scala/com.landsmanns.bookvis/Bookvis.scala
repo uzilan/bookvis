@@ -4,9 +4,13 @@ import com.landsmanns.bookvis.repository._
 import spark.Spark._
 import spark._
 import org.anormcypher.Neo4jREST
+import com.landsmanns.bookvis.repository.db.DBCharacter
+import com.landsmanns.bookvis.repository.json.JsonRepository
+import com.landsmanns.bookvis.json.JsonRoute
 
 /**
- * Created by uzilan on 2014-02-15.
+ * The Bookvis back-end application, which presents a REST interface which allows the users to save and retrieve
+ * books, chapters, charactes and relations and save them into the DB
  */
 object Bookvis extends App {
 
@@ -42,7 +46,7 @@ object Bookvis extends App {
       book2.addCharacter(char2)
       repo.addBook(book2)
       //repo//.books.toArray
-      Repository.jsonBooks(repo)
+      JsonRepository.jsonBooks(repo)
     }
 
   })
