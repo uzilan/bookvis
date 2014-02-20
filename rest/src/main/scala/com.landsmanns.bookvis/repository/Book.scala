@@ -130,7 +130,7 @@ object DBBook {
    * Saves a book in the DB
    * @param book the book to save
    */
-  def createBook(book: Book) {
+  def createBook(book: Book) = {
     val create =
       """
         CREATE (b:Book {title: "%s", author: "%s"})

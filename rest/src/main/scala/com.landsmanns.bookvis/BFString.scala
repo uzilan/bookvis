@@ -1,5 +1,7 @@
 package com.landsmanns.bookvis
 
+import scala.language.implicitConversions
+
 /**
  * A solution for formatting strings with arguments like the following:
  *

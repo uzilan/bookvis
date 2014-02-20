@@ -4,7 +4,7 @@ import com.landsmanns.bookvis.repository._
 import spark.Spark._
 import spark._
 import org.anormcypher.Neo4jREST
-import com.landsmanns.bookvis.repository.db.DBCharacter
+import com.landsmanns.bookvis.repository.db.{DBBook, DBChapter, DBCharacter}
 import com.landsmanns.bookvis.repository.json.JsonRepository
 import com.landsmanns.bookvis.json.JsonRoute
 
@@ -21,11 +21,13 @@ object Bookvis extends App {
   val c = Chapter("chap1", 1)
   val ch = Character("char1", c)
 
-  //DBBook.createBook(b)
-  //DBChapter.createChapter(b, c)
+  val rb = DBBook.createBook(b)
+  val rc = DBChapter.createChapter(b, c)
   val r = DBCharacter.createCharacter(b, c, ch)
   println("#####################")
-  println("result: " + r)
+  println("book: " + rb)
+  println("chapter: " + rc)
+  println("char: " + r)
   println("#####################")
 
   get(new JsonRoute("/books") {

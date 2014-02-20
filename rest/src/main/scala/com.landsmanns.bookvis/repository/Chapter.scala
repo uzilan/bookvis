@@ -61,11 +61,11 @@ object DBChapter {
    * @param book the book where the chapter resides
    * @param chapter the chapter to save
    */
-  def createChapter(book: Book, chapter: Chapter) {
+  def createChapter(book: Book, chapter: Chapter) = {
     val create =
       """
         MATCH (b:Book)
-        WHERE b.name = '%s' AND b.author = '%s'
+        WHERE b.title = '%s' AND b.author = '%s'
         CREATE (c:Chapter {name: "%s", index: "%d"})-[r:%s]->(b)
         RETURN r
       """ %(book.title, book.author, chapter.name, chapter.index, JsonStuff.INBOOK)

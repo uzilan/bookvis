@@ -71,7 +71,7 @@ object DBCharacter {
     val create =
       """
         MATCH ((ch:Chapter) -[br:%s]-> (b:Book))
-        WHERE b.name = '%s'
+        WHERE b.title = '%s'
         AND b.author = '%s'
         AND ch.name = '%s'
         AND ch.index = '%d'
