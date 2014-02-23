@@ -129,13 +129,31 @@ object DBBook {
   /**
    * Saves a book in the DB
    * @param book the book to save
+   * @return true if saving went well, or false otherwise
    */
-  def createBook(book: Book) = {
-    val create =
+  def saveBook(book: Book) = {
+    val create = Cypher(
       """
         CREATE (b:Book {title: "%s", author: "%s"})
-      """ %(book.title, book.author)
-    Cypher(create).execute()
+      """ %(book.title, book.author))
+
+    create.execute()
+  }
+
+  /**
+   * Retrieves all the books in the DB
+   * @return all the books in the DB
+   */
+  def getAllBooks = {
+    val fetch = Cypher(
+      """
+        MATCH (b:Book)
+        RETURN b.title as title, b.author as author
+      """)
+
+    fetch.apply().map(row =>
+      Book(row[String]("title"), row[String]("author"))
+    ).toList
   }
 }
 

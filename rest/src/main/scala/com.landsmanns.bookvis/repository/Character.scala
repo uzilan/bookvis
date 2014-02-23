@@ -58,6 +58,7 @@ package db {
 object DBCharacter {
 
   import com.landsmanns.bookvis.BFString._
+  import JsonStuff._
 
 
   /**
@@ -65,21 +66,44 @@ object DBCharacter {
    * @param book the book where the character lives in
    * @param chapter the first chapter where the character appears
    * @param character the character to save
-   * @return
+   * @return true if saving went well, or false otherwise
    */
-  def createCharacter(book: Book, chapter: Chapter, character: Character) = {
-    val create =
+  def saveCharacter(book: Book, chapter: Chapter, character: Character) = {
+    val create = Cypher(
       """
         MATCH ((ch:Chapter) -[br:%s]-> (b:Book))
         WHERE b.title = '%s'
         AND b.author = '%s'
         AND ch.name = '%s'
-        AND ch.index = '%d'
-        CREATE (c:Character {name: "%s"})-[r:%s]->(b),
-               (c)-[r2:%s]->(ch)
-        RETURN c
-      """ %(JsonStuff.INBOOK, book.title, book.author, chapter.name, chapter.index, character.name, JsonStuff.INBOOK, JsonStuff.APPEARSIN)
-    Cypher(create).execute()
+        AND ch.index = %d
+        CREATE (c:Character {name: "%s"}) -[r:%s]-> (b),
+               (c) -[r2:%s]-> (ch)
+        RETURN r
+      """ %(INBOOK, book.title, book.author, chapter.name, chapter.index, character.name, INBOOK, APPEARSIN))
+
+    create.execute()
+  }
+
+  /**
+   * Retrieves all characters in a given book and a chapter
+   * @param book the book
+   * @param chapter the chapter
+   * @return all characters
+   */
+  def getCharacters(book: Book, chapter: Chapter) = {
+    val fetch = Cypher(
+      """
+        MATCH ((char:Character) -[charr:%s]-> (chap:Chapter) -[chapr:%s]-> (b:Book))
+        WHERE chap.name = '%s'
+        AND chap.index = %d
+        AND b.title = '%s'
+        AND b.author = '%s'
+        RETURN char.name as name
+      """ %(JsonStuff.APPEARSIN, JsonStuff.INBOOK, chapter.name, chapter.index, book.title, book.author))
+
+    fetch.apply().map(row =>
+      Character(row[String]("name"), chapter)
+    ).toList
   }
 }
 

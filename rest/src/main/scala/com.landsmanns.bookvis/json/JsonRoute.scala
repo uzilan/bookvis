@@ -39,4 +39,7 @@ object JsonStuff {
 
   /** A relation between a character and a chapter. Should be the first chapter the character appears in  */
   val APPEARSIN = "APPEARSIN"
+
+  /** A relation between two characters */
+  val BETWEENCHARS = "BETWEENCHARS"
 }
