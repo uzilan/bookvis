@@ -1,5 +1,8 @@
-import com.landsmanns.bookvis.repository.{Chapter, Book}
-import com.landsmanns.bookvis.repository.db.{DBBook, DBChapter}
+package db
+
+import com.landsmanns.bookvis.repository.{Author, Chapter, Book}
+import com.landsmanns.bookvis.repository.db.{DBAuthor, DBBook, DBChapter}
+import testdata.TestData._
 
 /**
  * Created by uzilan on 2014-02-22.
@@ -7,11 +10,13 @@ import com.landsmanns.bookvis.repository.db.{DBBook, DBChapter}
 class DBChapterSpec extends DBSpecBase {
   "Chapters" should "be saveable and retieveable" in {
 
-    val book = Book(winnieThePooh, aaMilne)
+    val author = Author(aaMilne)
+    val book = Book(winnieThePooh, author)
     val ch1 = Chapter(chapterOne, 1)
     val ch2 = Chapter(chapterTwo, 2)
     val ch3 = Chapter(chapterThree, 3)
 
+    DBAuthor.saveAuthor(author)
     DBBook.saveBook(book)
     DBChapter.saveChapter(book, ch1)
     DBChapter.saveChapter(book, ch2)

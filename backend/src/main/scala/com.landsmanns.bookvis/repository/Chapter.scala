@@ -57,7 +57,7 @@ object DBChapter {
   import com.landsmanns.bookvis.BFString._
 
   /**
-   * Saves a chapter in the DB, as well as an INBOOK relation between the chapter and the book
+   * Saves a chapter in the DB, as well as an IN_BOOK relation between the chapter and the book
    * @param book the book where the chapter resides
    * @param chapter the chapter to save
    * @return true if saving went well, or false otherwise
@@ -65,11 +65,12 @@ object DBChapter {
   def saveChapter(book: Book, chapter: Chapter) = {
     val create = Cypher(
       """
-        MATCH (b:Book)
-        WHERE b.title = '%s' AND b.author = '%s'
-        CREATE (c:Chapter {name: "%s", index: %d}) -[r:%s]-> (b)
-        RETURN r
-      """ %(book.title, book.author, chapter.name, chapter.index, JsonStuff.INBOOK))
+        MATCH (a:Author) -[r:AUTHOR_OF]-> (b:Book)
+        WHERE a.name = '%s'
+        AND b.title = '%s'
+        CREATE (c:Chapter {name: "%s", index: %d}) -[r2:IN_BOOK]-> (b)
+        RETURN r2
+      """ %(book.author.name, book.title, chapter.name, chapter.index))
 
     create.execute()
   }
@@ -82,11 +83,11 @@ object DBChapter {
   def getChapters(book: Book) = {
     val fetch = Cypher(
       """
-        MATCH (c:Chapter) -[r:%s]-> (b:Book)
+        MATCH (c:Chapter) -[r:IN_BOOK]-> (b:Book) <-[r2:AUTHOR_OF]- (a:Author)
         WHERE b.title = '%s'
-        AND b.author = '%s'
+        AND a.name = '%s'
         RETURN c.name as name, c.index as index
-      """ %(JsonStuff.INBOOK, book.title, book.author))
+      """ %(book.title, book.author.name))
 
     fetch.apply().map(row =>
       Chapter(row[String]("name"), row[Int]("index"))

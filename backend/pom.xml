@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rest</artifactId>
+    <artifactId>backend</artifactId>
 
     <repositories>
         <repository>
@@ -34,6 +34,12 @@
         <repository>
             <id>sonatype-public</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>snapshot-repository.java.net</id>
+            <name>Java.net Snapshot Repository for Maven</name>
+            <url>https://maven.java.net/content/repositories/snapshots/</url>
+            <layout>default</layout>
         </repository>
     </repositories>
 
@@ -137,14 +143,12 @@
             <artifactId>groovy-all</artifactId>
             <version>2.2.1</version>
         </dependency>
-
-
-
         <!--
         <dependency>
-            <groupId>eu.fakod</groupId>
-            <artifactId>neo4j-scala_2.10</artifactId>
-            <version>0.3.0</version>
+            <groupId>net.databinder.dispatch</groupId>
+            <artifactId>dispatch-core_2.10</artifactId>
+            <version>0.9.5</version>
+            <version>0.11.0</version>
         </dependency>
         -->
     </dependencies>

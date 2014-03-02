@@ -32,8 +32,6 @@ class RelationSerializer extends JsonSerializer[Relation] {
 package db {
 
 import com.landsmanns.bookvis.BFString._
-import com.landsmanns.bookvis.json.JsonStuff
-import JsonStuff._
 import org.anormcypher.Cypher
 
 /**
@@ -50,16 +48,16 @@ object DBRelation {
   def saveRelation(book: Book, relation: Relation) = {
     val create = Cypher(
       """
-        MATCH (f:Character) -[r1:%s]-> (b:Book)
+        MATCH (f:Character) -[r1:IN_BOOK]-> (b:Book) <-[ar:AUTHOR_OF]- (a:Author)
         WHERE f.name = '%s'
         AND b.title = '%s'
-        AND b.author = '%s'
+        AND a.name = '%s'
         WITH f, b
-        MATCH (t:Character) -[r2:%s]-> (b)
+        MATCH (t:Character) -[r2:IN_BOOK]-> (b)
         WHERE t.name = '%s'
-        CREATE (f) -[r3:%s {description: "%s"}]-> (t)
+        CREATE (f) -[r3:BETWEEN_CHARS {description: "%s"}]-> (t)
         RETURN r3
-      """ %(INBOOK, relation.from.name, book.title, book.author, INBOOK, relation.to.name, BETWEENCHARS, relation.description))
+      """ %(relation.from.name, book.title, book.author.name, relation.to.name, relation.description))
 
     create.execute()
   }
@@ -67,15 +65,15 @@ object DBRelation {
   def getRelations(book: Book) = {
     val fetch = Cypher(
       """
-        MATCH (f:Character) -[r1:%s]-> (t:Character)
-        WITH f, t, r1
-        MATCH (f) -[r2:%s]-> (b:Book)
+        MATCH (f:Character) -[r1:IN_BOOK]-> (b:Book) <-[ar:AUTHOR_OF]- (a:Author)
         WHERE b.title = '%s'
-        AND b.author = '%s'
-        WITH f, t, b, r1
-        MATCH (t) -[r3:%s]-> (b:Book)
-        RETURN f.name as from, t.name as to, r1.description as description
-      """ %(BETWEENCHARS, INBOOK, book.title, book.author, INBOOK))
+        AND a.name = '%s'
+        WITH f, b
+        MATCH (t:Character) -[r2:IN_BOOK]-> (b)
+        WITH f, t
+        MATCH (f) -[r3:BETWEEN_CHARS]-> (t)
+        RETURN f.name as from, t.name as to, r3.description as description
+      """ %(book.title, book.author.name))
 
     fetch.apply().map(row =>
       Relation(Character(row[String]("from"), null), Character(row[String]("to"), null), row[String]("description"))

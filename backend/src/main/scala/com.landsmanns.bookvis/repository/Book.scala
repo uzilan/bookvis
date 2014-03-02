@@ -4,7 +4,7 @@ import scala.collection.mutable._
 import org.anormcypher.Cypher
 import com.google.gson.{JsonObject, JsonSerializationContext, JsonSerializer}
 import java.lang.reflect.Type
-import com.landsmanns.bookvis.json.JsonStuff
+import com.landsmanns.bookvis.json.JsonStuff._
 
 
 /**
@@ -12,7 +12,7 @@ import com.landsmanns.bookvis.json.JsonStuff
  * @param title the book's title
  * @param author the book's author
  */
-case class Book(title: String, author: String) {
+case class Book(title: String, author: Author) {
   private val chars = ArrayBuffer[Character]()
   private val chaps = ArrayBuffer[Chapter]()
   private val rels = ArrayBuffer[Relation]()
@@ -70,7 +70,7 @@ class BookSerializer extends JsonSerializer[Book] {
   override def serialize(book: Book, typeOfSrc: Type, context: JsonSerializationContext) = {
     val json = new JsonObject
     json.addProperty("title", book.title)
-    json.addProperty("author", book.author)
+    json.addProperty("author", book.author.name)
     json.addProperty("chapters", JsonBook.jsonChapters(book))
     json.addProperty("characters", JsonBook.jsonCharacters(book))
     json.addProperty("relations", JsonBook.jsonRelations(book))
@@ -93,7 +93,7 @@ object JsonBook {
    * @return the book's characters in json form
    */
   def jsonCharacters(book: Book) = {
-    JsonStuff.gson.toJson(book.characters.toArray)
+    gson.toJson(book.characters.toArray)
   }
 
   /**
@@ -102,7 +102,7 @@ object JsonBook {
    * @return the book's chapters, ordered by index
    */
   def jsonChapters(book: Book) = {
-    JsonStuff.gson.toJson(book.chapters.toArray.sortBy(_.index))
+    gson.toJson(book.chapters.toArray.sortBy(_.index))
   }
 
   /**
@@ -111,7 +111,7 @@ object JsonBook {
    * @return the book's relations
    */
   def jsonRelations(book: Book) = {
-    JsonStuff.gson.toJson(book.relations.toArray)
+    gson.toJson(book.relations.toArray)
   }
 }
 
@@ -134,8 +134,10 @@ object DBBook {
   def saveBook(book: Book) = {
     val create = Cypher(
       """
-        CREATE (b:Book {title: "%s", author: "%s"})
-      """ %(book.title, book.author))
+        MATCH (a:Author)
+        WHERE a.name = '%s'
+        CREATE a -[r:AUTHOR_OF]-> (b:Book {title: "%s"})
+      """ %(book.author.name, book.title))
 
     create.execute()
   }
@@ -147,12 +149,12 @@ object DBBook {
   def getAllBooks = {
     val fetch = Cypher(
       """
-        MATCH (b:Book)
-        RETURN b.title as title, b.author as author
+        MATCH (a:Author) -[r:AUTHOR_OF]-> (b:Book)
+        RETURN b.title as title, a.name as name
       """)
 
     fetch.apply().map(row =>
-      Book(row[String]("title"), row[String]("author"))
+      Book(row[String]("title"), Author(row[String]("name")))
     ).toList
   }
 }

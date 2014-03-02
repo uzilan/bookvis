@@ -58,11 +58,10 @@ package db {
 object DBCharacter {
 
   import com.landsmanns.bookvis.BFString._
-  import JsonStuff._
 
 
   /**
-   * Saves a character in the DB, as well as an INBOOK relation to the book and an APPEARSIN relation to the chapter
+   * Saves a character in the DB, as well as an IN_BOOK relation to the book and an APPEARS_IN relation to the chapter
    * @param book the book where the character lives in
    * @param chapter the first chapter where the character appears
    * @param character the character to save
@@ -71,15 +70,15 @@ object DBCharacter {
   def saveCharacter(book: Book, chapter: Chapter, character: Character) = {
     val create = Cypher(
       """
-        MATCH ((ch:Chapter) -[br:%s]-> (b:Book))
+        MATCH (ch:Chapter) -[br:IN_BOOK]-> (b:Book) <-[ar:AUTHOR_OF]- (a:Author)
         WHERE b.title = '%s'
-        AND b.author = '%s'
+        AND a.name = '%s'
         AND ch.name = '%s'
         AND ch.index = %d
-        CREATE (c:Character {name: "%s"}) -[r:%s]-> (b),
-               (c) -[r2:%s]-> (ch)
+        CREATE (c:Character {name: "%s"}) -[r:IN_BOOK]-> (b),
+               (c) -[r2:APPEARS_IN]-> (ch)
         RETURN r
-      """ %(INBOOK, book.title, book.author, chapter.name, chapter.index, character.name, INBOOK, APPEARSIN))
+      """ %(book.title, book.author.name, chapter.name, chapter.index, character.name))
 
     create.execute()
   }
@@ -93,13 +92,13 @@ object DBCharacter {
   def getCharacters(book: Book, chapter: Chapter) = {
     val fetch = Cypher(
       """
-        MATCH ((char:Character) -[charr:%s]-> (chap:Chapter) -[chapr:%s]-> (b:Book))
+        MATCH ((char:Character) -[charr:APPEARS_IN]-> (chap:Chapter) -[chapr:IN_BOOK]-> (b:Book) <- [ar:AUTHOR_OF]- (a:Author))
         WHERE chap.name = '%s'
         AND chap.index = %d
         AND b.title = '%s'
-        AND b.author = '%s'
+        AND a.name = '%s'
         RETURN char.name as name
-      """ %(JsonStuff.APPEARSIN, JsonStuff.INBOOK, chapter.name, chapter.index, book.title, book.author))
+      """ %(chapter.name, chapter.index, book.title, book.author.name))
 
     fetch.apply().map(row =>
       Character(row[String]("name"), chapter)
