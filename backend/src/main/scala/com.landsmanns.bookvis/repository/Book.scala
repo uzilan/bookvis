@@ -122,7 +122,7 @@ package db {
 /**
  * DB-related book functions
  */
-object DBBook {
+private[db] object DBBook {
 
   import com.landsmanns.bookvis.BFString._
 

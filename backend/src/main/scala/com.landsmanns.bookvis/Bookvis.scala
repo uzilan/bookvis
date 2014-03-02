@@ -10,7 +10,7 @@ import com.landsmanns.bookvis.json.JsonRoute
 
 /**
  * The Bookvis back-end application, which presents a REST interface which allows the users to save and retrieve
- * books, chapters, charactes and relations and save them into the DB
+ * authors, books, chapters, charactes and relations and save them into the DB
  */
 object Bookvis extends App {
 

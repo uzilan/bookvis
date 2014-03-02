@@ -2,17 +2,17 @@ package com.landsmanns.bookvis.repository
 
 /**
  * An author
+ * @param name the author's name
  */
 case class Author(name: String)
 
 package serializers {
 
-import com.landsmanns.bookvis.repository.json.JsonBook
 import com.google.gson.{JsonObject, JsonSerializationContext, JsonSerializer}
 import java.lang.reflect.Type
 
 /**
- * Book json serializer
+ * Author json serializer
  */
 class AuthorSerializer extends JsonSerializer[Author] {
   override def serialize(author: Author, typeOfSrc: Type, context: JsonSerializationContext) = {
@@ -32,7 +32,7 @@ import org.anormcypher.Cypher
 /**
  * DB-related author functions
  */
-object DBAuthor {
+private[db] object DBAuthor {
 
   import com.landsmanns.bookvis.BFString._
 
@@ -76,8 +76,8 @@ object DBAuthor {
       """
         MATCH (a:Author) -[r:AUTHOR_OF]-> (b:Book)
         WHERE a.name = '%s'
-        RETURN b.title
-      """)
+        RETURN b.title as title
+      """ % (author.name))
 
     fetch.apply().map(row =>
       Book(row[String]("title"), author)

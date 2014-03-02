@@ -55,7 +55,7 @@ package db {
 /**
  * DB-related character help functions
  */
-object DBCharacter {
+private[db] object DBCharacter {
 
   import com.landsmanns.bookvis.BFString._
 

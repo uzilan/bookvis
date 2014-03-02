@@ -3,7 +3,7 @@ package rest
 import org.scalatest.{Matchers, FlatSpec}
 //import dispatch._, Defaults._
 import com.landsmanns.bookvis.repository.{Author, Book}
-import com.landsmanns.bookvis.repository.db.{DBAuthor, DBBook}
+import com.landsmanns.bookvis.repository.db.DB
 import testdata.TestData._
 
 /**
@@ -15,13 +15,13 @@ class JsonBookSpec extends FlatSpec with Matchers {
 
   "Books" should "be retrieveable" in {
 
-    val author = Author(aaMilne)
-    val book1 = Book(winnieThePooh, author)
-    val book2 = Book(theHouseAtPoohCorner, author)
+    val author = Author(A_A_MILNE)
+    val book1 = Book(WINNIE_THE_POOH, author)
+    val book2 = Book(THE_HOUSE_AT_POOH_CORNER, author)
 
-    DBAuthor.saveAuthor(author)
-    DBBook.saveBook(book1)
-    DBBook.saveBook(book2)
+    DB.saveAuthor(author)
+    DB.saveBook(book1)
+    DB.saveBook(book2)
 
     //val books = Http(svc OK as.String)
     //println(books.print)

@@ -37,7 +37,7 @@ import org.anormcypher.Cypher
 /**
  * DB-related relation help functions
  */
-object DBRelation {
+private[db] object DBRelation {
 
   /**
    * Saves a relation between two characters in a given book
@@ -62,6 +62,11 @@ object DBRelation {
     create.execute()
   }
 
+  /**
+   * Retrieves all the relations between characters in a given book
+   * @param book the book
+   * @return all the relations between characters in the book
+   */
   def getRelations(book: Book) = {
     val fetch = Cypher(
       """

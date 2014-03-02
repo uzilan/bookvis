@@ -52,7 +52,7 @@ package db {
 /**
  * DB-related chapter help functions
  */
-object DBChapter {
+private[db] object DBChapter {
 
   import com.landsmanns.bookvis.BFString._
 
