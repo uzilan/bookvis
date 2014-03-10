@@ -1,11 +1,10 @@
 package com.landsmanns.bookvis
 
-import com.landsmanns.bookvis.repository._
 import spark.Spark._
 import spark._
 import org.anormcypher.Neo4jREST
-import com.landsmanns.bookvis.repository.db.{DBBook, DBChapter, DBCharacter}
-import com.landsmanns.bookvis.repository.json.JsonRepository
+import com.landsmanns.bookvis.repository.db.DB
+import com.landsmanns.bookvis.repository.json.JsonBook
 import com.landsmanns.bookvis.json.JsonRoute
 
 /**
@@ -14,12 +13,11 @@ import com.landsmanns.bookvis.json.JsonRoute
  */
 object Bookvis extends App {
 
-  private val repo = new Repository
   Neo4jREST.setServer("localhost", 7474, "/db/data/")
 
   get(new JsonRoute("/books") {
     override def handle(request: Request, response: Response) = {
-      JsonRepository.jsonBooks(repo)
+      JsonBook.jsonBooks(DB.getAllBooks)
     }
 
   })

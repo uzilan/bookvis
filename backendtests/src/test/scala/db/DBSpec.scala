@@ -1,28 +1,15 @@
 package db
 
-import com.landsmanns.bookvis.repository._
-import testdata.TestData._
-import com.landsmanns.bookvis.repository.db.DB
 import org.scalatest.{BeforeAndAfterEach, Matchers, FlatSpec}
 import org.anormcypher.Cypher
+import com.landsmanns.bookvis.repository._
+import com.landsmanns.bookvis.repository.db.DB
+import testdata.TestData._
 
 /**
  * Created by uzilan on 2014-03-02.
  */
-class DBSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
-
-  override def beforeEach() {
-    cleanDB
-  }
-
-  override def afterEach() {
-    cleanDB
-  }
-
-  def cleanDB {
-    Cypher("OPTIONAL MATCH (n)-[r]-() DELETE n,r").execute()
-    Cypher("MATCH (n) DELETE n").execute()
-  }
+class DBSpec extends DBCleaner {
 
   val aaMilne = Author(A_A_MILNE)
   val astridLindgren = Author(ASTRID_LINDGREN)

@@ -82,10 +82,23 @@ class BookSerializer extends JsonSerializer[Book] {
 
 package json {
 
+
 /**
  * Json-related book help functions
  */
 object JsonBook {
+
+  /**
+   * Transform a list of books into json form
+   * @param books the books to transform
+   * @return the books in json form
+   */
+  def jsonBooks(books: List[Book]) = {
+
+    val titles = for (book <- books) yield book.title
+
+    gson.toJson(titles.toArray)
+  }
 
   /**
    * Transform a given book's characters into json form
