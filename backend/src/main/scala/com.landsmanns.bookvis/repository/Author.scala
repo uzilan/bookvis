@@ -32,7 +32,7 @@ import org.anormcypher.Cypher
 /**
  * DB-related author functions
  */
-private[db] object DBAuthor {
+object DBAuthor {
 
   import com.landsmanns.bookvis.BFString._
 
@@ -82,6 +82,29 @@ private[db] object DBAuthor {
     fetch.apply().map(row =>
       Book(row[String]("title"), author)
     ).toList
+  }
+}
+
+}
+
+package json {
+
+import com.landsmanns.bookvis.json.JsonStuff._
+
+
+/**
+ * Json-related book help functions
+ */
+object JsonAuthor {
+
+  /**
+   * Transform a list of authors into json form
+   * @param authors the authors to transform
+   * @return the authors in json form
+   */
+  def jsonAuthors(authors: List[Author]) = {
+    val authorNames = for (author <- authors) yield author.name
+    gson.toJson(authorNames.toArray)
   }
 }
 

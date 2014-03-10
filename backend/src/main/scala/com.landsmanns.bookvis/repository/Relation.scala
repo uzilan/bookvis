@@ -37,7 +37,7 @@ import org.anormcypher.Cypher
 /**
  * DB-related relation help functions
  */
-private[db] object DBRelation {
+object DBRelation {
 
   /**
    * Saves a relation between two characters in a given book

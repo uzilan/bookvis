@@ -94,9 +94,7 @@ object JsonBook {
    * @return the books in json form
    */
   def jsonBooks(books: List[Book]) = {
-
     val titles = for (book <- books) yield book.title
-
     gson.toJson(titles.toArray)
   }
 
@@ -135,7 +133,7 @@ package db {
 /**
  * DB-related book functions
  */
-private[db] object DBBook {
+object DBBook {
 
   import com.landsmanns.bookvis.BFString._
 
