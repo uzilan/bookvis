@@ -1,7 +1,6 @@
 package db
 
 import testdata.TestData._
-import com.landsmanns.bookvis.repository._
 import com.landsmanns.bookvis.repository.db.DBBook._
 import com.landsmanns.bookvis.repository.db.DBAuthor._
 import com.landsmanns.bookvis.repository.db.DBChapter._
@@ -11,22 +10,9 @@ import com.landsmanns.bookvis.repository.db.DBRelation._
 /**
  * Created by uzilan on 2014-03-02.
  */
-class DBSpec extends DBCleaner {
-
-  val aaMilne = Author(A_A_MILNE)
-  val astridLindgren = Author(ASTRID_LINDGREN)
-  val winnieThePooh = Book(WINNIE_THE_POOH, aaMilne)
-  val theHouseAtPoohCorner = Book(THE_HOUSE_AT_POOH_CORNER, aaMilne)
-  val ch1 = Chapter(CHAPTER_ONE, 1)
-  val ch2 = Chapter(CHAPTER_TWO, 2)
-  val ch3 = Chapter(CHAPTER_THREE, 3)
-  val pooh = Character(WINNIE_THE_POOH, ch1)
-  val chris = Character(CHRISTOPHER_ROBIN, ch1)
-  val friendRelation = Relation(pooh, chris, FRIEND)
+class DBSpec extends DBTestBase {
 
   "Authors" should "be saveable and retrieveable" in {
-    saveAuthor(aaMilne)
-    saveAuthor(astridLindgren)
 
     val retrieved = getAllAuthors
 
@@ -35,9 +21,6 @@ class DBSpec extends DBCleaner {
   }
 
   "Author books" should "be saveable and retrieveable" in {
-    saveAuthor(aaMilne)
-    saveBook(winnieThePooh)
-    saveBook(theHouseAtPoohCorner)
 
     val retrieved = getAuthorBooks(aaMilne)
 
@@ -48,9 +31,6 @@ class DBSpec extends DBCleaner {
   }
 
   "Books" should "be saveable and retrieveable" in {
-    saveAuthor(aaMilne)
-    saveBook(winnieThePooh)
-    saveBook(theHouseAtPoohCorner)
 
     val retrieved = getAllBooks
 
@@ -61,12 +41,6 @@ class DBSpec extends DBCleaner {
   }
 
   "Chapters" should "be saveable and retieveable" in {
-
-    saveAuthor(aaMilne)
-    saveBook(winnieThePooh)
-    saveChapter(winnieThePooh, ch1)
-    saveChapter(winnieThePooh, ch2)
-    saveChapter(winnieThePooh, ch3)
 
     val retrieved = getChapters(winnieThePooh)
 
@@ -80,12 +54,6 @@ class DBSpec extends DBCleaner {
 
   "Characters" should "be saveable and retrieveable" in {
 
-    saveAuthor(aaMilne)
-    saveBook(winnieThePooh)
-    saveChapter(winnieThePooh, ch1)
-    saveCharacter(winnieThePooh, ch1, pooh)
-    saveCharacter(winnieThePooh, ch1, chris)
-
     val chars = getCharacters(winnieThePooh, ch1)
 
     chars(0).name should be(WINNIE_THE_POOH)
@@ -93,13 +61,6 @@ class DBSpec extends DBCleaner {
   }
 
   "Relations" should "be saveable and retrieveable" in {
-
-    saveAuthor(aaMilne)
-    saveBook(winnieThePooh)
-    saveChapter(winnieThePooh, ch1)
-    saveCharacter(winnieThePooh, ch1, pooh)
-    saveCharacter(winnieThePooh, ch1, chris)
-    saveRelation(winnieThePooh, friendRelation)
 
     val relations = getRelations(winnieThePooh)
 
