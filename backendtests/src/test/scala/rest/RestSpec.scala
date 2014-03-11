@@ -1,11 +1,8 @@
 package rest
 
 import testdata.TestData._
-import com.landsmanns.bookvis.repository.{Book, Author}
 import com.sun.jersey.api.client.{ClientResponse, Client}
 import db.DBTestBase
-import com.landsmanns.bookvis.repository.db.DBAuthor._
-import com.landsmanns.bookvis.repository.db.DBBook._
 import com.landsmanns.bookvis.json.JsonStuff
 import java.net.URLEncoder
 
