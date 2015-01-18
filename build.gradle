@@ -1,5 +1,3 @@
-
-
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -10,8 +8,10 @@ buildDir = 'target'
 
 repositories {
     mavenCentral()
+    maven {
+        url "http://m2.neo4j.org/content/repositories/releases/"
+    }
 }
-
 
 dependencies {
     compile group: 'com.sparkjava', name: 'spark-core', version: '2.1'
@@ -19,5 +19,5 @@ dependencies {
     compile group: 'com.google.inject', name: 'guice', version: '3.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.3.2'
     compile group: 'org.json', name: 'json', version: '20141113'
-
+    compile group: 'org.neo4j', name: 'neo4j-rest-graphdb', version: '2.0.1'
 }

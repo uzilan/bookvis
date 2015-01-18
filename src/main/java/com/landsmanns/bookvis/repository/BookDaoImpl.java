@@ -2,6 +2,14 @@ package com.landsmanns.bookvis.repository;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.neo4j.rest.graphdb.RestAPI;
+import org.neo4j.rest.graphdb.RestAPIFacade;
+import org.neo4j.rest.graphdb.query.RestCypherQueryEngine;
+import org.neo4j.rest.graphdb.util.QueryResult;
+
+import java.util.Map;
+
+import static org.neo4j.helpers.collection.MapUtil.map;
 
 /**
  * Created by uzilan on 2015-01-18.
@@ -10,6 +18,18 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public String getAllBooks() {
+
+        RestAPI restAPI = new RestAPIFacade("http://localhost:7474/db/data");
+        final RestCypherQueryEngine engine = new RestCypherQueryEngine(restAPI);
+        final QueryResult<Map<String, Object>> result = engine.query("start n=node(2) return n, n.name as name;", map("id", 0));
+
+        engine.query("CREATE (n:genre {name:'Childrens Books'}) ", null);
+/*
+        for (Map<String, Object> row : result) {
+            long id = ((Number) row.get("id")).longValue();
+            System.out.println("id is " + id);
+        }
+*/
         return createBooksList();
     }
 
