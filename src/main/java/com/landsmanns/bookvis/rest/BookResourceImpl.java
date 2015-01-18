@@ -13,6 +13,8 @@ public class BookResourceImpl implements BookResource {
     @Inject
     private BookService bookService;
 
+
+
     public BookResourceImpl() {
         get("/books", (req, res) -> {
             return bookService.getAllBooks();

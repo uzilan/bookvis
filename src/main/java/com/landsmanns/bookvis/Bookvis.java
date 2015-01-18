@@ -10,12 +10,19 @@ import com.landsmanns.bookvis.rest.BookResourceImpl;
 import com.landsmanns.bookvis.service.BookService;
 import com.landsmanns.bookvis.service.BookServiceImpl;
 
+import static spark.Spark.staticFileLocation;
+
 /**
  * Created by uzilan on 2015-01-18.
  */
 public class Bookvis extends AbstractModule {
 
     public static void main(String[] args) {
+
+        // redirect everything that is not mapped using spark to the public directory under resources
+        staticFileLocation("/public");
+
+        // create the Guice dependency graph
         Injector injector = Guice.createInjector(new Bookvis());
         BookResource bookResource = injector.getInstance(BookResource.class);
     }
@@ -26,5 +33,4 @@ public class Bookvis extends AbstractModule {
         bind(BookService.class).to(BookServiceImpl.class);
         bind(BookResource.class).to(BookResourceImpl.class);
     }
-
 }
