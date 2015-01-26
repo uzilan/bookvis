@@ -6,6 +6,7 @@ import com.landsmanns.bookvis.model.Genre;
 import org.neo4j.rest.graphdb.util.QueryResult;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,18 +23,18 @@ public class BookDaoImpl implements BookDao {
         // create some nodes
         query("CREATE (ch:genre {name:'Childrens Books'}) " +
                 "CREATE (fi:genre {name:'Fiction'}) " +
-                "CREATE (a:author {name:'A. A. Milne'}) -[:GENRE]-> (ch) " +
-                "CREATE (dr:author {name:'Dr. Seuss'}) -[:GENRE]-> (ch) " +
-                "CREATE (mt:author {name:'Mark Twain'}) -[:GENRE]-> (ch) " +
-                "CREATE (ws:author {name:'William Shakespeare'}) -[:GENRE]-> (fi) " +
-                "CREATE (ac:author {name:'Agatha Christie'}) -[:GENRE]-> (fi) ");
+                "CREATE (a:author {name:'A. A. Milne'}) -[:of_genre]-> (ch) " +
+                "CREATE (dr:author {name:'Dr. Seuss'}) -[:of_genre]-> (ch) " +
+                "CREATE (mt:author {name:'Mark Twain'}) -[:of_genre]-> (ch) " +
+                "CREATE (ws:author {name:'William Shakespeare'}) -[:of_genre]-> (fi) " +
+                "CREATE (ac:author {name:'Agatha Christie'}) -[:of_genre]-> (fi) ");
     }
 
     @Override
     public List<Genre> getAllBooks() {
 
         QueryResult<Map<String, Object>> result =
-                query("MATCH (a:author) -[:GENRE]-> (g:lastGenre) " +
+                query("MATCH (a:author) -[:of_genre]-> (g:genre) " +
                         "RETURN ID(a) as authorId, " +
                         "ID(g) as genreId, " +
                         "a.name as authorName, " +
@@ -42,25 +43,25 @@ public class BookDaoImpl implements BookDao {
 
         List<Genre> genres = new ArrayList<>();
 
-        final long[] lastId = {-1};
-        final Genre[] lastGenre = {null};
+        Genre genre = null;
 
-        result.forEach(row -> {
-            long genreId = (long) row.get("genreId");
+        Iterator<Map<String, Object>> iterator = result.iterator();
+        while (iterator.hasNext()) {
+
+            Map<String, Object> row = iterator.next();
+            long genreId = (int) row.get("genreId");
             String genreName = row.get("genreName").toString();
-            long authorId = (long) row.get("authorName");
+            long authorId = (int) row.get("authorId");
             String authorName = row.get("authorName").toString();
 
-            if (genreId != lastId[0]) {
-                lastGenre[0] = new Genre(genreId, genreName);
-                lastId[0] = genreId;
-                genres.add(lastGenre[0]);
+            if (genre == null || !genreName.equals(genre.getName())) {
+                genre = new Genre(genreId, genreName);
+                genres.add(genre);
             }
 
             Author a = new Author(authorId, authorName);
-            lastGenre[0].addAuthor(a);
-        });
-
+            genre.addAuthor(a);
+        }
         return genres;
     }
 

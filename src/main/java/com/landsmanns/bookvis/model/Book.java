@@ -3,6 +3,7 @@ package com.landsmanns.bookvis.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.json.JSONObject;
 
 /**
  * Created by uzilan on 2015-01-18.
@@ -36,7 +37,7 @@ public class Book extends Model {
     }
 
     @Override
-    public String toJson() {
+    public JSONObject toJson() {
         return null;
     }
 }

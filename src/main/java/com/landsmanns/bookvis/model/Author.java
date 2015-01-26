@@ -45,12 +45,12 @@ public class Author extends Model {
     }
 
     @Override
-    public String toJson() {
+    public JSONObject toJson() {
 
         JSONObject j = new JSONObject();
         j.put("name", name);
         j.put("size", 10);
 
-        return j.toString();
+        return j;
     }
 }

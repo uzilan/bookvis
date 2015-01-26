@@ -1,5 +1,7 @@
 package com.landsmanns.bookvis.model;
 
+import org.json.JSONObject;
+
 /**
  * Created by uzilan on 2015-01-26.
  */
@@ -15,5 +17,5 @@ public abstract class Model {
         return id;
     }
 
-    public abstract String toJson();
+    public abstract JSONObject toJson();
 }
