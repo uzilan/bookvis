@@ -1,11 +1,11 @@
 package com.landsmanns.bookvis.repository;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.landsmanns.bookvis.model.Author;
+import com.landsmanns.bookvis.model.Book;
+import com.landsmanns.bookvis.model.Genre;
 import org.neo4j.rest.graphdb.util.QueryResult;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +14,12 @@ import java.util.Map;
  */
 public class BookDaoImpl implements BookDao {
 
-    @Override
-    public String getAllBooks() {
+    public BookDaoImpl() {
 
+        // delete everything
         query("MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r");
 
+        // create some nodes
         query("CREATE (ch:genre {name:'Childrens Books'}) " +
                 "CREATE (fi:genre {name:'Fiction'}) " +
                 "CREATE (a:author {name:'A. A. Milne'}) -[:GENRE]-> (ch) " +
@@ -26,93 +27,45 @@ public class BookDaoImpl implements BookDao {
                 "CREATE (mt:author {name:'Mark Twain'}) -[:GENRE]-> (ch) " +
                 "CREATE (ws:author {name:'William Shakespeare'}) -[:GENRE]-> (fi) " +
                 "CREATE (ac:author {name:'Agatha Christie'}) -[:GENRE]-> (fi) ");
-
-        QueryResult<Map<String, Object>> result =
-                query("MATCH (a:author) -[:GENRE]-> (g:genre) " +
-                        "RETURN a.name as authorName, g.name as genreName");
-
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
-
-        result.forEach(row -> {
-            String genreName =  row.get("genreName").toString();
-            String authorName = row.get("authorName").toString();
-
-            List<String> authors = null;
-
-            if (map.containsKey(genreName)) {
-                authors = map.get(genreName);
-            } else {
-                authors = new ArrayList<String>();
-                map.put(genreName, authors);
-            }
-
-            authors.add(authorName);
-        });
-
-        JSONArray genres = new JSONArray();
-
-        map.forEach((genreName, authorNames) -> {
-            JSONObject genre = new JSONObject();
-            genre.put("name", genreName);
-
-            JSONArray authors = new JSONArray();
-            genre.put("children", authors);
-
-            authorNames.forEach(authorName -> {
-                JSONObject author = new JSONObject();
-                author.put("name", authorName);
-                author.put("size", 10);
-                authors.put(author);
-            });
-
-            genres.put(genre);
-        });
-
-        return genres.toString();
-
     }
 
-    private String createBooksList() {
+    @Override
+    public List<Genre> getAllBooks() {
 
-        JSONArray genres = new JSONArray();
+        QueryResult<Map<String, Object>> result =
+                query("MATCH (a:author) -[:GENRE]-> (g:lastGenre) " +
+                        "RETURN ID(a) as authorId, " +
+                        "ID(g) as genreId, " +
+                        "a.name as authorName, " +
+                        "g.name as genreName " +
+                        "ORDER BY ID(g)");
 
-        JSONObject childrenBooks = new JSONObject();
-        JSONArray childrenBooksAuthors = new JSONArray();
-        childrenBooks.put("name", "Childrens Books");
-        childrenBooks.put("children", childrenBooksAuthors);
-        genres.put(childrenBooks);
+        List<Genre> genres = new ArrayList<>();
 
-        JSONObject milne = new JSONObject();
-        milne.put("name", "A. A. Milne");
-        milne.put("size", 10);
-        childrenBooksAuthors.put(milne);
+        final long[] lastId = {-1};
+        final Genre[] lastGenre = {null};
 
-        JSONObject seuss = new JSONObject();
-        seuss.put("name", "Dr. Seuss");
-        seuss.put("size", 13);
-        childrenBooksAuthors.put(seuss);
+        result.forEach(row -> {
+            long genreId = (long) row.get("genreId");
+            String genreName = row.get("genreName").toString();
+            long authorId = (long) row.get("authorName");
+            String authorName = row.get("authorName").toString();
 
-        JSONObject twain = new JSONObject();
-        twain.put("name", "Mark Twain");
-        twain.put("size", 15);
-        childrenBooksAuthors.put(twain);
+            if (genreId != lastId[0]) {
+                lastGenre[0] = new Genre(genreId, genreName);
+                lastId[0] = genreId;
+                genres.add(lastGenre[0]);
+            }
 
-        JSONObject fiction = new JSONObject();
-        JSONArray fictionAuthors = new JSONArray();
-        fiction.put("name", "Fiction");
-        fiction.put("children", fictionAuthors);
-        genres.put(fiction);
+            Author a = new Author(authorId, authorName);
+            lastGenre[0].addAuthor(a);
+        });
 
-        JSONObject shake = new JSONObject();
-        shake.put("name", "William Shakespeare");
-        shake.put("size", 12);
-        fictionAuthors.put(shake);
+        return genres;
+    }
 
-        JSONObject chris = new JSONObject();
-        chris.put("name", "Agatha Christie");
-        chris.put("size", 15);
-        fictionAuthors.put(chris);
-
-        return genres.toString();
+    @Override
+    public Book getBook(String id) {
+        return null;
     }
 }

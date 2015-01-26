@@ -1,12 +1,15 @@
 package com.landsmanns.bookvis.service;
 
 import com.landsmanns.bookvis.model.Book;
+import com.landsmanns.bookvis.model.Genre;
+
+import java.util.List;
 
 /**
  * Created by uzilan on 2015-01-18.
  */
 public interface BookService {
-    String getAllBooks();
+    List<Genre> getAllBooks();
 
     Book getBook(String id);
 

@@ -2,6 +2,7 @@ package com.landsmanns.bookvis.rest;
 
 import com.google.inject.Inject;
 import com.landsmanns.bookvis.service.BookService;
+import com.landsmanns.bookvis.utils.JsonUtils;
 
 import static spark.Spark.*;
 
@@ -16,7 +17,7 @@ public class BookResourceImpl implements BookResource {
     public BookResourceImpl() {
 
         get("/books", (request, response) -> {
-            return bookService.getAllBooks();
+            return JsonUtils.toJson(bookService.getAllBooks());
         });
 
         get("/books/:bookId", (request, response) -> {

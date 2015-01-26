@@ -3,6 +3,7 @@ package com.landsmanns.bookvis.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -11,12 +12,12 @@ import java.util.List;
 /**
  * Created by uzilan on 2015-01-18.
  */
-public class Author extends Model {
+public class Genre extends Model {
 
     private String name;
-    private List<Book> books = new ArrayList<>();
+    private List<Author> authors = new ArrayList<>();
 
-    public Author(long id, String name) {
+    public Genre(long id, String name) {
         super(id);
         this.name = name;
     }
@@ -25,8 +26,12 @@ public class Author extends Model {
         return name;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
+    public void addAuthor(Author author) {
+        authors.add(author);
     }
 
     @Override
@@ -46,10 +51,14 @@ public class Author extends Model {
 
     @Override
     public String toJson() {
-
         JSONObject j = new JSONObject();
         j.put("name", name);
-        j.put("size", 10);
+        JSONArray a = new JSONArray();
+        j.put("children", a);
+
+        authors.forEach(au -> {
+            a.put(au.toJson());
+        });
 
         return j.toString();
     }

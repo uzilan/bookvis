@@ -4,30 +4,20 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.List;
-
 /**
  * Created by uzilan on 2015-01-18.
  */
-public class Book {
+public class Book extends Model {
 
     private String title;
-    private List<Author> authors;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
+    public Book(long id, String title) {
+        super(id);
         this.title = title;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public String getTitle() {
+        return title;
     }
 
     @Override
@@ -43,5 +33,10 @@ public class Book {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toJson() {
+        return null;
     }
 }
