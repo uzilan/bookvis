@@ -2,14 +2,12 @@ package com.landsmanns.bookvis.repository;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.neo4j.rest.graphdb.RestAPI;
-import org.neo4j.rest.graphdb.RestAPIFacade;
-import org.neo4j.rest.graphdb.query.RestCypherQueryEngine;
 import org.neo4j.rest.graphdb.util.QueryResult;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static org.neo4j.helpers.collection.MapUtil.map;
 
 /**
  * Created by uzilan on 2015-01-18.
@@ -19,18 +17,59 @@ public class BookDaoImpl implements BookDao {
     @Override
     public String getAllBooks() {
 
-        RestAPI restAPI = new RestAPIFacade("http://localhost:7474/db/data");
-        final RestCypherQueryEngine engine = new RestCypherQueryEngine(restAPI);
-        final QueryResult<Map<String, Object>> result = engine.query("start n=node(2) return n, n.name as name;", map("id", 0));
+        query("MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r");
 
-        engine.query("CREATE (n:genre {name:'Childrens Books'}) ", null);
-/*
-        for (Map<String, Object> row : result) {
-            long id = ((Number) row.get("id")).longValue();
-            System.out.println("id is " + id);
-        }
-*/
-        return createBooksList();
+        query("CREATE (ch:genre {name:'Childrens Books'}) " +
+                "CREATE (fi:genre {name:'Fiction'}) " +
+                "CREATE (a:author {name:'A. A. Milne'}) -[:GENRE]-> (ch) " +
+                "CREATE (dr:author {name:'Dr. Seuss'}) -[:GENRE]-> (ch) " +
+                "CREATE (mt:author {name:'Mark Twain'}) -[:GENRE]-> (ch) " +
+                "CREATE (ws:author {name:'William Shakespeare'}) -[:GENRE]-> (fi) " +
+                "CREATE (ac:author {name:'Agatha Christie'}) -[:GENRE]-> (fi) ");
+
+        QueryResult<Map<String, Object>> result =
+                query("MATCH (a:author) -[:GENRE]-> (g:genre) " +
+                        "RETURN a.name as authorName, g.name as genreName");
+
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+
+        result.forEach(row -> {
+            String genreName =  row.get("genreName").toString();
+            String authorName = row.get("authorName").toString();
+
+            List<String> authors = null;
+
+            if (map.containsKey(genreName)) {
+                authors = map.get(genreName);
+            } else {
+                authors = new ArrayList<String>();
+                map.put(genreName, authors);
+            }
+
+            authors.add(authorName);
+        });
+
+        JSONArray genres = new JSONArray();
+
+        map.forEach((genreName, authorNames) -> {
+            JSONObject genre = new JSONObject();
+            genre.put("name", genreName);
+
+            JSONArray authors = new JSONArray();
+            genre.put("children", authors);
+
+            authorNames.forEach(authorName -> {
+                JSONObject author = new JSONObject();
+                author.put("name", authorName);
+                author.put("size", 10);
+                authors.put(author);
+            });
+
+            genres.put(genre);
+        });
+
+        return genres.toString();
+
     }
 
     private String createBooksList() {
