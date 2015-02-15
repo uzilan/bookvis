@@ -12,5 +12,5 @@ public interface BookDao extends BaseDao {
 
     List<Genre> getAllBooks();
 
-    Book getBook(String id);
+    Book getBook(long id);
 }

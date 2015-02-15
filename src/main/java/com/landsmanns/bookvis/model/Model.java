@@ -17,5 +17,11 @@ public abstract class Model {
         return id;
     }
 
-    public abstract JSONObject toJson();
+    public abstract JSONObject toJson(DetailLevel detailLevel);
+
+    public enum DetailLevel {
+
+        GENRE, AUTHOR, BOOK, CHAPTER, CHARACTER, RELATION, ATTRIBUTE;
+
+    }
 }

@@ -10,28 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by uzilan on 2015-01-18.
+ * Created by uzilan on 2015-02-02.
  */
-public class Genre extends Model {
+public class Character extends Model {
 
     private String name;
-    private List<Author> authors = new ArrayList<>();
+    private List<Attribute> attributes;
 
-    private Genre(GenreBuilder builder) {
+    private Character(CharacterBuilder builder) {
         super(builder.id);
         this.name = builder.name;
+        this.attributes = builder.attributes;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public List<Attribute> getAttributes() {
+        return attributes;
     }
 
-    public void addAuthor(Author author) {
-        authors.add(author);
+    public void addAttribute(Attribute attribute) {
+        attributes.add(attribute);
     }
 
     @Override
@@ -56,35 +57,40 @@ public class Genre extends Model {
         j.put("id", getId());
         j.put("name", name);
 
-        if (detailLevel.ordinal() > DetailLevel.GENRE.ordinal()) {
-            JSONArray a = new JSONArray();
-            j.put("authors", a);
-            authors.forEach(au -> a.put(au.toJson(detailLevel)));
-        }
+        JSONArray a = new JSONArray();
+        j.put("attributes", a);
+        attributes.forEach(at -> a.put(at.toJson(detailLevel)));
 
         return j;
     }
 
-    public static GenreBuilder builder() {
-        return new GenreBuilder();
+    public static CharacterBuilder builder() {
+        return new CharacterBuilder();
     }
 
-    public static class GenreBuilder {
+    public static class CharacterBuilder {
+
         private long id;
         private String name;
+        private List<Attribute> attributes = new ArrayList<>();
 
-        public GenreBuilder id(long id) {
+        public CharacterBuilder id(long id) {
             this.id = id;
             return this;
         }
 
-        public GenreBuilder name(String name) {
+        public CharacterBuilder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Genre build() {
-            return new Genre(this);
+        public CharacterBuilder attributes(List<Attribute> attributes) {
+            this.attributes = attributes;
+            return this;
+        }
+
+        public Character build() {
+            return new Character(this);
         }
     }
 }

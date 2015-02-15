@@ -3,6 +3,7 @@ package com.landsmanns.bookvis.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class Author extends Model {
     private String name;
     private List<Book> books = new ArrayList<>();
 
-    public Author(long id, String name) {
-        super(id);
-        this.name = name;
+    private Author(AuthorBuilder builder) {
+        super(builder.id);
+        this.name = builder.name;
     }
 
     public String getName() {
@@ -27,6 +28,10 @@ public class Author extends Model {
 
     public List<Book> getBooks() {
         return books;
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
     }
 
     @Override
@@ -45,12 +50,41 @@ public class Author extends Model {
     }
 
     @Override
-    public JSONObject toJson() {
+    public JSONObject toJson(DetailLevel detailLevel) {
 
         JSONObject j = new JSONObject();
+        j.put("id", getId());
         j.put("name", name);
-        j.put("size", 10);
+
+        if (detailLevel.ordinal() > DetailLevel.AUTHOR.ordinal()) {
+            JSONArray a = new JSONArray();
+            j.put("books", a);
+            books.forEach(b -> a.put(b.toJson(detailLevel)));
+        }
 
         return j;
+    }
+
+    public static AuthorBuilder builder() {
+        return new AuthorBuilder();
+    }
+
+    public static class AuthorBuilder {
+        private long id;
+        private String name;
+
+        public AuthorBuilder id(long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AuthorBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Author build() {
+            return new Author(this);
+        }
     }
 }

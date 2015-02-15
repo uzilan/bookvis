@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class JsonUtils {
 
-    public static <T extends Model> String toJson(List<T> list) {
+    public static <T extends Model> String toJson(List<T> list, Model.DetailLevel detailLevel) {
         JSONArray array = new JSONArray();
-        list.forEach(item -> array.put(item.toJson()));
+        list.forEach(item -> array.put(item.toJson(detailLevel)));
         return array.toString();
     }
 }

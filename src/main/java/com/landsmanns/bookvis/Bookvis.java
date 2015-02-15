@@ -22,9 +22,14 @@ public class Bookvis extends AbstractModule {
         // redirect everything that is not mapped using spark to the public directory under resources
         staticFileLocation("/public");
 
-        // create the Guice dependency graph
-        Injector injector = Guice.createInjector(new Bookvis());
-        BookResource bookResource = injector.getInstance(BookResource.class);
+        try {
+
+            // create the Guice dependency graph
+            Injector injector = Guice.createInjector(new Bookvis());
+            BookResource bookResource = injector.getInstance(BookResource.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
