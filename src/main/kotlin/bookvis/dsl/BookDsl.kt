@@ -36,22 +36,19 @@ class BookBuilder {
     }
 
     fun characters(init: CharactersBuilder.() -> Unit) {
-        val book = Book(Author(authorName), bookTitle)
-        val charactersBuilder = CharactersBuilder(book, factionsList.toList())
+        val charactersBuilder = CharactersBuilder()
         charactersBuilder.init()
         charactersList.addAll(charactersBuilder.getCharacters())
     }
 
     fun relationships(init: RelationshipsBuilder.() -> Unit) {
-        val book = Book(Author(authorName), bookTitle)
-        val relationshipsBuilder = RelationshipsBuilder(book, charactersList.toList(), chaptersList.toList())
+        val relationshipsBuilder = RelationshipsBuilder(charactersList.toList(), chaptersList.toList())
         relationshipsBuilder.init()
         relationshipsList.addAll(relationshipsBuilder.getRelationships())
     }
 
     fun factions(init: FactionsBuilder.() -> Unit) {
-        val book = Book(Author(authorName), bookTitle)
-        val factionsBuilder = FactionsBuilder(book)
+        val factionsBuilder = FactionsBuilder()
         factionsBuilder.init()
         factionsList.addAll(factionsBuilder.getFactions())
     }

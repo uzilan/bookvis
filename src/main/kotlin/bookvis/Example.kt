@@ -242,17 +242,20 @@ object Example {
             }
             relationships {
                 relationship {
-                    between("bilbo", "gandalf")
+                    character1("bilbo")
+                    character2("gandalf")
                     description("Mentor and mentee relationship")
                     chapter("An Unexpected Party")
                 }
                 relationship {
-                    between("bilbo", "thorin")
+                    character1("bilbo")
+                    character2("thorin")
                     description("Reluctant allies who grow to respect each other")
                     chapter("Roast Mutton")
                 }
                 relationship {
-                    between("bilbo", "smaug")
+                    character1("bilbo")
+                    character2("smaug")
                     description("Adversaries in a battle of wits")
                     chapter("Riddles in the Dark")
                 }

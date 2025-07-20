@@ -1,6 +1,5 @@
 package bookvis.dsl
 
-import bookvis.models.Book
 import bookvis.models.Chapter
 import bookvis.models.Character
 import bookvis.models.Relationship
@@ -10,7 +9,6 @@ annotation class RelationshipsDsl
 
 @RelationshipsDsl
 class RelationshipBuilder(
-    private val book: Book,
     private val characters: List<Character>,
     private val chapters: List<Chapter>,
 ) {
@@ -19,12 +17,12 @@ class RelationshipBuilder(
     private var relationshipDescription: String = ""
     private var chapterTitle: String = ""
 
-    fun between(
-        character1Id: String,
-        character2Id: String,
-    ) {
-        this.character1Id = character1Id
-        this.character2Id = character2Id
+    fun character1(id: String) {
+        character1Id = id
+    }
+
+    fun character2(id: String) {
+        character2Id = id
     }
 
     fun description(desc: String) {
@@ -44,20 +42,24 @@ class RelationshipBuilder(
             return null
         }
 
-        return Relationship(book, char1, char2, relationshipDescription, chapter)
+        return Relationship(
+            character1 = char1,
+            character2 = char2,
+            description = relationshipDescription,
+            chapter = chapter,
+        )
     }
 }
 
 @RelationshipsDsl
 class RelationshipsBuilder(
-    private val book: Book,
     private val characters: List<Character>,
     private val chapters: List<Chapter>,
 ) {
     private val relationships = mutableListOf<Relationship>()
 
     fun relationship(init: RelationshipBuilder.() -> Unit) {
-        val relationshipBuilder = RelationshipBuilder(book, characters, chapters)
+        val relationshipBuilder = RelationshipBuilder(characters, chapters)
         relationshipBuilder.init()
         relationshipBuilder.build()?.let { relationships.add(it) }
     }

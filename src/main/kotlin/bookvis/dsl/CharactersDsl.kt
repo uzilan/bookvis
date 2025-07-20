@@ -1,17 +1,12 @@
 package bookvis.dsl
 
-import bookvis.models.Book
 import bookvis.models.Character
-import bookvis.models.Faction
 
 @DslMarker
 annotation class CharactersDsl
 
 @CharactersDsl
-class CharacterBuilder(
-    private val book: Book,
-    private val availableFactions: List<Faction>,
-) {
+class CharacterBuilder {
     private var characterName: String = ""
     private var characterId: String = ""
     private var characterDescription: String = ""
@@ -48,33 +43,24 @@ class CharacterBuilder(
         attributesList.addAll(attrs.toList())
     }
 
-    fun build(): Character {
-        val characterFactions =
-            availableFactions.filter { faction ->
-                factionIds.contains(faction.id)
-            }
-        return Character(
-            book,
-            characterName,
-            characterId,
-            aliasesList,
-            characterDescription,
-            firstAppearanceChapter,
-            characterFactions,
-            attributesList,
+    fun build(): Character =
+        Character(
+            name = characterName,
+            id = characterId,
+            description = characterDescription,
+            firstAppearanceChapter = firstAppearanceChapter,
+            aliases = aliasesList.toList(),
+            factions = factionIds.toList(),
+            attributes = attributesList.toList(),
         )
-    }
 }
 
 @CharactersDsl
-class CharactersBuilder(
-    private val book: Book,
-    private val availableFactions: List<Faction>,
-) {
+class CharactersBuilder {
     private val characters = mutableListOf<Character>()
 
     fun character(init: CharacterBuilder.() -> Unit) {
-        val characterBuilder = CharacterBuilder(book, availableFactions)
+        val characterBuilder = CharacterBuilder()
         characterBuilder.init()
         characters.add(characterBuilder.build())
     }

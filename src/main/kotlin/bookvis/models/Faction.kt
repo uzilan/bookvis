@@ -1,8 +1,10 @@
 package bookvis.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Faction(
-    val book: Book,
-    val title: String,
     val id: String,
+    val title: String,
     val description: String,
 )

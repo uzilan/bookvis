@@ -1,15 +1,12 @@
 package bookvis.dsl
 
-import bookvis.models.Book
 import bookvis.models.Faction
 
 @DslMarker
 annotation class FactionsDsl
 
 @FactionsDsl
-class FactionBuilder(
-    private val book: Book,
-) {
+class FactionBuilder {
     private var factionTitle: String = ""
     private var factionId: String = ""
     private var factionDescription: String = ""
@@ -26,17 +23,20 @@ class FactionBuilder(
         factionDescription = desc
     }
 
-    fun build(): Faction = Faction(book, factionTitle, factionId, factionDescription)
+    fun build(): Faction =
+        Faction(
+            id = factionId,
+            title = factionTitle,
+            description = factionDescription,
+        )
 }
 
 @FactionsDsl
-class FactionsBuilder(
-    private val book: Book,
-) {
+class FactionsBuilder {
     private val factions = mutableListOf<Faction>()
 
     fun faction(init: FactionBuilder.() -> Unit) {
-        val factionBuilder = FactionBuilder(book)
+        val factionBuilder = FactionBuilder()
         factionBuilder.init()
         factions.add(factionBuilder.build())
     }

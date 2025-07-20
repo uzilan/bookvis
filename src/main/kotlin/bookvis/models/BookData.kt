@@ -1,5 +1,8 @@
 package bookvis.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class BookData(
     val book: Book,
     val chapters: List<Chapter>,

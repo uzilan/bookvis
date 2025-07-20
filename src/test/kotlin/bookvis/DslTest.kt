@@ -137,21 +137,21 @@ class DslTest {
         assertEquals(listOf("Burglar", "Mr. Baggins"), bookData.characters[0].aliases)
         assertEquals("A hobbit who goes on an adventure", bookData.characters[0].description)
         assertEquals(1, bookData.characters[0].firstAppearanceChapter)
-        assertEquals(emptyList<Faction>(), bookData.characters[0].factions)
+        assertEquals(emptyList<String>(), bookData.characters[0].factions)
         assertEquals(emptyList<String>(), bookData.characters[0].attributes)
         assertEquals("Gandalf", bookData.characters[1].name)
         assertEquals("gandalf", bookData.characters[1].id)
         assertEquals(listOf("Grey Wizard", "Mithrandir"), bookData.characters[1].aliases)
         assertEquals("A wise wizard", bookData.characters[1].description)
         assertEquals(1, bookData.characters[1].firstAppearanceChapter)
-        assertEquals(emptyList<Faction>(), bookData.characters[1].factions)
+        assertEquals(emptyList<String>(), bookData.characters[1].factions)
         assertEquals(emptyList<String>(), bookData.characters[1].attributes)
         assertEquals("Thorin Oakenshield", bookData.characters[2].name)
         assertEquals("thorin", bookData.characters[2].id)
         assertEquals(emptyList<String>(), bookData.characters[2].aliases)
         assertEquals("The leader of the dwarves", bookData.characters[2].description)
         assertEquals(2, bookData.characters[2].firstAppearanceChapter)
-        assertEquals(emptyList<Faction>(), bookData.characters[2].factions)
+        assertEquals(emptyList<String>(), bookData.characters[2].factions)
         assertEquals(emptyList<String>(), bookData.characters[2].attributes)
         assertEquals(0, bookData.relationships.size)
         assertEquals(0, bookData.factions.size)
@@ -285,26 +285,22 @@ class DslTest {
         val bilbo = bookData.characters.find { it.id == "bilbo" }
         assertNotNull(bilbo)
         assertEquals(1, bilbo!!.factions.size)
-        assertEquals("Hobbits", bilbo.factions[0].title)
-        assertEquals("hobbits", bilbo.factions[0].id)
+        assertEquals("hobbits", bilbo.factions[0])
 
         val gandalf = bookData.characters.find { it.id == "gandalf" }
         assertNotNull(gandalf)
         assertEquals(1, gandalf!!.factions.size)
-        assertEquals("Wizards", gandalf.factions[0].title)
-        assertEquals("wizards", gandalf.factions[0].id)
+        assertEquals("wizards", gandalf.factions[0])
 
         val thorin = bookData.characters.find { it.id == "thorin" }
         assertNotNull(thorin)
         assertEquals(1, thorin!!.factions.size)
-        assertEquals("Dwarves", thorin.factions[0].title)
-        assertEquals("dwarves", thorin.factions[0].id)
+        assertEquals("dwarves", thorin.factions[0])
 
         val balin = bookData.characters.find { it.id == "balin" }
         assertNotNull(balin)
         assertEquals(1, balin!!.factions.size)
-        assertEquals("Dwarves", balin.factions[0].title)
-        assertEquals("dwarves", balin.factions[0].id)
+        assertEquals("dwarves", balin.factions[0])
     }
 
     @Test
@@ -339,12 +335,14 @@ class DslTest {
                 }
                 relationships {
                     relationship {
-                        between("bilbo", "gandalf")
+                        character1("bilbo")
+                        character2("gandalf")
                         description("Mentor and mentee relationship")
                         chapter("An Unexpected Party")
                     }
                     relationship {
-                        between("bilbo", "thorin")
+                        character1("bilbo")
+                        character2("thorin")
                         description("Reluctant allies")
                         chapter("Roast Mutton")
                     }

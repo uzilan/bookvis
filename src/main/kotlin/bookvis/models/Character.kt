@@ -1,12 +1,14 @@
 package bookvis.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Character(
-    val book: Book,
     val name: String,
     val id: String,
-    val aliases: List<String>,
     val description: String,
     val firstAppearanceChapter: Int,
-    val factions: List<Faction>,
+    val aliases: List<String>,
+    val factions: List<String>,
     val attributes: List<String>,
 )
