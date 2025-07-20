@@ -7,5 +7,6 @@ data class Character(
     val aliases: List<String>,
     val description: String,
     val firstAppearanceChapter: Int,
-    val factions: List<Faction>
+    val factions: List<Faction>,
+    val attributes: List<String>
 ) 

@@ -15,6 +15,7 @@ class CharacterBuilder(private val book: Book, private val availableFactions: Li
     private var firstAppearanceChapter: Int = 1
     private var aliasesList = mutableListOf<String>()
     private var factionIds = mutableListOf<String>()
+    private var attributesList = mutableListOf<String>()
     
     fun name(name: String) {
         characterName = name
@@ -40,11 +41,15 @@ class CharacterBuilder(private val book: Book, private val availableFactions: Li
         factionIds.addAll(ids.toList())
     }
     
+    fun attributes(vararg attrs: String) {
+        attributesList.addAll(attrs.toList())
+    }
+    
     fun build(): Character {
         val characterFactions = availableFactions.filter { faction ->
             factionIds.contains(faction.id)
         }
-        return Character(book, characterName, characterId, aliasesList, characterDescription, firstAppearanceChapter, characterFactions)
+        return Character(book, characterName, characterId, aliasesList, characterDescription, firstAppearanceChapter, characterFactions, attributesList)
     }
 }
 

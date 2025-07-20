@@ -111,6 +111,43 @@ object Example {
         }
     }
     
+    fun createBookWithAttributes(): BookData {
+        return book {
+            author("J.R.R. Tolkien")
+            title("The Hobbit")
+            characters {
+                character {
+                    name("Bilbo Baggins")
+                    id("bilbo")
+                    description("A hobbit")
+                    firstAppearance(1)
+                    attributes("brave", "curious", "loyal", "homesick")
+                }
+                character {
+                    name("Gandalf")
+                    id("gandalf")
+                    description("A wizard")
+                    firstAppearance(1)
+                    attributes("wise", "powerful", "mysterious", "kind")
+                }
+                character {
+                    name("Thorin Oakenshield")
+                    id("thorin")
+                    description("A dwarf")
+                    firstAppearance(2)
+                    attributes("proud", "stubborn", "noble", "greedy")
+                }
+                character {
+                    name("Smaug")
+                    id("smaug")
+                    description("A dragon")
+                    firstAppearance(12)
+                    attributes("greedy", "cunning", "fearsome", "vain")
+                }
+            }
+        }
+    }
+    
     fun createBookWithFactions(): BookData {
         return book {
             author("J.R.R. Tolkien")

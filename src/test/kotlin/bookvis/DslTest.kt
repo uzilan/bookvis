@@ -140,20 +140,84 @@ class DslTest {
         assertEquals("A hobbit who goes on an adventure", bookData.characters[0].description)
         assertEquals(1, bookData.characters[0].firstAppearanceChapter)
         assertEquals(emptyList<Faction>(), bookData.characters[0].factions)
+        assertEquals(emptyList<String>(), bookData.characters[0].attributes)
         assertEquals("Gandalf", bookData.characters[1].name)
         assertEquals("gandalf", bookData.characters[1].id)
         assertEquals(listOf("Grey Wizard", "Mithrandir"), bookData.characters[1].aliases)
         assertEquals("A wise wizard", bookData.characters[1].description)
         assertEquals(1, bookData.characters[1].firstAppearanceChapter)
         assertEquals(emptyList<Faction>(), bookData.characters[1].factions)
+        assertEquals(emptyList<String>(), bookData.characters[1].attributes)
         assertEquals("Thorin Oakenshield", bookData.characters[2].name)
         assertEquals("thorin", bookData.characters[2].id)
         assertEquals(emptyList<String>(), bookData.characters[2].aliases)
         assertEquals("The leader of the dwarves", bookData.characters[2].description)
         assertEquals(2, bookData.characters[2].firstAppearanceChapter)
         assertEquals(emptyList<Faction>(), bookData.characters[2].factions)
+        assertEquals(emptyList<String>(), bookData.characters[2].attributes)
         assertEquals(0, bookData.relationships.size)
         assertEquals(0, bookData.factions.size)
+    }
+    
+    @Test
+    fun `should create book with characters and attributes`() {
+        val bookData = book {
+            author("J.R.R. Tolkien")
+            title("The Hobbit")
+            characters {
+                character {
+                    name("Bilbo Baggins")
+                    id("bilbo")
+                    description("A hobbit")
+                    firstAppearance(1)
+                    attributes("brave", "curious", "loyal")
+                }
+                character {
+                    name("Gandalf")
+                    id("gandalf")
+                    description("A wizard")
+                    firstAppearance(1)
+                    attributes("wise", "powerful", "mysterious")
+                }
+                character {
+                    name("Thorin Oakenshield")
+                    id("thorin")
+                    description("A dwarf")
+                    firstAppearance(2)
+                    attributes("proud", "stubborn", "noble")
+                }
+            }
+        }
+        
+        assertNotNull(bookData.book)
+        assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("The Hobbit", bookData.book.title)
+        assertEquals(0, bookData.chapters.size)
+        assertEquals(3, bookData.characters.size)
+        assertEquals(0, bookData.relationships.size)
+        assertEquals(0, bookData.factions.size)
+        
+        // Check character attributes
+        val bilbo = bookData.characters.find { it.id == "bilbo" }
+        assertNotNull(bilbo)
+        assertEquals(3, bilbo!!.attributes.size)
+        assertEquals("brave", bilbo.attributes[0])
+        assertEquals("curious", bilbo.attributes[1])
+        assertEquals("loyal", bilbo.attributes[2])
+        
+        val gandalf = bookData.characters.find { it.id == "gandalf" }
+        assertNotNull(gandalf)
+        assertEquals(3, gandalf!!.attributes.size)
+        assertEquals("wise", gandalf.attributes[0])
+        assertEquals("powerful", gandalf.attributes[1])
+        assertEquals("mysterious", gandalf.attributes[2])
+        
+        val thorin = bookData.characters.find { it.id == "thorin" }
+        assertNotNull(thorin)
+        assertEquals(3, thorin!!.attributes.size)
+        assertEquals("proud", thorin.attributes[0])
+        assertEquals("stubborn", thorin.attributes[1])
+        assertEquals("noble", thorin.attributes[2])
     }
     
     @Test
