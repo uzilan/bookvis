@@ -50,23 +50,27 @@ object Example {
             characters {
                 character {
                     name("Bilbo Baggins")
+                    id("bilbo")
                     description("A hobbit who goes on an adventure")
                     firstAppearance(1)
                     aliases("Burglar", "Mr. Baggins")
                 }
                 character {
                     name("Gandalf")
+                    id("gandalf")
                     description("A wise wizard")
                     firstAppearance(1)
                     aliases("Grey Wizard", "Mithrandir")
                 }
                 character {
                     name("Thorin Oakenshield")
+                    id("thorin")
                     description("The leader of the dwarves")
                     firstAppearance(2)
                 }
                 character {
                     name("Smaug")
+                    id("smaug")
                     description("A fearsome dragon")
                     firstAppearance(12)
                     aliases("The Dragon")
@@ -87,18 +91,76 @@ object Example {
             characters {
                 character {
                     name("Bilbo Baggins")
+                    id("bilbo")
                     description("A hobbit")
                     firstAppearance(1)
                 }
                 character {
                     name("Gandalf")
+                    id("gandalf")
                     description("A wizard")
                     firstAppearance(1)
                 }
                 character {
                     name("Thorin Oakenshield")
+                    id("thorin")
                     description("A dwarf")
                     firstAppearance(2)
+                }
+            }
+        }
+    }
+    
+    fun createBookWithRelationships(): BookData {
+        return book {
+            author("J.R.R. Tolkien")
+            title("The Hobbit")
+            chapters {
+                title("An Unexpected Party")
+                title("Roast Mutton")
+                title("A Short Rest")
+            }
+            characters {
+                character {
+                    name("Bilbo Baggins")
+                    id("bilbo")
+                    description("A hobbit")
+                    firstAppearance(1)
+                }
+                character {
+                    name("Gandalf")
+                    id("gandalf")
+                    description("A wizard")
+                    firstAppearance(1)
+                }
+                character {
+                    name("Thorin Oakenshield")
+                    id("thorin")
+                    description("A dwarf")
+                    firstAppearance(2)
+                }
+                character {
+                    name("Smaug")
+                    id("smaug")
+                    description("A dragon")
+                    firstAppearance(12)
+                }
+            }
+            relationships {
+                relationship {
+                    between("bilbo", "gandalf")
+                    description("Mentor and mentee relationship")
+                    chapter("An Unexpected Party")
+                }
+                relationship {
+                    between("bilbo", "thorin")
+                    description("Reluctant allies who grow to respect each other")
+                    chapter("Roast Mutton")
+                }
+                relationship {
+                    between("bilbo", "smaug")
+                    description("Adversaries in a battle of wits")
+                    chapter("Riddles in the Dark")
                 }
             }
         }

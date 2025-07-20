@@ -5,6 +5,7 @@ import bookvis.models.Book
 import bookvis.models.BookData
 import bookvis.models.Chapter
 import bookvis.models.Character
+import bookvis.models.Relationship
 
 @DslMarker
 annotation class BookDsl
@@ -15,6 +16,7 @@ class BookBuilder {
     private var bookTitle: String = ""
     private var chaptersList = mutableListOf<Chapter>()
     private var charactersList = mutableListOf<Character>()
+    private var relationshipsList = mutableListOf<Relationship>()
     
     fun author(name: String) {
         authorName = name
@@ -38,6 +40,13 @@ class BookBuilder {
         charactersList.addAll(charactersBuilder.getCharacters())
     }
     
+    fun relationships(init: RelationshipsBuilder.() -> Unit) {
+        val book = Book(Author(authorName), bookTitle)
+        val relationshipsBuilder = RelationshipsBuilder(book, charactersList.toList(), chaptersList.toList())
+        relationshipsBuilder.init()
+        relationshipsList.addAll(relationshipsBuilder.getRelationships())
+    }
+    
     fun build(): Book {
         val author = Author(authorName)
         return Book(author, bookTitle)
@@ -46,6 +55,8 @@ class BookBuilder {
     fun getChapters(): List<Chapter> = chaptersList.toList()
     
     fun getCharacters(): List<Character> = charactersList.toList()
+    
+    fun getRelationships(): List<Relationship> = relationshipsList.toList()
 }
 
 fun book(init: BookBuilder.() -> Unit): BookData {
@@ -53,6 +64,7 @@ fun book(init: BookBuilder.() -> Unit): BookData {
     return BookData(
         book = builder.build(),
         chapters = builder.getChapters(),
-        characters = builder.getCharacters()
+        characters = builder.getCharacters(),
+        relationships = builder.getRelationships()
     )
 } 

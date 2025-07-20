@@ -9,12 +9,17 @@ annotation class CharactersDsl
 @CharactersDsl
 class CharacterBuilder(private val book: Book) {
     private var characterName: String = ""
+    private var characterId: String = ""
     private var characterDescription: String = ""
     private var firstAppearanceChapter: Int = 1
     private var aliasesList = mutableListOf<String>()
     
     fun name(name: String) {
         characterName = name
+    }
+    
+    fun id(id: String) {
+        characterId = id
     }
     
     fun description(desc: String) {
@@ -30,7 +35,7 @@ class CharacterBuilder(private val book: Book) {
     }
     
     fun build(): Character {
-        return Character(book, characterName, aliasesList, characterDescription, firstAppearanceChapter)
+        return Character(book, characterName, characterId, aliasesList, characterDescription, firstAppearanceChapter)
     }
 }
 
