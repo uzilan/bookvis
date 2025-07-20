@@ -6,6 +6,7 @@ import bookvis.models.BookData
 import bookvis.models.Chapter
 import bookvis.models.Character
 import bookvis.models.Relationship
+import bookvis.models.Faction
 
 @DslMarker
 annotation class BookDsl
@@ -17,6 +18,7 @@ class BookBuilder {
     private var chaptersList = mutableListOf<Chapter>()
     private var charactersList = mutableListOf<Character>()
     private var relationshipsList = mutableListOf<Relationship>()
+    private var factionsList = mutableListOf<Faction>()
     
     fun author(name: String) {
         authorName = name
@@ -35,7 +37,7 @@ class BookBuilder {
     
     fun characters(init: CharactersBuilder.() -> Unit) {
         val book = Book(Author(authorName), bookTitle)
-        val charactersBuilder = CharactersBuilder(book)
+        val charactersBuilder = CharactersBuilder(book, factionsList.toList())
         charactersBuilder.init()
         charactersList.addAll(charactersBuilder.getCharacters())
     }
@@ -45,6 +47,13 @@ class BookBuilder {
         val relationshipsBuilder = RelationshipsBuilder(book, charactersList.toList(), chaptersList.toList())
         relationshipsBuilder.init()
         relationshipsList.addAll(relationshipsBuilder.getRelationships())
+    }
+    
+    fun factions(init: FactionsBuilder.() -> Unit) {
+        val book = Book(Author(authorName), bookTitle)
+        val factionsBuilder = FactionsBuilder(book)
+        factionsBuilder.init()
+        factionsList.addAll(factionsBuilder.getFactions())
     }
     
     fun build(): Book {
@@ -57,6 +66,8 @@ class BookBuilder {
     fun getCharacters(): List<Character> = charactersList.toList()
     
     fun getRelationships(): List<Relationship> = relationshipsList.toList()
+    
+    fun getFactions(): List<Faction> = factionsList.toList()
 }
 
 fun book(init: BookBuilder.() -> Unit): BookData {
@@ -65,6 +76,7 @@ fun book(init: BookBuilder.() -> Unit): BookData {
         book = builder.build(),
         chapters = builder.getChapters(),
         characters = builder.getCharacters(),
-        relationships = builder.getRelationships()
+        relationships = builder.getRelationships(),
+        factions = builder.getFactions()
     )
 } 

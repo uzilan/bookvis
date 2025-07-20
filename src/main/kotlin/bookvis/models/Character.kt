@@ -6,5 +6,6 @@ data class Character(
     val id: String,
     val aliases: List<String>,
     val description: String,
-    val firstAppearanceChapter: Int
+    val firstAppearanceChapter: Int,
+    val factions: List<Faction>
 ) 

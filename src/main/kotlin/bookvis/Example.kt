@@ -111,6 +111,72 @@ object Example {
         }
     }
     
+    fun createBookWithFactions(): BookData {
+        return book {
+            author("J.R.R. Tolkien")
+            title("The Hobbit")
+            factions {
+                faction {
+                    title("Dwarves")
+                    id("dwarves")
+                    description("A proud race of miners and craftsmen")
+                }
+                faction {
+                    title("Wizards")
+                    id("wizards")
+                    description("Mystical beings with great power")
+                }
+                faction {
+                    title("Hobbits")
+                    id("hobbits")
+                    description("Small, peaceful folk who love comfort")
+                }
+                faction {
+                    title("Dragons")
+                    id("dragons")
+                    description("Ancient, greedy creatures who hoard treasure")
+                }
+            }
+            characters {
+                character {
+                    name("Bilbo Baggins")
+                    id("bilbo")
+                    description("A hobbit")
+                    firstAppearance(1)
+                    factions("hobbits")
+                }
+                character {
+                    name("Gandalf")
+                    id("gandalf")
+                    description("A wizard")
+                    firstAppearance(1)
+                    factions("wizards")
+                }
+                character {
+                    name("Thorin Oakenshield")
+                    id("thorin")
+                    description("A dwarf")
+                    firstAppearance(2)
+                    factions("dwarves")
+                }
+                character {
+                    name("Balin")
+                    id("balin")
+                    description("A dwarf")
+                    firstAppearance(2)
+                    factions("dwarves")
+                }
+                character {
+                    name("Smaug")
+                    id("smaug")
+                    description("A dragon")
+                    firstAppearance(12)
+                    factions("dragons")
+                }
+            }
+        }
+    }
+    
     fun createBookWithRelationships(): BookData {
         return book {
             author("J.R.R. Tolkien")
