@@ -5,5 +5,5 @@ data class Relationship(
     val character1: Character,
     val character2: Character,
     val description: String,
-    val chapter: Chapter
-) 
+    val chapter: Chapter,
+)

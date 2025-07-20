@@ -7,14 +7,16 @@ import bookvis.models.Chapter
 annotation class ChaptersDsl
 
 @ChaptersDsl
-class ChaptersBuilder(private val book: Book) {
+class ChaptersBuilder(
+    private val book: Book,
+) {
     private val chapters = mutableListOf<Chapter>()
     private var currentIndex = 1
-    
+
     fun title(title: String) {
         chapters.add(Chapter(book, title, currentIndex))
         currentIndex++
     }
-    
+
     fun getChapters(): List<Chapter> = chapters.toList()
-} 
+}

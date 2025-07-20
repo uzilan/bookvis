@@ -1,23 +1,20 @@
 package bookvis
 
+import bookvis.dsl.book
+import bookvis.dsl.chapter
 import bookvis.models.Book
 import bookvis.models.BookData
 import bookvis.models.Chapter
-import bookvis.models.Character
-import bookvis.dsl.book
-import bookvis.dsl.chapter
 
 object Example {
-    
-    fun demonstrateSimpleDsl(): BookData {
-        return book {
+    fun demonstrateSimpleDsl(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Lord of the Rings")
         }
-    }
-    
-    fun createMultipleBooks(): List<BookData> {
-        return listOf(
+
+    fun createMultipleBooks(): List<BookData> =
+        listOf(
             book {
                 author("J.K. Rowling")
                 title("Harry Potter and the Philosopher's Stone")
@@ -25,12 +22,11 @@ object Example {
             book {
                 author("J.K. Rowling")
                 title("Harry Potter and the Chamber of Secrets")
-            }
+            },
         )
-    }
-    
-    fun createBookWithChapters(): BookData {
-        return book {
+
+    fun createBookWithChapters(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
@@ -41,10 +37,9 @@ object Example {
                 title("Riddles in the Dark")
             }
         }
-    }
-    
-    fun createBookWithCharacters(): BookData {
-        return book {
+
+    fun createBookWithCharacters(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             characters {
@@ -77,10 +72,9 @@ object Example {
                 }
             }
         }
-    }
-    
-    fun createBookWithEverything(): BookData {
-        return book {
+
+    fun createBookWithEverything(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
@@ -109,10 +103,9 @@ object Example {
                 }
             }
         }
-    }
-    
-    fun createBookWithAttributes(): BookData {
-        return book {
+
+    fun createBookWithAttributes(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             characters {
@@ -146,10 +139,9 @@ object Example {
                 }
             }
         }
-    }
-    
-    fun createBookWithFactions(): BookData {
-        return book {
+
+    fun createBookWithFactions(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             factions {
@@ -212,10 +204,9 @@ object Example {
                 }
             }
         }
-    }
-    
-    fun createBookWithRelationships(): BookData {
-        return book {
+
+    fun createBookWithRelationships(): BookData =
+        book {
             author("J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
@@ -267,20 +258,21 @@ object Example {
                 }
             }
         }
-    }
-    
+
     fun createBookWithChapter(): Pair<Book, Chapter> {
-        val bookData = book {
-            author("J.R.R. Tolkien")
-            title("The Hobbit")
-        }
-        
-        val chapter = chapter {
-            book(bookData.book)
-            title("An Unexpected Party")
-            index(1)
-        }
-        
+        val bookData =
+            book {
+                author("J.R.R. Tolkien")
+                title("The Hobbit")
+            }
+
+        val chapter =
+            chapter {
+                book(bookData.book)
+                title("An Unexpected Party")
+                index(1)
+            }
+
         return Pair(bookData.book, chapter)
     }
-} 
+}

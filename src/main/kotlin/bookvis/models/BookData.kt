@@ -5,5 +5,5 @@ data class BookData(
     val chapters: List<Chapter>,
     val characters: List<Character>,
     val relationships: List<Relationship>,
-    val factions: List<Faction>
-) 
+    val factions: List<Faction>,
+)

@@ -1,3 +1,5 @@
 package bookvis.models
 
-data class Author(val name: String)
+data class Author(
+    val name: String,
+)

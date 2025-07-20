@@ -8,5 +8,5 @@ data class Character(
     val description: String,
     val firstAppearanceChapter: Int,
     val factions: List<Faction>,
-    val attributes: List<String>
-) 
+    val attributes: List<String>,
+)
