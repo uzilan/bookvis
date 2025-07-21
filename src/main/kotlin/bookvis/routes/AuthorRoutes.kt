@@ -1,6 +1,6 @@
 package bookvis.routes
 
-import bookvis.models.Author
+import bookvis.services.AuthorService
 import io.github.smiley4.ktoropenapi.post
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
@@ -22,13 +22,14 @@ data class ErrorResponse(
 )
 
 private val logger = LoggerFactory.getLogger("AuthorRoutes")
+private val authorService = AuthorService()
 
 fun Route.authorRoutes() {
     route("/api/authors") {
         post("/create", {
             description = "Create an author"
             response {
-                HttpStatusCode.OK to {
+                HttpStatusCode.Created to {
                     description = "Author created"
                     body<AuthorRequest> {
                         example("default") {
@@ -40,17 +41,11 @@ fun Route.authorRoutes() {
         }) {
             try {
                 val request = call.receive<AuthorRequest>()
-                logger.info("Creating author: ${request.name} with id: ${request.id}")
-
-                val author = Author(request.id, request.name)
-
+                val author = authorService.createAuthor(request.id, request.name)
                 call.respond(HttpStatusCode.Created, author)
             } catch (e: Exception) {
                 logger.error("Error creating author", e)
-                call.respond(
-                    HttpStatusCode.BadRequest,
-                    ErrorResponse(e.message ?: "Error creating author"),
-                )
+                call.respond(HttpStatusCode.BadRequest, ErrorResponse(e.message ?: "Error creating author"))
             }
         }
     }

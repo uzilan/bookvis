@@ -21,7 +21,10 @@ class BookBuilder {
     private var relationshipsList = mutableListOf<Relationship>()
     private var factionsList = mutableListOf<Faction>()
 
-    fun author(id: String, name: String) {
+    fun author(
+        id: String,
+        name: String,
+    ) {
         authorId = id
         authorName = name
     }
