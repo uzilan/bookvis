@@ -1,0 +1,10 @@
+{
+  "name": "bookvis",
+  "version": "1.0.0",
+  "description": "Book visualization project",
+  "scripts": {
+    "update-models": "node scripts/update-frontend-models.js"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+} 

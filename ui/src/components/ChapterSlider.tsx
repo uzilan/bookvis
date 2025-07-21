@@ -45,7 +45,19 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({ chapters, value, o
       />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '70vh', justifyContent: 'space-between' }}>
         {chapters.map((chapter, idx) => (
-          <div key={chapter.index} style={{ fontSize: 12, color: idx === value ? '#111' : '#888', fontWeight: idx === value ? 'bold' : 'normal', textAlign: 'left', minHeight: 0 }}>
+          <div
+            key={chapter.index}
+            style={{
+              fontSize: 12,
+              color: idx === value ? '#111' : '#888',
+              fontWeight: idx === value ? 'bold' : 'normal',
+              textAlign: 'left',
+              minHeight: 0,
+              cursor: 'pointer',
+              textDecoration: idx === value ? 'underline' : 'none',
+            }}
+            onClick={() => onChange(idx)}
+          >
             {chapter.title}
           </div>
         ))}

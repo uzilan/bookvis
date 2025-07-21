@@ -11,10 +11,18 @@ interface CharacterGraphProps {
 }
 
 export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, factions, relationships = [] }) => {
+  // Color palette for factions
+  const factionColors: Record<string, string> = {
+    f1: '#e0e7ff', // blue-ish
+    f2: '#fef9c3', // yellow-ish
+    f3: '#fee2e2', // red-ish
+    // Add more as needed
+  };
+
   // Create compound nodes for factions
   const elements = [
     ...factions.map((faction) => ({
-      data: { id: faction.id, label: faction.title },
+      data: { id: faction.id, label: faction.title, bgcolor: factionColors[faction.id] || '#e0e0e0' },
       classes: 'faction',
     })),
     ...characters.map((character) => ({
@@ -42,19 +50,19 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
     {
       selector: 'node.faction',
       style: {
-        'background-color': '#e0e0e0',
+        'background-color': 'data(bgcolor)',
         'label': 'data(label)',
         'text-valign': 'top',
         'text-halign': 'center',
-        'font-size': 24,
+        'font-size': 16,
         'font-weight': 'bold',
         'shape': 'roundrectangle',
-        'padding': '40px',
+        'padding': '20px',
         'border-width': 3,
         'border-color': '#888',
         'width': 320,
         'height': 320,
-        'text-margin-y': -160, // Move label above the group
+        'text-margin-y': -10, // Move label even closer above the group
         'text-background-color': '#fff',
         'text-background-opacity': 1,
         'text-background-padding': 6,
@@ -66,7 +74,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
         'background-color': '#fafafa',
         'label': 'data(label)',
         'color': '#111',
-        'font-size': 20,
+        'font-size': 12,
         'font-weight': 'bold',
         'border-width': 2,
         'border-color': '#333',
@@ -87,17 +95,14 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
         'target-arrow-shape': 'triangle',
         'curve-style': 'bezier',
         'label': 'data(label)',
-        'font-size': 16,
+        'font-size': 10,
         'color': '#333',
-        'text-background-color': '#fff',
-        'text-background-opacity': 1,
-        'text-background-padding': 4,
       },
     },
   ];
 
   return (
-    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0 }}>
+    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, background: '#f8fafc' }}>
       <CytoscapeComponent
         elements={elements as any}
         style={{ width: '100vw', height: '100vh' }}
