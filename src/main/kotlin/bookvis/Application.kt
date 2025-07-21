@@ -1,6 +1,6 @@
 package bookvis
 
-import bookvis.routes.bookRoutes
+import bookvis.routes.authorRoutes
 import io.github.smiley4.ktoropenapi.OpenApi
 import io.github.smiley4.ktoropenapi.get
 import io.github.smiley4.ktoropenapi.openApi
@@ -30,7 +30,7 @@ fun Application.module() {
             call.respondText("OK")
         }
 
-        bookRoutes()
+        authorRoutes()
 
         route("api.json") {
             openApi()

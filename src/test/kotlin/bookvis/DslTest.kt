@@ -11,12 +11,13 @@ class DslTest {
     fun `should create book with DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
             }
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(0, bookData.chapters.size)
         assertEquals(0, bookData.characters.size)
@@ -28,7 +29,7 @@ class DslTest {
     fun `should create book with chapters using nested DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 chapters {
                     title("An Unexpected Party")
@@ -39,6 +40,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(3, bookData.chapters.size)
         assertEquals("An Unexpected Party", bookData.chapters[0].title)
@@ -56,7 +58,7 @@ class DslTest {
     fun `should create book with factions using nested DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 factions {
                     faction {
@@ -79,6 +81,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(0, bookData.chapters.size)
         assertEquals(0, bookData.characters.size)
@@ -100,7 +103,7 @@ class DslTest {
     fun `should create book with characters using nested DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 characters {
                     character {
@@ -128,6 +131,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(0, bookData.chapters.size)
         assertEquals(3, bookData.characters.size)
@@ -160,7 +164,7 @@ class DslTest {
     fun `should create book with characters and attributes`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 characters {
                     character {
@@ -189,6 +193,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(0, bookData.chapters.size)
         assertEquals(3, bookData.characters.size)
@@ -222,7 +227,7 @@ class DslTest {
     fun `should create book with characters and factions`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 factions {
                     faction {
@@ -275,6 +280,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(0, bookData.chapters.size)
         assertEquals(4, bookData.characters.size)
@@ -306,7 +312,7 @@ class DslTest {
     fun `should create book with relationships using nested DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 chapters {
                     title("An Unexpected Party")
@@ -350,6 +356,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(2, bookData.chapters.size)
         assertEquals(3, bookData.characters.size)
@@ -383,7 +390,7 @@ class DslTest {
     fun `should create book with both chapters and characters`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
                 chapters {
                     title("An Unexpected Party")
@@ -407,6 +414,7 @@ class DslTest {
 
         assertNotNull(bookData.book)
         assertEquals("J.R.R. Tolkien", bookData.book.author.name)
+        assertEquals("tolkien", bookData.book.author.id)
         assertEquals("The Hobbit", bookData.book.title)
         assertEquals(2, bookData.chapters.size)
         assertEquals(2, bookData.characters.size)
@@ -426,7 +434,7 @@ class DslTest {
     fun `should create chapter with DSL`() {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
             }
 

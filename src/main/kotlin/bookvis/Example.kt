@@ -9,25 +9,25 @@ import bookvis.models.Chapter
 object Example {
     fun demonstrateSimpleDsl(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Lord of the Rings")
         }
 
     fun createMultipleBooks(): List<BookData> =
         listOf(
             book {
-                author("J.K. Rowling")
+                author("rowling", "J.K. Rowling")
                 title("Harry Potter and the Philosopher's Stone")
             },
             book {
-                author("J.K. Rowling")
+                author("rowling", "J.K. Rowling")
                 title("Harry Potter and the Chamber of Secrets")
             },
         )
 
     fun createBookWithChapters(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
                 title("An Unexpected Party")
@@ -40,7 +40,7 @@ object Example {
 
     fun createBookWithCharacters(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             characters {
                 character {
@@ -75,7 +75,7 @@ object Example {
 
     fun createBookWithEverything(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
                 title("An Unexpected Party")
@@ -106,7 +106,7 @@ object Example {
 
     fun createBookWithAttributes(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             characters {
                 character {
@@ -142,7 +142,7 @@ object Example {
 
     fun createBookWithFactions(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             factions {
                 faction {
@@ -207,7 +207,7 @@ object Example {
 
     fun createBookWithRelationships(): BookData =
         book {
-            author("J.R.R. Tolkien")
+            author("tolkien", "J.R.R. Tolkien")
             title("The Hobbit")
             chapters {
                 title("An Unexpected Party")
@@ -265,7 +265,7 @@ object Example {
     fun createBookWithChapter(): Pair<Book, Chapter> {
         val bookData =
             book {
-                author("J.R.R. Tolkien")
+                author("tolkien", "J.R.R. Tolkien")
                 title("The Hobbit")
             }
 
