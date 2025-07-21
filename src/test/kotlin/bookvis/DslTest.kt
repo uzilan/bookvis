@@ -2,7 +2,6 @@ package bookvis
 
 import bookvis.dsl.book
 import bookvis.dsl.chapter
-import bookvis.models.Faction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

@@ -18,19 +18,20 @@ java {
     }
 }
 
+val ktorVersion = "3.2.2"
+
 dependencies {
-    implementation("io.ktor:ktor-server-core:2.3.7")
-    implementation("io.ktor:ktor-server-netty:2.3.7")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.7")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
-    implementation("io.ktor:ktor-server-cors:2.3.7")
-    implementation("io.ktor:ktor-server-call-logging:2.3.7")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-server-cors:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.github.smiley4:ktor-swagger-ui:5.1.0")
+    implementation("io.github.smiley4:ktor-openapi:5.1.0")
     implementation("org.slf4j:slf4j-simple:2.0.17")
-    
-    testImplementation("io.ktor:ktor-server-tests:2.3.7")
+
     testImplementation(kotlin("test"))
-    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    testImplementation("ch.qos.logback:logback-classic:1.4.11")
 }
 
 tasks.test {
