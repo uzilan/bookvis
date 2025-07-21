@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
-import type { Character } from './models/Character';
-import type { Faction } from './models/Faction';
-import type { Relationship } from './models/Relationship';
+import { BookSelector } from './components/BookSelector';
 // import { ChapterTimeline } from './components/ChapterTimeline';
-import type { Chapter } from './models/Chapter';
-import { ChapterSlider } from './components/ChapterSlider';
+import type { Book } from './models/Book';
+import type { BookData } from './models/BookData';
 import {
   winnieBook,
   winnieChapters,
@@ -14,61 +12,90 @@ import {
   winnieFactions,
   winnieRelationships,
 } from './winnieData';
-import type { RelationshipWithChapters } from './winnieData';
+import {
+  aliceBook,
+  aliceChapters,
+  aliceCharacters,
+  aliceFactions,
+  aliceRelationships,
+} from './aliceData';
+
+const availableBooks = [winnieBook, aliceBook];
+
+// Create BookData objects
+const winnieBookData: BookData = {
+  book: winnieBook,
+  characters: winnieCharacters,
+  chapters: winnieChapters,
+  factions: winnieFactions,
+  relationships: winnieRelationships,
+};
+
+const aliceBookData: BookData = {
+  book: aliceBook,
+  characters: aliceCharacters,
+  chapters: aliceChapters,
+  factions: aliceFactions,
+  relationships: aliceRelationships,
+};
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState(0);
+  const [selectedBook, setSelectedBook] = useState<Book>(winnieBook);
+
+  // Get the appropriate book data based on selected book
+  const getBookData = (book: Book): BookData => {
+    switch (book.title) {
+      case 'Winnie-the-Pooh':
+        return winnieBookData;
+      case 'Alice\'s Adventures in Wonderland':
+        return aliceBookData;
+      default:
+        return winnieBookData;
+    }
+  };
+
+  const bookData = getBookData(selectedBook);
+
+  // Reset chapter when switching books
+  React.useEffect(() => {
+    setSelectedChapter(0);
+  }, [selectedBook]);
 
   // Only show characters whose firstAppearanceChapter is <= selected chapter
-  const visibleCharacters = winnieCharacters.filter(
-    c => c.firstAppearanceChapter <= winnieChapters[selectedChapter].index
+  const visibleCharacters = bookData.characters.filter(
+    c => c.firstAppearanceChapter <= bookData.chapters[selectedChapter].index
   );
-  // Only show relationships where both characters are visible and a description exists for the selected chapter
-  const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
-  const visibleRelationships = winnieRelationships
-    .map(r => {
-      // Find the latest description for the current chapter or earlier
-      const desc = [...r.descriptions]
-        .sort((a, b) => b.chapter - a.chapter)
-        .find(d => d.chapter <= winnieChapters[selectedChapter].index);
-      if (!desc) return null;
-      // Only show if both characters are visible (in either direction)
-      if (
-        visibleCharacterIds.has(r.character1.id) &&
-        visibleCharacterIds.has(r.character2.id)
-      ) {
-        return {
-          character1: r.character1,
-          character2: r.character2,
-          description: desc.description,
-          chapter: { book: winnieBook, title: '', index: desc.chapter },
-        };
-      }
-      // Also check for the reverse direction
-      if (
-        visibleCharacterIds.has(r.character2.id) &&
-        visibleCharacterIds.has(r.character1.id)
-      ) {
-        return {
-          character1: r.character2,
-          character2: r.character1,
-          description: desc.description,
-          chapter: { book: winnieBook, title: '', index: desc.chapter },
-        };
-      }
-      return null;
-    })
-    .filter(Boolean) as Relationship[];
   // Only show factions that have at least one visible character
+  const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const visibleFactionIds = new Set(visibleCharacters.flatMap(c => c.factions));
-  const visibleFactions = winnieFactions.filter(f => visibleFactionIds.has(f.id));
+  const visibleFactions = bookData.factions.filter(f => visibleFactionIds.has(f.id));
+
+  // Create filtered book data for the graph
+  const filteredBookData: BookData = {
+    ...bookData,
+    characters: visibleCharacters,
+    relationships: bookData.relationships.filter(r => {
+      // Only include relationships where both characters are visible
+      return visibleCharacterIds.has(r.character1.id) && visibleCharacterIds.has(r.character2.id);
+    }),
+    factions: visibleFactions,
+  };
 
   return (
-    <div className="App" style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <CharacterGraph characters={visibleCharacters} factions={visibleFactions} relationships={visibleRelationships} />
+    <div className="App" style={{ width: '100vw', height: '100vh' }}>
+      <BookSelector 
+        books={availableBooks}
+        selectedBook={selectedBook}
+        onBookChange={setSelectedBook}
+      />
+      <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <CharacterGraph 
+          bookData={filteredBookData}
+          selectedChapter={selectedChapter}
+          onChapterChange={setSelectedChapter}
+        />
       </div>
-      <ChapterSlider chapters={winnieChapters} value={selectedChapter} onChange={setSelectedChapter} />
     </div>
   );
 }

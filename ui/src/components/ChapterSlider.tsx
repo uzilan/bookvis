@@ -1,5 +1,7 @@
 import React from 'react';
 import type { Chapter } from '../models/Chapter';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 
 interface ChapterSliderProps {
   chapters: Chapter[];
@@ -10,40 +12,47 @@ interface ChapterSliderProps {
 export const ChapterSlider: React.FC<ChapterSliderProps> = ({ chapters, value, onChange }) => {
   // Invert the value for the slider so that top = 0 (first chapter)
   const invertedValue = chapters.length - 1 - value;
-  const handleChange = (v: number) => onChange(chapters.length - 1 - v);
+  const handleChange = (_: Event, v: number | number[]) => {
+    const val = Array.isArray(v) ? v[0] : v;
+    onChange(chapters.length - 1 - val);
+  };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      right: 220, // Place next to the timeline (timeline is 220px wide)
-      width: 180,
-      height: '100vh',
-      background: 'rgba(255,255,255,0.95)',
-      borderLeft: '2px solid #eee',
-      zIndex: 20,
-      padding: '24px 0',
-      boxSizing: 'border-box',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      <input
-        id="chapter-slider"
-        type="range"
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: 200,
+        height: '100vh',
+        background: 'rgba(255,255,255,0.98)',
+        borderRight: '3px solid #ccc',
+        zIndex: 1000,
+        p: '24px 0',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+      }}
+    >
+      <Slider
+        orientation="vertical"
         min={0}
         max={chapters.length - 1}
         value={invertedValue}
-        onChange={e => handleChange(Number(e.target.value))}
-        style={{
-          WebkitAppearance: 'slider-vertical',
-          width: 40,
+        onChange={handleChange}
+        sx={{
           height: '70vh',
-          margin: '0 8px 0 0',
+          mr: 2,
         }}
+        marks={chapters.map((chapter, idx) => ({
+          value: chapters.length - 1 - idx,
+          label: '' // We'll show labels separately
+        }))}
       />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '70vh', justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', height: '70vh', justifyContent: 'space-between' }}>
         {chapters.map((chapter, idx) => (
           <div
             key={chapter.index}
@@ -61,7 +70,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({ chapters, value, o
             {chapter.title}
           </div>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }; 

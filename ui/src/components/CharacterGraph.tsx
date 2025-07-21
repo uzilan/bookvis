@@ -1,31 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
+import cytoscape from 'cytoscape';
+// @ts-expect-error - cytoscape-node-editing has no type declarations
+import nodeEditing from 'cytoscape-node-editing';
+import type { BookData } from '../models/BookData';
 import type { Character } from '../models/Character';
-import type { Faction } from '../models/Faction';
-import type { Relationship } from '../models/Relationship';
+import { CharacterDetailsPanel } from './CharacterDetailsPanel';
+import { ChapterSlider } from './ChapterSlider';
+
+// Register the node editing extension
+cytoscape.use(nodeEditing);
 
 interface CharacterGraphProps {
-  characters: Character[];
-  factions: Faction[];
-  relationships?: Relationship[];
+  bookData: BookData;
+  selectedChapter: number;
+  onChapterChange: (index: number) => void;
 }
 
-export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, factions, relationships = [] }) => {
-  // Color palette for factions
-  const factionColors: Record<string, string> = {
-    f1: '#e0e7ff', // blue-ish
-    f2: '#fef9c3', // yellow-ish
-    f3: '#fee2e2', // red-ish
-    // Add more as needed
-  };
+export const CharacterGraph: React.FC<CharacterGraphProps> = ({ bookData, selectedChapter, onChapterChange }) => {
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
+
+  // Create a lookup for faction colors from the factions array
+  const factionColors: Record<string, string> = Object.fromEntries(bookData.factions.map(f => [f.id, f.color]));
 
   // Create compound nodes for factions
   const elements = [
-    ...factions.map((faction) => ({
+    ...bookData.factions.map((faction) => ({
       data: { id: faction.id, label: faction.title, bgcolor: factionColors[faction.id] || '#e0e0e0' },
       classes: 'faction',
     })),
-    ...characters.map((character) => ({
+    ...bookData.characters.map((character) => ({
       data: {
         id: character.id,
         label: character.name,
@@ -33,12 +38,12 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
       },
       classes: 'character',
     })),
-    ...relationships.map((rel, i) => ({
+    ...bookData.relationships.map((rel, i) => ({
       data: {
         id: `rel-${i}`,
         source: rel.character1.id,
         target: rel.character2.id,
-        label: rel.description,
+        label: rel.descriptions[0]?.description || 'Related',
       },
       classes: 'relationship',
     })),
@@ -60,12 +65,20 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
         'padding': '20px',
         'border-width': 3,
         'border-color': '#888',
-        'width': 320,
-        'height': 320,
+        'width': 200,
+        'height': 200,
         'text-margin-y': -10, // Move label even closer above the group
         'text-background-color': '#fff',
         'text-background-opacity': 1,
         'text-background-padding': 6,
+        'resize': 'manual',
+        'resize-from': 'width height',
+        'resize-to': 'width height',
+        'resize-handle-width': 10,
+        'resize-handle-color': '#ff0000',
+        'resize-handle-border-color': '#fff',
+        'resize-handle-border-width': 2,
+        'resize-handle-opacity': 1,
       },
     },
     {
@@ -84,6 +97,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
         'text-halign': 'center',
         'shape': 'ellipse',
         'userDraggable': true,
+        'cursor': 'pointer',
       },
     },
     {
@@ -101,13 +115,59 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ characters, fact
     },
   ];
 
+  const handleNodeClick = (event: cytoscape.EventObject) => {
+    const node = event.target;
+    if (node.hasClass('character')) {
+      const characterId = node.id();
+      const character = bookData.characters.find(c => c.id === characterId);
+      if (character) {
+        setSelectedCharacter(character);
+        setIsDetailsPanelOpen(true);
+      }
+    }
+  };
+
+  const handleCloseDetailsPanel = () => {
+    setIsDetailsPanelOpen(false);
+    setSelectedCharacter(null);
+  };
+
   return (
-    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, background: '#f8fafc' }}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%', 
+      background: '#f8fafc', 
+      overflow: 'hidden', 
+      position: 'relative',
+      clipPath: 'inset(0 0 0 0)',
+      isolation: 'isolate'
+    }}>
       <CytoscapeComponent
-        elements={elements as any}
-        style={{ width: '100vw', height: '100vh' }}
+        elements={elements}
+        style={{ width: '100%', height: '100%' }}
         layout={layout}
         stylesheet={style}
+        cy={(cy: cytoscape.Core) => {
+          cy.on('tap', 'node', handleNodeClick);
+          // Enable panning and zooming
+          cy.panningEnabled(true);
+          cy.zoomingEnabled(true);
+          // Ensure the graph stays within bounds
+          cy.fit();
+        }}
+      />
+      <ChapterSlider
+        chapters={bookData.chapters}
+        value={selectedChapter}
+        onChange={onChapterChange}
+      />
+      <CharacterDetailsPanel
+        character={selectedCharacter}
+        factions={bookData.factions}
+        chapters={bookData.chapters}
+        relationships={bookData.relationships}
+        open={isDetailsPanelOpen}
+        onClose={handleCloseDetailsPanel}
       />
     </div>
   );

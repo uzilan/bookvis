@@ -1,9 +1,18 @@
-import type { Book, Chapter, Character, Relationship, Faction } from './Book';
+import type { Book } from './Book';
+import type { Character } from './Character';
+import type { Chapter } from './Chapter';
+import type { Faction } from './Faction';
+
+export interface RelationshipWithChapters {
+  character1: Character;
+  character2: Character;
+  descriptions: { chapter: number; description: string }[];
+}
 
 export interface BookData {
   book: Book;
-  chapters: Chapter[];
   characters: Character[];
-  relationships: Relationship[];
+  chapters: Chapter[];
   factions: Faction[];
+  relationships: RelationshipWithChapters[];
 }
