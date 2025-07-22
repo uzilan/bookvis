@@ -6,6 +6,8 @@ import type { Book } from '../models/Book';
 import { CharacterDetailsPanel } from './CharacterDetailsPanel';
 import { ChapterSlider } from './ChapterSlider';
 
+
+
 interface CharacterGraphProps {
   bookData: BookData;
   selectedChapter: number;
@@ -29,13 +31,29 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   const networkInstanceRef = useRef<Network | null>(null);
 
   // Create vis.js nodes and edges with legend-style faction display
-  const createVisData = () => {
+  const createVisData = (preservePositions = false) => {
     const nodes: Record<string, unknown>[] = [];
     const edges: Record<string, unknown>[] = [];
+
+    // Get current node positions if preserving positions
+    const currentPositions: Record<string, { x: number; y: number }> = {};
+    if (preservePositions && networkInstanceRef.current) {
+      const currentNodes = networkInstanceRef.current.getPositions();
+      Object.keys(currentNodes).forEach(nodeId => {
+        currentPositions[nodeId] = currentNodes[nodeId];
+      });
+    }
 
     // Add character nodes in the main area
     bookData.characters.forEach((character) => {
       const primaryFaction = character.factions[0];
+      
+      // Use existing position if available, otherwise random
+      const existingPosition = currentPositions[character.id];
+      const position = existingPosition || {
+        x: (Math.random() - 0.5) * 400,
+        y: (Math.random() - 0.5) * 400,
+      };
 
       nodes.push({
         id: character.id,
@@ -48,9 +66,9 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         size: 100, // Explicit size override
         widthConstraint: { minimum: 100, maximum: 100 },
         heightConstraint: { minimum: 100, maximum: 100 },
-        // Position characters in the main area (center)
-        x: (Math.random() - 0.5) * 400,
-        y: (Math.random() - 0.5) * 400,
+        // Use preserved position or random position
+        x: position.x,
+        y: position.y,
       });
     });
 
@@ -61,7 +79,6 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         from: rel.character1.id,
         to: rel.character2.id,
         label: rel.descriptions[0]?.description || 'Related',
-        arrows: 'to',
         color: '#888',
         width: 2,
         font: { size: 14, color: '#333' },
@@ -114,17 +131,28 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       },
     },
 
-    physics: {
+            physics: {
       enabled: true,
-      solver: 'forceAtlas2Based',
-      forceAtlas2Based: {
-        gravitationalConstant: -50,
-        centralGravity: 0.01,
+      solver: 'repulsion',
+      repulsion: {
+        nodeDistance: 150,
+        centralGravity: 0.05,
         springLength: 200,
-        springConstant: 0.08,
-        damping: 0.4,
-        avoidOverlap: 0.8,
+        springConstant: 0.01,
+        damping: 0.9,
+        avoidOverlap: 0.5,
       },
+    },
+    smooth: {
+      enabled: true,
+      type: 'continuous',
+      forceDirection: 'none',
+      roundness: 0.5,
+    },
+    animation: {
+      enabled: true,
+      duration: 8000,
+      easingFunction: 'easeInOutQuad',
     },
     interaction: {
       hover: true,
@@ -159,11 +187,13 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   // Update network when data changes
   useEffect(() => {
     if (networkInstanceRef.current) {
-      const data = createVisData();
+      const data = createVisData(true); // Preserve current positions
       networkInstanceRef.current.setData(data);
-      networkInstanceRef.current.fit();
+      // Don't call fit() here as it would reset the view
     }
   }, [bookData, selectedChapter]);
+
+
 
   const handleCloseDetailsPanel = () => {
     setIsDetailsPanelOpen(false);
@@ -178,6 +208,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       overflow: 'hidden',
       position: 'relative',
     }}>
+
+
       {/* Faction Legend */}
       <div style={{
         position: 'absolute',
