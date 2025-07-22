@@ -5,6 +5,7 @@ import type { Faction } from '../models/Faction';
 import type { RelationshipWithChapters } from '../models/BookData';
 
 const winnieBook = {
+  id: 'winnie',
   author: { id: 'milne', name: 'A. A. Milne' },
   title: 'Winnie-the-Pooh',
 };

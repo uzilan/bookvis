@@ -11,7 +11,7 @@ import { lotrData } from './books/lotrData';
 
 const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData, lotrData];
 const availableBooks = bookDataList.map(bd => bd.book);
-const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.map(bd => [bd.book.title, bd]));
+const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.map(bd => [bd.book.id, bd]));
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState(1);
@@ -19,7 +19,7 @@ function App() {
 
   // Get the appropriate book data based on selected book
   const getBookData = (book: Book): BookData => {
-    return bookDataMap[book.title] || winnieBookData;
+    return bookDataMap[book.id] || winnieBookData;
   };
 
   const bookData = getBookData(selectedBook);
@@ -56,7 +56,7 @@ function App() {
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph 
-          key={selectedBook.title}
+          key={selectedBook.id}
           bookData={filteredBookData}
           fullBookData={bookData}
           selectedChapter={selectedChapter}

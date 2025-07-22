@@ -5,6 +5,7 @@ import type { Faction } from '../models/Faction';
 import type { RelationshipWithChapters } from '../models/BookData';
 
 const aliceBook = {
+  id: 'alice',
   author: { id: 'carroll', name: 'Lewis Carroll' },
   title: "Alice's Adventures in Wonderland",
 };

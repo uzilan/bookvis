@@ -28,15 +28,15 @@ export const BookSelector: React.FC<BookSelectorProps> = ({ books, selectedBook,
         </Typography>
         <FormControl size="small" sx={{ minWidth: 200 }}>
           <Select
-            value={selectedBook.title}
+            value={selectedBook.id}
             onChange={(e) => {
-              const book = books.find(b => b.title === e.target.value);
+              const book = books.find(b => b.id === e.target.value);
               if (book) onBookChange(book);
             }}
             displayEmpty
           >
             {books.map((book) => (
-              <MenuItem key={book.title} value={book.title}>
+              <MenuItem key={book.id} value={book.id}>
                 {book.title}
               </MenuItem>
             ))}

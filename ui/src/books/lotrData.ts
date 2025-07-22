@@ -14,6 +14,7 @@ const tolkien: Author = {
 
 // Book definition
 const lotrBook: Book = {
+  id: 'lotr',
   title: 'The Lord of the Rings',
   author: tolkien,
 };

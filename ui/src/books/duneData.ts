@@ -14,6 +14,7 @@ const frankHerbert: Author = {
 
 // Book definition
 const duneBook: Book = {
+  id: 'dune',
   title: 'Dune',
   author: frankHerbert,
 };

@@ -14,6 +14,7 @@ const fyodorDostoevsky: Author = {
 
 // Book
 const crimeAndPunishmentBook: Book = {
+  id: 'crime-and-punishment',
   author: fyodorDostoevsky,
   title: 'Crime and Punishment',
 };

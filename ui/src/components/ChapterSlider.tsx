@@ -206,16 +206,16 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         </Typography>
         <FormControl size="small" sx={{ width: '100%' }}>
           <Select
-            value={selectedBook.title}
+            value={selectedBook.id}
             onChange={(e) => {
-              const book = books.find(b => b.title === e.target.value);
+              const book = books.find(b => b.id === e.target.value);
               if (book) onBookChange(book);
             }}
             displayEmpty
             sx={{ fontSize: 12 }}
           >
             {books.map((book) => (
-              <MenuItem key={book.title} value={book.title} sx={{ fontSize: 12 }}>
+              <MenuItem key={book.id} value={book.id} sx={{ fontSize: 12 }}>
                 {book.title}
               </MenuItem>
             ))}
