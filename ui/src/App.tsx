@@ -3,15 +3,17 @@ import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
-import { winnieBookData } from './winnieData';
-import { aliceBookData } from './aliceData';
+import { winnieBookData } from './books/winnieData';
+import { aliceBookData } from './books/aliceData';
+import { duneData } from './books/duneData';
+import { crimeAndPunishmentData } from './books/crimeAndPunishmentData';
 
-const bookDataList: BookData[] = [winnieBookData, aliceBookData];
+const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData];
 const availableBooks = bookDataList.map(bd => bd.book);
 const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.map(bd => [bd.book.title, bd]));
 
 function App() {
-  const [selectedChapter, setSelectedChapter] = useState(0);
+  const [selectedChapter, setSelectedChapter] = useState(1);
   const [selectedBook, setSelectedBook] = useState<Book>(winnieBookData.book);
 
   // Get the appropriate book data based on selected book
@@ -23,7 +25,7 @@ function App() {
 
   // Reset chapter when switching books
   React.useEffect(() => {
-    setSelectedChapter(0);
+    setSelectedChapter(1);
   }, [selectedBook]);
 
   // Clamp selectedChapter to a valid range for the current book
@@ -53,7 +55,9 @@ function App() {
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph 
+          key={selectedBook.title}
           bookData={filteredBookData}
+          fullBookData={bookData}
           selectedChapter={selectedChapter}
           onChapterChange={setSelectedChapter}
           books={availableBooks}

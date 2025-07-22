@@ -33,6 +33,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   open,
   onClose,
 }) => {
+  console.log('CharacterDetailsPanel render:', { character, open });
   if (!character) return null;
 
   const characterFactions = character.factions.map(factionId => 
@@ -116,8 +117,23 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
           </Paper>
         )}
 
-        {characterRelationships.length > 0 && (
+        {character.attributes.length > 0 && (
           <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Attributes
+            </Typography>
+            <List dense>
+              {character.attributes.map((attribute, index) => (
+                <ListItem key={index} sx={{ py: 0.5 }}>
+                  <ListItemText primary={attribute} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+        )}
+
+        {characterRelationships.length > 0 && (
+          <Paper elevation={1} sx={{ p: 2 }}>
             <Typography variant="h6" sx={{ mb: 1 }}>
               Current Relationships
             </Typography>
@@ -133,21 +149,6 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
                   </ListItem>
                 );
               })}
-            </List>
-          </Paper>
-        )}
-
-        {character.attributes.length > 0 && (
-          <Paper elevation={1} sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Attributes
-            </Typography>
-            <List dense>
-              {character.attributes.map((attribute, index) => (
-                <ListItem key={index} sx={{ py: 0.5 }}>
-                  <ListItemText primary={attribute} />
-                </ListItem>
-              ))}
             </List>
           </Paper>
         )}

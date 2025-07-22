@@ -10,6 +10,7 @@ import { ChapterSlider } from './ChapterSlider';
 
 interface CharacterGraphProps {
   bookData: BookData;
+  fullBookData: BookData;
   selectedChapter: number;
   onChapterChange: (index: number) => void;
   books: Book[];
@@ -19,6 +20,7 @@ interface CharacterGraphProps {
 
 export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   bookData,
+  fullBookData,
   selectedChapter,
   onChapterChange,
   books,
@@ -169,12 +171,19 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
       // Handle node clicks
       network.on('click', (params) => {
+        console.log('Node click detected:', params);
         if (params.nodes.length > 0) {
           const nodeId = params.nodes[0];
-          const character = bookData.characters.find(c => c.id === nodeId);
+          console.log('Clicked node ID:', nodeId);
+          const character = fullBookData.characters.find(c => c.id === nodeId);
+          console.log('Found character:', character);
+          console.log('Available characters in fullBookData:', fullBookData.characters.map(c => ({ id: c.id, name: c.name })));
           if (character) {
+            console.log('Setting selected character and opening panel');
             setSelectedCharacter(character);
             setIsDetailsPanelOpen(true);
+          } else {
+            console.log('Character not found in fullBookData.characters:', fullBookData.characters.map(c => c.id));
           }
         }
       });
@@ -182,7 +191,9 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       // Fit network to view
       network.fit();
     }
-  }, []);
+  }, []); // Keep empty dependency array
+
+
 
   // Update network when data changes
   useEffect(() => {
