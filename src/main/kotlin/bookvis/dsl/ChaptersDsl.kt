@@ -13,8 +13,28 @@ class ChaptersBuilder(
     private val chapters = mutableListOf<Chapter>()
     private var currentIndex = 1
 
-    fun title(title: String) {
-        chapters.add(Chapter(book, title, currentIndex))
+    fun title(
+        title: String,
+        parent: Chapter? = null,
+        level: Int? = null,
+        type: String? = null,
+        partTitle: String? = null,
+        globalIndex: Int? = null,
+        path: List<String>? = null,
+    ) {
+        chapters.add(
+            Chapter(
+                book = book,
+                title = title,
+                index = currentIndex,
+                parent = parent,
+                level = level,
+                type = type,
+                partTitle = partTitle,
+                globalIndex = globalIndex,
+                path = path,
+            )
+        )
         currentIndex++
     }
 
