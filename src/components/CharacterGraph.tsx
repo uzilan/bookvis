@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Network } from 'vis-network/standalone';
 import type { BookData } from '../models/BookData';
 import type { Character } from '../models/Character';
@@ -18,6 +18,84 @@ interface CharacterGraphProps {
   onBookChange: (book: Book) => void;
 }
 
+
+
+// Utility to generate a pie chart SVG data URI for an array of colors with character name
+function generatePieSVG(colors: string[], characterName: string, size = 100): string {
+  if (colors.length === 0) return '';
+  const radius = size / 2;
+  const cx = radius;
+  const cy = radius;
+  const total = colors.length;
+  let svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${size}' height='${size}' viewBox='0 0 ${size} ${size}'>`;
+  
+  // For 1 color, create a solid circle
+  if (total === 1) {
+    svg += `<circle cx='${cx}' cy='${cy}' r='${radius-2}' fill='${colors[0]}'/>`;
+  } else if (total === 2) {
+    // For 2 colors, create a vertical split (left/right halves of circle)
+    // Left half of circle
+    svg += `<path d='M${cx},${cy} L${cx},${cy-radius} A${radius},${radius} 0 0 1 ${cx},${cy+radius} Z' fill='${colors[0]}'/>`;
+    // Right half of circle
+    svg += `<path d='M${cx},${cy} L${cx},${cy-radius} A${radius},${radius} 0 0 0 ${cx},${cy+radius} Z' fill='${colors[1]}'/>`;
+  } else {
+    // For more than 2 colors, use pie chart
+    let startAngle = 0;
+    for (let i = 0; i < total; i++) {
+      const endAngle = startAngle + (2 * Math.PI) / total;
+      const x1 = cx + radius * Math.cos(startAngle);
+      const y1 = cy + radius * Math.sin(startAngle);
+      const x2 = cx + radius * Math.cos(endAngle);
+      const y2 = cy + radius * Math.sin(endAngle);
+      const largeArcFlag = (endAngle - startAngle) > Math.PI ? 1 : 0;
+      svg += `<path d='M${cx},${cy} L${x1},${y1} A${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2} Z' fill='${colors[i]}'/>`;
+      startAngle = endAngle;
+    }
+  }
+  
+  svg += `<circle cx='${cx}' cy='${cy}' r='${radius-2}' fill='none' stroke='#333' stroke-width='2'/>`;
+  // Add character name in the center with wrapping
+  const maxCharsPerLine = 8; // Adjust based on desired fit and font size
+  const lineHeight = 8; // Adjust based on font size (font-size 6 + some padding)
+  const words = characterName.split(' ');
+  let lines: string[] = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    if ((currentLine + word).length <= maxCharsPerLine) {
+      currentLine += (currentLine === '' ? '' : ' ') + word;
+    } else {
+      if (currentLine !== '') {
+        lines.push(currentLine);
+      }
+      currentLine = word;
+    }
+  }
+  if (currentLine !== '') {
+    lines.push(currentLine);
+  }
+
+  // If a single word is too long, force break it
+  if (lines.length === 1 && lines[0].length > maxCharsPerLine) {
+    const originalLine = lines[0];
+    lines = [];
+    for (let i = 0; i < originalLine.length; i += maxCharsPerLine) {
+      lines.push(originalLine.substring(i, i + maxCharsPerLine));
+    }
+  }
+
+  const totalTextHeight = lines.length * lineHeight;
+  const initialY = cy - (totalTextHeight / 2) + (lineHeight / 2); // Center vertically
+
+  svg += `<text x='${cx}' y='${initialY}' text-anchor='middle' font-family='Arial' font-size='6' font-weight='bold' fill='#333'>`;
+  lines.forEach((line, index) => {
+    svg += `<tspan x='${cx}' dy='${index === 0 ? 0 : lineHeight}'>${line}</tspan>`;
+  });
+  svg += `</text>`;
+  svg += '</svg>';
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
 export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   bookData,
   fullBookData,
@@ -33,7 +111,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   const networkInstanceRef = useRef<Network | null>(null);
 
   // Create vis.js nodes and edges with legend-style faction display
-  const createVisData = (preservePositions = false) => {
+  const createVisData = useCallback((preservePositions = false) => {
     const nodes: Record<string, unknown>[] = [];
     const edges: Record<string, unknown>[] = [];
 
@@ -48,27 +126,28 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
     // Add character nodes in the main area
     bookData.characters.forEach((character) => {
-      const primaryFaction = character.factions[0];
-      
+      const factionColors = character.factions
+        .map(fid => bookData.factions.find(f => f.id === fid)?.color)
+        .filter(Boolean) as string[];
       // Use existing position if available, otherwise random
       const existingPosition = currentPositions[character.id];
       const position = existingPosition || {
         x: (Math.random() - 0.5) * 400,
         y: (Math.random() - 0.5) * 400,
       };
-
+      // Use SVG image for all characters (single or multiple factions)
       nodes.push({
         id: character.id,
-        label: character.name,
+        label: '', // No label since name is inside the SVG
         group: 'character',
-        color: primaryFaction ? bookData.factions.find(f => f.id === primaryFaction)?.color : '#cccccc',
+        shape: 'image',
+        image: generatePieSVG(factionColors, character.name, 60),
         font: { size: 16, face: 'Arial', bold: true },
         borderWidth: 2,
         borderColor: '#333',
-        size: 100, // Explicit size override
-        widthConstraint: { minimum: 100, maximum: 100 },
-        heightConstraint: { minimum: 100, maximum: 100 },
-        // Use preserved position or random position
+        size: 60,
+        widthConstraint: { minimum: 60, maximum: 60 },
+        heightConstraint: { minimum: 60, maximum: 60 },
         x: position.x,
         y: position.y,
       });
@@ -88,10 +167,10 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     });
 
     return { nodes, edges };
-  };
+  }, [bookData.characters, bookData.factions, bookData.relationships]);
 
   // Network options
-  const options = {
+  const options = useMemo(() => ({
     nodes: {
       shape: 'circle',
       font: {
@@ -160,7 +239,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       hover: true,
       tooltipDelay: 200,
     },
-  };
+  }), []);
 
   // Initialize network
   useEffect(() => {
@@ -191,7 +270,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       // Fit network to view
       network.fit();
     }
-  }, []); // Keep empty dependency array
+  }, [createVisData, fullBookData.characters, options]);
 
 
 
@@ -202,7 +281,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       networkInstanceRef.current.setData(data);
       // Don't call fit() here as it would reset the view
     }
-  }, [bookData, selectedChapter]);
+  }, [bookData, selectedChapter, createVisData]);
 
 
 

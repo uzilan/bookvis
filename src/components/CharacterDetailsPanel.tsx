@@ -15,7 +15,52 @@ import type { Character } from '../models/Character';
 import type { Faction } from '../models/Faction';
 import type { Chapter } from '../models/Chapter';
 import type { RelationshipWithChapters } from '../models/BookData';
-import { getChapterDisplayPath } from '../utils/chapterHierarchy';
+
+// Helper function to create breadcrumb display for chapter
+function getBreadcrumbDisplay(chapter: Chapter, chapters: Chapter[]): string {
+  // Get all unique books and parts to determine what to show
+  const books = chapters.filter(ch => ch.type === 'book');
+  const parts = chapters.filter(ch => ch.type === 'part');
+  
+  const path = chapter.path || [];
+  const breadcrumbs: string[] = [];
+  
+  // If there's only one book, skip the book name
+  if (books.length <= 1) {
+    // For simple books without parts, just show the chapter title
+    if (path.length === 0) {
+      // Simple structure: no path, just show chapter title
+      breadcrumbs.push(chapter.title);
+    } else if (path.length === 1) {
+      // Simple structure: just book and chapter
+      breadcrumbs.push(chapter.title);
+    } else if (path.length > 1) {
+      // Has parts
+      breadcrumbs.push(path[1]); // Part name
+      if (path.length > 2) {
+        breadcrumbs.push(path[2]); // Chapter name
+      }
+    }
+  } else {
+    // Multiple books, show book name
+    if (path.length > 0) {
+      breadcrumbs.push(path[0]); // Book name
+    }
+    if (path.length > 1) {
+      breadcrumbs.push(path[1]); // Part name
+    }
+    if (path.length > 2) {
+      breadcrumbs.push(path[2]); // Chapter name
+    }
+  }
+  
+  // If there's only one part, skip the part name
+  if (parts.length <= 1 && breadcrumbs.length > 1) {
+    breadcrumbs.splice(1, 1); // Remove part name
+  }
+  
+  return breadcrumbs.join(', ');
+}
 
 interface CharacterDetailsPanelProps {
   character: Character | null;
@@ -42,7 +87,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   ).filter(Boolean) as Faction[];
 
   const firstAppearanceChapter = chapters.find(
-    ch => ch.globalIndex === character.firstAppearanceChapter && ch.type === 'chapter'
+    ch => ch.globalIndex === character.firstAppearanceChapter
   );
 
   // Find relationships where this character is involved
@@ -52,7 +97,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
   // Get the formatted display path for first appearance
   const firstAppearanceDisplay = firstAppearanceChapter 
-    ? getChapterDisplayPath(firstAppearanceChapter, chapters)
+    ? getBreadcrumbDisplay(firstAppearanceChapter, chapters)
     : `Chapter ${character.firstAppearanceChapter}`;
 
   return (

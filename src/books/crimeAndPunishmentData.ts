@@ -134,91 +134,91 @@ const lizavetaIvanovna: Character = {
 const studentsFaction: Faction = {
   id: 'students',
   title: 'Students',
-  color: '#4A90E2',
+  color: '#3498DB', // Blue
   description: 'University students and intellectuals',
 };
 
 const criminalsFaction: Faction = {
   id: 'criminals',
   title: 'Criminals',
-  color: '#E74C3C',
+  color: '#E74C3C', // Red
   description: 'Those involved in criminal activities',
 };
 
 const policeFaction: Faction = {
   id: 'police',
   title: 'Police & Authority',
-  color: '#2C3E50',
+  color: '#F8C471', // Light Orange
   description: 'Law enforcement and government officials',
 };
 
 const wealthyFaction: Faction = {
   id: 'wealthy',
   title: 'Wealthy Class',
-  color: '#F39C12',
+  color: '#F1C40F', // Yellow
   description: 'The wealthy and privileged class',
 };
 
 const familyFaction: Faction = {
   id: 'family',
   title: 'Family',
-  color: '#27AE60',
+  color: '#2ECC71', // Green
   description: 'Family members and close relatives',
 };
 
 const prostitutesFaction: Faction = {
   id: 'prostitutes',
   title: 'Prostitutes',
-  color: '#9B59B6',
+  color: '#9B59B6', // Purple
   description: 'Women forced into prostitution',
 };
 
 const marmeladovFamilyFaction: Faction = {
   id: 'marmeladov-family',
   title: 'Marmeladov Family',
-  color: '#E67E22',
+  color: '#E67E22', // Dark Orange
   description: 'Sonya\'s impoverished family',
 };
 
 const nobilityFaction: Faction = {
   id: 'nobility',
   title: 'Nobility',
-  color: '#8E44AD',
+  color: '#8E44AD', // Dark Purple
   description: 'Members of the noble class',
 };
 
 const alcoholicsFaction: Faction = {
   id: 'alcoholics',
   title: 'Alcoholics',
-  color: '#95A5A6',
+  color: '#95A5A6', // Gray
   description: 'Those struggling with alcoholism',
 };
 
 const pawnbrokersFaction: Faction = {
   id: 'pawnbrokers',
   title: 'Pawnbrokers',
-  color: '#34495E',
+  color: '#16A085', // Dark Teal
   description: 'Those involved in pawnbroking',
 };
 
 const friendsFaction: Faction = {
   id: 'friends',
   title: 'Friends',
-  color: '#3498DB',
+  color: '#1ABC9C', // Teal
   description: 'Close friends and allies',
 };
 
 const authorityFaction: Faction = {
   id: 'authority',
   title: 'Authority',
-  color: '#2C3E50',
+  color: '#C0392B', // Dark Red
   description: 'Those in positions of authority',
 };
 
 const landownersFaction: Faction = {
   id: 'landowners',
   title: 'Landowners',
-  color: '#D35400',
+  color: '#D35400', // Dark Orange
   description: 'Wealthy landowners and estate owners',
 };
 

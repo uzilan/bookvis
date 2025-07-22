@@ -24,7 +24,7 @@ const frodo: Character = {
   id: 'frodo-baggins',
   name: 'Frodo Baggins',
   description: 'The Ring-bearer, a hobbit who carries the One Ring to Mount Doom',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Mr. Baggins', 'Ring-bearer', 'Master of the Ring'],
   factions: ['hobbits', 'fellowship'],
   attributes: ['Brave', 'Resilient', 'Hobbit', 'Ring-bearer'],
@@ -34,7 +34,7 @@ const sam: Character = {
   id: 'samwise-gamgee',
   name: 'Samwise Gamgee',
   description: 'Frodo\'s loyal gardener and companion on the quest',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Sam', 'Mr. Gamgee'],
   factions: ['hobbits', 'fellowship'],
   attributes: ['Loyal', 'Practical', 'Gardener', 'Brave'],
@@ -44,7 +44,7 @@ const gandalf: Character = {
   id: 'gandalf',
   name: 'Gandalf',
   description: 'A wizard and member of the Istari, guides the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Gandalf the Grey', 'Gandalf the White', 'Mithrandir', 'Olorin'],
   factions: ['wizards', 'fellowship'],
   attributes: ['Wizard', 'Wise', 'Powerful', 'Guide'],
@@ -54,7 +54,7 @@ const aragorn: Character = {
   id: 'aragorn',
   name: 'Aragorn',
   description: 'Ranger of the North, heir to the throne of Gondor',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Strider', 'Elessar', 'King Elessar', 'Thorongil'],
   factions: ['rangers', 'fellowship', 'gondor'],
   attributes: ['Ranger', 'King', 'Warrior', 'Healer'],
@@ -64,7 +64,7 @@ const legolas: Character = {
   id: 'legolas',
   name: 'Legolas',
   description: 'Elf from Mirkwood, member of the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Prince of Mirkwood'],
   factions: ['elves', 'fellowship'],
   attributes: ['Elf', 'Archer', 'Agile', 'Immortal'],
@@ -74,7 +74,7 @@ const gimli: Character = {
   id: 'gimli',
   name: 'Gimli',
   description: 'Dwarf from the Lonely Mountain, member of the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Son of Glóin'],
   factions: ['dwarves', 'fellowship'],
   attributes: ['Dwarf', 'Warrior', 'Stout', 'Loyal'],
@@ -84,7 +84,7 @@ const boromir: Character = {
   id: 'boromir',
   name: 'Boromir',
   description: 'Captain of Gondor, member of the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Captain of Gondor'],
   factions: ['gondor', 'fellowship'],
   attributes: ['Warrior', 'Proud', 'Tempted by Ring', 'Noble'],
@@ -94,7 +94,7 @@ const merry: Character = {
   id: 'meriadoc-brandybuck',
   name: 'Meriadoc Brandybuck',
   description: 'Hobbit from Buckland, member of the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Merry'],
   factions: ['hobbits', 'fellowship'],
   attributes: ['Hobbit', 'Brave', 'Loyal', 'Knight of Rohan'],
@@ -104,7 +104,7 @@ const pippin: Character = {
   id: 'peregrin-took',
   name: 'Peregrin Took',
   description: 'Hobbit from Tookland, member of the fellowship',
-  firstAppearanceChapter: 1,
+  firstAppearanceChapter: 2,
   aliases: ['Pippin'],
   factions: ['hobbits', 'fellowship'],
   attributes: ['Hobbit', 'Young', 'Curious', 'Guard of the Citadel'],
@@ -182,16 +182,16 @@ const denethor: Character = {
 
 // Factions
 const factions: Faction[] = [
-  { id: 'hobbits', title: 'Hobbits', description: 'Small, peaceful folk of the Shire', color: '#8BC34A' },
-  { id: 'fellowship', title: 'Fellowship of the Ring', description: 'The nine companions who set out to destroy the Ring', color: '#2196F3' },
-  { id: 'wizards', title: 'Wizards', description: 'The Istari, powerful beings sent to guide Middle-earth', color: '#9C27B0' },
-  { id: 'elves', title: 'Elves', description: 'Immortal beings of great wisdom and beauty', color: '#4CAF50' },
-  { id: 'dwarves', title: 'Dwarves', description: 'Stout warriors and craftsmen', color: '#FF9800' },
-  { id: 'gondor', title: 'Gondor', description: 'The greatest kingdom of Men', color: '#795548' },
-  { id: 'rohan', title: 'Rohan', description: 'Kingdom of the horse-lords', color: '#607D8B' },
-  { id: 'rangers', title: 'Rangers', description: 'Protectors of the North', color: '#795548' },
-  { id: 'evil', title: 'Evil', description: 'Forces of darkness and corruption', color: '#F44336' },
-  { id: 'corrupted', title: 'Corrupted', description: 'Those corrupted by the Ring or other evil', color: '#9E9E9E' },
+  { id: 'hobbits', title: 'Hobbits', description: 'Small, peaceful folk of the Shire', color: '#8BC34A' }, // Green
+  { id: 'fellowship', title: 'Fellowship of the Ring', description: 'The nine companions who set out to destroy the Ring', color: '#2196F3' }, // Blue
+  { id: 'wizards', title: 'Wizards', description: 'The Istari, powerful beings sent to guide Middle-earth', color: '#9C27B0' }, // Purple
+  { id: 'elves', title: 'Elves', description: 'Immortal beings of great wisdom and beauty', color: '#4CAF50' }, // Green
+  { id: 'dwarves', title: 'Dwarves', description: 'Stout warriors and craftsmen', color: '#FF9800' }, // Orange
+  { id: 'gondor', title: 'Gondor', description: 'The greatest kingdom of Men', color: '#795548' }, // Brown
+  { id: 'rohan', title: 'Rohan', description: 'Kingdom of the horse-lords', color: '#607D8B' }, // Blue Gray
+  { id: 'rangers', title: 'Rangers', description: 'Protectors of the North', color: '#8D6E63' }, // Light Brown
+  { id: 'evil', title: 'Evil', description: 'Forces of darkness and corruption', color: '#F44336' }, // Red
+  { id: 'corrupted', title: 'Corrupted', description: 'Those corrupted by the Ring or other evil', color: '#9E9E9E' }, // Gray
 ];
 
 // Complex hierarchical chapters
