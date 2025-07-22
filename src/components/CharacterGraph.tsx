@@ -108,6 +108,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
   const [isClustered] = useState(true); // Start with clustering enabled by default
+  const [currentZoom, setCurrentZoom] = useState(1);
   const networkRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
 
@@ -271,48 +272,53 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         springLength: 200,
         springConstant: 0.01,
         damping: 0.9,
-        avoidOverlap: 0.5,
       },
-    },
-    smooth: {
-      enabled: true,
-      type: 'continuous',
-      forceDirection: 'none',
-      roundness: 0.5,
-    },
-    animation: {
-      enabled: true,
-      duration: 8000,
-      easingFunction: 'easeInOutQuad',
     },
     interaction: {
       hover: true,
       tooltipDelay: 200,
     },
+    manipulation: {
+      enabled: false, // Disable node manipulation but enable zoom controls
+    },
+
   }), [bookData.factions]);
 
   // Initialize network
   useEffect(() => {
     if (networkRef.current && !networkInstanceRef.current) {
+      // Add CSS for navigation controls
+      const style = document.createElement('style');
+      style.textContent = `
+        .vis-navigation {
+          background: white !important;
+          border: 1px solid #ccc !important;
+          border-radius: 4px !important;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+        .vis-navigation button {
+          color: #333 !important;
+          background: white !important;
+          border: 1px solid #ccc !important;
+        }
+        .vis-navigation button:hover {
+          background: #f0f0f0 !important;
+        }
+      `;
+      document.head.appendChild(style);
+
       const data = createVisData();
       const network = new Network(networkRef.current, data, options);
       networkInstanceRef.current = network;
 
       // Handle node clicks
       network.on('click', (params) => {
-        console.log('Node click detected:', params);
         if (params.nodes.length > 0) {
           const nodeId = params.nodes[0];
-          console.log('Clicked node ID:', nodeId);
           const character = fullBookData.characters.find(c => c.id === nodeId);
-          console.log('Found character:', character);
-          console.log('Available characters in fullBookData:', fullBookData.characters.map(c => ({ id: c.id, name: c.name })));
           if (character) {
-            console.log('Setting selected character and opening panel');
             setSelectedCharacter(character);
             setIsDetailsPanelOpen(true);
-          } else {
-            console.log('Character not found in fullBookData.characters:', fullBookData.characters.map(c => c.id));
           }
         }
       });
@@ -354,12 +360,13 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
 
 
+
       {/* Faction Legend */}
       <div style={{
         position: 'absolute',
         top: '20px',
         right: '20px',
-        zIndex: 1000,
+        zIndex: 1002,
         background: 'white',
         padding: '12px 16px',
         borderRadius: '8px',
@@ -386,13 +393,133 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         </div>
       </div>
 
+
+
       <div
         ref={networkRef}
         style={{
           width: '100%',
-          height: '100%'
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 1,
         }}
       />
+
+      {/* Custom Zoom Controls */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '300px',
+        zIndex: 1003,
+        background: 'white',
+        padding: '6px',
+        borderRadius: '6px',
+        border: '1px solid #ccc',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
+      }}>
+        <button
+          onClick={() => {
+            const newZoom = Math.min(currentZoom * 1.2, 5); // Max zoom 5x
+            setCurrentZoom(newZoom);
+            networkInstanceRef.current?.moveTo({ 
+              scale: newZoom,
+              animation: {
+                duration: 300,
+                easingFunction: 'easeInOutQuad'
+              }
+            });
+          }}
+          style={{
+            width: '32px',
+            height: '32px',
+            border: '1px solid #ddd',
+            background: 'white',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '18px',
+            color: '#333',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          +
+        </button>
+        <button
+          onClick={() => {
+            const newZoom = Math.max(currentZoom * 0.8, 0.1); // Min zoom 0.1x
+            setCurrentZoom(newZoom);
+            networkInstanceRef.current?.moveTo({ 
+              scale: newZoom,
+              animation: {
+                duration: 300,
+                easingFunction: 'easeInOutQuad'
+              }
+            });
+          }}
+          style={{
+            width: '32px',
+            height: '32px',
+            border: '1px solid #ddd',
+            background: 'white',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '18px',
+            color: '#333',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          −
+        </button>
+        <button
+          onClick={() => {
+            setCurrentZoom(1);
+            // Fit to the available space (accounting for sidebar)
+            networkInstanceRef.current?.fit({
+              animation: {
+                duration: 300,
+                easingFunction: 'easeInOutQuad'
+              }
+            });
+            // Move view to account for sidebar width
+            setTimeout(() => {
+              networkInstanceRef.current?.moveTo({
+                offset: { x: 140, y: 0 },
+                animation: {
+                  duration: 200,
+                  easingFunction: 'easeInOutQuad'
+                }
+              });
+            }, 350); // Wait for fit animation to complete
+          }}
+          style={{
+            width: '32px',
+            height: '32px',
+            border: '1px solid #ddd',
+            background: 'white',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '18px',
+            color: '#333',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          ⤢
+        </button>
+      </div>
+
       <ChapterSlider
         chapters={bookData.chapters}
         value={selectedChapter}

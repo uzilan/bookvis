@@ -1,50 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
-import { winnieBookData } from './books/winnieData';
-import { aliceBookData } from './books/aliceData';
-import { duneData } from './books/duneData';
-import { crimeAndPunishmentData } from './books/crimeAndPunishmentData';
-import { lotrData } from './books/lotrData';
-import { firebaseConfig} from "./credentials.ts";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData, lotrData];
-const availableBooks = bookDataList.map(bd => bd.book);
-const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.map(bd => [bd.book.id, bd]));
+import FirebaseService from './services/firebase';
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState(1);
-  const [selectedBook, setSelectedBook] = useState<Book>(winnieBookData.book);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const hasSetInitialBook = useRef(false);
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  // Fetch books from Firebase on component mount
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        setLoading(true);
+        const books = await FirebaseService.getAllBooks();
+        setBooksFromFirebase(books);
+        console.log('Fetched books from Firebase:', books.length);
+        
+        // Set the first book as selected if we have books and no book is currently selected
+        if (books.length > 0 && !hasSetInitialBook.current) {
+          const firstBook = books[0];
+
+          setSelectedBook(firstBook.book);
+          
+          // Set the initial chapter to the first actual chapter's globalIndex
+          if (firstBook.chapters.length > 0) {
+            const firstActualChapter = firstBook.chapters.find(ch => ch.type === 'chapter');
+            if (firstActualChapter) {
+              const firstChapterIndex = firstActualChapter.globalIndex || firstActualChapter.index;
   
-  // Initialize analytics (required for Firebase Analytics)
-  console.log('Analytics initialized:', analytics);
+              setSelectedChapter(firstChapterIndex);
+            }
+          }
+          
+          hasSetInitialBook.current = true;
+        }
+      } catch (error) {
+        console.error('Failed to fetch books from Firebase:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  // Use only Firebase books
+  const availableBooks = booksFromFirebase.map(bd => bd.book);
+
+  const bookDataMap: Record<string, BookData> = Object.fromEntries(
+    booksFromFirebase.map(bd => [bd.book.id, bd])
+  );
 
   // Get the appropriate book data based on selected book
-  const getBookData = (book: Book): BookData => {
-    return bookDataMap[book.id] || winnieBookData;
+  const getBookData = (book: Book): BookData | null => {
+    return bookDataMap[book.id] || null;
   };
 
-  const bookData = getBookData(selectedBook);
+  const bookData = selectedBook ? getBookData(selectedBook) : null;
 
-  // Reset chapter when switching books
+  // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
-    setSelectedChapter(1);
-  }, [selectedBook]);
+    if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
+      // Set to the globalIndex of the first actual chapter, or fall back to index
+      const firstActualChapter = bookData.chapters.find(ch => ch.type === 'chapter');
+      if (firstActualChapter) {
+        const firstChapterIndex = firstActualChapter.globalIndex || firstActualChapter.index;
 
-  // Clamp selectedChapter to a valid range for the current book
-  const safeChapterIndex = Math.min(selectedChapter, Math.max(0, bookData.chapters.length - 1));
+        setSelectedChapter(firstChapterIndex);
+      }
+    }
+  }, [selectedBook, bookData]);
 
-  // Only show characters whose firstAppearanceChapter is <= selected chapter
-  const visibleCharacters = bookData.characters.filter(
-    c => c.firstAppearanceChapter <= bookData.chapters[safeChapterIndex].index
+  // Show loading or no data message if no book data
+  if (loading) {
+    return <div style={{ padding: '20px', textAlign: 'center' }}>Loading books from Firebase...</div>;
+  }
+
+  if (!bookData || !selectedBook) {
+    return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
+  }
+
+  // Find the current chapter by matching selectedChapter with globalIndex or index (only actual chapters)
+  const currentChapter = bookData.chapters.find(ch => 
+    ch.type === 'chapter' && (ch.globalIndex === selectedChapter || ch.index === selectedChapter)
   );
+  
+  // Only show characters whose firstAppearanceChapter is <= selected chapter
+  const visibleCharacters = bookData.characters.filter(c => {
+    return currentChapter && c.firstAppearanceChapter <= selectedChapter;
+  });
   // Only show factions that have at least one visible character
   const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const visibleFactionIds = new Set(visibleCharacters.flatMap(c => c.factions));
@@ -61,6 +110,8 @@ function App() {
     factions: visibleFactions,
   };
 
+
+  
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>

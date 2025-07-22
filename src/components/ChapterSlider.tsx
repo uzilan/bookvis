@@ -34,7 +34,8 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   onToggleExpanded 
 }) => {
   const isExpanded = expandedNodes.has(node.chapter.title);
-  const isSelected = selectedIndex === (node.chapter.globalIndex || node.chapter.index);
+  const isSelected = node.chapter.type === 'chapter' && selectedIndex === node.chapter.globalIndex;
+
   const hasChildren = node.children.length > 0;
   const indent = level * 4; // Reduced from 8 to 4
 
@@ -136,13 +137,11 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     chapterTree = chapterTree[0].children;
   }
   
-  // Debug logging
-  console.log('ChapterSlider - chapters:', chapters.length);
-  console.log('ChapterSlider - chapterTree:', chapterTree);
-  console.log('ChapterSlider - expandedNodes:', expandedNodes);
-  
-  // Get current chapter for breadcrumb
-  const currentChapter = chapters.find(ch => (ch.globalIndex || ch.index) === value);
+  // Get current chapter for breadcrumb (only actual chapters, not books or parts)
+  const currentChapter = chapters.find(ch => {
+    if (ch.type !== 'chapter') return false;
+    return ch.globalIndex === value || ch.index === value;
+  });
 
   // Auto-expand parent nodes by default and ensure current chapter's parents are expanded
   useEffect(() => {
@@ -152,7 +151,6 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     chapters.forEach(chapter => {
       if (chapter.type === 'part' || chapter.type === 'book') {
         newExpanded.add(chapter.title);
-        console.log('Auto-expanding:', chapter.title, 'type:', chapter.type);
       }
     });
     
@@ -162,12 +160,10 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         const parentChapter = chapters.find(ch => ch.title === pathSegment);
         if (parentChapter) {
           newExpanded.add(parentChapter.title);
-          console.log('Expanding parent path:', parentChapter.title);
         }
       });
     }
     
-    console.log('Setting expanded nodes:', Array.from(newExpanded));
     setExpandedNodes(newExpanded);
   }, [chapters, currentChapter]);
 

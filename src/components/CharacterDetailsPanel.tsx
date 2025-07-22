@@ -79,7 +79,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   open,
   onClose,
 }) => {
-  console.log('CharacterDetailsPanel render:', { character, open });
+
   if (!character) return null;
 
   const characterFactions = character.factions.map(factionId => 
