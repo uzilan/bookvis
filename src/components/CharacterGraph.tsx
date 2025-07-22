@@ -107,10 +107,11 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
+  const [isClustered] = useState(true); // Start with clustering enabled by default
   const networkRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
 
-  // Create vis.js nodes and edges with legend-style faction display
+  // Create vis.js nodes and edges with faction-based clustering
   const createVisData = useCallback((preservePositions = false) => {
     const nodes: Record<string, unknown>[] = [];
     const edges: Record<string, unknown>[] = [];
@@ -124,22 +125,54 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       });
     }
 
-    // Add character nodes in the main area
+    // Group characters by faction for clustering
+    const factionGroups: Record<string, Character[]> = {};
+    bookData.characters.forEach((character) => {
+      const primaryFaction = character.factions[0];
+      if (primaryFaction) {
+        if (!factionGroups[primaryFaction]) {
+          factionGroups[primaryFaction] = [];
+        }
+        factionGroups[primaryFaction].push(character);
+      }
+    });
+
+    // Add character nodes with faction-based positioning
     bookData.characters.forEach((character) => {
       const factionColors = character.factions
         .map(fid => bookData.factions.find(f => f.id === fid)?.color)
         .filter(Boolean) as string[];
-      // Use existing position if available, otherwise random
-      const existingPosition = currentPositions[character.id];
-      const position = existingPosition || {
-        x: (Math.random() - 0.5) * 400,
-        y: (Math.random() - 0.5) * 400,
-      };
+      
+      // Determine the primary faction for clustering
+      const primaryFaction = character.factions[0];
+      const factionGroup = primaryFaction ? `faction-${primaryFaction}` : 'character';
+      
+      // Calculate position based on faction grouping
+      let position;
+      if (isClustered && primaryFaction && factionGroups[primaryFaction]) {
+        // Position characters in clusters by faction
+        const factionIndex = Object.keys(factionGroups).indexOf(primaryFaction);
+        const characterIndex = factionGroups[primaryFaction].indexOf(character);
+        const clusterX = (factionIndex - 1) * 200; // Spread clusters horizontally
+        const clusterY = (characterIndex - factionGroups[primaryFaction].length / 2) * 80; // Stack within cluster
+        position = {
+          x: clusterX + (Math.random() - 0.5) * 50, // Add some randomness
+          y: clusterY + (Math.random() - 0.5) * 50,
+        };
+      } else {
+        // Use existing position or random
+        const existingPosition = currentPositions[character.id];
+        position = existingPosition || {
+          x: (Math.random() - 0.5) * 400,
+          y: (Math.random() - 0.5) * 400,
+        };
+      }
+      
       // Use SVG image for all characters (single or multiple factions)
       nodes.push({
         id: character.id,
         label: '', // No label since name is inside the SVG
-        group: 'character',
+        group: factionGroup, // Use faction-based grouping
         shape: 'image',
         image: generatePieSVG(factionColors, character.name, 60),
         font: { size: 16, face: 'Arial', bold: true },
@@ -167,7 +200,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     });
 
     return { nodes, edges };
-  }, [bookData.characters, bookData.factions, bookData.relationships]);
+  }, [bookData.characters, bookData.factions, bookData.relationships, isClustered]);
 
   // Network options
   const options = useMemo(() => ({
@@ -210,6 +243,23 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           },
         },
       },
+      // Add faction-specific groups for clustering
+      ...bookData.factions.reduce((acc, faction) => {
+        acc[`faction-${faction.id}`] = {
+          shape: 'circle',
+          size: 100,
+          color: { background: faction.color, border: '#333' },
+          font: { size: 16, bold: true },
+          scaling: {
+            min: 100,
+            max: 100,
+            label: {
+              enabled: false,
+            },
+          },
+        };
+        return acc;
+      }, {} as Record<string, Record<string, unknown>>),
     },
 
             physics: {
@@ -239,7 +289,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       hover: true,
       tooltipDelay: 200,
     },
-  }), []);
+  }), [bookData.factions]);
 
   // Initialize network
   useEffect(() => {
@@ -281,7 +331,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       networkInstanceRef.current.setData(data);
       // Don't call fit() here as it would reset the view
     }
-  }, [bookData, selectedChapter, createVisData]);
+  }, [bookData, selectedChapter, createVisData, isClustered]);
 
 
 
@@ -289,6 +339,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     setIsDetailsPanelOpen(false);
     setSelectedCharacter(null);
   };
+
+
 
   return (
     <div style={{
@@ -298,6 +350,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       overflow: 'hidden',
       position: 'relative',
     }}>
+
+
 
 
       {/* Faction Legend */}

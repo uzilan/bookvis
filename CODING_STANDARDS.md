@@ -1,75 +1,88 @@
 # Coding Standards
 
-## Assertions
-- **Always use AssertJ** for all assertions in tests.
-    - Use `assertThat(...)` and other AssertJ fluent assertions.
-    - Do **not** use `kotlin.test.assertEquals`, `assertTrue`, `assertFalse`, or JUnit's `Assertions.assertEquals`, etc.
+## Development Philosophy
+- **Go slowly and step by step**: Take your time to understand each change before proceeding
+- **Make small, focused changes**: Break down complex tasks into smaller, manageable pieces
+- **Seek confirmation before major changes**: Ask for approval before implementing significant modifications
+- **Explain your reasoning**: Always explain why you're making changes and what they accomplish
 
-**Examples:**
-```kotlin
-import org.assertj.core.api.Assertions.assertThat
+## Code Quality
+- **Keep functions small and modular**: Write focused, single-purpose functions that are easy to understand and test
+- **Use descriptive names**: Choose clear, meaningful names for variables, functions, and components
+- **Remove unused code**: Always clean up unused imports, variables, and functions
+- **Follow linting rules**: Run linters before committing and fix all issues
 
-assertThat(result).isEqualTo(expected)
-assertThat(list).hasSize(3)
-assertThat(value).isBetween(0.0, 1.0)
-```
+## React Best Practices
+- **Use React Hooks properly**: 
+  - Include all dependencies in useEffect dependency arrays
+  - Use useCallback for functions passed as props or used in useEffect
+  - Use useMemo for expensive computations or objects that shouldn't recreate on every render
+- **Component organization**: 
+  - Keep components focused on a single responsibility
+  - Extract reusable logic into custom hooks
+  - Use TypeScript interfaces for props and state
+- **State management**: 
+  - Use appropriate state management patterns
+  - Avoid prop drilling by using context when needed
+  - Keep state as local as possible
 
-## Logging and Output
-- **Never use `println`** for output, debugging, or logging.
-- **Always use a logger** (e.g., SLF4J, Logback) for all output, including in tests.
-    - Use appropriate log levels: `logger.info`, `logger.warn`, `logger.error`, etc.
+## TypeScript Standards
+- **Always use imports**: Import types and interfaces rather than using inline type definitions
+- **Remove unused imports**: Keep import sections clean and organized
+- **Use proper typing**: Define interfaces for all data structures and component props
+- **Avoid any type**: Use specific types instead of `any` whenever possible
 
-**Examples:**
-```kotlin
-import org.slf4j.LoggerFactory
+## Code Organization
+- **File structure**: Organize files logically by feature or functionality
+- **Component hierarchy**: Keep component relationships clear and maintainable
+- **Data models**: Define clear interfaces for all data structures
+- **Utility functions**: Extract reusable logic into separate utility files
 
-private val logger = LoggerFactory.getLogger(MyClass::class.java)
-logger.info("Informational message")
-logger.error("Error message: {}", exception.message)
-```
+## Development Workflow
+- **Lint before committing**: Always run `npm run lint` and fix all issues before committing
+- **Test your changes**: Verify that changes work as expected before proceeding
+- **Incremental development**: Make small changes, test them, then move to the next step
+- **Documentation**: Update README and comments when adding new features
 
-## Test Imports
-- Always use static imports for AssertJ assertions for clarity and brevity.
+## Performance Considerations
+- **Optimize re-renders**: Use React.memo, useCallback, and useMemo appropriately
+- **Bundle size**: Be mindful of dependencies and their impact on bundle size
+- **Memory leaks**: Clean up event listeners and subscriptions in useEffect cleanup functions
+- **Lazy loading**: Use React.lazy for code splitting when appropriate
 
-**Example:**
-```kotlin
-import org.assertj.core.api.Assertions.assertThat
-```
+## Error Handling
+- **Graceful degradation**: Handle errors gracefully without breaking the user experience
+- **User feedback**: Provide clear error messages and loading states
+- **Validation**: Validate user input and data before processing
+- **Logging**: Use appropriate logging for debugging and monitoring
 
-## Imports
-- **Never use star imports** (e.g., `import x.y.z.*`). Always import only what you use.
-- **Always use imports for variables and types** rather than using full package paths in code.
-    - Use `import articles.scraping.Article` and then reference as `Article` in code.
-    - Do **not** use `articles.scraping.Article` directly in variable declarations or method signatures.
+## Testing
+- **Write testable code**: Structure code to be easily testable
+- **Component testing**: Test component behavior and user interactions
+- **Integration testing**: Test how components work together
+- **Accessibility**: Ensure components are accessible and test with screen readers
 
-**Examples:**
-```kotlin
-// Good - use imports
-import articles.scraping.Article
-import articles.embedding.EmbeddingService
+## Code Review Standards
+- **Small, focused PRs**: Keep pull requests small and focused on a single feature or fix
+- **Clear descriptions**: Explain what changes were made and why
+- **Test coverage**: Ensure new code has appropriate test coverage
+- **Documentation**: Update documentation for new features or API changes
 
-fun processArticle(article: Article, embeddingService: EmbeddingService) {
-    // ...
-}
+## Git Workflow
+- **Meaningful commits**: Write clear, descriptive commit messages
+- **Atomic commits**: Make commits that represent a single logical change
+- **Branch naming**: Use descriptive branch names that indicate the purpose
+- **Clean history**: Keep commit history clean and logical
 
-// Bad - using full package paths
-fun processArticle(article: articles.scraping.Article, embeddingService: articles.embedding.EmbeddingService) {
-    // ...
-}
-```
+## Tools and Automation
+- **ESLint**: Use ESLint for code quality and consistency
+- **Prettier**: Use Prettier for consistent code formatting
+- **TypeScript**: Use TypeScript for type safety and better developer experience
+- **Vite**: Use Vite for fast development and building
+- **Git hooks**: Use pre-commit hooks to run linting and tests automatically
 
-## Development Process
-- **Take things slowly and work step by step.**
-- **Explain every change and its purpose before making it.**
-- **Avoid making multiple unrelated changes at once.**
-- **Seek confirmation before proceeding to the next step, especially for significant or breaking changes.**
-
-## Additional Coding Standards
-
-- **Put public methods before private ones**: Order your methods so that public methods appear before private ones in classes and objects.
-- **Always use imports instead of inlining them**: Import types, classes, and functions at the top of the file rather than using fully qualified names inline.
-- **Always remove unused imports**: Keep your import section clean by removing any imports that are not used in the file.
-- **Use AssertJ for assertions in tests**: Prefer AssertJ's fluent assertions (e.g., `assertThat(...)`) for all test assertions.
-- **Use ktlint to format Kotlin code**: Run ktlint to ensure consistent code formatting for all Kotlin files.
-- **Keep methods small and give them names that describe them well**: Write small, focused methods with descriptive names that clearly state their purpose.
-- **Make small changes and ask for approval and advance step by step**: When collaborating, break work into small, reviewable steps and seek approval before proceeding to the next step. 
+## Collaboration
+- **Communication**: Explain your changes and reasoning clearly
+- **Code reviews**: Review code thoroughly and provide constructive feedback
+- **Knowledge sharing**: Document decisions and share knowledge with the team
+- **Pair programming**: Work together when tackling complex problems 
