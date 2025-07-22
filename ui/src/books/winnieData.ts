@@ -1,8 +1,8 @@
-import type { BookData } from './models/BookData';
-import type { Chapter } from './models/Chapter';
-import type { Character } from './models/Character';
-import type { Faction } from './models/Faction';
-import type { RelationshipWithChapters } from './models/BookData';
+import type { BookData } from '../models/BookData';
+import type { Chapter } from '../models/Chapter';
+import type { Character } from '../models/Character';
+import type { Faction } from '../models/Faction';
+import type { RelationshipWithChapters } from '../models/BookData';
 
 const winnieBook = {
   author: { id: 'milne', name: 'A. A. Milne' },
@@ -29,16 +29,16 @@ const winnieFactions: Faction[] = [
 ];
 
 const winnieChapters: Chapter[] = [
-  { book: winnieBook, title: 'In Which We Are Introduced to Winnie-the-Pooh and Some Bees, and the Stories Begin', index: 1 },
-  { book: winnieBook, title: 'In Which Pooh Goes Visiting and Gets into a Tight Place', index: 2 },
-  { book: winnieBook, title: 'In Which Pooh and Piglet Go Hunting and Nearly Catch a Woozle', index: 3 },
-  { book: winnieBook, title: 'In Which Eeyore Loses a Tail and Pooh Finds One', index: 4 },
-  { book: winnieBook, title: 'In Which Piglet Meets a Heffalump', index: 5 },
-  { book: winnieBook, title: 'In Which Eeyore Has a Birthday and Gets Two Presents', index: 6 },
-  { book: winnieBook, title: 'In Which Kanga and Baby Roo Come to the Forest, and Piglet Has a Bath', index: 7 },
-  { book: winnieBook, title: 'In Which Christopher Robin Leads an Expotition to the North Pole', index: 8 },
-  { book: winnieBook, title: 'In Which Piglet Does a Very Grand Thing', index: 9 },
-  { book: winnieBook, title: 'In Which Christopher Robin Gives a Pooh Party, and We Say Good-bye', index: 10 },
+  { book: winnieBook, title: 'In Which We Are Introduced to Winnie-the-Pooh and Some Bees, and the Stories Begin', index: 1, globalIndex: 1, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Pooh Goes Visiting and Gets into a Tight Place', index: 2, globalIndex: 2, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Pooh and Piglet Go Hunting and Nearly Catch a Woozle', index: 3, globalIndex: 3, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Eeyore Loses a Tail and Pooh Finds One', index: 4, globalIndex: 4, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Piglet Meets a Heffalump', index: 5, globalIndex: 5, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Eeyore Has a Birthday and Gets Two Presents', index: 6, globalIndex: 6, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Kanga and Baby Roo Come to the Forest, and Piglet Has a Bath', index: 7, globalIndex: 7, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Christopher Robin Leads an Expotition to the North Pole', index: 8, globalIndex: 8, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Piglet Does a Very Grand Thing', index: 9, globalIndex: 9, level: 0, type: 'chapter' },
+  { book: winnieBook, title: 'In Which Christopher Robin Gives a Pooh Party, and We Say Good-bye', index: 10, globalIndex: 10, level: 0, type: 'chapter' },
 ];
 
 const winnieRelationships: RelationshipWithChapters[] = [

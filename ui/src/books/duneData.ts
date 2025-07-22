@@ -1,10 +1,10 @@
-import type { BookData } from './models/BookData';
-import type { Character } from './models/Character';
-import type { Book } from './models/Book';
-import type { Author } from './models/Author';
-import type { Chapter } from './models/Chapter';
-import type { Faction } from './models/Faction';
-import type { RelationshipWithChapters } from './models/BookData';
+import type { BookData } from '../models/BookData';
+import type { Character } from '../models/Character';
+import type { Book } from '../models/Book';
+import type { Author } from '../models/Author';
+import type { Chapter } from '../models/Chapter';
+import type { Faction } from '../models/Faction';
+import type { RelationshipWithChapters } from '../models/BookData';
 
 // Author definition
 const frankHerbert: Author = {
@@ -237,21 +237,21 @@ const beneGesseritFaction: Faction = {
 
 // Chapters
 const chapters: Chapter[] = [
-  { book: duneBook, title: 'The Duke and the Lady', index: 1 },
-  { book: duneBook, title: 'The Missionaria Protectiva', index: 2 },
-  { book: duneBook, title: 'The Reverend Mother', index: 3 },
-  { book: duneBook, title: 'The Spice', index: 4 },
-  { book: duneBook, title: 'The Harkonnens', index: 5 },
-  { book: duneBook, title: 'The Atreides Arrive', index: 6 },
-  { book: duneBook, title: 'The Betrayal', index: 7 },
-  { book: duneBook, title: 'The Desert', index: 8 },
-  { book: duneBook, title: 'The Fremen', index: 9 },
-  { book: duneBook, title: 'The Spice Melange', index: 10 },
-  { book: duneBook, title: 'The Water of Life', index: 11 },
-  { book: duneBook, title: 'The Prophet', index: 12 },
-  { book: duneBook, title: 'The Jihad', index: 13 },
-  { book: duneBook, title: 'The Emperor', index: 14 },
-  { book: duneBook, title: 'The Final Battle', index: 15 },
+  { book: duneBook, title: 'The Duke and the Lady', index: 1, globalIndex: 1, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Missionaria Protectiva', index: 2, globalIndex: 2, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Reverend Mother', index: 3, globalIndex: 3, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Spice', index: 4, globalIndex: 4, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Harkonnens', index: 5, globalIndex: 5, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Atreides Arrive', index: 6, globalIndex: 6, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Betrayal', index: 7, globalIndex: 7, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Desert', index: 8, globalIndex: 8, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Fremen', index: 9, globalIndex: 9, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Spice Melange', index: 10, globalIndex: 10, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Water of Life', index: 11, globalIndex: 11, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Prophet', index: 12, globalIndex: 12, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Jihad', index: 13, globalIndex: 13, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Emperor', index: 14, globalIndex: 14, level: 0, type: 'chapter' },
+  { book: duneBook, title: 'The Final Battle', index: 15, globalIndex: 15, level: 0, type: 'chapter' },
 ];
 
 // Relationships

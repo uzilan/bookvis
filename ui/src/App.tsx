@@ -7,8 +7,9 @@ import { winnieBookData } from './books/winnieData';
 import { aliceBookData } from './books/aliceData';
 import { duneData } from './books/duneData';
 import { crimeAndPunishmentData } from './books/crimeAndPunishmentData';
+import { lotrData } from './books/lotrData';
 
-const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData];
+const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData, lotrData];
 const availableBooks = bookDataList.map(bd => bd.book);
 const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.map(bd => [bd.book.title, bd]));
 

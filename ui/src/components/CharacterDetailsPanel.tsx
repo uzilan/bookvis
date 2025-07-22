@@ -15,6 +15,7 @@ import type { Character } from '../models/Character';
 import type { Faction } from '../models/Faction';
 import type { Chapter } from '../models/Chapter';
 import type { RelationshipWithChapters } from '../models/BookData';
+import { getChapterDisplayPath } from '../utils/chapterHierarchy';
 
 interface CharacterDetailsPanelProps {
   character: Character | null;
@@ -40,12 +41,19 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
     factions.find(f => f.id === factionId)
   ).filter(Boolean) as Faction[];
 
-  const firstAppearanceChapter = chapters.find(ch => ch.index === character.firstAppearanceChapter);
+  const firstAppearanceChapter = chapters.find(
+    ch => ch.globalIndex === character.firstAppearanceChapter && ch.type === 'chapter'
+  );
 
   // Find relationships where this character is involved
   const characterRelationships = relationships.filter(rel => 
     rel.character1.id === character.id || rel.character2.id === character.id
   );
+
+  // Get the formatted display path for first appearance
+  const firstAppearanceDisplay = firstAppearanceChapter 
+    ? getChapterDisplayPath(firstAppearanceChapter, chapters)
+    : `Chapter ${character.firstAppearanceChapter}`;
 
   return (
     <Drawer
@@ -75,7 +83,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
           </Typography>
           
           <Typography variant="body2" color="text.secondary">
-            First appears in {firstAppearanceChapter ? `"${firstAppearanceChapter.title}"` : `Chapter ${character.firstAppearanceChapter}`}
+            First appears in {firstAppearanceDisplay}
           </Typography>
         </Paper>
 

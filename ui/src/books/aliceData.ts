@@ -1,8 +1,8 @@
-import type { BookData } from './models/BookData';
-import type { Chapter } from './models/Chapter';
-import type { Character } from './models/Character';
-import type { Faction } from './models/Faction';
-import type { RelationshipWithChapters } from './models/BookData';
+import type { BookData } from '../models/BookData';
+import type { Chapter } from '../models/Chapter';
+import type { Character } from '../models/Character';
+import type { Faction } from '../models/Faction';
+import type { RelationshipWithChapters } from '../models/BookData';
 
 const aliceBook = {
   author: { id: 'carroll', name: 'Lewis Carroll' },
@@ -23,18 +23,18 @@ const aliceFactions: Faction[] = [
 ];
 
 const aliceChapters: Chapter[] = [
-  { book: aliceBook, title: 'Down the Rabbit-Hole', index: 1 },
-  { book: aliceBook, title: 'The Pool of Tears', index: 2 },
-  { book: aliceBook, title: 'A Caucus-Race and a Long Tale', index: 3 },
-  { book: aliceBook, title: 'The Rabbit Sends in a Little Bill', index: 4 },
-  { book: aliceBook, title: 'Advice from a Caterpillar', index: 5 },
-  { book: aliceBook, title: 'Pig and Pepper', index: 6 },
-  { book: aliceBook, title: 'A Mad Tea-Party', index: 7 },
-  { book: aliceBook, title: 'The Queen’s Croquet-Ground', index: 8 },
-  { book: aliceBook, title: 'The Mock Turtle’s Story', index: 9 },
-  { book: aliceBook, title: 'The Lobster Quadrille', index: 10 },
-  { book: aliceBook, title: 'Who Stole the Tarts?', index: 11 },
-  { book: aliceBook, title: 'Alice’s Evidence', index: 12 },
+  { book: aliceBook, title: 'Down the Rabbit-Hole', index: 1, globalIndex: 1, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'The Pool of Tears', index: 2, globalIndex: 2, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'A Caucus-Race and a Long Tale', index: 3, globalIndex: 3, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'The Rabbit Sends in a Little Bill', index: 4, globalIndex: 4, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'Advice from a Caterpillar', index: 5, globalIndex: 5, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'Pig and Pepper', index: 6, globalIndex: 6, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'A Mad Tea-Party', index: 7, globalIndex: 7, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'The Queen\'s Croquet-Ground', index: 8, globalIndex: 8, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'The Mock Turtle\'s Story', index: 9, globalIndex: 9, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'The Lobster Quadrille', index: 10, globalIndex: 10, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'Who Stole the Tarts?', index: 11, globalIndex: 11, level: 0, type: 'chapter' },
+  { book: aliceBook, title: 'Alice\'s Evidence', index: 12, globalIndex: 12, level: 0, type: 'chapter' },
 ];
 
 const aliceRelationships: RelationshipWithChapters[] = [
@@ -49,7 +49,7 @@ const aliceRelationships: RelationshipWithChapters[] = [
     character1: alice,
     character2: madHatter,
     descriptions: [
-      { chapter: 7, description: 'Alice attends the Mad Tea-Party' },
+      { chapter: 7, description: 'Alice attends the mad tea party' },
     ],
   },
   {

@@ -221,49 +221,63 @@ const landownersFaction: Faction = {
   description: 'Wealthy landowners and estate owners',
 };
 
-// Chapters
+// Book node
+const crimeAndPunishmentBookNode: Chapter = {
+  book: crimeAndPunishmentBook,
+  title: 'Crime and Punishment',
+  index: 0,
+  level: 1,
+  type: 'book',
+  path: ['Crime and Punishment'],
+};
+
+// Part nodes
+const parts = [
+  { title: 'Part I', start: 1, end: 7 },
+  { title: 'Part II', start: 8, end: 14 },
+  { title: 'Part III', start: 15, end: 20 },
+  { title: 'Part IV', start: 21, end: 26 },
+  { title: 'Part V', start: 27, end: 31 },
+  { title: 'Part VI', start: 32, end: 39 },
+  { title: 'Epilogue', start: 40, end: 41 },
+];
+
+const partNodes: Chapter[] = parts.map((part, idx) => ({
+  book: crimeAndPunishmentBook,
+  title: part.title,
+  index: idx + 1,
+  level: 2,
+  type: 'part',
+  parent: crimeAndPunishmentBookNode,
+  path: ['Crime and Punishment', part.title],
+}));
+
+// Chapter nodes
+const chapterNodes: Chapter[] = [];
+let globalIndex = 1;
+for (const [i, part] of parts.entries()) {
+  for (let ch = part.start; ch <= part.end; ch++) {
+    const chapterNumber = ch - part.start + 1;
+    const chapterTitle = part.title === 'Epilogue'
+      ? `Chapter ${chapterNumber}`
+      : `Chapter ${chapterNumber}`;
+    chapterNodes.push({
+      book: crimeAndPunishmentBook,
+      title: chapterTitle,
+      index: chapterNumber,
+      globalIndex: globalIndex++,
+      level: 3,
+      type: 'chapter',
+      parent: partNodes[i],
+      path: ['Crime and Punishment', part.title, chapterTitle],
+    });
+  }
+}
+
 const chapters: Chapter[] = [
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 1', index: 1 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 2', index: 2 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 3', index: 3 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 4', index: 4 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 5', index: 5 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 6', index: 6 },
-  { book: crimeAndPunishmentBook, title: 'Part I, Chapter 7', index: 7 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 1', index: 8 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 2', index: 9 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 3', index: 10 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 4', index: 11 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 5', index: 12 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 6', index: 13 },
-  { book: crimeAndPunishmentBook, title: 'Part II, Chapter 7', index: 14 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 1', index: 15 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 2', index: 16 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 3', index: 17 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 4', index: 18 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 5', index: 19 },
-  { book: crimeAndPunishmentBook, title: 'Part III, Chapter 6', index: 20 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 1', index: 21 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 2', index: 22 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 3', index: 23 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 4', index: 24 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 5', index: 25 },
-  { book: crimeAndPunishmentBook, title: 'Part IV, Chapter 6', index: 26 },
-  { book: crimeAndPunishmentBook, title: 'Part V, Chapter 1', index: 27 },
-  { book: crimeAndPunishmentBook, title: 'Part V, Chapter 2', index: 28 },
-  { book: crimeAndPunishmentBook, title: 'Part V, Chapter 3', index: 29 },
-  { book: crimeAndPunishmentBook, title: 'Part V, Chapter 4', index: 30 },
-  { book: crimeAndPunishmentBook, title: 'Part V, Chapter 5', index: 31 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 1', index: 32 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 2', index: 33 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 3', index: 34 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 4', index: 35 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 5', index: 36 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 6', index: 37 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 7', index: 38 },
-  { book: crimeAndPunishmentBook, title: 'Part VI, Chapter 8', index: 39 },
-  { book: crimeAndPunishmentBook, title: 'Epilogue, Chapter 1', index: 40 },
-  { book: crimeAndPunishmentBook, title: 'Epilogue, Chapter 2', index: 41 },
+  crimeAndPunishmentBookNode,
+  ...partNodes,
+  ...chapterNodes,
 ];
 
 // Relationships
