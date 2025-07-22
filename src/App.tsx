@@ -8,6 +8,9 @@ import { aliceBookData } from './books/aliceData';
 import { duneData } from './books/duneData';
 import { crimeAndPunishmentData } from './books/crimeAndPunishmentData';
 import { lotrData } from './books/lotrData';
+import { firebaseConfig} from "./credentials.ts";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 const bookDataList: BookData[] = [winnieBookData, aliceBookData, duneData, crimeAndPunishmentData, lotrData];
 const availableBooks = bookDataList.map(bd => bd.book);
@@ -16,6 +19,12 @@ const bookDataMap: Record<string, BookData> = Object.fromEntries(bookDataList.ma
 function App() {
   const [selectedChapter, setSelectedChapter] = useState(1);
   const [selectedBook, setSelectedBook] = useState<Book>(winnieBookData.book);
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
+  // Initialize analytics (required for Firebase Analytics)
+  console.log('Analytics initialized:', analytics);
 
   // Get the appropriate book data based on selected book
   const getBookData = (book: Book): BookData => {
@@ -55,7 +64,7 @@ function App() {
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
-        <CharacterGraph 
+        <CharacterGraph
           key={selectedBook.id}
           bookData={filteredBookData}
           fullBookData={bookData}

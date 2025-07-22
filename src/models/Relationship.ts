@@ -1,4 +1,5 @@
-import type { Character, Chapter } from './Character';
+import type { Character } from './Character';
+import type { Chapter } from './Chapter';
 
 export interface Relationship {
   character1: Character;
