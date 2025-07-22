@@ -50,7 +50,7 @@ class BookRoutesTest {
         }
 
     @Test
-    fun testGetBookByTitleForAuthor() =
+    fun testGetBookByIdForAuthor() =
         testApplication {
             application {
                 this@application.install(ContentNegotiation) {
@@ -70,13 +70,13 @@ class BookRoutesTest {
                 setBody(Json.encodeToString(AuthorRequest.serializer(), AuthorRequest(author.id, author.name)))
             }
 
-            // Test getting a specific book by title for an author (will be not found since no books are created via API)
-            val response = client.get("/api/authors/${author.id}/books/The Hobbit")
+            // Test getting a specific book by ID for an author (will be not found since no books are created via API)
+            val response = client.get("/api/authors/${author.id}/books/the-hobbit")
             assertThat(response.status).isEqualTo(HttpStatusCode.NotFound)
         }
 
     @Test
-    fun testGetBookByTitleForNonExistentAuthor() =
+    fun testGetBookByIdForNonExistentAuthor() =
         testApplication {
             application {
                 this@application.install(ContentNegotiation) {

@@ -53,8 +53,8 @@ fun Route.bookRoutes() {
             }
         }
 
-        get("/{title}", {
-            description = "Get a specific book by title for an author"
+        get("/{bookId}", {
+            description = "Get a specific book by ID for an author"
             response {
                 HttpStatusCode.OK to {
                     description = "Book found"
@@ -68,14 +68,14 @@ fun Route.bookRoutes() {
         }) {
             try {
                 val authorId = call.parameters["authorId"]
-                val title = call.parameters["title"]
+                val bookId = call.parameters["bookId"]
 
                 if (authorId == null) {
                     call.respond(HttpStatusCode.BadRequest, ErrorResponse("Author ID is required"))
                     return@get
                 }
-                if (title == null) {
-                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("Book title is required"))
+                if (bookId == null) {
+                    call.respond(HttpStatusCode.BadRequest, ErrorResponse("Book ID is required"))
                     return@get
                 }
 
@@ -86,19 +86,19 @@ fun Route.bookRoutes() {
                     return@get
                 }
 
-                // Then get the book by title
-                val book = Services.bookService.getBookByTitle(title)
+                // Then get the book by ID
+                val book = Services.bookService.getBookById(bookId)
                 if (book != null && book.author.id == authorId) {
                     call.respond(HttpStatusCode.OK, book)
                 } else {
                     call.respond(HttpStatusCode.NotFound, ErrorResponse("Book not found for this author"))
                 }
             } catch (e: Exception) {
-                logger.error("Error fetching book by title for author", e)
+                logger.error("Error fetching book by ID for author", e)
                 call.respond(
                     HttpStatusCode.InternalServerError,
                     ErrorResponse(
-                        e.message ?: "Error fetching book by title for author",
+                        e.message ?: "Error fetching book by ID for author",
                     ),
                 )
             }

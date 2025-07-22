@@ -13,6 +13,7 @@ annotation class BookDsl
 
 @BookDsl
 class BookBuilder {
+    private var bookId: String = ""
     private var authorId: String = ""
     private var authorName: String = ""
     private var bookTitle: String = ""
@@ -20,6 +21,10 @@ class BookBuilder {
     private var charactersList = mutableListOf<Character>()
     private var relationshipsList = mutableListOf<Relationship>()
     private var factionsList = mutableListOf<Faction>()
+
+    fun id(id: String) {
+        bookId = id
+    }
 
     fun author(
         id: String,
@@ -34,7 +39,8 @@ class BookBuilder {
     }
 
     fun chapters(init: ChaptersBuilder.() -> Unit) {
-        val book = Book(Author(authorId, authorName), bookTitle)
+        val author = Author(authorId, authorName)
+        val book = Book(id = bookId, author = author, title = bookTitle)
         val chaptersBuilder = ChaptersBuilder(book)
         chaptersBuilder.init()
         chaptersList.addAll(chaptersBuilder.getChapters())
@@ -60,7 +66,7 @@ class BookBuilder {
 
     fun build(): Book {
         val author = Author(authorId, authorName)
-        return Book(author, bookTitle)
+        return Book(id = bookId, author = author, title = bookTitle)
     }
 
     fun getChapters(): List<Chapter> = chaptersList.toList()

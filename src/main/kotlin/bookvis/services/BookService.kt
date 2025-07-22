@@ -7,15 +7,16 @@ class BookService {
     private val books = mutableListOf<Book>()
 
     fun createBook(
+        id: String,
         author: Author,
         title: String,
     ): Book {
-        val book = Book(author = author, title = title)
+        val book = Book(id = id, author = author, title = title)
         books.add(book)
         return book
     }
 
-    fun getBookByTitle(title: String): Book? = books.find { it.title == title }
+    fun getBookById(id: String): Book? = books.find { it.id == id }
 
     fun getBooksByAuthorId(authorId: String): List<Book> = books.filter { it.author.id == authorId }
 }
