@@ -1,6 +1,6 @@
 package bookvis.routes
 
-import bookvis.services.AuthorService
+import bookvis.services.Services
 import io.github.smiley4.ktoropenapi.get
 import io.github.smiley4.ktoropenapi.post
 import io.ktor.http.HttpStatusCode
@@ -23,7 +23,6 @@ data class ErrorResponse(
 )
 
 private val logger = LoggerFactory.getLogger("AuthorRoutes")
-private val authorService = AuthorService()
 
 fun Route.authorRoutes() {
     route("/api/authors") {
@@ -37,7 +36,7 @@ fun Route.authorRoutes() {
             }
         }) {
             try {
-                val authors = authorService.getAllAuthors()
+                val authors = Services.authorService.getAllAuthors()
                 call.respond(HttpStatusCode.OK, authors)
             } catch (e: Exception) {
                 logger.error("Error fetching all authors", e)
@@ -76,7 +75,7 @@ fun Route.authorRoutes() {
                     return@get
                 }
 
-                val author = authorService.getAuthor(authorId)
+                val author = Services.authorService.getAuthor(authorId)
                 if (author != null) {
                     call.respond(HttpStatusCode.OK, author)
                 } else {
@@ -103,7 +102,7 @@ fun Route.authorRoutes() {
         }) {
             try {
                 val request = call.receive<AuthorRequest>()
-                val author = authorService.createAuthor(request.id, request.name)
+                val author = Services.authorService.createAuthor(request.id, request.name)
                 call.respond(HttpStatusCode.Created, author)
             } catch (e: Exception) {
                 logger.error("Error creating author", e)
