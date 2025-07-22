@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import cytoscape from 'cytoscape';
 // @ts-expect-error - cytoscape-node-editing has no type declarations
 import nodeEditing from 'cytoscape-node-editing';
 import type { BookData } from '../models/BookData';
 import type { Character } from '../models/Character';
+import type { Book } from '../models/Book';
 import { CharacterDetailsPanel } from './CharacterDetailsPanel';
 import { ChapterSlider } from './ChapterSlider';
 
@@ -15,14 +16,66 @@ interface CharacterGraphProps {
   bookData: BookData;
   selectedChapter: number;
   onChapterChange: (index: number) => void;
+  books: Book[];
+  selectedBook: Book;
+  onBookChange: (book: Book) => void;
 }
 
-export const CharacterGraph: React.FC<CharacterGraphProps> = ({ bookData, selectedChapter, onChapterChange }) => {
+export const CharacterGraph: React.FC<CharacterGraphProps> = ({ 
+  bookData, 
+  selectedChapter, 
+  onChapterChange, 
+  books, 
+  selectedBook, 
+  onBookChange 
+}) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
+  const cyRef = useRef<cytoscape.Core | null>(null);
+
+  // Auto-reorganize layout when chapter changes
+  useEffect(() => {
+    if (cyRef.current) {
+      // Only re-layout if there are elements to layout
+      const elementCount = cyRef.current.elements().length;
+      if (elementCount > 0) {
+        // Add a delay so users can see new elements appear first
+        const timeoutId = setTimeout(() => {
+          if (cyRef.current) {
+            try {
+              cyRef.current.layout(layout).run();
+            } catch (error) {
+              console.warn('Layout failed:', error);
+            }
+          }
+        }, 500); // 500ms delay before re-layout
+        
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [selectedChapter, bookData.characters.length, bookData.relationships.length]);
 
   // Create a lookup for faction colors from the factions array
   const factionColors: Record<string, string> = Object.fromEntries(bookData.factions.map(f => [f.id, f.color]));
+
+  // Layout configuration for cose
+  const layout = { 
+    name: 'cose', 
+    padding: 10, // Reduced from 20
+    animate: true,
+    animationDuration: 2000,
+    animationEasing: 'ease-out-cubic',
+    fit: true,
+    nodeDimensionsIncludeLabels: true,
+    // Compound node specific settings - much tighter arrangement
+    nestingFactor: 0.02, // Reduced from 0.05
+    nodeRepulsion: 1500, // Reduced from 2500
+    idealEdgeLength: 20, // Reduced from 30
+    edgeElasticity: 0.2, // Reduced from 0.3
+    gravity: 0.6, // Increased from 0.4 to pull nodes much closer
+    gravityRange: 0.3, // Reduced from 0.5
+    gravityCompound: 0.2, // Increased from 0.1
+  };
 
   // Create compound nodes for factions
   const elements = [
@@ -48,8 +101,6 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ bookData, select
       classes: 'relationship',
     })),
   ];
-
-  const layout = { name: 'cose', padding: 30 };
 
   const style = [
     {
@@ -87,7 +138,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ bookData, select
         'background-color': '#fafafa',
         'label': 'data(label)',
         'color': '#111',
-        'font-size': 12,
+        'font-size': 8, // Reduced from 12
         'font-weight': 'bold',
         'border-width': 2,
         'border-color': '#333',
@@ -154,12 +205,16 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({ bookData, select
           cy.zoomingEnabled(true);
           // Ensure the graph stays within bounds
           cy.fit();
+          cyRef.current = cy; // Store the cytoscape instance in the ref
         }}
       />
       <ChapterSlider
         chapters={bookData.chapters}
         value={selectedChapter}
         onChange={onChapterChange}
+        books={books}
+        selectedBook={selectedBook}
+        onBookChange={onBookChange}
       />
       <CharacterDetailsPanel
         character={selectedCharacter}

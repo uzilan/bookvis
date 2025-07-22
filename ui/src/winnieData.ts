@@ -1,14 +1,14 @@
+import type { BookData } from './models/BookData';
 import type { Chapter } from './models/Chapter';
 import type { Character } from './models/Character';
 import type { Faction } from './models/Faction';
 import type { RelationshipWithChapters } from './models/BookData';
 
-export const winnieBook = {
+const winnieBook = {
   author: { id: 'milne', name: 'A. A. Milne' },
   title: 'Winnie-the-Pooh',
 };
 
-// Winnie-the-Pooh characters
 const pooh: Character = { name: 'Winnie-the-Pooh', id: 'pooh', description: 'A bear of very little brain.', firstAppearanceChapter: 1, aliases: ['Pooh'], factions: ['friends'], attributes: ['Loves honey', 'Very friendly', 'Sometimes forgetful', 'Lives in a house under the name Sanders'] };
 const piglet: Character = { name: 'Piglet', id: 'piglet', description: 'A small and timid pig.', firstAppearanceChapter: 1, aliases: [], factions: ['friends'], attributes: ['Very brave despite being small', 'Best friends with Pooh', 'Lives in a beech tree', 'Always tries to be helpful'] };
 const eeyore: Character = { name: 'Eeyore', id: 'eeyore', description: 'A gloomy donkey.', firstAppearanceChapter: 1, aliases: [], factions: ['friends'], attributes: ['Gloomy personality', 'Lives in the thistly corner', 'Has a detachable tail', 'Very loyal friend'] };
@@ -19,16 +19,16 @@ const kanga: Character = { name: 'Kanga', id: 'kanga', description: 'A mother ka
 const roo: Character = { name: 'Roo', id: 'roo', description: 'Kanga\'s child.', firstAppearanceChapter: 7, aliases: [], factions: ['friends'], attributes: ['Very young and energetic', 'Loves to bounce', 'Kanga\'s only child', 'Friends with Tigger'] };
 const heffalump: Character = { name: 'Heffalump', id: 'heffalump', description: 'A mysterious creature.', firstAppearanceChapter: 5, aliases: [], factions: ['heffalumps'], attributes: ['Imaginary creature', 'Scares Piglet', 'Has a very large head', 'Lives in the forest'] };
 
-export const winnieCharacters: Character[] = [
+const winnieCharacters: Character[] = [
   pooh, piglet, eeyore, cr, rabbit, owl, kanga, roo, heffalump
 ];
 
-export const winnieFactions: Faction[] = [
+const winnieFactions: Faction[] = [
   { id: 'friends', title: 'Pooh\'s Friends', description: 'The main group of friends in the Hundred Acre Wood.', color: '#A7C7E7' }, // soft blue
   { id: 'heffalumps', title: 'Heffalumps', description: 'Imaginary creatures.', color: '#C7A7E7' }, // muted mauve
 ];
 
-export const winnieChapters: Chapter[] = [
+const winnieChapters: Chapter[] = [
   { book: winnieBook, title: 'In Which We Are Introduced to Winnie-the-Pooh and Some Bees, and the Stories Begin', index: 1 },
   { book: winnieBook, title: 'In Which Pooh Goes Visiting and Gets into a Tight Place', index: 2 },
   { book: winnieBook, title: 'In Which Pooh and Piglet Go Hunting and Nearly Catch a Woozle', index: 3 },
@@ -41,7 +41,7 @@ export const winnieChapters: Chapter[] = [
   { book: winnieBook, title: 'In Which Christopher Robin Gives a Pooh Party, and We Say Good-bye', index: 10 },
 ];
 
-export const winnieRelationships: RelationshipWithChapters[] = [
+const winnieRelationships: RelationshipWithChapters[] = [
   {
     character1: pooh,
     character2: piglet,
@@ -87,4 +87,12 @@ export const winnieRelationships: RelationshipWithChapters[] = [
       { chapter: 5, description: 'Piglet meets a Heffalump' },
     ],
   },
-]; 
+];
+
+export const winnieBookData: BookData = {
+  book: winnieBook,
+  characters: winnieCharacters,
+  chapters: winnieChapters,
+  factions: winnieFactions,
+  relationships: winnieRelationships,
+}; 
