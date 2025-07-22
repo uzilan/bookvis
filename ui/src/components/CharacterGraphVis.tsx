@@ -28,40 +28,52 @@ export const CharacterGraphVis: React.FC<CharacterGraphProps> = ({
   const networkRef = useRef<HTMLDivElement>(null);
   const networkInstanceRef = useRef<Network | null>(null);
 
-  // Create vis.js nodes and edges
+  // Create vis.js nodes and edges with legend-style faction display
   const createVisData = () => {
     const nodes: Record<string, unknown>[] = [];
     const edges: Record<string, unknown>[] = [];
 
-    // Add faction nodes (groups)
-    bookData.factions.forEach((faction) => {
+    // Position faction legend boxes in a horizontal row at the top
+    const legendStartX = -600;
+    const legendY = -400;
+    const legendSpacing = 300;
+    
+    bookData.factions.forEach((faction, index) => {
+      const x = legendStartX + (index * legendSpacing);
       nodes.push({
-        id: faction.id,
+        id: `faction-${faction.id}`,
         label: faction.title,
         group: 'faction',
         color: faction.color,
         shape: 'box',
-        widthConstraint: { minimum: 200 },
-        heightConstraint: { minimum: 100 },
-        font: { size: 16, face: 'Arial', bold: true },
-        borderWidth: 3,
+        widthConstraint: { minimum: 200, maximum: 250 },
+        heightConstraint: { minimum: 80, maximum: 120 },
+        font: { size: 14, face: 'Arial', bold: true },
+        borderWidth: 2,
         borderColor: '#888',
+        x: x,
+        y: legendY,
+        fixed: true, // Keep legend boxes in fixed positions
       });
     });
 
-    // Add character nodes
+    // Add character nodes in the main area
     bookData.characters.forEach((character) => {
+      const primaryFaction = character.factions[0];
+      
       nodes.push({
         id: character.id,
         label: character.name,
-        color: '#fafafa',
+        group: 'character',
+        color: primaryFaction ? bookData.factions.find(f => f.id === primaryFaction)?.color : '#cccccc',
         shape: 'circle',
-        size: 30,
-        font: { size: 10, face: 'Arial', bold: true },
+        size: 25,
+        font: { size: 9, face: 'Arial', bold: true },
         borderWidth: 2,
         borderColor: '#333',
-        // Group characters by their first faction
-        group: character.factions[0] || 'ungrouped',
+        // Position characters in the main area (center)
+        x: (Math.random() - 0.5) * 400,
+        y: (Math.random() - 0.5) * 400,
       });
     });
 
@@ -106,11 +118,13 @@ export const CharacterGraphVis: React.FC<CharacterGraphProps> = ({
         font: { size: 16, bold: true },
         color: { background: '#e0e0e0', border: '#888' },
       },
-      character: {
+      ungrouped: {
         shape: 'circle',
-        color: { background: '#fafafa', border: '#333' },
+        color: { background: '#cccccc', border: '#333' },
+        font: { size: 10, bold: true },
       },
     },
+
     physics: {
       enabled: true,
       solver: 'forceAtlas2Based',
@@ -120,7 +134,7 @@ export const CharacterGraphVis: React.FC<CharacterGraphProps> = ({
         springLength: 100,
         springConstant: 0.08,
         damping: 0.4,
-        avoidOverlap: 0.5,
+        avoidOverlap: 0.6,
       },
     },
     interaction: {
