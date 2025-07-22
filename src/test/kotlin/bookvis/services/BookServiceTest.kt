@@ -14,4 +14,4 @@ class BookServiceTest {
         assertEquals(author, book.author)
         assertEquals(title, book.title)
     }
-} 
+}

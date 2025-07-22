@@ -20,4 +20,4 @@ class AuthorServiceTest {
         assertEquals("tolkien", author.id)
         assertEquals("J.R.R. Tolkien", author.name)
     }
-} 
+}

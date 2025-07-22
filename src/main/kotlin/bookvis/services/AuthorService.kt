@@ -13,4 +13,4 @@ class AuthorService {
         logger.info("Creating author: $name with id: $id")
         return Author(id, name)
     }
-} 
+}

@@ -33,7 +33,7 @@ class ChaptersBuilder(
                 partTitle = partTitle,
                 globalIndex = globalIndex,
                 path = path,
-            )
+            ),
         )
         currentIndex++
     }
