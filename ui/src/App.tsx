@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { CharacterGraph } from './components/CharacterGraph';
+import { CharacterGraphVis } from './components/CharacterGraphVis';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
 import { winnieBookData } from './winnieData';
@@ -52,7 +52,7 @@ function App() {
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
-        <CharacterGraph 
+        <CharacterGraphVis 
           bookData={filteredBookData}
           selectedChapter={selectedChapter}
           onChapterChange={setSelectedChapter}

@@ -19,7 +19,8 @@
     "cytoscape-node-resize": "^3.2.2",
     "react": "^19.1.0",
     "react-cytoscapejs": "^2.0.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "vis-network": "^10.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
