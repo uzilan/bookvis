@@ -126,10 +126,29 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       });
     }
 
+    // Debug: Log available chapters
+
+    
     // Group characters by faction for clustering
     const factionGroups: Record<string, Character[]> = {};
     bookData.characters.forEach((character) => {
-      const primaryFaction = character.factions[0];
+      // Filter factions based on current chapter
+      const currentFactions = character.factions.filter(factionId => {
+        const joinChapter = character.factionJoinChapters?.[factionId];
+        if (!joinChapter) return false;
+        
+        // Handle both number (backward compatibility) and string (chapter ID) values
+        if (typeof joinChapter === 'number') {
+          return joinChapter <= selectedChapter;
+        } else if (typeof joinChapter === 'string') {
+          // For string chapter IDs, we need to find the chapter's global index
+          const chapter = bookData.chapters.find(ch => ch.index.toString() === joinChapter.replace('chapter-', ''));
+          return chapter && chapter.globalIndex && chapter.globalIndex <= selectedChapter;
+        }
+        return false;
+      });
+      
+      const primaryFaction = currentFactions[0] || character.factions[0];
       if (primaryFaction) {
         if (!factionGroups[primaryFaction]) {
           factionGroups[primaryFaction] = [];
@@ -140,12 +159,34 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
     // Add character nodes with faction-based positioning
     bookData.characters.forEach((character) => {
-      const factionColors = character.factions
-        .map(fid => bookData.factions.find(f => f.id === fid)?.color)
+      // Filter factions based on current chapter
+      const currentFactions = character.factions.filter(factionId => {
+        const joinChapter = character.factionJoinChapters?.[factionId];
+        if (!joinChapter) return false;
+        
+        // Handle both number (backward compatibility) and string (chapter ID) values
+        if (typeof joinChapter === 'number') {
+          return joinChapter <= selectedChapter;
+        } else if (typeof joinChapter === 'string') {
+          // For string chapter IDs, we need to find the chapter's global index
+          const chapter = bookData.chapters.find(ch => ch.index.toString() === joinChapter.replace('chapter-', ''));
+          return chapter && chapter.globalIndex && chapter.globalIndex <= selectedChapter;
+        }
+        return false;
+      });
+      
+      const factionColors = currentFactions
+        .map(fid => {
+          const faction = bookData.factions.find(f => f.id === fid);
+          return faction?.color;
+        })
         .filter(Boolean) as string[];
       
-      // Determine the primary faction for clustering
-      const primaryFaction = character.factions[0];
+      // If no current factions, use a default color to prevent invisible nodes
+      const finalColors = factionColors.length > 0 ? factionColors : ['#ffffff'];
+      
+      // Determine the primary faction for clustering (use first current faction)
+      const primaryFaction = currentFactions[0] || character.factions[0];
       const factionGroup = primaryFaction ? `faction-${primaryFaction}` : 'character';
       
       // Calculate position based on faction grouping
@@ -175,7 +216,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         label: '', // No label since name is inside the SVG
         group: factionGroup, // Use faction-based grouping
         shape: 'image',
-        image: generatePieSVG(factionColors, character.name, 60),
+        image: generatePieSVG(finalColors, character.name, 60),
         font: { size: 16, face: 'Arial', bold: true },
         borderWidth: 2,
         borderColor: '#333',
@@ -201,7 +242,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     });
 
     return { nodes, edges };
-  }, [bookData.characters, bookData.factions, bookData.relationships, isClustered]);
+  }, [bookData.characters, bookData.factions, bookData.relationships, bookData.chapters, selectedChapter, isClustered]);
 
   // Network options
   const options = useMemo(() => ({

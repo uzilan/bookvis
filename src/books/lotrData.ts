@@ -27,6 +27,10 @@ const frodo: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Mr. Baggins', 'Ring-bearer', 'Master of the Ring'],
   factions: ['hobbits', 'fellowship'],
+  factionJoinChapters: {
+    'hobbits': 2, // Born a hobbit
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Brave', 'Resilient', 'Hobbit', 'Ring-bearer'],
 };
 
@@ -37,6 +41,10 @@ const sam: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Sam', 'Mr. Gamgee'],
   factions: ['hobbits', 'fellowship'],
+  factionJoinChapters: {
+    'hobbits': 2, // Born a hobbit
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Loyal', 'Practical', 'Gardener', 'Brave'],
 };
 
@@ -47,6 +55,10 @@ const gandalf: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Gandalf the Grey', 'Gandalf the White', 'Mithrandir', 'Olorin'],
   factions: ['wizards', 'fellowship'],
+  factionJoinChapters: {
+    'wizards': 2, // Always a wizard
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Wizard', 'Wise', 'Powerful', 'Guide'],
 };
 
@@ -57,6 +69,11 @@ const aragorn: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Strider', 'Elessar', 'King Elessar', 'Thorongil'],
   factions: ['rangers', 'fellowship', 'gondor'],
+  factionJoinChapters: {
+    'rangers': 2, // Always a ranger
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'gondor': 2, // Born heir to Gondor
+  },
   attributes: ['Ranger', 'King', 'Warrior', 'Healer'],
 };
 
@@ -67,6 +84,10 @@ const legolas: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Prince of Mirkwood'],
   factions: ['elves', 'fellowship'],
+  factionJoinChapters: {
+    'elves': 2, // Always an elf
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Elf', 'Archer', 'Agile', 'Immortal'],
 };
 
@@ -77,6 +98,10 @@ const gimli: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Son of Glóin'],
   factions: ['dwarves', 'fellowship'],
+  factionJoinChapters: {
+    'dwarves': 2, // Always a dwarf
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Dwarf', 'Warrior', 'Stout', 'Loyal'],
 };
 
@@ -87,6 +112,10 @@ const boromir: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Captain of Gondor'],
   factions: ['gondor', 'fellowship'],
+  factionJoinChapters: {
+    'gondor': 2, // Born in Gondor
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Warrior', 'Proud', 'Tempted by Ring', 'Noble'],
 };
 
@@ -97,6 +126,10 @@ const merry: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Merry'],
   factions: ['hobbits', 'fellowship'],
+  factionJoinChapters: {
+    'hobbits': 2, // Born a hobbit
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Hobbit', 'Brave', 'Loyal', 'Knight of Rohan'],
 };
 
@@ -107,6 +140,10 @@ const pippin: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Pippin'],
   factions: ['hobbits', 'fellowship'],
+  factionJoinChapters: {
+    'hobbits': 2, // Born a hobbit
+    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+  },
   attributes: ['Hobbit', 'Young', 'Curious', 'Guard of the Citadel'],
 };
 
@@ -117,6 +154,9 @@ const gollum: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Sméagol', 'Stinker', 'Slinker'],
   factions: ['corrupted'],
+  factionJoinChapters: {
+    'corrupted': 2, // Already corrupted when introduced
+  },
   attributes: ['Corrupted', 'Split personality', 'Ring-obsessed', 'Agile'],
 };
 
@@ -127,6 +167,9 @@ const sauron: Character = {
   firstAppearanceChapter: 1,
   aliases: ['The Dark Lord', 'The Eye', 'Lord of Mordor'],
   factions: ['evil'],
+  factionJoinChapters: {
+    'evil': 1, // Always evil
+  },
   attributes: ['Dark Lord', 'Powerful', 'Corrupting', 'Immortal'],
 };
 
@@ -137,6 +180,10 @@ const saruman: Character = {
   firstAppearanceChapter: 2,
   aliases: ['Saruman the White', 'Curunír', 'Sharkey'],
   factions: ['wizards', 'evil'],
+  factionJoinChapters: {
+    'wizards': 2, // Always a wizard
+    'evil': 2, // Already corrupted when introduced
+  },
   attributes: ['Wizard', 'Corrupted', 'Ambitious', 'Traitor'],
 };
 
@@ -147,6 +194,9 @@ const theoden: Character = {
   firstAppearanceChapter: 3,
   aliases: ['King of Rohan'],
   factions: ['rohan'],
+  factionJoinChapters: {
+    'rohan': 3, // King of Rohan when introduced
+  },
   attributes: ['King', 'Warrior', 'Freed from corruption', 'Noble'],
 };
 
@@ -157,6 +207,9 @@ const eowyn: Character = {
   firstAppearanceChapter: 3,
   aliases: ['Lady of Rohan', 'Dernhelm'],
   factions: ['rohan'],
+  factionJoinChapters: {
+    'rohan': 3, // Princess of Rohan when introduced
+  },
   attributes: ['Princess', 'Warrior', 'Brave', 'Slayer of Witch-king'],
 };
 
@@ -167,6 +220,9 @@ const faramir: Character = {
   firstAppearanceChapter: 4,
   aliases: ['Captain of Gondor'],
   factions: ['gondor'],
+  factionJoinChapters: {
+    'gondor': 4, // Captain of Gondor when introduced
+  },
   attributes: ['Captain', 'Wise', 'Resistant to Ring', 'Noble'],
 };
 
@@ -177,6 +233,9 @@ const denethor: Character = {
   firstAppearanceChapter: 4,
   aliases: ['Steward of Gondor'],
   factions: ['gondor'],
+  factionJoinChapters: {
+    'gondor': 4, // Steward of Gondor when introduced
+  },
   attributes: ['Steward', 'Proud', 'Despairing', 'Noble'],
 };
 
@@ -194,25 +253,7 @@ const factions: Faction[] = [
   { id: 'corrupted', title: 'Corrupted', description: 'Those corrupted by the Ring or other evil', color: '#9E9E9E' }, // Gray
 ];
 
-// Complex hierarchical chapters
-const fellowshipPart1 = {
-  book: lotrBook,
-  title: 'The Ring Sets Out',
-  index: 1,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
-  path: ['The Fellowship of the Ring', 'The Ring Sets Out'],
-};
-const fellowshipPart2 = {
-  book: lotrBook,
-  title: 'The Ring Goes South',
-  index: 2,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
-  path: ['The Fellowship of the Ring', 'The Ring Goes South'],
-};
+
 const twoTowersPart1 = {
   book: lotrBook,
   title: 'The Treason of Isengard',
@@ -266,9 +307,12 @@ const chapters: Chapter[] = [
   
   // Part 1
   {
-    ...fellowshipPart1,
-    type: 'part',
+    book: lotrBook,
+    title: 'The Ring Sets Out',
+    index: 1,
     level: 2,
+    type: 'part',
+    globalIndex: 1,
     parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
     path: ['The Fellowship of the Ring', 'The Ring Sets Out'],
   },
@@ -387,9 +431,12 @@ const chapters: Chapter[] = [
   
   // Part 2
   {
-    ...fellowshipPart2,
-    type: 'part',
+    book: lotrBook,
+    title: 'The Ring Goes South',
+    index: 2,
     level: 2,
+    type: 'part',
+    globalIndex: 13,
     parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
     path: ['The Fellowship of the Ring', 'The Ring Goes South'],
   },
@@ -401,7 +448,7 @@ const chapters: Chapter[] = [
     index: 1,
     level: 3,
     type: 'chapter',
-    globalIndex: 13,
+    globalIndex: 14,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Many Meetings'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -411,7 +458,7 @@ const chapters: Chapter[] = [
     index: 2,
     level: 3,
     type: 'chapter',
-    globalIndex: 14,
+    globalIndex: 15,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Council of Elrond'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -421,7 +468,7 @@ const chapters: Chapter[] = [
     index: 3,
     level: 3,
     type: 'chapter',
-    globalIndex: 15,
+    globalIndex: 16,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Ring Goes South'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -431,7 +478,7 @@ const chapters: Chapter[] = [
     index: 4,
     level: 3,
     type: 'chapter',
-    globalIndex: 16,
+    globalIndex: 17,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'A Journey in the Dark'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -441,7 +488,7 @@ const chapters: Chapter[] = [
     index: 5,
     level: 3,
     type: 'chapter',
-    globalIndex: 17,
+    globalIndex: 18,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Bridge of Khazad-dûm'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -451,7 +498,7 @@ const chapters: Chapter[] = [
     index: 6,
     level: 3,
     type: 'chapter',
-    globalIndex: 18,
+    globalIndex: 19,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Lothlórien'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -461,7 +508,7 @@ const chapters: Chapter[] = [
     index: 7,
     level: 3,
     type: 'chapter',
-    globalIndex: 19,
+    globalIndex: 20,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Mirror of Galadriel'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -471,7 +518,7 @@ const chapters: Chapter[] = [
     index: 8,
     level: 3,
     type: 'chapter',
-    globalIndex: 20,
+    globalIndex: 21,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Farewell to Lórien'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -481,7 +528,7 @@ const chapters: Chapter[] = [
     index: 9,
     level: 3,
     type: 'chapter',
-    globalIndex: 21,
+    globalIndex: 22,
     path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Great River'],
     parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
   },
@@ -1089,21 +1136,7 @@ const characters: Character[] = [
   gollum, sauron, saruman, theoden, eowyn, faramir, denethor,
 ];
 
-// Utility to fix parent references in chapters array
-function fixChapterParents(chapters: Chapter[]): void {
-  for (const chapter of chapters) {
-    if (chapter.parent) {
-      const parent = chapters.find(
-        ch => ch.title === chapter.parent!.title && ch.type === chapter.parent!.type && ch.level === chapter.parent!.level
-      );
-      if (parent) {
-        chapter.parent = parent;
-      }
-    }
-  }
-}
 
-fixChapterParents(chapters);
 
 export const lotrData: BookData = {
   book: lotrBook,

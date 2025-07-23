@@ -19,6 +19,56 @@ const duneBook: Book = {
   author: frankHerbert,
 };
 
+// Chapter definitions - just basic data
+const duneChapterData = {
+  'chapter-1': { id: 'chapter-1', title: 'The Duke and the Lady' },
+  'chapter-2': { id: 'chapter-2', title: 'The Missionaria Protectiva' },
+  'chapter-3': { id: 'chapter-3', title: 'The Reverend Mother' },
+  'chapter-4': { id: 'chapter-4', title: 'The Spice' },
+  'chapter-5': { id: 'chapter-5', title: 'The Harkonnens' },
+  'chapter-6': { id: 'chapter-6', title: 'The Atreides Arrive' },
+  'chapter-7': { id: 'chapter-7', title: 'The Betrayal' },
+  'chapter-8': { id: 'chapter-8', title: 'The Desert' },
+  'chapter-9': { id: 'chapter-9', title: 'The Fremen' },
+  'chapter-10': { id: 'chapter-10', title: 'The Spice Melange' },
+  'chapter-11': { id: 'chapter-11', title: 'The Water of Life' },
+  'chapter-12': { id: 'chapter-12', title: 'The Prophet' },
+  'chapter-13': { id: 'chapter-13', title: 'The Jihad' },
+  'chapter-14': { id: 'chapter-14', title: 'The Emperor' },
+  'chapter-15': { id: 'chapter-15', title: 'The Final Battle' },
+};
+
+// Hierarchy definition - order determines global index, no explicit globalIndex needed
+const duneHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
+  { chapterId: 'chapter-1', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-2', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-3', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-4', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-5', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-6', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-7', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-8', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-9', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-10', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-11', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-12', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-13', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-14', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-15', level: 0, type: 'chapter' },
+];
+
+// Function to build chapters from data and hierarchy
+function buildChapters(chapterData: Record<string, { id: string; title: string }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+  return hierarchy.map((item, index) => ({
+    book: duneBook,
+    ...chapterData[item.chapterId],
+    globalIndex: index + 1, // Order in array determines global index
+    level: item.level,
+    type: item.type,
+    index: index + 1, // For backward compatibility
+  }));
+}
+
 // Characters
 const paulAtreides: Character = {
   id: 'paul-atreides',
@@ -27,6 +77,10 @@ const paulAtreides: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Muad\'Dib', 'Usul', 'Kwisatz Haderach'],
   factions: ['atreides', 'fremen'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Born into House Atreides
+    'fremen': 'chapter-8', // Joins Fremen when he meets Stilgar and Chani
+  },
   attributes: ['Prescient', 'Bene Gesserit trained', 'Duke\'s son'],
 };
 
@@ -37,6 +91,10 @@ const jessica: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Reverend Mother'],
   factions: ['bene-gesserit', 'atreides'],
+  factionJoinChapters: {
+    'bene-gesserit': 'chapter-1', // Always Bene Gesserit
+    'atreides': 'chapter-1', // Always part of House Atreides
+  },
   attributes: ['Bene Gesserit trained', 'Concubine', 'Mother of Paul'],
 };
 
@@ -47,6 +105,9 @@ const letoAtreides: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Duke'],
   factions: ['atreides'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Always Duke of House Atreides
+  },
   attributes: ['Duke', 'Father', 'Ruler of Caladan'],
 };
 
@@ -57,6 +118,9 @@ const gurneyHalleck: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Weapons Master'],
   factions: ['atreides'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Always loyal to House Atreides
+  },
   attributes: ['Weapons master', 'Loyal retainer', 'Poet warrior'],
 };
 
@@ -67,6 +131,9 @@ const thufirHawat: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Mentat'],
   factions: ['atreides'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Always loyal to House Atreides
+  },
   attributes: ['Mentat', 'Security chief', 'Human computer'],
 };
 
@@ -77,67 +144,88 @@ const duncanIdaho: Character = {
   firstAppearanceChapter: 1,
   aliases: ['Swordmaster'],
   factions: ['atreides'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Always loyal to House Atreides
+  },
   attributes: ['Swordmaster', 'Loyal retainer', 'Expert fighter'],
 };
 
 const stilgar: Character = {
   id: 'stilgar',
   name: 'Stilgar',
-  description: 'Naib (leader) of Sietch Tabr, Fremen leader',
+  description: 'Naib of Sietch Tabr, Fremen leader and Paul\'s mentor',
   firstAppearanceChapter: 8,
   aliases: ['Naib'],
   factions: ['fremen'],
-  attributes: ['Naib', 'Fremen leader', 'Desert warrior'],
+  factionJoinChapters: {
+    'fremen': 'chapter-8', // Always Fremen leader
+  },
+  attributes: ['Fremen leader', 'Desert warrior', 'Paul\'s mentor'],
 };
 
 const chani: Character = {
   id: 'chani',
   name: 'Chani',
-  description: 'Daughter of Imperial Planetologist Liet-Kynes, Paul\'s Fremen love',
+  description: 'Fremen woman, daughter of Liet-Kynes, Paul\'s love interest',
   firstAppearanceChapter: 8,
   aliases: ['Sihaya'],
   factions: ['fremen'],
+  factionJoinChapters: {
+    'fremen': 'chapter-8', // Always Fremen
+  },
   attributes: ['Fremen', 'Daughter of Liet-Kynes', 'Paul\'s love'],
 };
 
 const lietKynes: Character = {
   id: 'liet-kynes',
   name: 'Liet-Kynes',
-  description: 'Imperial Planetologist and secret leader of the Fremen',
+  description: 'Imperial Planetologist and father of Chani',
   firstAppearanceChapter: 3,
   aliases: ['Planetologist'],
-  factions: ['fremen', 'imperial'],
-  attributes: ['Planetologist', 'Fremen leader', 'Ecologist'],
+  factions: ['fremen'],
+  factionJoinChapters: {
+    'fremen': 'chapter-3', // Joins Fremen when introduced
+  },
+  attributes: ['Planetologist', 'Father of Chani', 'Fremen ally'],
 };
 
 const baronHarkonnen: Character = {
   id: 'baron-harkonnen',
   name: 'Baron Vladimir Harkonnen',
-  description: 'Head of House Harkonnen, ruler of Arrakis, enemy of Atreides',
+  description: 'Head of House Harkonnen, enemy of House Atreides',
   firstAppearanceChapter: 2,
   aliases: ['Baron'],
   factions: ['harkonnen'],
-  attributes: ['Baron', 'Ruler of Arrakis', 'Enemy of Atreides'],
+  factionJoinChapters: {
+    'harkonnen': 'chapter-2', // Always Harkonnen leader
+  },
+  attributes: ['Baron', 'Enemy of Atreides', 'Spice trader'],
 };
 
 const feydRautha: Character = {
   id: 'feyd-rautha',
   name: 'Feyd-Rautha Harkonnen',
-  description: 'Nephew of Baron Harkonnen, potential heir',
+  description: 'Baron\'s nephew and heir to House Harkonnen',
   firstAppearanceChapter: 2,
   aliases: ['Harkonnen heir'],
   factions: ['harkonnen'],
-  attributes: ['Nephew of Baron', 'Potential heir', 'Gladiator'],
+  factionJoinChapters: {
+    'harkonnen': 'chapter-2', // Always Harkonnen heir
+  },
+  attributes: ['Harkonnen heir', 'Gladiator', 'Baron\'s nephew'],
 };
 
 const piterDeVries: Character = {
   id: 'piter-de-vries',
   name: 'Piter De Vries',
-  description: 'Mentat and twisted advisor to Baron Harkonnen',
+  description: 'Twisted mentat and advisor to Baron Harkonnen',
   firstAppearanceChapter: 2,
-  aliases: ['Twisted Mentat'],
+  aliases: ['Mentat'],
   factions: ['harkonnen'],
-  attributes: ['Mentat', 'Twisted', 'Harkonnen advisor'],
+  factionJoinChapters: {
+    'harkonnen': 'chapter-2', // Always Harkonnen mentat
+  },
+  attributes: ['Twisted mentat', 'Harkonnen advisor', 'Psychotic'],
 };
 
 const emperorShaddam: Character = {
@@ -145,49 +233,65 @@ const emperorShaddam: Character = {
   name: 'Emperor Shaddam IV',
   description: 'Padishah Emperor of the Known Universe',
   firstAppearanceChapter: 4,
-  aliases: ['Padishah Emperor'],
+  aliases: ['Emperor'],
   factions: ['corrino'],
-  attributes: ['Emperor', 'Ruler of Known Universe', 'Corrino'],
+  factionJoinChapters: {
+    'corrino': 'chapter-4', // Always Emperor
+  },
+  attributes: ['Emperor', 'Ruler of Known Universe', 'Spice controller'],
 };
 
 const princessIrulan: Character = {
   id: 'princess-irulan',
   name: 'Princess Irulan',
-  description: 'Daughter of Emperor Shaddam IV, historian',
+  description: 'Daughter of Emperor Shaddam IV',
   firstAppearanceChapter: 4,
   aliases: ['Princess'],
   factions: ['corrino'],
-  attributes: ['Princess', 'Daughter of Emperor', 'Historian'],
+  factionJoinChapters: {
+    'corrino': 'chapter-4', // Always Corrino princess
+  },
+  attributes: ['Princess', 'Emperor\'s daughter', 'Historian'],
 };
 
 const hasimirFenring: Character = {
   id: 'hasimir-fenring',
-  name: 'Count Hasimir Fenring',
-  description: 'Imperial Spice Minister and close advisor to Emperor',
+  name: 'Hasimir Fenring',
+  description: 'Count and advisor to Emperor Shaddam',
   firstAppearanceChapter: 4,
   aliases: ['Count'],
   factions: ['corrino'],
-  attributes: ['Spice Minister', 'Imperial advisor', 'Eunuch'],
+  factionJoinChapters: {
+    'corrino': 'chapter-4', // Always Corrino advisor
+  },
+  attributes: ['Count', 'Emperor\'s advisor', 'Genetic eunuch'],
 };
 
 const margotFenring: Character = {
   id: 'margot-fenring',
   name: 'Lady Margot Fenring',
-  description: 'Bene Gesserit acolyte and wife of Count Fenring',
+  description: 'Bene Gesserit and wife of Count Fenring',
   firstAppearanceChapter: 4,
   aliases: ['Lady'],
   factions: ['bene-gesserit', 'corrino'],
-  attributes: ['Bene Gesserit', 'Wife of Count', 'Imperial agent'],
+  factionJoinChapters: {
+    'bene-gesserit': 'chapter-4', // Always Bene Gesserit
+    'corrino': 'chapter-4', // Always Corrino through marriage
+  },
+  attributes: ['Bene Gesserit', 'Count\'s wife', 'Emperor\'s ally'],
 };
 
 const gaiusHelenMohiam: Character = {
   id: 'gaius-helen-mohiam',
-  name: 'Reverend Mother Gaius Helen Mohiam',
-  description: 'Bene Gesserit Truthsayer and advisor to Emperor',
+  name: 'Gaius Helen Mohiam',
+  description: 'Reverend Mother and Bene Gesserit representative',
   firstAppearanceChapter: 1,
-  aliases: ['Truthsayer'],
+  aliases: ['Reverend Mother'],
   factions: ['bene-gesserit'],
-  attributes: ['Truthsayer', 'Bene Gesserit', 'Imperial advisor'],
+  factionJoinChapters: {
+    'bene-gesserit': 'chapter-1', // Always Bene Gesserit
+  },
+  attributes: ['Reverend Mother', 'Bene Gesserit', 'Paul\'s tester'],
 };
 
 const yueh: Character = {
@@ -195,65 +299,52 @@ const yueh: Character = {
   name: 'Dr. Wellington Yueh',
   description: 'Suk doctor and traitor to House Atreides',
   firstAppearanceChapter: 1,
-  aliases: ['Suk Doctor'],
+  aliases: ['Suk doctor'],
   factions: ['atreides'],
-  attributes: ['Suk doctor', 'Traitor', 'Conditioned'],
+  factionJoinChapters: {
+    'atreides': 'chapter-1', // Initially loyal to Atreides, then betrays
+  },
+  attributes: ['Suk doctor', 'Traitor', 'Compromised by Harkonnens'],
 };
 
 // Factions
 const atreidesFaction: Faction = {
   id: 'atreides',
   title: 'House Atreides',
-  color: '#4A90E2',
   description: 'Noble house from Caladan, rulers of Arrakis',
+  color: '#4A90E2',
 };
 
 const harkonnenFaction: Faction = {
   id: 'harkonnen',
   title: 'House Harkonnen',
+  description: 'Noble house from Giedi Prime, enemies of Atreides',
   color: '#D0021B',
-  description: 'Noble house from Giedi Prime, former rulers of Arrakis',
 };
 
 const fremenFaction: Faction = {
   id: 'fremen',
   title: 'Fremen',
+  description: 'Desert people of Arrakis, native to the planet',
   color: '#7ED321',
-  description: 'Desert people of Arrakis, native inhabitants',
 };
 
 const corrinoFaction: Faction = {
   id: 'corrino',
   title: 'House Corrino',
-  color: '#F5A623',
   description: 'Imperial house, rulers of the Known Universe',
+  color: '#F5A623',
 };
 
 const beneGesseritFaction: Faction = {
   id: 'bene-gesserit',
   title: 'Bene Gesserit',
+  description: 'Ancient order of women with special abilities',
   color: '#9013FE',
-  description: 'Ancient sisterhood with mental and physical powers',
 };
 
-// Chapters
-const chapters: Chapter[] = [
-  { book: duneBook, title: 'The Duke and the Lady', index: 1, globalIndex: 1, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Missionaria Protectiva', index: 2, globalIndex: 2, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Reverend Mother', index: 3, globalIndex: 3, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Spice', index: 4, globalIndex: 4, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Harkonnens', index: 5, globalIndex: 5, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Atreides Arrive', index: 6, globalIndex: 6, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Betrayal', index: 7, globalIndex: 7, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Desert', index: 8, globalIndex: 8, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Fremen', index: 9, globalIndex: 9, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Spice Melange', index: 10, globalIndex: 10, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Water of Life', index: 11, globalIndex: 11, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Prophet', index: 12, globalIndex: 12, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Jihad', index: 13, globalIndex: 13, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Emperor', index: 14, globalIndex: 14, level: 0, type: 'chapter' },
-  { book: duneBook, title: 'The Final Battle', index: 15, globalIndex: 15, level: 0, type: 'chapter' },
-];
+// Build chapters from data and hierarchy
+const chapters = buildChapters(duneChapterData, duneHierarchy);
 
 // Relationships
 const duneRelationships: RelationshipWithChapters[] = [

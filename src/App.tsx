@@ -19,7 +19,6 @@ function App() {
         setLoading(true);
         const books = await FirebaseService.getAllBooks();
         setBooksFromFirebase(books);
-        console.log('Fetched books from Firebase:', books.length);
         
         // Set the first book as selected if we have books and no book is currently selected
         if (books.length > 0 && !hasSetInitialBook.current) {
@@ -27,13 +26,11 @@ function App() {
 
           setSelectedBook(firstBook.book);
           
-          // Set the initial chapter to the first actual chapter's globalIndex
+          // Set the initial chapter to the first actual chapter's index
           if (firstBook.chapters.length > 0) {
             const firstActualChapter = firstBook.chapters.find(ch => ch.type === 'chapter');
             if (firstActualChapter) {
-              const firstChapterIndex = firstActualChapter.globalIndex || firstActualChapter.index;
-  
-              setSelectedChapter(firstChapterIndex);
+              setSelectedChapter(firstActualChapter.index);
             }
           }
           
@@ -66,12 +63,10 @@ function App() {
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
     if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
-      // Set to the globalIndex of the first actual chapter, or fall back to index
+      // Set to the index of the first actual chapter
       const firstActualChapter = bookData.chapters.find(ch => ch.type === 'chapter');
       if (firstActualChapter) {
-        const firstChapterIndex = firstActualChapter.globalIndex || firstActualChapter.index;
-
-        setSelectedChapter(firstChapterIndex);
+        setSelectedChapter(firstActualChapter.index);
       }
     }
   }, [selectedBook, bookData]);
@@ -85,19 +80,45 @@ function App() {
     return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
   }
 
-  // Find the current chapter by matching selectedChapter with globalIndex or index (only actual chapters)
+  // Find the current chapter by matching selectedChapter with index
   const currentChapter = bookData.chapters.find(ch => 
-    ch.type === 'chapter' && (ch.globalIndex === selectedChapter || ch.index === selectedChapter)
+    ch.type === 'chapter' && ch.index === selectedChapter
   );
   
   // Only show characters whose firstAppearanceChapter is <= selected chapter
   const visibleCharacters = bookData.characters.filter(c => {
     return currentChapter && c.firstAppearanceChapter <= selectedChapter;
   });
-  // Only show factions that have at least one visible character
+  // Only show factions that have at least one visible character and are active in current chapter
   const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
-  const visibleFactionIds = new Set(visibleCharacters.flatMap(c => c.factions));
-  const visibleFactions = bookData.factions.filter(f => visibleFactionIds.has(f.id));
+  const activeFactionIds = new Set();
+  
+  visibleCharacters.forEach(character => {
+    character.factions.forEach(factionId => {
+      const joinChapter = character.factionJoinChapters?.[factionId];
+      if (joinChapter) {
+        // Handle both string chapter IDs and numeric chapter indices
+        let shouldAdd = false;
+        if (typeof joinChapter === 'number') {
+          shouldAdd = joinChapter <= selectedChapter;
+        } else if (typeof joinChapter === 'string') {
+          // For string chapter IDs, we need to find the chapter and get its globalIndex
+          // Try to extract chapter number from string like 'chapter-1' -> 1
+          const chapterMatch = joinChapter.match(/chapter-(\d+)/);
+          if (chapterMatch) {
+            const chapterNumber = parseInt(chapterMatch[1]);
+            shouldAdd = chapterNumber <= selectedChapter;
+          }
+        }
+        if (shouldAdd) {
+          activeFactionIds.add(factionId);
+        }
+      }
+    });
+  });
+  
+  const visibleFactions = bookData.factions.filter(f => activeFactionIds.has(f.id));
+
 
   // Create filtered book data for the graph
   const filteredBookData: BookData = {

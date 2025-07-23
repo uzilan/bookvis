@@ -20,26 +20,28 @@ export function buildChapterTree(chapters: Chapter[]): ChapterNode[] {
     isLeaf: true, // Will be updated when children are found
   }));
 
-  // Build parent-child relationships
-  const nodeMap = new Map<string, ChapterNode>();
-  nodes.forEach(node => {
-    nodeMap.set(node.chapter.title, node);
-  });
-
+  // Build parent-child relationships based on level
   const rootNodes: ChapterNode[] = [];
+  const levelStacks: ChapterNode[][] = [];
   
   nodes.forEach(node => {
-    if (node.chapter.parent) {
-      // Find parent by matching the parent object's title
-      const parentNode = nodeMap.get(node.chapter.parent.title);
-      if (parentNode) {
-        parentNode.children.push(node);
-        parentNode.isLeaf = false;
-      } else {
-        // If parent not found, treat as root node
-        rootNodes.push(node);
-      }
+    const level = node.level || 0;
+    
+    // Ensure we have enough level stacks
+    while (levelStacks.length <= level) {
+      levelStacks.push([]);
+    }
+    
+    // Add current node to its level stack
+    levelStacks[level].push(node);
+    
+    // Find parent at the previous level
+    if (level > 0 && levelStacks[level - 1].length > 0) {
+      const parent = levelStacks[level - 1][levelStacks[level - 1].length - 1];
+      parent.children.push(node);
+      parent.isLeaf = false;
     } else {
+      // This is a root node
       rootNodes.push(node);
     }
   });

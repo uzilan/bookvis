@@ -10,11 +10,56 @@ const aliceBook = {
   title: "Alice's Adventures in Wonderland",
 };
 
-const alice: Character = { name: 'Alice', id: 'alice', description: 'A curious girl who falls down a rabbit hole.', firstAppearanceChapter: 1, aliases: [], factions: ['wonderlanders'], attributes: ['Curious', 'Brave', 'Imaginative'] };
-const whiteRabbit: Character = { name: 'White Rabbit', id: 'whiteRabbit', description: 'A rabbit in a hurry.', firstAppearanceChapter: 1, aliases: [], factions: ['wonderlanders'], attributes: ['Always late', 'Nervous', 'Polite'] };
-const madHatter: Character = { name: 'Mad Hatter', id: 'madHatter', description: 'A mad tea party host.', firstAppearanceChapter: 7, aliases: [], factions: ['wonderlanders'], attributes: ['Mad', 'Tea lover', 'Eccentric'] };
-const queenHearts: Character = { name: 'Queen of Hearts', id: 'queenHearts', description: 'A tyrannical ruler.', firstAppearanceChapter: 8, aliases: [], factions: ['royalty'], attributes: ['Short-tempered', 'Loud', 'Fond of tarts'] };
-const cheshireCat: Character = { name: 'Cheshire Cat', id: 'cheshireCat', description: 'A grinning cat.', firstAppearanceChapter: 6, aliases: [], factions: ['wonderlanders'], attributes: ['Mischievous', 'Can disappear', 'Grinning'] };
+const alice: Character = { 
+  name: 'Alice', 
+  id: 'alice', 
+  description: 'A curious girl who falls down a rabbit hole.', 
+  firstAppearanceChapter: 1, 
+  aliases: [], 
+  factions: ['wonderlanders'], 
+  factionJoinChapters: { 'wonderlanders': 1 }, // Joins Wonderland when she falls down the hole
+  attributes: ['Curious', 'Brave', 'Imaginative'] 
+};
+const whiteRabbit: Character = { 
+  name: 'White Rabbit', 
+  id: 'whiteRabbit', 
+  description: 'A rabbit in a hurry.', 
+  firstAppearanceChapter: 1, 
+  aliases: [], 
+  factions: ['wonderlanders'], 
+  factionJoinChapters: { 'wonderlanders': 1 }, // Always a wonderlander
+  attributes: ['Always late', 'Nervous', 'Polite'] 
+};
+const madHatter: Character = { 
+  name: 'Mad Hatter', 
+  id: 'madHatter', 
+  description: 'A mad tea party host.', 
+  firstAppearanceChapter: 7, 
+  aliases: [], 
+  factions: ['wonderlanders'], 
+  factionJoinChapters: { 'wonderlanders': 7 }, // Joins when Alice meets him
+  attributes: ['Mad', 'Tea lover', 'Eccentric'] 
+};
+const queenHearts: Character = { 
+  name: 'Queen of Hearts', 
+  id: 'queenHearts', 
+  description: 'A tyrannical ruler.', 
+  firstAppearanceChapter: 8, 
+  aliases: [], 
+  factions: ['royalty'], 
+  factionJoinChapters: { 'royalty': 8 }, // Joins when Alice meets her
+  attributes: ['Short-tempered', 'Loud', 'Fond of tarts'] 
+};
+const cheshireCat: Character = { 
+  name: 'Cheshire Cat', 
+  id: 'cheshireCat', 
+  description: 'A grinning cat.', 
+  firstAppearanceChapter: 6, 
+  aliases: [], 
+  factions: ['wonderlanders'], 
+  factionJoinChapters: { 'wonderlanders': 6 }, // Joins when Alice meets him
+  attributes: ['Mischievous', 'Can disappear', 'Grinning'] 
+};
 
 const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, queenHearts, cheshireCat];
 
