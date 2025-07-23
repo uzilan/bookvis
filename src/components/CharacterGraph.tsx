@@ -6,6 +6,7 @@ import type { Book } from '../models/Book';
 import { CharacterDetailsPanel } from './CharacterDetailsPanel';
 import { ChapterSlider } from './ChapterSlider';
 import { LocationList } from './LocationList';
+import { FactionList } from './FactionList';
 
 
 
@@ -435,49 +436,34 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
 
 
-      {/* Faction Legend */}
+      {/* Sidebar Panels Wrapper */}
       <div style={{
         position: 'absolute',
         top: '20px',
-        right: '20px',
+        left: '20px',
+        width: '280px',
         zIndex: 1002,
-        background: 'white',
-        padding: '12px 16px',
-        borderRadius: '8px',
-        border: '2px solid #333',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-        width: '250px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        maxHeight: 'calc(100vh - 40px)',
+        overflowY: 'auto',
       }}>
-        <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px', color: '#000' }}>
-          Factions:
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {bookData.factions.map((faction) => (
-            <div key={faction.id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{
-                width: '16px',
-                height: '16px',
-                backgroundColor: faction.color,
-                border: '2px solid #333',
-                borderRadius: '3px',
-              }} />
-              <span style={{ fontSize: '13px', color: '#000', fontWeight: '500' }}>{faction.title}</span>
-            </div>
-          ))}
-        </div>
+        {/* Faction List */}
+        <FactionList factions={bookData.factions} />
+
+        {/* Location List */}
+        {(() => {
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          return currentChapter && currentChapter.locations ? (
+            <LocationList 
+              locations={currentChapter.locations} 
+              chapterTitle={currentChapter.title}
+              chapterId={selectedChapter}
+            />
+          ) : null;
+        })()}
       </div>
-
-      {/* Location List */}
-      {(() => {
-        const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-        return currentChapter && currentChapter.locations ? (
-          <LocationList 
-            locations={currentChapter.locations} 
-            chapterTitle={currentChapter.title}
-          />
-        ) : null;
-      })()}
-
 
 
       <div

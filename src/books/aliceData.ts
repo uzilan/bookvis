@@ -204,11 +204,48 @@ const madHatter: Character = {
   attributes: ['Mad', 'Host', 'Tea-loving', 'Eccentric'],
 };
 
-const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, caterpillar, cheshireCat];
+// Add more characters for royalty faction
+const queenOfHearts: Character = {
+  id: 'queen-of-hearts',
+  name: 'Queen of Hearts',
+  description: 'The tyrannical queen of Wonderland who constantly threatens to behead people',
+  firstAppearanceChapter: 'chapter-8',
+  aliases: ['The Queen'],
+  factions: ['royalty'],
+  factionJoinChapters: {
+    'royalty': 'chapter-8', // Appears as royalty in chapter 8
+  },
+  attributes: ['Tyrannical', 'Violent', 'Royal', 'Threatening'],
+};
+
+const kingOfHearts: Character = {
+  id: 'king-of-hearts',
+  name: 'King of Hearts',
+  description: 'The timid king who is often overshadowed by his wife, the Queen of Hearts',
+  firstAppearanceChapter: 'chapter-11',
+  aliases: ['The King'],
+  factions: ['royalty'],
+  factionJoinChapters: {
+    'royalty': 'chapter-11', // Appears as royalty in chapter 11
+  },
+  attributes: ['Timid', 'Submissive', 'Royal', 'Quiet'],
+};
+
+const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, caterpillar, cheshireCat, queenOfHearts, kingOfHearts];
 
 const aliceFactions: Faction[] = [
-  { id: 'wonderlanders', title: 'Wonderlanders', description: 'Inhabitants of Wonderland.', color: '#E7C7A7' },
-  { id: 'royalty', title: 'Royalty', description: 'The ruling class.', color: '#E7A7A7' },
+  { 
+    id: 'wonderlanders', 
+    title: 'Wonderlanders', 
+    description: 'The diverse inhabitants of Wonderland, including talking animals, magical creatures, and other strange beings. They represent the chaotic and whimsical nature of Wonderland, each with their own peculiar personalities and behaviors.', 
+    color: '#E7C7A7' 
+  },
+  { 
+    id: 'royalty', 
+    title: 'Royalty', 
+    description: 'The ruling class of Wonderland, including the Queen of Hearts and her court. They represent authority and power, though often portrayed as irrational and tyrannical, especially the Queen who is known for her famous phrase "Off with their heads!"', 
+    color: '#E7A7A7' 
+  },
 ];
 
 // Build chapters from data and hierarchy
@@ -241,6 +278,42 @@ const aliceRelationships: RelationshipWithChapters[] = [
     character2: cheshireCat,
     descriptions: [
       { chapter: 8, description: 'Alice meets the Cheshire Cat' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: queenOfHearts,
+    descriptions: [
+      { chapter: 8, description: 'Alice meets the Queen of Hearts at the croquet game' },
+      { chapter: 11, description: 'Alice witnesses the Queen\'s trial' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: kingOfHearts,
+    descriptions: [
+      { chapter: 11, description: 'Alice meets the King of Hearts at the trial' },
+    ],
+  },
+  {
+    character1: queenOfHearts,
+    character2: kingOfHearts,
+    descriptions: [
+      { chapter: 11, description: 'The Queen and King preside over the trial together' },
+    ],
+  },
+  {
+    character1: queenOfHearts,
+    character2: cheshireCat,
+    descriptions: [
+      { chapter: 8, description: 'The Queen is frustrated by the Cheshire Cat\'s disappearing act' },
+    ],
+  },
+  {
+    character1: whiteRabbit,
+    character2: queenOfHearts,
+    descriptions: [
+      { chapter: 8, description: 'The White Rabbit serves as the Queen\'s herald' },
     ],
   },
 ];
