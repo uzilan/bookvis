@@ -6,7 +6,7 @@ import type { BookData } from './models/BookData';
 import FirebaseService from './services/firebase';
 
 function App() {
-  const [selectedChapter, setSelectedChapter] = useState(1);
+  const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ function App() {
           if (firstBook.chapters.length > 0) {
             const firstActualChapter = firstBook.chapters.find(ch => ch.type === 'chapter');
             if (firstActualChapter) {
-              setSelectedChapter(firstActualChapter.index);
+              setSelectedChapter(firstActualChapter.id);
             }
           }
           
@@ -63,10 +63,10 @@ function App() {
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
     if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
-      // Set to the index of the first actual chapter
+      // Set to the ID of the first actual chapter
       const firstActualChapter = bookData.chapters.find(ch => ch.type === 'chapter');
       if (firstActualChapter) {
-        setSelectedChapter(firstActualChapter.index);
+        setSelectedChapter(firstActualChapter.id);
       }
     }
   }, [selectedBook, bookData]);
@@ -80,14 +80,23 @@ function App() {
     return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
   }
 
-  // Find the current chapter by matching selectedChapter with index
+  // Find the current chapter by matching selectedChapter with id
   const currentChapter = bookData.chapters.find(ch => 
-    ch.type === 'chapter' && ch.index === selectedChapter
+    ch.type === 'chapter' && ch.id === selectedChapter
   );
   
   // Only show characters whose firstAppearanceChapter is <= selected chapter
   const visibleCharacters = bookData.characters.filter(c => {
-    return currentChapter && c.firstAppearanceChapter <= selectedChapter;
+    if (typeof c.firstAppearanceChapter === 'number') {
+      // For backward compatibility with numeric chapter indices
+      return currentChapter && typeof currentChapter.index === 'number' && c.firstAppearanceChapter <= currentChapter.index;
+    } else if (typeof c.firstAppearanceChapter === 'string') {
+      // For string chapter IDs, find the target chapter and compare by index
+      const targetChapter = bookData.chapters.find(ch => ch.id === c.firstAppearanceChapter);
+      return targetChapter && currentChapter && targetChapter.index && currentChapter.index && 
+             targetChapter.index <= currentChapter.index;
+    }
+    return false;
   });
   // Only show factions that have at least one visible character and are active in current chapter
   const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
@@ -100,14 +109,15 @@ function App() {
         // Handle both string chapter IDs and numeric chapter indices
         let shouldAdd = false;
         if (typeof joinChapter === 'number') {
-          shouldAdd = joinChapter <= selectedChapter;
+          // For backward compatibility with numeric chapter indices
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          shouldAdd = !!(currentChapter && (joinChapter as number) <= (currentChapter.index || 0));
         } else if (typeof joinChapter === 'string') {
-          // For string chapter IDs, we need to find the chapter and get its globalIndex
-          // Try to extract chapter number from string like 'chapter-1' -> 1
-          const chapterMatch = joinChapter.match(/chapter-(\d+)/);
-          if (chapterMatch) {
-            const chapterNumber = parseInt(chapterMatch[1]);
-            shouldAdd = chapterNumber <= selectedChapter;
+          // For string chapter IDs, find the target chapter and current chapter
+          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          if (targetChapter && targetChapter.index && currentChapter && currentChapter.index) {
+            shouldAdd = targetChapter.index <= currentChapter.index;
           }
         }
         if (shouldAdd) {

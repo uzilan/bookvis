@@ -10,78 +10,124 @@ const aliceBook = {
   title: "Alice's Adventures in Wonderland",
 };
 
-const alice: Character = { 
-  name: 'Alice', 
-  id: 'alice', 
-  description: 'A curious girl who falls down a rabbit hole.', 
-  firstAppearanceChapter: 1, 
-  aliases: [], 
-  factions: ['wonderlanders'], 
-  factionJoinChapters: { 'wonderlanders': 1 }, // Joins Wonderland when she falls down the hole
-  attributes: ['Curious', 'Brave', 'Imaginative'] 
-};
-const whiteRabbit: Character = { 
-  name: 'White Rabbit', 
-  id: 'whiteRabbit', 
-  description: 'A rabbit in a hurry.', 
-  firstAppearanceChapter: 1, 
-  aliases: [], 
-  factions: ['wonderlanders'], 
-  factionJoinChapters: { 'wonderlanders': 1 }, // Always a wonderlander
-  attributes: ['Always late', 'Nervous', 'Polite'] 
-};
-const madHatter: Character = { 
-  name: 'Mad Hatter', 
-  id: 'madHatter', 
-  description: 'A mad tea party host.', 
-  firstAppearanceChapter: 7, 
-  aliases: [], 
-  factions: ['wonderlanders'], 
-  factionJoinChapters: { 'wonderlanders': 7 }, // Joins when Alice meets him
-  attributes: ['Mad', 'Tea lover', 'Eccentric'] 
-};
-const queenHearts: Character = { 
-  name: 'Queen of Hearts', 
-  id: 'queenHearts', 
-  description: 'A tyrannical ruler.', 
-  firstAppearanceChapter: 8, 
-  aliases: [], 
-  factions: ['royalty'], 
-  factionJoinChapters: { 'royalty': 8 }, // Joins when Alice meets her
-  attributes: ['Short-tempered', 'Loud', 'Fond of tarts'] 
-};
-const cheshireCat: Character = { 
-  name: 'Cheshire Cat', 
-  id: 'cheshireCat', 
-  description: 'A grinning cat.', 
-  firstAppearanceChapter: 6, 
-  aliases: [], 
-  factions: ['wonderlanders'], 
-  factionJoinChapters: { 'wonderlanders': 6 }, // Joins when Alice meets him
-  attributes: ['Mischievous', 'Can disappear', 'Grinning'] 
+// Chapter definitions - just basic data
+const aliceChapterData = {
+  'chapter-1': { id: 'chapter-1', title: 'Down the Rabbit-Hole' },
+  'chapter-2': { id: 'chapter-2', title: 'The Pool of Tears' },
+  'chapter-3': { id: 'chapter-3', title: 'A Caucus-Race and a Long Tale' },
+  'chapter-4': { id: 'chapter-4', title: 'The Rabbit Sends in a Little Bill' },
+  'chapter-5': { id: 'chapter-5', title: 'Advice from a Caterpillar' },
+  'chapter-6': { id: 'chapter-6', title: 'Pig and Pepper' },
+  'chapter-7': { id: 'chapter-7', title: 'A Mad Tea-Party' },
+  'chapter-8': { id: 'chapter-8', title: 'The Queen\'s Croquet-Ground' },
+  'chapter-9': { id: 'chapter-9', title: 'The Mock Turtle\'s Story' },
+  'chapter-10': { id: 'chapter-10', title: 'The Lobster Quadrille' },
+  'chapter-11': { id: 'chapter-11', title: 'Who Stole the Tarts?' },
+  'chapter-12': { id: 'chapter-12', title: 'Alice\'s Evidence' },
 };
 
-const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, queenHearts, cheshireCat];
+// Hierarchy definition - order determines chapter sequence
+const aliceHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
+  { chapterId: 'chapter-1', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-2', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-3', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-4', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-5', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-6', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-7', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-8', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-9', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-10', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-11', level: 0, type: 'chapter' },
+  { chapterId: 'chapter-12', level: 0, type: 'chapter' },
+];
+
+// Function to build chapters from data and hierarchy
+function buildChapters(chapterData: Record<string, { id: string; title: string }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+  return hierarchy.map((item, index) => ({
+    book: aliceBook,
+    ...chapterData[item.chapterId],
+    
+    level: item.level,
+    type: item.type,
+    index: index + 1, // For backward compatibility
+  }));
+}
+
+const alice: Character = {
+  id: 'alice',
+  name: 'Alice',
+  description: 'A curious young girl who falls down a rabbit hole into Wonderland',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Alice Liddell'],
+  factions: ['humans'],
+  factionJoinChapters: {
+    'humans': 'chapter-1', // Appears as a human in chapter 1
+  },
+  attributes: ['Curious', 'Brave', 'Imaginative', 'Young'],
+};
+
+const whiteRabbit: Character = {
+  id: 'white-rabbit',
+  name: 'White Rabbit',
+  description: 'A nervous rabbit in a waistcoat who is always late',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['The Rabbit'],
+  factions: ['wonderland-creatures'],
+  factionJoinChapters: {
+    'wonderland-creatures': 'chapter-1', // Appears as a wonderland creature in chapter 1
+  },
+  attributes: ['Nervous', 'Punctual', 'Fashionable', 'Hare'],
+};
+
+const caterpillar: Character = {
+  id: 'caterpillar',
+  name: 'Caterpillar',
+  description: 'A wise but rude caterpillar who smokes a hookah',
+  firstAppearanceChapter: 'chapter-7',
+  aliases: ['Absolem'],
+  factions: ['wonderland-creatures'],
+  factionJoinChapters: {
+    'wonderland-creatures': 'chapter-7', // Appears as a wonderland creature in chapter 7
+  },
+  attributes: ['Wise', 'Rude', 'Philosophical', 'Insect'],
+};
+
+const cheshireCat: Character = {
+  id: 'cheshire-cat',
+  name: 'Cheshire Cat',
+  description: 'A mysterious cat with a disappearing grin',
+  firstAppearanceChapter: 'chapter-8',
+  aliases: ['The Cat'],
+  factions: ['wonderland-creatures'],
+  factionJoinChapters: {
+    'wonderland-creatures': 'chapter-8', // Appears as a wonderland creature in chapter 8
+  },
+  attributes: ['Mysterious', 'Playful', 'Disappearing', 'Feline'],
+};
+
+const madHatter: Character = {
+  id: 'mad-hatter',
+  name: 'Mad Hatter',
+  description: 'A mad tea party host with a large hat',
+  firstAppearanceChapter: 'chapter-6',
+  aliases: ['The Hatter'],
+  factions: ['wonderland-creatures'],
+  factionJoinChapters: {
+    'wonderland-creatures': 'chapter-6', // Appears as a wonderland creature in chapter 6
+  },
+  attributes: ['Mad', 'Host', 'Tea-loving', 'Eccentric'],
+};
+
+const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, caterpillar, cheshireCat];
 
 const aliceFactions: Faction[] = [
   { id: 'wonderlanders', title: 'Wonderlanders', description: 'Inhabitants of Wonderland.', color: '#E7C7A7' },
   { id: 'royalty', title: 'Royalty', description: 'The ruling class.', color: '#E7A7A7' },
 ];
 
-const aliceChapters: Chapter[] = [
-  { book: aliceBook, title: 'Down the Rabbit-Hole', index: 1, globalIndex: 1, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'The Pool of Tears', index: 2, globalIndex: 2, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'A Caucus-Race and a Long Tale', index: 3, globalIndex: 3, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'The Rabbit Sends in a Little Bill', index: 4, globalIndex: 4, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'Advice from a Caterpillar', index: 5, globalIndex: 5, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'Pig and Pepper', index: 6, globalIndex: 6, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'A Mad Tea-Party', index: 7, globalIndex: 7, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'The Queen\'s Croquet-Ground', index: 8, globalIndex: 8, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'The Mock Turtle\'s Story', index: 9, globalIndex: 9, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'The Lobster Quadrille', index: 10, globalIndex: 10, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'Who Stole the Tarts?', index: 11, globalIndex: 11, level: 0, type: 'chapter' },
-  { book: aliceBook, title: 'Alice\'s Evidence', index: 12, globalIndex: 12, level: 0, type: 'chapter' },
-];
+// Build chapters from data and hierarchy
+const aliceChapters = buildChapters(aliceChapterData, aliceHierarchy);
 
 const aliceRelationships: RelationshipWithChapters[] = [
   {
@@ -100,16 +146,16 @@ const aliceRelationships: RelationshipWithChapters[] = [
   },
   {
     character1: alice,
-    character2: queenHearts,
+    character2: caterpillar,
     descriptions: [
-      { chapter: 8, description: 'Alice meets the Queen of Hearts' },
+      { chapter: 7, description: 'Alice meets the Caterpillar' },
     ],
   },
   {
     character1: alice,
     character2: cheshireCat,
     descriptions: [
-      { chapter: 6, description: 'Alice meets the Cheshire Cat' },
+      { chapter: 8, description: 'Alice meets the Cheshire Cat' },
     ],
   },
 ];

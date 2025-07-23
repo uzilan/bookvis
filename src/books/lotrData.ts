@@ -19,17 +19,209 @@ const lotrBook: Book = {
   author: tolkien,
 };
 
+// Chapter definitions - just basic data
+const lotrChapterData = {
+  // Fellowship of the Ring
+  'book-1': { id: 'book-1', title: 'The Fellowship of the Ring' },
+  
+  // Part 1: The Ring Sets Out
+  'part-1': { id: 'part-1', title: 'The Ring Sets Out' },
+  'chapter-1': { id: 'chapter-1', title: 'A Long-expected Party' },
+  'chapter-2': { id: 'chapter-2', title: 'The Shadow of the Past' },
+  'chapter-3': { id: 'chapter-3', title: 'Three is Company' },
+  'chapter-4': { id: 'chapter-4', title: 'A Short Cut to Mushrooms' },
+  'chapter-5': { id: 'chapter-5', title: 'A Conspiracy Unmasked' },
+  'chapter-6': { id: 'chapter-6', title: 'The Old Forest' },
+  'chapter-7': { id: 'chapter-7', title: 'In the House of Tom Bombadil' },
+  'chapter-8': { id: 'chapter-8', title: 'Fog on the Barrow-downs' },
+  'chapter-9': { id: 'chapter-9', title: 'At the Sign of the Prancing Pony' },
+  'chapter-10': { id: 'chapter-10', title: 'Strider' },
+  'chapter-11': { id: 'chapter-11', title: 'A Knife in the Dark' },
+  'chapter-12': { id: 'chapter-12', title: 'Flight to the Ford' },
+  
+  // Part 2: The Ring Goes South
+  'part-2': { id: 'part-2', title: 'The Ring Goes South' },
+  'chapter-13': { id: 'chapter-13', title: 'Many Meetings' },
+  'chapter-14': { id: 'chapter-14', title: 'The Council of Elrond' },
+  'chapter-15': { id: 'chapter-15', title: 'The Ring Goes South' },
+  'chapter-16': { id: 'chapter-16', title: 'A Journey in the Dark' },
+  'chapter-17': { id: 'chapter-17', title: 'The Bridge of Khazad-dûm' },
+  'chapter-18': { id: 'chapter-18', title: 'Lothlórien' },
+  'chapter-19': { id: 'chapter-19', title: 'The Mirror of Galadriel' },
+  'chapter-20': { id: 'chapter-20', title: 'Farewell to Lórien' },
+  'chapter-21': { id: 'chapter-21', title: 'The Great River' },
+  'chapter-22': { id: 'chapter-22', title: 'The Breaking of the Fellowship' },
+  
+  // The Two Towers
+  'book-2': { id: 'book-2', title: 'The Two Towers' },
+  
+  // Part 1: The Treason of Isengard
+  'part-3': { id: 'part-3', title: 'The Treason of Isengard' },
+  'chapter-23': { id: 'chapter-23', title: 'The Departure of Boromir' },
+  'chapter-24': { id: 'chapter-24', title: 'The Riders of Rohan' },
+  'chapter-25': { id: 'chapter-25', title: 'The Uruk-hai' },
+  'chapter-26': { id: 'chapter-26', title: 'Treebeard' },
+  'chapter-27': { id: 'chapter-27', title: 'The White Rider' },
+  'chapter-28': { id: 'chapter-28', title: 'The King of the Golden Hall' },
+  'chapter-29': { id: 'chapter-29', title: 'Helm\'s Deep' },
+  'chapter-30': { id: 'chapter-30', title: 'The Road to Isengard' },
+  'chapter-31': { id: 'chapter-31', title: 'Flotsam and Jetsam' },
+  'chapter-32': { id: 'chapter-32', title: 'The Voice of Saruman' },
+  'chapter-33': { id: 'chapter-33', title: 'The Palantír' },
+  
+  // Part 2: The Ring Goes East
+  'part-4': { id: 'part-4', title: 'The Ring Goes East' },
+  'chapter-34': { id: 'chapter-34', title: 'The Taming of Sméagol' },
+  'chapter-35': { id: 'chapter-35', title: 'The Passage of the Marshes' },
+  'chapter-36': { id: 'chapter-36', title: 'The Black Gate is Closed' },
+  'chapter-37': { id: 'chapter-37', title: 'Of Herbs and Stewed Rabbit' },
+  'chapter-38': { id: 'chapter-38', title: 'The Window on the West' },
+  'chapter-39': { id: 'chapter-39', title: 'The Forbidden Pool' },
+  'chapter-40': { id: 'chapter-40', title: 'Journey to the Cross-roads' },
+  'chapter-41': { id: 'chapter-41', title: 'The Stairs of Cirith Ungol' },
+  'chapter-42': { id: 'chapter-42', title: 'Shelob\'s Lair' },
+  'chapter-43': { id: 'chapter-43', title: 'The Choices of Master Samwise' },
+  
+  // The Return of the King
+  'book-3': { id: 'book-3', title: 'The Return of the King' },
+  
+  // Part 1: The War of the Ring
+  'part-5': { id: 'part-5', title: 'The War of the Ring' },
+  'chapter-44': { id: 'chapter-44', title: 'Minas Tirith' },
+  'chapter-45': { id: 'chapter-45', title: 'The Passing of the Grey Company' },
+  'chapter-46': { id: 'chapter-46', title: 'The Muster of Rohan' },
+  'chapter-47': { id: 'chapter-47', title: 'The Siege of Gondor' },
+  'chapter-48': { id: 'chapter-48', title: 'The Ride of the Rohirrim' },
+  'chapter-49': { id: 'chapter-49', title: 'The Battle of the Pelennor Fields' },
+  'chapter-50': { id: 'chapter-50', title: 'The Pyre of Denethor' },
+  'chapter-51': { id: 'chapter-51', title: 'The Houses of Healing' },
+  'chapter-52': { id: 'chapter-52', title: 'The Last Debate' },
+  'chapter-53': { id: 'chapter-53', title: 'The Black Gate Opens' },
+  
+  // Part 2: The End of the Third Age
+  'part-6': { id: 'part-6', title: 'The End of the Third Age' },
+  'chapter-54': { id: 'chapter-54', title: 'Mount Doom' },
+  'chapter-55': { id: 'chapter-55', title: 'The Field of Cormallen' },
+  'chapter-56': { id: 'chapter-56', title: 'The Steward and the King' },
+  'chapter-57': { id: 'chapter-57', title: 'Many Partings' },
+  'chapter-58': { id: 'chapter-58', title: 'Homeward Bound' },
+  'chapter-59': { id: 'chapter-59', title: 'The Scouring of the Shire' },
+  'chapter-60': { id: 'chapter-60', title: 'The Grey Havens' },
+};
+
+// Hierarchy definition - 3-level structure: Book → Part → Chapter
+const lotrHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
+  // Book 1: The Fellowship of the Ring
+  { chapterId: 'book-1', level: 0, type: 'book' },
+  
+  // Part 1: The Ring Sets Out
+  { chapterId: 'part-1', level: 1, type: 'part' },
+  { chapterId: 'chapter-1', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-2', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-3', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-4', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-5', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-6', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-7', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-8', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-9', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-10', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-11', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-12', level: 2, type: 'chapter' },
+  
+  // Part 2: The Ring Goes South
+  { chapterId: 'part-2', level: 1, type: 'part' },
+  { chapterId: 'chapter-13', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-14', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-15', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-16', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-17', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-18', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-19', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-20', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-21', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-22', level: 2, type: 'chapter' },
+  
+  // Book 2: The Two Towers
+  { chapterId: 'book-2', level: 0, type: 'book' },
+  
+  // Part 3: The Treason of Isengard
+  { chapterId: 'part-3', level: 1, type: 'part' },
+  { chapterId: 'chapter-23', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-24', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-25', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-26', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-27', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-28', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-29', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-30', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-31', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-32', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-33', level: 2, type: 'chapter' },
+  
+  // Part 4: The Ring Goes East
+  { chapterId: 'part-4', level: 1, type: 'part' },
+  { chapterId: 'chapter-34', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-35', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-36', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-37', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-38', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-39', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-40', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-41', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-42', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-43', level: 2, type: 'chapter' },
+  
+  // Book 3: The Return of the King
+  { chapterId: 'book-3', level: 0, type: 'book' },
+  
+  // Part 5: The War of the Ring
+  { chapterId: 'part-5', level: 1, type: 'part' },
+  { chapterId: 'chapter-44', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-45', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-46', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-47', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-48', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-49', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-50', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-51', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-52', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-53', level: 2, type: 'chapter' },
+  
+  // Part 6: The End of the Third Age
+  { chapterId: 'part-6', level: 1, type: 'part' },
+  { chapterId: 'chapter-54', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-55', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-56', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-57', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-58', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-59', level: 2, type: 'chapter' },
+  { chapterId: 'chapter-60', level: 2, type: 'chapter' },
+];
+
+// Function to build chapters from data and hierarchy
+function buildChapters(chapterData: Record<string, { id: string; title: string }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+  return hierarchy.map((item, index) => ({
+    book: lotrBook,
+    ...chapterData[item.chapterId],
+    
+    level: item.level,
+    type: item.type,
+    index: index + 1, // For backward compatibility
+  }));
+}
+
 // Characters
 const frodo: Character = {
   id: 'frodo-baggins',
   name: 'Frodo Baggins',
   description: 'The Ring-bearer, a hobbit who carries the One Ring to Mount Doom',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-1',
   aliases: ['Mr. Baggins', 'Ring-bearer', 'Master of the Ring'],
   factions: ['hobbits', 'fellowship'],
   factionJoinChapters: {
-    'hobbits': 2, // Born a hobbit
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'hobbits': 'chapter-1', // Appears as a hobbit in chapter 1
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
   attributes: ['Brave', 'Resilient', 'Hobbit', 'Ring-bearer'],
 };
@@ -38,12 +230,12 @@ const sam: Character = {
   id: 'samwise-gamgee',
   name: 'Samwise Gamgee',
   description: 'Frodo\'s loyal gardener and companion on the quest',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-1',
   aliases: ['Sam', 'Mr. Gamgee'],
   factions: ['hobbits', 'fellowship'],
   factionJoinChapters: {
-    'hobbits': 2, // Born a hobbit
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'hobbits': 'chapter-1', // Appears as a hobbit in chapter 1
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
   attributes: ['Loyal', 'Practical', 'Gardener', 'Brave'],
 };
@@ -52,12 +244,12 @@ const gandalf: Character = {
   id: 'gandalf',
   name: 'Gandalf',
   description: 'A wizard and member of the Istari, guides the fellowship',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-1',
   aliases: ['Gandalf the Grey', 'Gandalf the White', 'Mithrandir', 'Olorin'],
   factions: ['wizards', 'fellowship'],
   factionJoinChapters: {
-    'wizards': 2, // Always a wizard
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'wizards': 'chapter-1', // Appears as a wizard in chapter 1
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
   attributes: ['Wizard', 'Wise', 'Powerful', 'Guide'],
 };
@@ -66,13 +258,13 @@ const aragorn: Character = {
   id: 'aragorn',
   name: 'Aragorn',
   description: 'Ranger of the North, heir to the throne of Gondor',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-10',
   aliases: ['Strider', 'Elessar', 'King Elessar', 'Thorongil'],
   factions: ['rangers', 'fellowship', 'gondor'],
   factionJoinChapters: {
-    'rangers': 2, // Always a ranger
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
-    'gondor': 2, // Born heir to Gondor
+    'rangers': 'chapter-10', // Appears as Strider in chapter 10
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
+    'gondor': 'chapter-10', // Appears as heir to Gondor in chapter 10
   },
   attributes: ['Ranger', 'King', 'Warrior', 'Healer'],
 };
@@ -81,12 +273,12 @@ const legolas: Character = {
   id: 'legolas',
   name: 'Legolas',
   description: 'Elf from Mirkwood, member of the fellowship',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-14',
   aliases: ['Prince of Mirkwood'],
   factions: ['elves', 'fellowship'],
   factionJoinChapters: {
-    'elves': 2, // Always an elf
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'elves': 'chapter-15', // Appears as an elf in chapter 15
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
   attributes: ['Elf', 'Archer', 'Agile', 'Immortal'],
 };
@@ -95,26 +287,26 @@ const gimli: Character = {
   id: 'gimli',
   name: 'Gimli',
   description: 'Dwarf from the Lonely Mountain, member of the fellowship',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-14',
   aliases: ['Son of Glóin'],
   factions: ['dwarves', 'fellowship'],
   factionJoinChapters: {
-    'dwarves': 2, // Always a dwarf
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'dwarves': 'chapter-15', // Appears as a dwarf in chapter 15
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
-  attributes: ['Dwarf', 'Warrior', 'Stout', 'Loyal'],
+  attributes: ['Dwarf', 'Warrior', 'Loyal', 'Proud'],
 };
 
 const boromir: Character = {
   id: 'boromir',
   name: 'Boromir',
   description: 'Captain of Gondor, member of the fellowship',
-  firstAppearanceChapter: 2,
+  firstAppearanceChapter: 'chapter-14',
   aliases: ['Captain of Gondor'],
   factions: ['gondor', 'fellowship'],
   factionJoinChapters: {
-    'gondor': 2, // Born in Gondor
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'gondor': 'chapter-15', // Appears from Gondor in chapter 15
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
   attributes: ['Warrior', 'Proud', 'Tempted by Ring', 'Noble'],
 };
@@ -122,906 +314,152 @@ const boromir: Character = {
 const merry: Character = {
   id: 'meriadoc-brandybuck',
   name: 'Meriadoc Brandybuck',
-  description: 'Hobbit from Buckland, member of the fellowship',
-  firstAppearanceChapter: 2,
-  aliases: ['Merry'],
+  description: 'Hobbit of the Shire, friend of Frodo',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Merry', 'Master Brandybuck'],
   factions: ['hobbits', 'fellowship'],
   factionJoinChapters: {
-    'hobbits': 2, // Born a hobbit
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'hobbits': 'chapter-1', // Appears as a hobbit in chapter 1
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
-  attributes: ['Hobbit', 'Brave', 'Loyal', 'Knight of Rohan'],
+  attributes: ['Hobbit', 'Brave', 'Loyal', 'Noble'],
 };
 
 const pippin: Character = {
   id: 'peregrin-took',
   name: 'Peregrin Took',
-  description: 'Hobbit from Tookland, member of the fellowship',
-  firstAppearanceChapter: 2,
-  aliases: ['Pippin'],
+  description: 'Hobbit of the Shire, friend of Frodo',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Pippin', 'Master Took'],
   factions: ['hobbits', 'fellowship'],
   factionJoinChapters: {
-    'hobbits': 2, // Born a hobbit
-    'fellowship': 15, // Joins the Fellowship in "The Council of Elrond"
+    'hobbits': 'chapter-1', // Appears as a hobbit in chapter 1
+    'fellowship': 'chapter-15', // Joins the Fellowship in "The Council of Elrond"
   },
-  attributes: ['Hobbit', 'Young', 'Curious', 'Guard of the Citadel'],
+  attributes: ['Hobbit', 'Curious', 'Loyal', 'Young'],
 };
 
 const gollum: Character = {
   id: 'gollum',
   name: 'Gollum',
-  description: 'Former hobbit corrupted by the One Ring',
-  firstAppearanceChapter: 2,
+  description: 'Former hobbit corrupted by the Ring, guides Frodo to Mount Doom',
+  firstAppearanceChapter: 'chapter-34',
   aliases: ['Sméagol', 'Stinker', 'Slinker'],
   factions: ['corrupted'],
   factionJoinChapters: {
-    'corrupted': 2, // Already corrupted when introduced
+    'corrupted': 'chapter-34', // Appears as corrupted by the Ring
   },
-  attributes: ['Corrupted', 'Split personality', 'Ring-obsessed', 'Agile'],
+  attributes: ['Corrupted', 'Split Personality', 'Ring-obsessed', 'Tragic'],
 };
 
 const sauron: Character = {
   id: 'sauron',
   name: 'Sauron',
   description: 'The Dark Lord, creator of the One Ring',
-  firstAppearanceChapter: 1,
-  aliases: ['The Dark Lord', 'The Eye', 'Lord of Mordor'],
-  factions: ['evil'],
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Dark Lord', 'Lord of Mordor', 'The Eye'],
+  factions: ['dark-forces'],
   factionJoinChapters: {
-    'evil': 1, // Always evil
+    'dark-forces': 'chapter-2', // Always been a dark force
   },
-  attributes: ['Dark Lord', 'Powerful', 'Corrupting', 'Immortal'],
+  attributes: ['Dark Lord', 'Powerful', 'Corrupted', 'Evil'],
 };
 
 const saruman: Character = {
   id: 'saruman',
   name: 'Saruman',
   description: 'The White Wizard, corrupted by power',
-  firstAppearanceChapter: 2,
-  aliases: ['Saruman the White', 'Curunír', 'Sharkey'],
-  factions: ['wizards', 'evil'],
+  firstAppearanceChapter: 'chapter-27', // First appears in "The White Rider"
+  aliases: ['Saruman the White', 'Curunír'],
+  factions: ['wizards', 'dark-forces'],
   factionJoinChapters: {
-    'wizards': 2, // Always a wizard
-    'evil': 2, // Already corrupted when introduced
+    'wizards': 'chapter-27', // Always been a wizard, appears in "The White Rider"
+    'dark-forces': 'chapter-32', // Corrupted and joins dark forces in "The Voice of Saruman"
   },
-  attributes: ['Wizard', 'Corrupted', 'Ambitious', 'Traitor'],
+  attributes: ['Wizard', 'Corrupted', 'Power-hungry', 'Traitor'],
 };
 
 const theoden: Character = {
   id: 'theoden',
   name: 'Théoden',
-  description: 'King of Rohan, freed from Saruman\'s influence',
-  firstAppearanceChapter: 3,
+  description: 'King of Rohan',
+  firstAppearanceChapter: 'chapter-28',
   aliases: ['King of Rohan'],
   factions: ['rohan'],
   factionJoinChapters: {
-    'rohan': 3, // King of Rohan when introduced
+    'rohan': 'chapter-28', // King of Rohan
   },
-  attributes: ['King', 'Warrior', 'Freed from corruption', 'Noble'],
+  attributes: ['King', 'Noble', 'Warrior', 'Leader'],
 };
 
 const eowyn: Character = {
   id: 'eowyn',
   name: 'Éowyn',
-  description: 'Princess of Rohan, slayer of the Witch-king',
-  firstAppearanceChapter: 3,
-  aliases: ['Lady of Rohan', 'Dernhelm'],
+  description: 'Princess of Rohan, shieldmaiden',
+  firstAppearanceChapter: 'chapter-28',
+  aliases: ['Shieldmaiden of Rohan'],
   factions: ['rohan'],
   factionJoinChapters: {
-    'rohan': 3, // Princess of Rohan when introduced
+    'rohan': 'chapter-28', // Princess of Rohan
   },
-  attributes: ['Princess', 'Warrior', 'Brave', 'Slayer of Witch-king'],
+  attributes: ['Princess', 'Shieldmaiden', 'Brave', 'Warrior'],
 };
 
 const faramir: Character = {
   id: 'faramir',
   name: 'Faramir',
-  description: 'Captain of Gondor, brother of Boromir',
-  firstAppearanceChapter: 4,
+  description: 'Captain of Gondor, son of Denethor',
+  firstAppearanceChapter: 'chapter-38',
   aliases: ['Captain of Gondor'],
   factions: ['gondor'],
   factionJoinChapters: {
-    'gondor': 4, // Captain of Gondor when introduced
+    'gondor': 'chapter-38', // Captain of Gondor
   },
-  attributes: ['Captain', 'Wise', 'Resistant to Ring', 'Noble'],
+  attributes: ['Captain', 'Noble', 'Wise', 'Warrior'],
 };
 
 const denethor: Character = {
   id: 'denethor',
   name: 'Denethor',
-  description: 'Steward of Gondor, father of Boromir and Faramir',
-  firstAppearanceChapter: 4,
+  description: 'Steward of Gondor, father of Faramir',
+  firstAppearanceChapter: 'chapter-44',
   aliases: ['Steward of Gondor'],
   factions: ['gondor'],
   factionJoinChapters: {
-    'gondor': 4, // Steward of Gondor when introduced
+    'gondor': 'chapter-44', // Steward of Gondor
   },
   attributes: ['Steward', 'Proud', 'Despairing', 'Noble'],
 };
 
-// Factions
+const characters: Character[] = [
+  frodo, sam, gandalf, aragorn, legolas, gimli, boromir, merry, pippin, 
+  gollum, sauron, saruman, theoden, eowyn, faramir, denethor,
+];
+
 const factions: Faction[] = [
-  { id: 'hobbits', title: 'Hobbits', description: 'Small, peaceful folk of the Shire', color: '#8BC34A' }, // Green
-  { id: 'fellowship', title: 'Fellowship of the Ring', description: 'The nine companions who set out to destroy the Ring', color: '#2196F3' }, // Blue
-  { id: 'wizards', title: 'Wizards', description: 'The Istari, powerful beings sent to guide Middle-earth', color: '#9C27B0' }, // Purple
-  { id: 'elves', title: 'Elves', description: 'Immortal beings of great wisdom and beauty', color: '#4CAF50' }, // Green
-  { id: 'dwarves', title: 'Dwarves', description: 'Stout warriors and craftsmen', color: '#FF9800' }, // Orange
-  { id: 'gondor', title: 'Gondor', description: 'The greatest kingdom of Men', color: '#795548' }, // Brown
-  { id: 'rohan', title: 'Rohan', description: 'Kingdom of the horse-lords', color: '#607D8B' }, // Blue Gray
-  { id: 'rangers', title: 'Rangers', description: 'Protectors of the North', color: '#8D6E63' }, // Light Brown
-  { id: 'evil', title: 'Evil', description: 'Forces of darkness and corruption', color: '#F44336' }, // Red
-  { id: 'corrupted', title: 'Corrupted', description: 'Those corrupted by the Ring or other evil', color: '#9E9E9E' }, // Gray
+  { id: 'hobbits', title: 'Hobbits', description: 'Small, peaceful folk of the Shire.', color: '#D2B48C' },
+  { id: 'fellowship', title: 'The Fellowship', description: 'The nine companions chosen to destroy the Ring.', color: '#4169E1' },
+  { id: 'wizards', title: 'Wizards', description: 'The Istari, powerful beings sent to guide Middle-earth.', color: '#9932CC' },
+  { id: 'rangers', title: 'Rangers', description: 'Protectors of the North, descendants of Númenor.', color: '#228B22' },
+  { id: 'elves', title: 'Elves', description: 'Immortal beings of great wisdom and beauty.', color: '#32CD32' },
+  { id: 'dwarves', title: 'Dwarves', description: 'Stout warriors and craftsmen of the mountains.', color: '#CD853F' },
+  { id: 'gondor', title: 'Gondor', description: 'The greatest kingdom of Men in Middle-earth.', color: '#DC143C' },
+  { id: 'rohan', title: 'Rohan', description: 'The kingdom of the horse-lords.', color: '#DAA520' },
+  { id: 'corrupted', title: 'Corrupted', description: 'Those corrupted by the power of the Ring.', color: '#696969' },
+  { id: 'dark-forces', title: 'Dark Forces', description: 'Servants of Sauron and evil.', color: '#4A5D5D' },
 ];
 
+// Build chapters from data and hierarchy
+const chapters = buildChapters(lotrChapterData, lotrHierarchy);
 
-const twoTowersPart1 = {
-  book: lotrBook,
-  title: 'The Treason of Isengard',
-  index: 3,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Two Towers', index: 2, level: 1, type: 'book' },
-  path: ['The Two Towers', 'The Treason of Isengard'],
-};
-const twoTowersPart2 = {
-  book: lotrBook,
-  title: 'The Journey of the Ring-bearers',
-  index: 4,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Two Towers', index: 2, level: 1, type: 'book' },
-  path: ['The Two Towers', 'The Journey of the Ring-bearers'],
-};
-const returnKingPart1 = {
-  book: lotrBook,
-  title: 'The War of the Ring',
-  index: 5,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Return of the King', index: 3, level: 1, type: 'book' },
-  path: ['The Return of the King', 'The War of the Ring'],
-};
-const returnKingPart2 = {
-  book: lotrBook,
-  title: 'The End of the Third Age',
-  index: 6,
-  level: 2,
-  type: 'part',
-  parent: { book: lotrBook, title: 'The Return of the King', index: 3, level: 1, type: 'book' },
-  path: ['The Return of the King', 'The End of the Third Age'],
-};
-
-// Fellowship of the Ring - Part 1 chapters
-const chapters: Chapter[] = [
-  // Fellowship of the Ring
-  {
-    book: lotrBook,
-    title: 'The Fellowship of the Ring',
-    index: 1,
-    level: 1,
-    type: 'book',
-    partTitle: 'Book 1',
-    globalIndex: 1,
-    path: ['The Fellowship of the Ring'],
-  },
-  
-  // Part 1
-  {
-    book: lotrBook,
-    title: 'The Ring Sets Out',
-    index: 1,
-    level: 2,
-    type: 'part',
-    globalIndex: 1,
-    parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out'],
-  },
-  
-  // Part 1 chapters
-  {
-    book: lotrBook,
-    title: 'A Long-expected Party',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 2,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'A Long-expected Party'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Shadow of the Past',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 3,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'The Shadow of the Past'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Three is Company',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 4,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'Three is Company'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'A Short Cut to Mushrooms',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 5,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'A Short Cut to Mushrooms'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'A Conspiracy Unmasked',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 6,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'A Conspiracy Unmasked'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Old Forest',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 7,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'The Old Forest'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'In the House of Tom Bombadil',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 8,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'In the House of Tom Bombadil'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Fog on the Barrow-downs',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 9,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'Fog on the Barrow-downs'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'At the Sign of the Prancing Pony',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 10,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'At the Sign of the Prancing Pony'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Strider',
-    index: 10,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 11,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'Strider'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'A Knife in the Dark',
-    index: 11,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 12,
-    path: ['The Fellowship of the Ring', 'The Ring Sets Out', 'A Knife in the Dark'],
-    parent: { book: lotrBook, title: 'The Ring Sets Out', index: 1, level: 2, type: 'part' },
-  },
-  
-  // Part 2
-  {
-    book: lotrBook,
-    title: 'The Ring Goes South',
-    index: 2,
-    level: 2,
-    type: 'part',
-    globalIndex: 13,
-    parent: { book: lotrBook, title: 'The Fellowship of the Ring', index: 1, level: 1, type: 'book' },
-    path: ['The Fellowship of the Ring', 'The Ring Goes South'],
-  },
-  
-  // Part 2 chapters
-  {
-    book: lotrBook,
-    title: 'Many Meetings',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 14,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Many Meetings'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Council of Elrond',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 15,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Council of Elrond'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Ring Goes South',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 16,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Ring Goes South'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'A Journey in the Dark',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 17,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'A Journey in the Dark'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Bridge of Khazad-dûm',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 18,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Bridge of Khazad-dûm'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Lothlórien',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 19,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Lothlórien'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Mirror of Galadriel',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 20,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Mirror of Galadriel'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Farewell to Lórien',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 21,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'Farewell to Lórien'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Great River',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 22,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Great River'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Breaking of the Fellowship',
-    index: 10,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 22,
-    path: ['The Fellowship of the Ring', 'The Ring Goes South', 'The Breaking of the Fellowship'],
-    parent: { book: lotrBook, title: 'The Ring Goes South', index: 2, level: 2, type: 'part' },
-  },
-  
-  // The Two Towers
-  {
-    book: lotrBook,
-    title: 'The Two Towers',
-    index: 2,
-    level: 1,
-    type: 'book',
-    partTitle: 'Book 2',
-    globalIndex: 23,
-    path: ['The Two Towers'],
-  },
-  
-  // Part 1
-  {
-    ...twoTowersPart1,
-    type: 'part',
-    level: 2,
-    parent: { book: lotrBook, title: 'The Two Towers', index: 2, level: 1, type: 'book' },
-    path: ['The Two Towers', 'The Treason of Isengard'],
-  },
-  
-  // Part 1 chapters
-  {
-    book: lotrBook,
-    title: 'The Departure of Boromir',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 24,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Departure of Boromir'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Riders of Rohan',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 25,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Riders of Rohan'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Uruk-hai',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 26,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Uruk-hai'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Treebeard',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 27,
-    path: ['The Two Towers', 'The Treason of Isengard', 'Treebeard'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The White Rider',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 28,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The White Rider'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The King of the Golden Hall',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 29,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The King of the Golden Hall'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Helm\'s Deep',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 30,
-    path: ['The Two Towers', 'The Treason of Isengard', 'Helm\'s Deep'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Road to Isengard',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 31,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Road to Isengard'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Flotsam and Jetsam',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 32,
-    path: ['The Two Towers', 'The Treason of Isengard', 'Flotsam and Jetsam'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Voice of Saruman',
-    index: 10,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 33,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Voice of Saruman'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Palantír',
-    index: 11,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 34,
-    path: ['The Two Towers', 'The Treason of Isengard', 'The Palantír'],
-    parent: { book: lotrBook, title: 'The Treason of Isengard', index: 3, level: 2, type: 'part' },
-  },
-  
-  // Part 2
-  {
-    ...twoTowersPart2,
-    type: 'part',
-    level: 2,
-    parent: { book: lotrBook, title: 'The Two Towers', index: 2, level: 1, type: 'book' },
-    path: ['The Two Towers', 'The Journey of the Ring-bearers'],
-  },
-  
-  // Part 2 chapters
-  {
-    book: lotrBook,
-    title: 'The Taming of Sméagol',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 35,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Taming of Sméagol'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Passage of the Marshes',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 36,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Passage of the Marshes'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Black Gate is Closed',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 37,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Black Gate is Closed'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Of Herbs and Stewed Rabbit',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 38,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'Of Herbs and Stewed Rabbit'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Window on the West',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 39,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Window on the West'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Forbidden Pool',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 40,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Forbidden Pool'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Journey to the Cross-roads',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 41,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'Journey to the Cross-roads'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Stairs of Cirith Ungol',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 42,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Stairs of Cirith Ungol'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Shelob\'s Lair',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 43,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'Shelob\'s Lair'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Choices of Master Samwise',
-    index: 10,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 44,
-    path: ['The Two Towers', 'The Journey of the Ring-bearers', 'The Choices of Master Samwise'],
-    parent: { book: lotrBook, title: 'The Journey of the Ring-bearers', index: 4, level: 2, type: 'part' },
-  },
-  
-  // The Return of the King
-  {
-    book: lotrBook,
-    title: 'The Return of the King',
-    index: 3,
-    level: 1,
-    type: 'book',
-    partTitle: 'Book 3',
-    globalIndex: 45,
-    path: ['The Return of the King'],
-  },
-  
-  // Part 1
-  {
-    ...returnKingPart1,
-    type: 'part',
-    level: 2,
-    parent: { book: lotrBook, title: 'The Return of the King', index: 3, level: 1, type: 'book' },
-    path: ['The Return of the King', 'The War of the Ring'],
-  },
-  
-  // Part 1 chapters
-  {
-    book: lotrBook,
-    title: 'Minas Tirith',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 46,
-    path: ['The Return of the King', 'The War of the Ring', 'Minas Tirith'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Passing of the Grey Company',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 47,
-    path: ['The Return of the King', 'The War of the Ring', 'The Passing of the Grey Company'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Muster of Rohan',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 48,
-    path: ['The Return of the King', 'The War of the Ring', 'The Muster of Rohan'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Siege of Gondor',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 49,
-    path: ['The Return of the King', 'The War of the Ring', 'The Siege of Gondor'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Ride of the Rohirrim',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 50,
-    path: ['The Return of the King', 'The War of the Ring', 'The Ride of the Rohirrim'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Battle of the Pelennor Fields',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 51,
-    path: ['The Return of the King', 'The War of the Ring', 'The Battle of the Pelennor Fields'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Pyre of Denethor',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 52,
-    path: ['The Return of the King', 'The War of the Ring', 'The Pyre of Denethor'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Houses of Healing',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 53,
-    path: ['The Return of the King', 'The War of the Ring', 'The Houses of Healing'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Last Debate',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 54,
-    path: ['The Return of the King', 'The War of the Ring', 'The Last Debate'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Black Gate Opens',
-    index: 10,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 55,
-    path: ['The Return of the King', 'The War of the Ring', 'The Black Gate Opens'],
-    parent: { book: lotrBook, title: 'The War of the Ring', index: 5, level: 2, type: 'part' },
-  },
-  
-  // Part 2
-  {
-    ...returnKingPart2,
-    type: 'part',
-    level: 2,
-    parent: { book: lotrBook, title: 'The Return of the King', index: 3, level: 1, type: 'book' },
-    path: ['The Return of the King', 'The End of the Third Age'],
-  },
-  
-  // Part 2 chapters
-  {
-    book: lotrBook,
-    title: 'The Tower of Cirith Ungol',
-    index: 1,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 56,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Tower of Cirith Ungol'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Land of Shadow',
-    index: 2,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 57,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Land of Shadow'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Mount Doom',
-    index: 3,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 58,
-    path: ['The Return of the King', 'The End of the Third Age', 'Mount Doom'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Field of Cormallen',
-    index: 4,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 59,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Field of Cormallen'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Steward and the King',
-    index: 5,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 60,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Steward and the King'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Many Partings',
-    index: 6,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 61,
-    path: ['The Return of the King', 'The End of the Third Age', 'Many Partings'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'Homeward Bound',
-    index: 7,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 62,
-    path: ['The Return of the King', 'The End of the Third Age', 'Homeward Bound'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Scouring of the Shire',
-    index: 8,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 63,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Scouring of the Shire'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-  {
-    book: lotrBook,
-    title: 'The Grey Havens',
-    index: 9,
-    level: 3,
-    type: 'chapter',
-    globalIndex: 64,
-    path: ['The Return of the King', 'The End of the Third Age', 'The Grey Havens'],
-    parent: { book: lotrBook, title: 'The End of the Third Age', index: 6, level: 2, type: 'part' },
-  },
-];
-
-// Relationships
 const relationships: RelationshipWithChapters[] = [
   {
     character1: frodo,
     character2: sam,
     descriptions: [
       { chapter: 1, description: 'Master and servant, become close friends' },
-      { chapter: 22, description: 'Sam remains loyal when Frodo leaves the fellowship' },
-      { chapter: 44, description: 'Sam rescues Frodo from Shelob' },
-      { chapter: 58, description: 'Together at Mount Doom to destroy the Ring' },
+      { chapter: 34, description: 'Sam becomes Frodo\'s protector' },
+      { chapter: 54, description: 'Sam carries Frodo to Mount Doom' },
     ],
   },
   {
@@ -1029,22 +467,22 @@ const relationships: RelationshipWithChapters[] = [
     character2: gandalf,
     descriptions: [
       { chapter: 1, description: 'Gandalf guides Frodo on his quest' },
-      { chapter: 17, description: 'Gandalf falls in Moria protecting the fellowship' },
+      { chapter: 14, description: 'Gandalf helps form the Fellowship' },
     ],
   },
   {
     character1: frodo,
     character2: aragorn,
     descriptions: [
-      { chapter: 1, description: 'Aragorn protects Frodo as Strider' },
-      { chapter: 22, description: 'Aragorn leads the fellowship after Gandalf falls' },
+      { chapter: 10, description: 'Aragorn protects Frodo as Strider' },
+      { chapter: 14, description: 'Aragorn joins the Fellowship' },
     ],
   },
   {
     character1: frodo,
     character2: gollum,
     descriptions: [
-      { chapter: 35, description: 'Gollum becomes Frodo\'s guide to Mordor' },
+      { chapter: 34, description: 'Frodo pities and spares Gollum' },
       { chapter: 44, description: 'Gollum betrays Frodo to Shelob' },
       { chapter: 58, description: 'Gollum takes the Ring and falls into Mount Doom' },
     ],
@@ -1130,13 +568,6 @@ const relationships: RelationshipWithChapters[] = [
     ],
   },
 ];
-
-const characters: Character[] = [
-  frodo, sam, gandalf, aragorn, legolas, gimli, boromir, merry, pippin, 
-  gollum, sauron, saruman, theoden, eowyn, faramir, denethor,
-];
-
-
 
 export const lotrData: BookData = {
   book: lotrBook,

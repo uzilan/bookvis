@@ -9,8 +9,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 interface ChapterSliderProps {
   chapters: Chapter[];
-  value: number;
-  onChange: (index: number) => void;
+  value: string; // Changed from number to string (chapter ID)
+  onChange: (chapterId: string) => void; // Changed from index to chapterId
   books: Book[];
   selectedBook: Book;
   onBookChange: (book: Book) => void;
@@ -18,8 +18,8 @@ interface ChapterSliderProps {
 
 interface ChapterItemProps {
   node: ChapterNode;
-  selectedIndex: number;
-  onSelect: (index: number) => void;
+  selectedChapterId: string; // Changed from selectedIndex to selectedChapterId
+  onSelect: (chapterId: string) => void; // Changed from index to chapterId
   level: number;
   expandedNodes: Set<string>;
   onToggleExpanded: (nodeTitle: string) => void;
@@ -27,14 +27,14 @@ interface ChapterItemProps {
 
 const ChapterItem: React.FC<ChapterItemProps> = ({ 
   node, 
-  selectedIndex, 
+  selectedChapterId, 
   onSelect, 
   level, 
   expandedNodes, 
   onToggleExpanded 
 }) => {
   const isExpanded = expandedNodes.has(node.chapter.title);
-  const isSelected = node.chapter.type === 'chapter' && selectedIndex === node.chapter.globalIndex;
+  const isSelected = node.chapter.type === 'chapter' && selectedChapterId === node.chapter.id;
 
   const hasChildren = node.children.length > 0;
   const indent = level * 4; // Reduced from 8 to 4
@@ -59,7 +59,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           if (hasChildren) {
             onToggleExpanded(node.chapter.title);
           } else {
-            onSelect(node.chapter.globalIndex || node.chapter.index);
+            onSelect(node.chapter.id);
           }
         }}
       >
@@ -106,7 +106,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
             <ChapterItem
               key={`${child.chapter.title}-${index}`}
               node={child}
-              selectedIndex={selectedIndex}
+              selectedChapterId={selectedChapterId}
               onSelect={onSelect}
               level={level + 1}
               expandedNodes={expandedNodes}
@@ -140,7 +140,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
   // Get current chapter for breadcrumb (only actual chapters, not books or parts)
   const currentChapter = chapters.find(ch => {
     if (ch.type !== 'chapter') return false;
-    return ch.globalIndex === value || ch.index === value;
+    return ch.id === value;
   });
 
   // Auto-expand parent nodes by default and ensure current chapter's parents are expanded
@@ -249,7 +249,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
           <ChapterItem
             key={`${node.chapter.title}-${index}`}
             node={node}
-            selectedIndex={value}
+                          selectedChapterId={value}
             onSelect={onChange}
             level={0}
             expandedNodes={expandedNodes}

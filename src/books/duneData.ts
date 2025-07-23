@@ -38,7 +38,7 @@ const duneChapterData = {
   'chapter-15': { id: 'chapter-15', title: 'The Final Battle' },
 };
 
-// Hierarchy definition - order determines global index, no explicit globalIndex needed
+// Hierarchy definition - order determines chapter sequence
 const duneHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
   { chapterId: 'chapter-1', level: 0, type: 'chapter' },
   { chapterId: 'chapter-2', level: 0, type: 'chapter' },
@@ -62,7 +62,7 @@ function buildChapters(chapterData: Record<string, { id: string; title: string }
   return hierarchy.map((item, index) => ({
     book: duneBook,
     ...chapterData[item.chapterId],
-    globalIndex: index + 1, // Order in array determines global index
+    
     level: item.level,
     type: item.type,
     index: index + 1, // For backward compatibility
@@ -70,110 +70,111 @@ function buildChapters(chapterData: Record<string, { id: string; title: string }
 }
 
 // Characters
-const paulAtreides: Character = {
+const paul: Character = {
   id: 'paul-atreides',
   name: 'Paul Atreides',
-  description: 'Son of Duke Leto Atreides, becomes Muad\'Dib and the Kwisatz Haderach',
-  firstAppearanceChapter: 1,
+  description: 'The son of Duke Leto Atreides, becomes the Kwisatz Haderach',
+  firstAppearanceChapter: 'chapter-1',
   aliases: ['Muad\'Dib', 'Usul', 'Kwisatz Haderach'],
-  factions: ['atreides', 'fremen'],
+  factions: ['atreides', 'fremen', 'bene-gesserit'],
   factionJoinChapters: {
     'atreides': 'chapter-1', // Born into House Atreides
-    'fremen': 'chapter-8', // Joins Fremen when he meets Stilgar and Chani
+    'fremen': 'chapter-8', // Joins the Fremen
+    'bene-gesserit': 'chapter-1', // Trained by Bene Gesserit
   },
-  attributes: ['Prescient', 'Bene Gesserit trained', 'Duke\'s son'],
+  attributes: ['Noble', 'Prophet', 'Warrior', 'Leader'],
 };
 
 const jessica: Character = {
-  id: 'jessica',
+  id: 'lady-jessica',
   name: 'Lady Jessica',
-  description: 'Bene Gesserit acolyte and concubine to Duke Leto, mother of Paul',
-  firstAppearanceChapter: 1,
-  aliases: ['Reverend Mother'],
+  description: 'Paul\'s mother, a Bene Gesserit acolyte',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Lady Jessica'],
   factions: ['bene-gesserit', 'atreides'],
   factionJoinChapters: {
-    'bene-gesserit': 'chapter-1', // Always Bene Gesserit
-    'atreides': 'chapter-1', // Always part of House Atreides
+    'bene-gesserit': 'chapter-1', // Always been Bene Gesserit
+    'atreides': 'chapter-1', // Consort to Duke Leto
   },
-  attributes: ['Bene Gesserit trained', 'Concubine', 'Mother of Paul'],
+  attributes: ['Bene Gesserit', 'Mother', 'Wise', 'Powerful'],
 };
 
-const letoAtreides: Character = {
-  id: 'leto-atreides',
+const leto: Character = {
+  id: 'duke-leto',
   name: 'Duke Leto Atreides',
-  description: 'Head of House Atreides, ruler of Caladan, father of Paul',
-  firstAppearanceChapter: 1,
-  aliases: ['Duke'],
+  description: 'The ruler of House Atreides, Paul\'s father',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Duke Leto', 'The Red Duke'],
   factions: ['atreides'],
   factionJoinChapters: {
-    'atreides': 'chapter-1', // Always Duke of House Atreides
+    'atreides': 'chapter-1', // Always been House Atreides
   },
-  attributes: ['Duke', 'Father', 'Ruler of Caladan'],
+  attributes: ['Noble', 'Leader', 'Father', 'Just'],
 };
 
-const gurneyHalleck: Character = {
+const gurney: Character = {
   id: 'gurney-halleck',
   name: 'Gurney Halleck',
-  description: 'Weapons master and loyal retainer of House Atreides',
-  firstAppearanceChapter: 1,
-  aliases: ['Weapons Master'],
+  description: 'Weapons master of House Atreides',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Gurney'],
   factions: ['atreides'],
   factionJoinChapters: {
-    'atreides': 'chapter-1', // Always loyal to House Atreides
+    'atreides': 'chapter-1', // Always been House Atreides
   },
-  attributes: ['Weapons master', 'Loyal retainer', 'Poet warrior'],
+  attributes: ['Warrior', 'Loyal', 'Musician', 'Weapons Master'],
 };
 
-const thufirHawat: Character = {
+const thufir: Character = {
   id: 'thufir-hawat',
   name: 'Thufir Hawat',
   description: 'Mentat and security chief of House Atreides',
-  firstAppearanceChapter: 1,
-  aliases: ['Mentat'],
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Thufir'],
   factions: ['atreides'],
   factionJoinChapters: {
-    'atreides': 'chapter-1', // Always loyal to House Atreides
+    'atreides': 'chapter-1', // Always been House Atreides
   },
-  attributes: ['Mentat', 'Security chief', 'Human computer'],
+  attributes: ['Mentat', 'Analyst', 'Loyal', 'Wise'],
 };
 
-const duncanIdaho: Character = {
+const duncan: Character = {
   id: 'duncan-idaho',
   name: 'Duncan Idaho',
-  description: 'Swordmaster and loyal retainer of House Atreides',
-  firstAppearanceChapter: 1,
-  aliases: ['Swordmaster'],
+  description: 'Swordmaster of House Atreides',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Duncan'],
   factions: ['atreides'],
   factionJoinChapters: {
-    'atreides': 'chapter-1', // Always loyal to House Atreides
+    'atreides': 'chapter-1', // Always been House Atreides
   },
-  attributes: ['Swordmaster', 'Loyal retainer', 'Expert fighter'],
+  attributes: ['Swordmaster', 'Loyal', 'Warrior', 'Friend'],
 };
 
 const stilgar: Character = {
   id: 'stilgar',
   name: 'Stilgar',
-  description: 'Naib of Sietch Tabr, Fremen leader and Paul\'s mentor',
-  firstAppearanceChapter: 8,
-  aliases: ['Naib'],
+  description: 'Naib of Sietch Tabr, Fremen leader',
+  firstAppearanceChapter: 'chapter-8',
+  aliases: ['Naib Stilgar'],
   factions: ['fremen'],
   factionJoinChapters: {
-    'fremen': 'chapter-8', // Always Fremen leader
+    'fremen': 'chapter-8', // Appears as Fremen leader in chapter 8
   },
-  attributes: ['Fremen leader', 'Desert warrior', 'Paul\'s mentor'],
+  attributes: ['Fremen', 'Leader', 'Warrior', 'Wise'],
 };
 
 const chani: Character = {
   id: 'chani',
   name: 'Chani',
-  description: 'Fremen woman, daughter of Liet-Kynes, Paul\'s love interest',
-  firstAppearanceChapter: 8,
+  description: 'Fremen woman, Paul\'s lover and mother of his children',
+  firstAppearanceChapter: 'chapter-8',
   aliases: ['Sihaya'],
   factions: ['fremen'],
   factionJoinChapters: {
-    'fremen': 'chapter-8', // Always Fremen
+    'fremen': 'chapter-8', // Appears as Fremen in chapter 8
   },
-  attributes: ['Fremen', 'Daughter of Liet-Kynes', 'Paul\'s love'],
+  attributes: ['Fremen', 'Warrior', 'Lover', 'Mother'],
 };
 
 const lietKynes: Character = {
@@ -192,119 +193,119 @@ const lietKynes: Character = {
 const baronHarkonnen: Character = {
   id: 'baron-harkonnen',
   name: 'Baron Vladimir Harkonnen',
-  description: 'Head of House Harkonnen, enemy of House Atreides',
-  firstAppearanceChapter: 2,
-  aliases: ['Baron'],
+  description: 'The ruler of House Harkonnen, enemy of House Atreides',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Baron Harkonnen', 'The Baron'],
   factions: ['harkonnen'],
   factionJoinChapters: {
-    'harkonnen': 'chapter-2', // Always Harkonnen leader
+    'harkonnen': 'chapter-1', // Always Harkonnen leader
   },
-  attributes: ['Baron', 'Enemy of Atreides', 'Spice trader'],
+  attributes: ['Baron', 'Evil', 'Scheming', 'Powerful'],
 };
 
 const feydRautha: Character = {
   id: 'feyd-rautha',
-  name: 'Feyd-Rautha Harkonnen',
-  description: 'Baron\'s nephew and heir to House Harkonnen',
-  firstAppearanceChapter: 2,
-  aliases: ['Harkonnen heir'],
+  name: 'Feyd-Rautha',
+  description: 'The nephew and heir of Baron Harkonnen',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Feyd'],
   factions: ['harkonnen'],
   factionJoinChapters: {
     'harkonnen': 'chapter-2', // Always Harkonnen heir
   },
-  attributes: ['Harkonnen heir', 'Gladiator', 'Baron\'s nephew'],
+  attributes: ['Heir', 'Skilled', 'Ambitious', 'Dangerous'],
 };
 
 const piterDeVries: Character = {
   id: 'piter-de-vries',
-  name: 'Piter De Vries',
-  description: 'Twisted mentat and advisor to Baron Harkonnen',
-  firstAppearanceChapter: 2,
-  aliases: ['Mentat'],
+  name: 'Piter de Vries',
+  description: 'Mentat and twisted advisor to Baron Harkonnen',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Piter'],
   factions: ['harkonnen'],
   factionJoinChapters: {
     'harkonnen': 'chapter-2', // Always Harkonnen mentat
   },
-  attributes: ['Twisted mentat', 'Harkonnen advisor', 'Psychotic'],
+  attributes: ['Mentat', 'Twisted', 'Advisor', 'Evil'],
 };
 
 const emperorShaddam: Character = {
   id: 'emperor-shaddam',
   name: 'Emperor Shaddam IV',
-  description: 'Padishah Emperor of the Known Universe',
-  firstAppearanceChapter: 4,
-  aliases: ['Emperor'],
+  description: 'The Padishah Emperor of the Known Universe',
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Emperor', 'Padishah Emperor'],
   factions: ['corrino'],
   factionJoinChapters: {
     'corrino': 'chapter-4', // Always Emperor
   },
-  attributes: ['Emperor', 'Ruler of Known Universe', 'Spice controller'],
+  attributes: ['Emperor', 'Powerful', 'Scheming', 'Noble'],
 };
 
 const princessIrulan: Character = {
   id: 'princess-irulan',
   name: 'Princess Irulan',
   description: 'Daughter of Emperor Shaddam IV',
-  firstAppearanceChapter: 4,
-  aliases: ['Princess'],
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Princess Irulan'],
   factions: ['corrino'],
   factionJoinChapters: {
     'corrino': 'chapter-4', // Always Corrino princess
   },
-  attributes: ['Princess', 'Emperor\'s daughter', 'Historian'],
+  attributes: ['Princess', 'Scholar', 'Daughter', 'Noble'],
 };
 
 const hasimirFenring: Character = {
   id: 'hasimir-fenring',
   name: 'Hasimir Fenring',
-  description: 'Count and advisor to Emperor Shaddam',
-  firstAppearanceChapter: 4,
-  aliases: ['Count'],
+  description: 'Count and close advisor to Emperor Shaddam',
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Count Fenring'],
   factions: ['corrino'],
   factionJoinChapters: {
     'corrino': 'chapter-4', // Always Corrino advisor
   },
-  attributes: ['Count', 'Emperor\'s advisor', 'Genetic eunuch'],
+  attributes: ['Count', 'Advisor', 'Skilled', 'Loyal'],
 };
 
 const margotFenring: Character = {
   id: 'margot-fenring',
   name: 'Lady Margot Fenring',
-  description: 'Bene Gesserit and wife of Count Fenring',
-  firstAppearanceChapter: 4,
-  aliases: ['Lady'],
+  description: 'Bene Gesserit acolyte and wife of Count Fenring',
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Lady Margot'],
   factions: ['bene-gesserit', 'corrino'],
   factionJoinChapters: {
     'bene-gesserit': 'chapter-4', // Always Bene Gesserit
     'corrino': 'chapter-4', // Always Corrino through marriage
   },
-  attributes: ['Bene Gesserit', 'Count\'s wife', 'Emperor\'s ally'],
+  attributes: ['Bene Gesserit', 'Lady', 'Wife', 'Skilled'],
 };
 
 const gaiusHelenMohiam: Character = {
-  id: 'gaius-helen-mohiam',
-  name: 'Gaius Helen Mohiam',
-  description: 'Reverend Mother and Bene Gesserit representative',
-  firstAppearanceChapter: 1,
-  aliases: ['Reverend Mother'],
+  id: 'reverend-mother-mohiam',
+  name: 'Reverend Mother Gaius Helen Mohiam',
+  description: 'Bene Gesserit Reverend Mother and Truthsayer',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Reverend Mother', 'Truthsayer'],
   factions: ['bene-gesserit'],
   factionJoinChapters: {
     'bene-gesserit': 'chapter-1', // Always Bene Gesserit
   },
-  attributes: ['Reverend Mother', 'Bene Gesserit', 'Paul\'s tester'],
+  attributes: ['Reverend Mother', 'Truthsayer', 'Wise', 'Powerful'],
 };
 
 const yueh: Character = {
-  id: 'yueh',
+  id: 'wellington-yueh',
   name: 'Dr. Wellington Yueh',
-  description: 'Suk doctor and traitor to House Atreides',
-  firstAppearanceChapter: 1,
-  aliases: ['Suk doctor'],
+  description: 'Suk doctor of House Atreides, traitor',
+  firstAppearanceChapter: 'chapter-3',
+  aliases: ['Dr. Yueh'],
   factions: ['atreides'],
   factionJoinChapters: {
-    'atreides': 'chapter-1', // Initially loyal to Atreides, then betrays
+    'atreides': 'chapter-3', // Appears as Atreides doctor in chapter 3
   },
-  attributes: ['Suk doctor', 'Traitor', 'Compromised by Harkonnens'],
+  attributes: ['Doctor', 'Traitor', 'Suk-trained', 'Tragic'],
 };
 
 // Factions
@@ -350,7 +351,7 @@ const chapters = buildChapters(duneChapterData, duneHierarchy);
 const duneRelationships: RelationshipWithChapters[] = [
   // Paul and Jessica (Mother-Son)
   {
-    character1: paulAtreides,
+    character1: paul,
     character2: jessica,
     descriptions: [
       { chapter: 1, description: 'Jessica trains Paul in Bene Gesserit ways' },
@@ -360,8 +361,8 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Paul and Leto (Father-Son)
   {
-    character1: paulAtreides,
-    character2: letoAtreides,
+    character1: paul,
+    character2: leto,
     descriptions: [
       { chapter: 1, description: 'Leto prepares Paul for leadership' },
       { chapter: 6, description: 'Leto gives Paul the Atreides signet ring' },
@@ -370,7 +371,7 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Paul and Chani (Love)
   {
-    character1: paulAtreides,
+    character1: paul,
     character2: chani,
     descriptions: [
       { chapter: 8, description: 'Paul meets Chani in the desert' },
@@ -380,7 +381,7 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Paul and Stilgar (Mentor)
   {
-    character1: paulAtreides,
+    character1: paul,
     character2: stilgar,
     descriptions: [
       { chapter: 8, description: 'Stilgar becomes Paul\'s Fremen mentor' },
@@ -391,7 +392,7 @@ const duneRelationships: RelationshipWithChapters[] = [
   // Jessica and Leto (Lovers)
   {
     character1: jessica,
-    character2: letoAtreides,
+    character2: leto,
     descriptions: [
       { chapter: 1, description: 'Jessica serves as Leto\'s concubine' },
       { chapter: 6, description: 'Jessica supports Leto\'s rule on Arrakis' },
@@ -450,8 +451,8 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Gurney and Paul (Mentor)
   {
-    character1: gurneyHalleck,
-    character2: paulAtreides,
+    character1: gurney,
+    character2: paul,
     descriptions: [
       { chapter: 1, description: 'Gurney trains Paul in weapons and strategy' },
       { chapter: 6, description: 'Gurney protects Paul during Atreides arrival' },
@@ -460,8 +461,8 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Duncan and Paul (Protector)
   {
-    character1: duncanIdaho,
-    character2: paulAtreides,
+    character1: duncan,
+    character2: paul,
     descriptions: [
       { chapter: 1, description: 'Duncan serves as Paul\'s swordmaster' },
       { chapter: 6, description: 'Duncan protects Paul during Atreides arrival' },
@@ -470,8 +471,8 @@ const duneRelationships: RelationshipWithChapters[] = [
   },
   // Thufir and Leto (Advisor)
   {
-    character1: thufirHawat,
-    character2: letoAtreides,
+    character1: thufir,
+    character2: leto,
     descriptions: [
       { chapter: 1, description: 'Thufir serves as Leto\'s mentat and security chief' },
       { chapter: 6, description: 'Thufir advises Leto on Arrakis security' },
@@ -491,7 +492,7 @@ const duneRelationships: RelationshipWithChapters[] = [
   // Yueh and Leto (Traitor)
   {
     character1: yueh,
-    character2: letoAtreides,
+    character2: leto,
     descriptions: [
       { chapter: 1, description: 'Yueh serves as Atreides doctor' },
       { chapter: 6, description: 'Yueh is compromised by Harkonnens' },
@@ -514,12 +515,12 @@ const duneRelationships: RelationshipWithChapters[] = [
 export const duneData: BookData = {
   book: duneBook,
   characters: [
-    paulAtreides,
+    paul,
     jessica,
-    letoAtreides,
-    gurneyHalleck,
-    thufirHawat,
-    duncanIdaho,
+    leto,
+    gurney,
+    thufir,
+    duncan,
     stilgar,
     chani,
     lietKynes,

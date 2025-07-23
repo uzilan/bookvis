@@ -73,7 +73,7 @@ const crimeAndPunishmentChapterData = {
   'chapter-41': { id: 'chapter-41', title: 'Chapter 41' },
 };
 
-// Hierarchy definition - order determines global index, no explicit globalIndex needed
+// Hierarchy definition - order determines chapter sequence
 const crimeAndPunishmentHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
   // Part I
   { chapterId: 'part-1', level: 0, type: 'part' },
@@ -137,7 +137,7 @@ function buildChapters(chapterData: Record<string, { id: string; title: string }
   return hierarchy.map((item, index) => ({
     book: crimeAndPunishmentBook,
     ...chapterData[item.chapterId],
-    globalIndex: index + 1, // Order in array determines global index
+    
     level: item.level,
     type: item.type,
     index: index + 1, // For backward compatibility
@@ -145,156 +145,154 @@ function buildChapters(chapterData: Record<string, { id: string; title: string }
 }
 
 // Characters with Russian names and multiple aliases
-const rodionRaskolnikov: Character = {
+const raskolnikov: Character = {
   id: 'rodion-raskolnikov',
-  name: 'Rodion Romanovich Raskolnikov',
-  description: 'A former law student who commits murder and struggles with guilt and redemption',
-  firstAppearanceChapter: 1,
-  aliases: ['Rodya', 'Rodka', 'Rodion Romanovich', 'The Student', 'The Murderer'],
+  name: 'Rodion Raskolnikov',
+  description: 'A poor former student who commits murder',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Rodya', 'Rodka'],
   factions: ['students', 'criminals'],
   factionJoinChapters: {
-    'students': 'chapter-1', // Former student
-    'criminals': 'chapter-1', // Commits murder in chapter 1
+    'students': 'chapter-1', // Appears as a former student in chapter 1
+    'criminals': 'chapter-2', // Becomes a criminal after the murder
   },
-  attributes: ['Intellectual', 'Guilt-ridden', 'Proud', 'Isolated', 'Philosophical'],
+  attributes: ['Student', 'Murderer', 'Tortured', 'Intellectual'],
 };
 
-const sofyaSemyonovna: Character = {
-  id: 'sofya-semyonovna',
-  name: 'Sofya Semyonovna Marmeladova',
-  description: 'A young woman forced into prostitution to support her family, becomes Raskolnikov\'s confidante',
-  firstAppearanceChapter: 2,
-  aliases: ['Sonya', 'Sofya Semyonovna', 'Sonechka', 'The Prostitute', 'The Saint'],
-  factions: ['prostitutes', 'marmeladov-family'],
+const sonya: Character = {
+  id: 'sonya-marmeladov',
+  name: 'Sonya Marmeladov',
+  description: 'A young prostitute who becomes Raskolnikov\'s confidante',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Sonya'],
+  factions: ['prostitutes', 'religious'],
   factionJoinChapters: {
-    'prostitutes': 'chapter-2', // Joins when introduced
-    'marmeladov-family': 'chapter-2', // Always part of the family
+    'prostitutes': 'chapter-2', // Appears as a prostitute in chapter 2
+    'religious': 'chapter-2', // Deeply religious despite her profession
   },
-  attributes: ['Religious', 'Self-sacrificing', 'Pure-hearted', 'Loving', 'Resilient'],
+  attributes: ['Prostitute', 'Religious', 'Kind', 'Sacrificial'],
 };
 
-const porfiryPetrovich: Character = {
+const porfiry: Character = {
   id: 'porfiry-petrovich',
   name: 'Porfiry Petrovich',
-  description: 'The clever police investigator who suspects Raskolnikov and uses psychological tactics',
-  firstAppearanceChapter: 3,
-  aliases: ['Porfiry Petrovich', 'The Investigator', 'The Detective', 'The Magistrate'],
-  factions: ['police', 'authority'],
+  description: 'The investigating magistrate who suspects Raskolnikov',
+  firstAppearanceChapter: 'chapter-3',
+  aliases: ['Porfiry'],
+  factions: ['police'],
   factionJoinChapters: {
-    'police': 'chapter-3', // Joins when introduced
-    'authority': 'chapter-3', // Always authority figure
+    'police': 'chapter-3', // Appears as police investigator in chapter 3
   },
-  attributes: ['Intelligent', 'Patient', 'Psychological', 'Just', 'Observant'],
+  attributes: ['Investigator', 'Clever', 'Psychological', 'Just'],
 };
 
-const dmitryProkofich: Character = {
-  id: 'dmitry-prokofich',
-  name: 'Dmitry Prokofich Razumikhin',
-  description: 'Raskolnikov\'s loyal friend and former classmate who tries to help him',
-  firstAppearanceChapter: 2,
-  aliases: ['Razumikhin', 'Dmitry Prokofich', 'The Friend', 'The Loyal One'],
+const razumikhin: Character = {
+  id: 'dmitri-razumikhin',
+  name: 'Dmitri Razumikhin',
+  description: 'Raskolnikov\'s loyal friend and fellow student',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Razumikhin'],
   factions: ['students', 'friends'],
   factionJoinChapters: {
-    'students': 'chapter-2', // Former student
-    'friends': 'chapter-2', // Joins when introduced
+    'students': 'chapter-2', // Appears as a student in chapter 2
+    'friends': 'chapter-2', // Becomes Raskolnikov\'s friend
   },
-  attributes: ['Loyal', 'Generous', 'Optimistic', 'Hardworking', 'Honest'],
+  attributes: ['Student', 'Loyal', 'Generous', 'Optimistic'],
 };
 
-const avdotyaRomanovna: Character = {
-  id: 'avdotya-romanovna',
-  name: 'Avdotya Romanovna Raskolnikova',
-  description: 'Raskolnikov\'s sister who comes to St. Petersburg and becomes engaged to Luzhin',
-  firstAppearanceChapter: 4,
-  aliases: ['Dunya', 'Avdotya Romanovna', 'Dounia', 'The Sister'],
-  factions: ['family', 'nobility'],
+const dunya: Character = {
+  id: 'avdotya-raskolnikov',
+  name: 'Avdotya Raskolnikov',
+  description: 'Raskolnikov\'s sister who comes to St. Petersburg',
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Dunya'],
+  factions: ['family'],
   factionJoinChapters: {
-    'family': 'chapter-4', // Joins when introduced
-    'nobility': 'chapter-4', // Always noble background
+    'family': 'chapter-4', // Appears as Raskolnikov\'s sister in chapter 4
   },
-  attributes: ['Beautiful', 'Proud', 'Protective', 'Intelligent', 'Determined'],
+  attributes: ['Sister', 'Beautiful', 'Intelligent', 'Loving'],
 };
 
-const semyonZakharovich: Character = {
-  id: 'semyon-zakharovich',
-  name: 'Semyon Zakharovich Marmeladov',
-  description: 'Sonya\'s alcoholic father who dies early in the novel',
-  firstAppearanceChapter: 2,
-  aliases: ['Marmeladov', 'Semyon Zakharovich', 'The Drunkard', 'The Father'],
-  factions: ['marmeladov-family', 'alcoholics'],
+const luzhin: Character = {
+  id: 'pyotr-luzhin',
+  name: 'Pyotr Luzhin',
+  description: 'Dunya\'s fiancé, a wealthy lawyer',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Luzhin'],
+  factions: ['lawyers', 'bourgeois'],
   factionJoinChapters: {
-    'marmeladov-family': 'chapter-2', // Always part of the family
-    'alcoholics': 'chapter-2', // Always alcoholic
+    'lawyers': 'chapter-2', // Appears as a lawyer in chapter 2
+    'bourgeois': 'chapter-2', // Represents the bourgeois class
   },
-  attributes: ['Alcoholic', 'Father', 'Desperate', 'Pitiful', 'Dying'],
+  attributes: ['Lawyer', 'Wealthy', 'Proud', 'Calculating'],
 };
 
-const katerinaIvanovna: Character = {
-  id: 'katerina-ivanovna',
-  name: 'Katerina Ivanovna Marmeladova',
-  description: 'Sonya\'s stepmother, a proud woman who becomes increasingly desperate',
-  firstAppearanceChapter: 2,
-  aliases: ['Katerina Ivanovna', 'The Stepmother', 'The Proud One'],
-  factions: ['marmeladov-family', 'nobility'],
+const svidrigailov: Character = {
+  id: 'arkady-svidrigailov',
+  name: 'Arkady Svidrigailov',
+  description: 'A wealthy landowner with a dark past',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Svidrigailov'],
+  factions: ['landowners', 'criminals'],
   factionJoinChapters: {
-    'marmeladov-family': 'chapter-2', // Always part of the family
-    'nobility': 'chapter-2', // Always noble background
+    'landowners': 'chapter-2', // Appears as a landowner in chapter 2
+    'criminals': 'chapter-2', // Has a criminal past
   },
-  attributes: ['Proud', 'Desperate', 'Ill', 'Noble background', 'Suffering'],
+  attributes: ['Landowner', 'Wealthy', 'Corrupt', 'Suicidal'],
 };
 
-const pyotrPetrovich: Character = {
-  id: 'pyotr-petrovich',
-  name: 'Pyotr Petrovich Luzhin',
-  description: 'A wealthy lawyer who becomes engaged to Dunya but reveals his true nature',
-  firstAppearanceChapter: 4,
-  aliases: ['Luzhin', 'Pyotr Petrovich', 'The Lawyer', 'The Fiancé'],
-  factions: ['lawyers', 'nobility'],
+const marmeladov: Character = {
+  id: 'semyon-marmeladov',
+  name: 'Semyon Marmeladov',
+  description: 'Sonya\'s alcoholic father',
+  firstAppearanceChapter: 'chapter-4',
+  aliases: ['Marmeladov'],
+  factions: ['alcoholics', 'family'],
   factionJoinChapters: {
-    'lawyers': 'chapter-4', // Joins when introduced
-    'nobility': 'chapter-4', // Always noble background
+    'alcoholics': 'chapter-4', // Appears as an alcoholic in chapter 4
+    'family': 'chapter-4', // Sonya\'s father
   },
-  attributes: ['Wealthy', 'Manipulative', 'Proud', 'Selfish', 'Hypocritical'],
+  attributes: ['Alcoholic', 'Father', 'Pitiful', 'Tragic'],
 };
 
-const arkadyIvanovich: Character = {
-  id: 'arkady-ivanovich',
-  name: 'Arkady Ivanovich Svidrigailov',
-  description: 'A wealthy landowner obsessed with Dunya who commits suicide',
-  firstAppearanceChapter: 5,
-  aliases: ['Svidrigailov', 'Arkady Ivanovich', 'The Landowner', 'The Obsessed'],
-  factions: ['landowners', 'nobility'],
+const katerina: Character = {
+  id: 'katerina-marmeladov',
+  name: 'Katerina Marmeladov',
+  description: 'Sonya\'s stepmother, a proud but poor woman',
+  firstAppearanceChapter: 'chapter-5',
+  aliases: ['Katerina'],
+  factions: ['family', 'poor'],
   factionJoinChapters: {
-    'landowners': 'chapter-5', // Joins when introduced
-    'nobility': 'chapter-5', // Always noble background
+    'family': 'chapter-5', // Appears as family in chapter 5
+    'poor': 'chapter-5', // Represents the poor class
   },
-  attributes: ['Wealthy', 'Obsessed', 'Desperate', 'Suicidal', 'Corrupt'],
+  attributes: ['Proud', 'Poor', 'Step-mother', 'Tragic'],
 };
 
-const alyonaIvanovna: Character = {
-  id: 'alyona-ivanovna',
-  name: 'Alyona Ivanovna',
-  description: 'The old pawnbroker murdered by Raskolnikov',
-  firstAppearanceChapter: 1,
-  aliases: ['The Pawnbroker', 'The Old Woman', 'The Victim'],
-  factions: ['pawnbrokers'],
+const pulcheria: Character = {
+  id: 'pulcheria-raskolnikov',
+  name: 'Pulcheria Raskolnikov',
+  description: 'Raskolnikov\'s mother who loves him deeply',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Mother'],
+  factions: ['family'],
   factionJoinChapters: {
-    'pawnbrokers': 'chapter-1', // Always pawnbroker
+    'family': 'chapter-1', // Appears as Raskolnikov\'s mother in chapter 1
   },
-  attributes: ['Old', 'Greedy', 'Victim', 'Pawnbroker', 'Murdered'],
+  attributes: ['Mother', 'Loving', 'Worried', 'Devoted'],
 };
 
-const lizavetaIvanovna: Character = {
-  id: 'lizaveta-ivanovna',
-  name: 'Lizaveta Ivanovna',
-  description: 'Alyona\'s half-sister who is also murdered by Raskolnikov',
-  firstAppearanceChapter: 1,
-  aliases: ['Lizaveta', 'The Half-sister', 'The Witness', 'The Victim'],
-  factions: ['pawnbrokers'],
+const nastasya: Character = {
+  id: 'nastasya-petrovna',
+  name: 'Nastasya Petrovna',
+  description: 'The landlady\'s servant who helps Raskolnikov',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Nastasya'],
+  factions: ['servants'],
   factionJoinChapters: {
-    'pawnbrokers': 'chapter-1', // Always pawnbroker
+    'servants': 'chapter-1', // Appears as a servant in chapter 1
   },
-  attributes: ['Simple', 'Innocent', 'Victim', 'Half-sister', 'Murdered'],
+  attributes: ['Servant', 'Kind', 'Helpful', 'Simple'],
 };
 
 // Factions
@@ -395,96 +393,96 @@ const chapters = buildChapters(crimeAndPunishmentChapterData, crimeAndPunishment
 // Relationships
 const relationships: RelationshipWithChapters[] = [
   {
-    character1: rodionRaskolnikov,
-    character2: sofyaSemyonovna,
+    character1: raskolnikov,
+    character2: sonya,
     descriptions: [
-      { chapter: 4, description: 'Raskolnikov meets Sonya and begins to confide in her' },
-      { chapter: 15, description: 'Raskolnikov confesses his crime to Sonya' },
-      { chapter: 41, description: 'Sonya follows Raskolnikov to Siberia and supports his redemption' },
+      { chapter: 'chapter-4', description: 'Raskolnikov meets Sonya and begins to confide in her' },
+      { chapter: 'chapter-15', description: 'Raskolnikov confesses his crime to Sonya' },
+      { chapter: 'chapter-41', description: 'Sonya follows Raskolnikov to Siberia and supports his redemption' },
     ],
   },
   {
-    character1: rodionRaskolnikov,
-    character2: porfiryPetrovich,
+    character1: raskolnikov,
+    character2: porfiry,
     descriptions: [
-      { chapter: 5, description: 'Porfiry begins investigating Raskolnikov' },
-      { chapter: 16, description: 'Porfiry uses psychological tactics to pressure Raskolnikov' },
-      { chapter: 33, description: 'Porfiry confronts Raskolnikov with evidence' },
+      { chapter: 'chapter-5', description: 'Porfiry begins investigating Raskolnikov' },
+      { chapter: 'chapter-16', description: 'Porfiry uses psychological tactics to pressure Raskolnikov' },
+      { chapter: 'chapter-33', description: 'Porfiry confronts Raskolnikov with evidence' },
     ],
   },
   {
-    character1: rodionRaskolnikov,
-    character2: dmitryProkofich,
+    character1: raskolnikov,
+    character2: razumikhin,
     descriptions: [
-      { chapter: 2, description: 'Razumikhin helps Raskolnikov when he is ill' },
-      { chapter: 8, description: 'Razumikhin defends Raskolnikov to others' },
-      { chapter: 17, description: 'Razumikhin continues to support his friend despite suspicions' },
+      { chapter: 'chapter-2', description: 'Razumikhin helps Raskolnikov when he is ill' },
+      { chapter: 'chapter-8', description: 'Razumikhin defends Raskolnikov to others' },
+      { chapter: 'chapter-17', description: 'Razumikhin continues to support his friend despite suspicions' },
     ],
   },
   {
-    character1: rodionRaskolnikov,
-    character2: avdotyaRomanovna,
+    character1: raskolnikov,
+    character2: dunya,
     descriptions: [
-      { chapter: 4, description: 'Dunya arrives in St. Petersburg to see her brother' },
-      { chapter: 9, description: 'Raskolnikov tries to prevent Dunya\'s engagement to Luzhin' },
-      { chapter: 18, description: 'Dunya learns about her brother\'s crime' },
+      { chapter: 'chapter-4', description: 'Dunya arrives in St. Petersburg to see her brother' },
+      { chapter: 'chapter-9', description: 'Raskolnikov tries to prevent Dunya\'s engagement to Luzhin' },
+      { chapter: 'chapter-18', description: 'Dunya learns about her brother\'s crime' },
     ],
   },
   {
-    character1: sofyaSemyonovna,
-    character2: semyonZakharovich,
+    character1: sonya,
+    character2: marmeladov,
     descriptions: [
-      { chapter: 2, description: 'Sonya supports her alcoholic father' },
-      { chapter: 3, description: 'Marmeladov dies, leaving Sonya to support the family' },
+      { chapter: 'chapter-2', description: 'Sonya supports her alcoholic father' },
+      { chapter: 'chapter-3', description: 'Marmeladov dies, leaving Sonya to support the family' },
     ],
   },
   {
-    character1: sofyaSemyonovna,
-    character2: katerinaIvanovna,
+    character1: sonya,
+    character2: katerina,
     descriptions: [
-      { chapter: 2, description: 'Sonya supports her stepmother and siblings' },
-      { chapter: 25, description: 'Katerina becomes increasingly ill and desperate' },
-      { chapter: 26, description: 'Katerina dies, leaving Sonya alone' },
+      { chapter: 'chapter-2', description: 'Sonya supports her stepmother and siblings' },
+      { chapter: 'chapter-25', description: 'Katerina becomes increasingly ill and desperate' },
+      { chapter: 'chapter-26', description: 'Katerina dies, leaving Sonya alone' },
     ],
   },
   {
-    character1: avdotyaRomanovna,
-    character2: pyotrPetrovich,
+    character1: dunya,
+    character2: luzhin,
     descriptions: [
-      { chapter: 4, description: 'Dunya becomes engaged to Luzhin' },
-      { chapter: 9, description: 'Luzhin reveals his true manipulative nature' },
-      { chapter: 19, description: 'Dunya breaks off the engagement' },
+      { chapter: 'chapter-4', description: 'Dunya becomes engaged to Luzhin' },
+      { chapter: 'chapter-9', description: 'Luzhin reveals his true manipulative nature' },
+      { chapter: 'chapter-19', description: 'Dunya breaks off the engagement' },
     ],
   },
   {
-    character1: avdotyaRomanovna,
-    character2: arkadyIvanovich,
+    character1: dunya,
+    character2: svidrigailov,
     descriptions: [
-      { chapter: 5, description: 'Svidrigailov becomes obsessed with Dunya' },
-      { chapter: 20, description: 'Svidrigailov tries to blackmail Dunya' },
-      { chapter: 35, description: 'Svidrigailov commits suicide after being rejected' },
+      { chapter: 'chapter-5', description: 'Svidrigailov becomes obsessed with Dunya' },
+      { chapter: 'chapter-20', description: 'Svidrigailov tries to blackmail Dunya' },
+      { chapter: 'chapter-35', description: 'Svidrigailov commits suicide after being rejected' },
     ],
   },
   {
-    character1: rodionRaskolnikov,
-    character2: alyonaIvanovna,
+    character1: raskolnikov,
+    character2: pulcheria,
     descriptions: [
-      { chapter: 1, description: 'Raskolnikov murders the old pawnbroker' },
+      { chapter: 'chapter-1', description: 'Raskolnikov murders the old pawnbroker' },
     ],
   },
   {
-    character1: rodionRaskolnikov,
-    character2: lizavetaIvanovna,
+    character1: raskolnikov,
+    character2: nastasya,
     descriptions: [
-      { chapter: 1, description: 'Raskolnikov also murders Lizaveta who witnesses the crime' },
+      { chapter: 'chapter-1', description: 'Raskolnikov also murders Lizaveta who witnesses the crime' },
     ],
   },
   {
-    character1: porfiryPetrovich,
-    character2: dmitryProkofich,
+    character1: porfiry,
+    character2: razumikhin,
     descriptions: [
-      { chapter: 10, description: 'Porfiry questions Razumikhin about Raskolnikov' },
-      { chapter: 17, description: 'Razumikhin defends Raskolnikov to Porfiry' },
+      { chapter: 'chapter-10', description: 'Porfiry questions Razumikhin about Raskolnikov' },
+      { chapter: 'chapter-17', description: 'Razumikhin defends Raskolnikov to Porfiry' },
     ],
   },
 ];
@@ -493,17 +491,17 @@ const relationships: RelationshipWithChapters[] = [
 export const crimeAndPunishmentData: BookData = {
   book: crimeAndPunishmentBook,
   characters: [
-    rodionRaskolnikov,
-    sofyaSemyonovna,
-    porfiryPetrovich,
-    dmitryProkofich,
-    avdotyaRomanovna,
-    semyonZakharovich,
-    katerinaIvanovna,
-    pyotrPetrovich,
-    arkadyIvanovich,
-    alyonaIvanovna,
-    lizavetaIvanovna,
+    raskolnikov,
+    sonya,
+    porfiry,
+    razumikhin,
+    dunya,
+    marmeladov,
+    katerina,
+    luzhin,
+    svidrigailov,
+    pulcheria,
+    nastasya,
   ],
   chapters,
   factions: [

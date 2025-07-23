@@ -24,7 +24,7 @@ const winnieChapterData = {
   'chapter-10': { id: 'chapter-10', title: 'In Which Christopher Robin Gives a Pooh Party, and We Say Good-bye' },
 };
 
-// Hierarchy definition - order determines global index, no explicit globalIndex needed
+// Hierarchy definition - order determines chapter sequence
 const winnieHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }> = [
   { chapterId: 'chapter-1', level: 0, type: 'chapter' },
   { chapterId: 'chapter-2', level: 0, type: 'chapter' },
@@ -43,111 +43,137 @@ function buildChapters(chapterData: Record<string, { id: string; title: string }
   return hierarchy.map((item, index) => ({
     book: winnieBook,
     ...chapterData[item.chapterId],
-    globalIndex: index + 1, // Order in array determines global index
+    
     level: item.level,
     type: item.type,
     index: index + 1, // For backward compatibility
   }));
 }
 
-const pooh: Character = { 
-  name: 'Winnie-the-Pooh', 
-  id: 'pooh', 
-  description: 'A bear of very little brain.', 
-  firstAppearanceChapter: 1, 
-  aliases: ['Pooh'], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-1' }, // Always a friend
-  attributes: ['Loves honey', 'Very friendly', 'Sometimes forgetful', 'Lives in a house under the name Sanders'] 
+const winnie: Character = {
+  id: 'winnie-the-pooh',
+  name: 'Winnie the Pooh',
+  description: 'A honey-loving bear who lives in the Hundred Acre Wood',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Pooh', 'Pooh Bear'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-1', // Appears in the Hundred Acre Wood in chapter 1
+  },
+  attributes: ['Bear', 'Honey-loving', 'Friendly', 'Simple'],
 };
-const piglet: Character = { 
-  name: 'Piglet', 
-  id: 'piglet', 
-  description: 'A small and timid pig.', 
-  firstAppearanceChapter: 1, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-1' }, // Always a friend
-  attributes: ['Very brave despite being small', 'Best friends with Pooh', 'Lives in a beech tree', 'Always tries to be helpful'] 
+
+const piglet: Character = {
+  id: 'piglet',
+  name: 'Piglet',
+  description: 'A small, timid pig who is Pooh\'s best friend',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Piglet'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-1', // Appears in the Hundred Acre Wood in chapter 1
+  },
+  attributes: ['Pig', 'Timid', 'Brave', 'Loyal'],
 };
-const eeyore: Character = { 
-  name: 'Eeyore', 
-  id: 'eeyore', 
-  description: 'A gloomy donkey.', 
-  firstAppearanceChapter: 1, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-1' }, // Always a friend
-  attributes: ['Gloomy personality', 'Lives in the thistly corner', 'Has a detachable tail', 'Very loyal friend'] 
+
+const tigger: Character = {
+  id: 'tigger',
+  name: 'Tigger',
+  description: 'A bouncy tiger who loves to bounce',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Tigger'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-1', // Appears in the Hundred Acre Wood in chapter 1
+  },
+  attributes: ['Tiger', 'Bouncy', 'Energetic', 'Friendly'],
 };
-const cr: Character = { 
-  name: 'Christopher Robin', 
-  id: 'cr', 
-  description: 'A boy and Pooh\'s best friend.', 
-  firstAppearanceChapter: 1, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-1' }, // Always a friend
-  attributes: ['The only human in the forest', 'Very wise for his age', 'Leads expeditions', 'Knows all the animals'] 
+
+const eeyore: Character = {
+  id: 'eeyore',
+  name: 'Eeyore',
+  description: 'A gloomy donkey who is always losing his tail',
+  firstAppearanceChapter: 'chapter-1',
+  aliases: ['Eeyore'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-1', // Appears in the Hundred Acre Wood in chapter 1
+  },
+  attributes: ['Donkey', 'Gloomy', 'Loyal', 'Patient'],
 };
-const rabbit: Character = { 
-  name: 'Rabbit', 
-  id: 'rabbit', 
-  description: 'A practical rabbit.', 
-  firstAppearanceChapter: 2, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-2' }, // Joins when introduced
-  attributes: ['Very organized', 'Likes to plan things', 'Has many friends and relations', 'Lives in a hole in the ground'] 
+
+const rabbit: Character = {
+  id: 'rabbit',
+  name: 'Rabbit',
+  description: 'A practical rabbit who likes to organize things',
+  firstAppearanceChapter: 'chapter-2',
+  aliases: ['Rabbit'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-2', // Appears in the Hundred Acre Wood in chapter 2
+  },
+  attributes: ['Rabbit', 'Practical', 'Organized', 'Worried'],
 };
-const owl: Character = { 
-  name: 'Owl', 
-  id: 'owl', 
-  description: 'A wise owl.', 
-  firstAppearanceChapter: 3, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-3' }, // Joins when introduced
-  attributes: ['Very wise', 'Can spell his name', 'Lives in a tree', 'Likes to give advice'] 
+
+const owl: Character = {
+  id: 'owl',
+  name: 'Owl',
+  description: 'A wise owl who lives in a tree',
+  firstAppearanceChapter: 'chapter-3',
+  aliases: ['Owl'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-3', // Appears in the Hundred Acre Wood in chapter 3
+  },
+  attributes: ['Owl', 'Wise', 'Talkative', 'Friendly'],
 };
-const kanga: Character = { 
-  name: 'Kanga', 
-  id: 'kanga', 
-  description: 'A mother kangaroo.', 
-  firstAppearanceChapter: 7, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-7' }, // Joins when introduced
-  attributes: ['Very motherly', 'Carries things in her pouch', 'Takes care of everyone', 'Very kind and gentle'] 
+
+const kanga: Character = {
+  id: 'kanga',
+  name: 'Kanga',
+  description: 'A mother kangaroo who carries Roo in her pouch',
+  firstAppearanceChapter: 'chapter-7',
+  aliases: ['Kanga'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-7', // Appears in the Hundred Acre Wood in chapter 7
+  },
+  attributes: ['Kangaroo', 'Mother', 'Kind', 'Protective'],
 };
-const roo: Character = { 
-  name: 'Roo', 
-  id: 'roo', 
-  description: 'Kanga\'s child.', 
-  firstAppearanceChapter: 7, 
-  aliases: [], 
-  factions: ['friends'], 
-  factionJoinChapters: { 'friends': 'chapter-7' }, // Joins when introduced
-  attributes: ['Very young and energetic', 'Loves to bounce', 'Kanga\'s only child', 'Friends with Tigger'] 
+
+const roo: Character = {
+  id: 'roo',
+  name: 'Roo',
+  description: 'A young kangaroo who lives in his mother\'s pouch',
+  firstAppearanceChapter: 'chapter-7',
+  aliases: ['Roo'],
+  factions: ['hundred-acre-wood'],
+  factionJoinChapters: {
+    'hundred-acre-wood': 'chapter-7', // Appears in the Hundred Acre Wood in chapter 7
+  },
+  attributes: ['Kangaroo', 'Young', 'Playful', 'Curious'],
 };
-const heffalump: Character = { 
-  name: 'Heffalump', 
-  id: 'heffalump', 
-  description: 'A mysterious creature.', 
-  firstAppearanceChapter: 5, 
-  aliases: [], 
-  factions: ['heffalumps'], 
-  factionJoinChapters: { 'heffalumps': 'chapter-5' }, // Joins when introduced
-  attributes: ['Imaginary creature', 'Scares Piglet', 'Has a very large head', 'Lives in the forest'] 
+
+const christopherRobin: Character = {
+  id: 'christopher-robin',
+  name: 'Christopher Robin',
+  description: 'A young boy who is friends with all the animals',
+  firstAppearanceChapter: 'chapter-5',
+  aliases: ['Christopher Robin'],
+  factions: ['humans'],
+  factionJoinChapters: {
+    'humans': 'chapter-5', // Appears as a human in chapter 5
+  },
+  attributes: ['Human', 'Young', 'Imaginative', 'Friend'],
 };
 
 const winnieCharacters: Character[] = [
-  pooh, piglet, eeyore, cr, rabbit, owl, kanga, roo, heffalump
+  winnie, piglet, tigger, eeyore, rabbit, owl, kanga, roo, christopherRobin
 ];
 
 const winnieFactions: Faction[] = [
-  { id: 'friends', title: 'Pooh\'s Friends', description: 'The main group of friends in the Hundred Acre Wood.', color: '#A7C7E7' }, // soft blue
-  { id: 'heffalumps', title: 'Heffalumps', description: 'Imaginary creatures.', color: '#C7A7E7' }, // muted mauve
+  { id: 'hundred-acre-wood', title: 'Hundred Acre Wood', description: 'The main forest where all the animals live.', color: '#A7C7E7' }, // soft blue
+  { id: 'humans', title: 'Humans', description: 'The people who live outside the forest.', color: '#C7A7E7' }, // muted mauve
 ];
 
 // Build chapters from data and hierarchy
@@ -155,48 +181,48 @@ const winnieChapters: Chapter[] = buildChapters(winnieChapterData, winnieHierarc
 
 const winnieRelationships: RelationshipWithChapters[] = [
   {
-    character1: pooh,
+    character1: winnie,
     character2: piglet,
     descriptions: [
-      { chapter: 1, description: 'Best friends' },
-      { chapter: 3, description: 'Hunting partners' },
+      { chapter: 'chapter-1', description: 'Best friends' },
+      { chapter: 'chapter-3', description: 'Hunting partners' },
     ],
   },
   {
-    character1: pooh,
+    character1: winnie,
     character2: eeyore,
     descriptions: [
-      { chapter: 1, description: 'Friends' },
-      { chapter: 4, description: 'Pooh finds Eeyore\'s tail' },
+      { chapter: 'chapter-1', description: 'Friends' },
+      { chapter: 'chapter-4', description: 'Pooh finds Eeyore\'s tail' },
     ],
   },
   {
-    character1: cr,
-    character2: pooh,
+    character1: christopherRobin,
+    character2: winnie,
     descriptions: [
-      { chapter: 1, description: 'Christopher Robin\'s favorite bear' },
-      { chapter: 8, description: 'Expotition leader' },
+      { chapter: 'chapter-5', description: 'Christopher Robin\'s favorite bear' },
+      { chapter: 'chapter-8', description: 'Expotition leader' },
     ],
   },
   {
     character1: rabbit,
     character2: owl,
     descriptions: [
-      { chapter: 3, description: 'Forest neighbors' },
+      { chapter: 'chapter-3', description: 'Forest neighbors' },
     ],
   },
   {
     character1: kanga,
     character2: roo,
     descriptions: [
-      { chapter: 7, description: 'Mother and child' },
+      { chapter: 'chapter-7', description: 'Mother and child' },
     ],
   },
   {
     character1: piglet,
-    character2: heffalump,
+    character2: christopherRobin,
     descriptions: [
-      { chapter: 5, description: 'Piglet meets a Heffalump' },
+      { chapter: 'chapter-5', description: 'Piglet meets a Heffalump' },
     ],
   },
 ];

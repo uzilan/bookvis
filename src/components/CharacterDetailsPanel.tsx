@@ -67,6 +67,7 @@ interface CharacterDetailsPanelProps {
   factions: Faction[];
   chapters: Chapter[];
   relationships: RelationshipWithChapters[];
+  selectedChapter: string; // Current chapter ID
   open: boolean;
   onClose: () => void;
 }
@@ -76,19 +77,45 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   factions,
   chapters,
   relationships,
+  selectedChapter,
   open,
   onClose,
 }) => {
 
   if (!character) return null;
 
-  const characterFactions = character.factions.map(factionId => 
+  // Filter factions based on current chapter - only show factions the character has joined by this chapter
+  const currentFactionIds = character.factions.filter(factionId => {
+    const joinChapter = character.factionJoinChapters?.[factionId];
+    if (!joinChapter) return false;
+    
+    // Handle both number (backward compatibility) and string (chapter ID) values
+    if (typeof joinChapter === 'number') {
+      // For backward compatibility with numeric chapter indices
+      const currentChapter = chapters.find(ch => ch.id === selectedChapter);
+      return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
+    } else if (typeof joinChapter === 'string') {
+      // For string chapter IDs, find the target chapter and current chapter
+      const targetChapter = chapters.find(ch => ch.id === joinChapter);
+      const currentChapter = chapters.find(ch => ch.id === selectedChapter);
+      return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+             targetChapter.index <= currentChapter.index;
+    }
+    return false;
+  });
+
+  const characterFactions = currentFactionIds.map(factionId => 
     factions.find(f => f.id === factionId)
   ).filter(Boolean) as Faction[];
 
-  const firstAppearanceChapter = chapters.find(
-    ch => ch.globalIndex === character.firstAppearanceChapter
-  );
+  const firstAppearanceChapter = chapters.find(ch => {
+    if (typeof character.firstAppearanceChapter === 'number') {
+      return ch.index === character.firstAppearanceChapter;
+    } else if (typeof character.firstAppearanceChapter === 'string') {
+      return ch.id === character.firstAppearanceChapter;
+    }
+    return false;
+  });
 
   // Find relationships where this character is involved
   const characterRelationships = relationships.filter(rel => 
@@ -148,7 +175,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
         {characterFactions.length > 0 && (
           <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
             <Typography variant="h6" sx={{ mb: 1 }}>
-              Factions
+              Current Factions
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               {characterFactions.map((faction) => (

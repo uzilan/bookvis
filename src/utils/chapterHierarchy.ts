@@ -51,11 +51,9 @@ export function buildChapterTree(chapters: Chapter[]): ChapterNode[] {
 
 /**
  * Flattens a hierarchical chapter structure into a linear list
- * with proper global indexing
  */
 export function flattenChapterHierarchy(chapters: Chapter[]): Chapter[] {
   const flattened: Chapter[] = [];
-  let globalIndex = 1;
 
   function traverse(chapterList: Chapter[], level: number = 0, path: string[] = []) {
     chapterList.forEach((chapter) => {
@@ -65,13 +63,11 @@ export function flattenChapterHierarchy(chapters: Chapter[]): Chapter[] {
       const flatChapter: Chapter = {
         ...chapter,
         level,
-        globalIndex,
         path: currentPath,
         type: level === 0 ? 'chapter' : (level === 1 ? 'part' : 'book'),
       };
       
       flattened.push(flatChapter);
-      globalIndex++;
 
       // Find children by looking for chapters that have this chapter as parent
       const children = chapters.filter(ch => ch.parent && ch.parent.title === chapter.title);

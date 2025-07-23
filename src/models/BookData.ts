@@ -6,7 +6,7 @@ import type { Faction } from './Faction';
 export interface RelationshipWithChapters {
   character1: Character;
   character2: Character;
-  descriptions: { chapter: number; description: string }[];
+  descriptions: { chapter: number | string; description: string }[]; // number for backward compatibility, string for chapter IDs
 }
 
 export interface BookData {

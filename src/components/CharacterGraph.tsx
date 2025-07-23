@@ -11,14 +11,27 @@ import { ChapterSlider } from './ChapterSlider';
 interface CharacterGraphProps {
   bookData: BookData;
   fullBookData: BookData;
-  selectedChapter: number;
-  onChapterChange: (index: number) => void;
+  selectedChapter: string; // Changed from number to string (chapter ID)
+  onChapterChange: (chapterId: string) => void; // Changed from index to chapterId
   books: Book[];
   selectedBook: Book;
   onBookChange: (book: Book) => void;
 }
 
 
+
+// Utility to determine if a color is dark
+function isDarkColor(color: string): boolean {
+  // Convert hex to RGB
+  const hex = color.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+  
+  // Calculate luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance < 0.5;
+}
 
 // Utility to generate a pie chart SVG data URI for an array of colors with character name
 function generatePieSVG(colors: string[], characterName: string, size = 100): string {
@@ -87,7 +100,18 @@ function generatePieSVG(colors: string[], characterName: string, size = 100): st
   const totalTextHeight = lines.length * lineHeight;
   const initialY = cy - (totalTextHeight / 2) + (lineHeight / 2); // Center vertically
 
-  svg += `<text x='${cx}' y='${initialY}' text-anchor='middle' font-family='Arial' font-size='6' font-weight='bold' fill='#333'>`;
+  // Determine text color based on background colors
+  let textColor = '#333'; // Default dark text
+  if (total === 1) {
+    // Single color - check if it's dark
+    textColor = isDarkColor(colors[0]) ? '#FFFFFF' : '#333';
+  } else {
+    // Multiple colors - check if any are dark
+    const hasDarkColor = colors.some(color => isDarkColor(color));
+    textColor = hasDarkColor ? '#FFFFFF' : '#333';
+  }
+
+  svg += `<text x='${cx}' y='${initialY}' text-anchor='middle' font-family='Arial' font-size='6' font-weight='bold' fill='${textColor}'>`;
   lines.forEach((line, index) => {
     svg += `<tspan x='${cx}' dy='${index === 0 ? 0 : lineHeight}'>${line}</tspan>`;
   });
@@ -139,11 +163,15 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         
         // Handle both number (backward compatibility) and string (chapter ID) values
         if (typeof joinChapter === 'number') {
-          return joinChapter <= selectedChapter;
+          // For backward compatibility with numeric chapter indices
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
         } else if (typeof joinChapter === 'string') {
-          // For string chapter IDs, we need to find the chapter's global index
-          const chapter = bookData.chapters.find(ch => ch.index.toString() === joinChapter.replace('chapter-', ''));
-          return chapter && chapter.globalIndex && chapter.globalIndex <= selectedChapter;
+          // For string chapter IDs, find the target chapter and current chapter
+          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+                 targetChapter.index <= currentChapter.index;
         }
         return false;
       });
@@ -166,11 +194,15 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         
         // Handle both number (backward compatibility) and string (chapter ID) values
         if (typeof joinChapter === 'number') {
-          return joinChapter <= selectedChapter;
+          // For backward compatibility with numeric chapter indices
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
         } else if (typeof joinChapter === 'string') {
-          // For string chapter IDs, we need to find the chapter's global index
-          const chapter = bookData.chapters.find(ch => ch.index.toString() === joinChapter.replace('chapter-', ''));
-          return chapter && chapter.globalIndex && chapter.globalIndex <= selectedChapter;
+          // For string chapter IDs, find the target chapter and current chapter
+          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+                 targetChapter.index <= currentChapter.index;
         }
         return false;
       });
@@ -574,6 +606,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         factions={bookData.factions}
         chapters={bookData.chapters}
         relationships={bookData.relationships}
+        selectedChapter={selectedChapter}
         open={isDetailsPanelOpen}
         onClose={handleCloseDetailsPanel}
       />
