@@ -440,14 +440,13 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       <div style={{
         position: 'absolute',
         top: '20px',
-        left: '20px',
-        width: '280px',
+        right: '50px',
+        width: '240px',
         zIndex: 1002,
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
         maxHeight: 'calc(100vh - 40px)',
-        overflowY: 'auto',
       }}>
         {/* Faction List */}
         <FactionList factions={bookData.factions} />
@@ -483,7 +482,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         position: 'absolute',
         top: '20px',
         left: '300px',
-        zIndex: 1003,
+        zIndex: 100,
         background: 'white',
         padding: '6px',
         borderRadius: '6px',
