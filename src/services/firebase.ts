@@ -45,7 +45,8 @@ export class FirebaseService {
           characters: data.characters,
           chapters: data.chapters,
           factions: data.factions,
-          relationships: data.relationships
+          relationships: data.relationships,
+          locations: data.locations || [] // Include locations with fallback to empty array
         });
       });
       

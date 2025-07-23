@@ -1,4 +1,5 @@
 import type { Book } from './Book';
+import type { Location } from './Location';
 
 export interface Chapter {
   book: Book;
@@ -13,4 +14,7 @@ export interface Chapter {
   partTitle?: string;         // e.g., "Book One", "Part I"
 
   path?: string[];            // Full path like ["Book 1", "Part 1", "Chapter 1"]
+  
+  // Locations mentioned in this chapter
+  locations?: Location[];
 }

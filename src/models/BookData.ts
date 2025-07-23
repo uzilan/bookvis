@@ -2,6 +2,7 @@ import type { Book } from './Book';
 import type { Character } from './Character';
 import type { Chapter } from './Chapter';
 import type { Faction } from './Faction';
+import type { Location } from './Location';
 
 export interface RelationshipWithChapters {
   character1: Character;
@@ -15,4 +16,5 @@ export interface BookData {
   chapters: Chapter[];
   factions: Faction[];
   relationships: RelationshipWithChapters[];
+  locations: Location[];
 }

@@ -3,6 +3,7 @@ import type { Chapter } from '../models/Chapter';
 import type { Character } from '../models/Character';
 import type { Faction } from '../models/Faction';
 import type { RelationshipWithChapters } from '../models/BookData';
+import type { Location } from '../models/Location';
 
 const aliceBook = {
   id: 'alice',
@@ -10,20 +11,95 @@ const aliceBook = {
   title: "Alice's Adventures in Wonderland",
 };
 
-// Chapter definitions - just basic data
+// All locations in Alice in Wonderland
+const aliceLocations: Location[] = [
+  { id: 'rabbit-hole', name: 'Rabbit Hole', description: 'A deep, dark hole that Alice falls down to enter Wonderland. It seems to go on forever and is filled with strange objects.' },
+  { id: 'wonderland-entrance', name: 'Wonderland Entrance', description: 'The magical gateway between the real world and Wonderland, where Alice first arrives after her fall.' },
+  { id: 'pool-of-tears', name: 'Pool of Tears', description: 'A large pool created from Alice\'s own tears when she was very small. It becomes a lake where various creatures gather.' },
+  { id: 'wonderland-garden', name: 'Wonderland Garden', description: 'A beautiful garden filled with talking flowers and other strange plants that can communicate with Alice.' },
+  { id: 'shore', name: 'Shore', description: 'The edge of the Pool of Tears where Alice and other creatures gather after swimming across the pool.' },
+  { id: 'caucus-race-ground', name: 'Caucus Race Ground', description: 'A circular race track where the Dodo organizes a race to dry off the wet creatures from the pool.' },
+  { id: 'white-rabbit-house', name: 'White Rabbit\'s House', description: 'The home of the White Rabbit, where Alice grows too large and gets stuck, causing chaos.' },
+  { id: 'wonderland-street', name: 'Wonderland Street', description: 'A street in Wonderland where Alice encounters various strange characters and follows the White Rabbit.' },
+  { id: 'mushroom', name: 'Mushroom', description: 'A large mushroom where the Caterpillar sits smoking a hookah. It has magical properties that can change Alice\'s size.' },
+  { id: 'forest-clearing', name: 'Forest Clearing', description: 'An open area in the forest where Alice meets the Caterpillar and learns about the mushroom\'s properties.' },
+  { id: 'duchess-house', name: 'Duchess\'s House', description: 'The home of the Duchess, filled with pepper and chaos. The Duchess holds a baby that turns into a pig.' },
+  { id: 'kitchen', name: 'Kitchen', description: 'The chaotic kitchen in the Duchess\'s house where there\'s too much pepper and everything is in disorder.' },
+  { id: 'mad-tea-party', name: 'Mad Tea Party', description: 'An endless tea party hosted by the Mad Hatter, March Hare, and Dormouse. Time is stuck at 6 o\'clock.' },
+  { id: 'tea-table', name: 'Tea Table', description: 'A long table set for tea where the Mad Tea Party takes place, with endless cups of tea and riddles.' },
+  { id: 'queens-garden', name: 'Queen\'s Garden', description: 'The beautiful garden belonging to the Queen of Hearts, filled with roses and other flowers.' },
+  { id: 'croquet-ground', name: 'Croquet Ground', description: 'A croquet court where Alice plays a chaotic game with flamingos as mallets and hedgehogs as balls.' },
+  { id: 'mock-turtle-beach', name: 'Mock Turtle\'s Beach', description: 'A beach where Alice meets the Mock Turtle, who tells her stories about his education and the Lobster Quadrille.' },
+  { id: 'shore-line', name: 'Shore Line', description: 'The shoreline where the Mock Turtle and Gryphon tell Alice about their underwater adventures and dances.' },
+  { id: 'dance-floor', name: 'Dance Floor', description: 'An underwater dance floor where the Lobster Quadrille takes place, with sea creatures dancing in formation.' },
+  { id: 'underwater-scene', name: 'Underwater Scene', description: 'A magical underwater world where Alice imagines the Lobster Quadrille dance taking place.' },
+  { id: 'courtroom', name: 'Courtroom', description: 'The court where the trial for the stolen tarts takes place, with Alice as a witness and the King and Queen as judges.' },
+  { id: 'witness-stand', name: 'Witness Stand', description: 'Where Alice stands to give her testimony during the trial of the Knave of Hearts.' },
+  { id: 'witness-box', name: 'Witness Box', description: 'The witness box where Alice gives evidence during the trial, growing larger and causing chaos in the court.' },
+];
+
+// Chapter definitions with location IDs
 const aliceChapterData = {
-  'chapter-1': { id: 'chapter-1', title: 'Down the Rabbit-Hole' },
-  'chapter-2': { id: 'chapter-2', title: 'The Pool of Tears' },
-  'chapter-3': { id: 'chapter-3', title: 'A Caucus-Race and a Long Tale' },
-  'chapter-4': { id: 'chapter-4', title: 'The Rabbit Sends in a Little Bill' },
-  'chapter-5': { id: 'chapter-5', title: 'Advice from a Caterpillar' },
-  'chapter-6': { id: 'chapter-6', title: 'Pig and Pepper' },
-  'chapter-7': { id: 'chapter-7', title: 'A Mad Tea-Party' },
-  'chapter-8': { id: 'chapter-8', title: 'The Queen\'s Croquet-Ground' },
-  'chapter-9': { id: 'chapter-9', title: 'The Mock Turtle\'s Story' },
-  'chapter-10': { id: 'chapter-10', title: 'The Lobster Quadrille' },
-  'chapter-11': { id: 'chapter-11', title: 'Who Stole the Tarts?' },
-  'chapter-12': { id: 'chapter-12', title: 'Alice\'s Evidence' },
+  'chapter-1': { 
+    id: 'chapter-1', 
+    title: 'Down the Rabbit-Hole',
+    locationIds: ['rabbit-hole', 'wonderland-entrance']
+  },
+  'chapter-2': { 
+    id: 'chapter-2', 
+    title: 'The Pool of Tears',
+    locationIds: ['pool-of-tears', 'wonderland-garden']
+  },
+  'chapter-3': { 
+    id: 'chapter-3', 
+    title: 'A Caucus-Race and a Long Tale',
+    locationIds: ['shore', 'caucus-race-ground']
+  },
+  'chapter-4': { 
+    id: 'chapter-4', 
+    title: 'The Rabbit Sends in a Little Bill',
+    locationIds: ['white-rabbit-house', 'wonderland-street']
+  },
+  'chapter-5': { 
+    id: 'chapter-5', 
+    title: 'Advice from a Caterpillar',
+    locationIds: ['mushroom', 'forest-clearing']
+  },
+  'chapter-6': { 
+    id: 'chapter-6', 
+    title: 'Pig and Pepper',
+    locationIds: ['duchess-house', 'kitchen']
+  },
+  'chapter-7': { 
+    id: 'chapter-7', 
+    title: 'A Mad Tea-Party',
+    locationIds: ['mad-tea-party', 'tea-table']
+  },
+  'chapter-8': { 
+    id: 'chapter-8', 
+    title: 'The Queen\'s Croquet-Ground',
+    locationIds: ['queens-garden', 'croquet-ground']
+  },
+  'chapter-9': { 
+    id: 'chapter-9', 
+    title: 'The Mock Turtle\'s Story',
+    locationIds: ['mock-turtle-beach', 'shore-line']
+  },
+  'chapter-10': { 
+    id: 'chapter-10', 
+    title: 'The Lobster Quadrille',
+    locationIds: ['dance-floor', 'underwater-scene']
+  },
+  'chapter-11': { 
+    id: 'chapter-11', 
+    title: 'Who Stole the Tarts?',
+    locationIds: ['courtroom', 'witness-stand']
+  },
+  'chapter-12': { 
+    id: 'chapter-12', 
+    title: 'Alice\'s Evidence',
+    locationIds: ['courtroom', 'witness-box']
+  },
 };
 
 // Hierarchy definition - order determines chapter sequence
@@ -43,15 +119,24 @@ const aliceHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' 
 ];
 
 // Function to build chapters from data and hierarchy
-function buildChapters(chapterData: Record<string, { id: string; title: string }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
-  return hierarchy.map((item, index) => ({
-    book: aliceBook,
-    ...chapterData[item.chapterId],
-    
-    level: item.level,
-    type: item.type,
-    index: index + 1, // For backward compatibility
-  }));
+function buildChapters(chapterData: Record<string, { id: string; title: string; locationIds: string[] }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+  return hierarchy.map((item, index) => {
+    const chapterDataItem = chapterData[item.chapterId];
+    return {
+      book: aliceBook,
+      id: chapterDataItem.id,
+      title: chapterDataItem.title,
+      
+      level: item.level,
+      type: item.type,
+      index: index + 1, // For backward compatibility
+      
+      // Resolve location IDs to actual location objects
+      locations: chapterDataItem.locationIds.map(locationId => 
+        aliceLocations.find(loc => loc.id === locationId)
+      ).filter(Boolean) as Location[],
+    };
+  });
 }
 
 const alice: Character = {
@@ -60,9 +145,9 @@ const alice: Character = {
   description: 'A curious young girl who falls down a rabbit hole into Wonderland',
   firstAppearanceChapter: 'chapter-1',
   aliases: ['Alice Liddell'],
-  factions: ['humans'],
+  factions: ['wonderlanders'],
   factionJoinChapters: {
-    'humans': 'chapter-1', // Appears as a human in chapter 1
+    'wonderlanders': 'chapter-1', // Appears as a wonderlander in chapter 1
   },
   attributes: ['Curious', 'Brave', 'Imaginative', 'Young'],
 };
@@ -73,9 +158,9 @@ const whiteRabbit: Character = {
   description: 'A nervous rabbit in a waistcoat who is always late',
   firstAppearanceChapter: 'chapter-1',
   aliases: ['The Rabbit'],
-  factions: ['wonderland-creatures'],
+  factions: ['wonderlanders'],
   factionJoinChapters: {
-    'wonderland-creatures': 'chapter-1', // Appears as a wonderland creature in chapter 1
+    'wonderlanders': 'chapter-1', // Appears as a wonderlander in chapter 1
   },
   attributes: ['Nervous', 'Punctual', 'Fashionable', 'Hare'],
 };
@@ -86,9 +171,9 @@ const caterpillar: Character = {
   description: 'A wise but rude caterpillar who smokes a hookah',
   firstAppearanceChapter: 'chapter-7',
   aliases: ['Absolem'],
-  factions: ['wonderland-creatures'],
+  factions: ['wonderlanders'],
   factionJoinChapters: {
-    'wonderland-creatures': 'chapter-7', // Appears as a wonderland creature in chapter 7
+    'wonderlanders': 'chapter-7', // Appears as a wonderlander in chapter 7
   },
   attributes: ['Wise', 'Rude', 'Philosophical', 'Insect'],
 };
@@ -99,9 +184,9 @@ const cheshireCat: Character = {
   description: 'A mysterious cat with a disappearing grin',
   firstAppearanceChapter: 'chapter-8',
   aliases: ['The Cat'],
-  factions: ['wonderland-creatures'],
+  factions: ['wonderlanders'],
   factionJoinChapters: {
-    'wonderland-creatures': 'chapter-8', // Appears as a wonderland creature in chapter 8
+    'wonderlanders': 'chapter-8', // Appears as a wonderlander in chapter 8
   },
   attributes: ['Mysterious', 'Playful', 'Disappearing', 'Feline'],
 };
@@ -112,9 +197,9 @@ const madHatter: Character = {
   description: 'A mad tea party host with a large hat',
   firstAppearanceChapter: 'chapter-6',
   aliases: ['The Hatter'],
-  factions: ['wonderland-creatures'],
+  factions: ['wonderlanders'],
   factionJoinChapters: {
-    'wonderland-creatures': 'chapter-6', // Appears as a wonderland creature in chapter 6
+    'wonderlanders': 'chapter-6', // Appears as a wonderlander in chapter 6
   },
   attributes: ['Mad', 'Host', 'Tea-loving', 'Eccentric'],
 };
@@ -166,4 +251,5 @@ export const aliceBookData: BookData = {
   chapters: aliceChapters,
   factions: aliceFactions,
   relationships: aliceRelationships,
+  locations: aliceLocations,
 }; 

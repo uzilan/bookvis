@@ -5,6 +5,7 @@ import type { Character } from '../models/Character';
 import type { Book } from '../models/Book';
 import { CharacterDetailsPanel } from './CharacterDetailsPanel';
 import { ChapterSlider } from './ChapterSlider';
+import { LocationList } from './LocationList';
 
 
 
@@ -445,7 +446,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         borderRadius: '8px',
         border: '2px solid #333',
         boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-        minWidth: '200px',
+        width: '250px',
       }}>
         <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px', color: '#000' }}>
           Factions:
@@ -465,6 +466,17 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Location List */}
+      {(() => {
+        const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+        return currentChapter && currentChapter.locations ? (
+          <LocationList 
+            locations={currentChapter.locations} 
+            chapterTitle={currentChapter.title}
+          />
+        ) : null;
+      })()}
 
 
 
