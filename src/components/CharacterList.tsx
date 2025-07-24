@@ -37,7 +37,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
       border: '2px solid #333',
       boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
       width: '100%',
-      maxHeight: '400px',
+      maxHeight: '350px',
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -116,7 +116,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         marginBottom: '8px',
         flex: 1,
         overflowY: 'auto',
-        maxHeight: '300px',
+        maxHeight: '250px',
         scrollbarWidth: 'thin',
         scrollbarColor: '#888 #f1f1f1'
       }}>

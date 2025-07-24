@@ -53,7 +53,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         border: '2px solid #333',
         boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
         width: '100%',
-        maxHeight: '400px',
+        maxHeight: '350px',
         display: 'flex',
         flexDirection: 'column'
       }}>
@@ -125,7 +125,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           marginBottom: '8px',
           flex: 1,
           overflowY: 'auto',
-          maxHeight: showAllLocations ? '800px' : '400px',
+          maxHeight: showAllLocations ? '600px' : '250px',
           scrollbarWidth: 'thin',
           scrollbarColor: '#c1c1c1 #f1f1f1'
         }}>
