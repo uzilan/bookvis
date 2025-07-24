@@ -11,15 +11,15 @@ export const WorldMap: React.FC<WorldMapProps> = ({ bookData }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   
-  if (!mapUrl) {
-    return null;
-  }
-  
   // Reset states when mapUrl changes
   useEffect(() => {
     setImageLoaded(false);
     setImageError(false);
   }, [mapUrl]);
+  
+  if (!mapUrl) {
+    return null;
+  }
   
   const handleImageLoad = () => {
     setImageLoaded(true);
