@@ -22,7 +22,7 @@ async function testLotrData() {
     
     console.log('\n📖 Chapters:');
     lotr.chapters.forEach((chapter, index) => {
-      console.log(`  ${index + 1}. ${chapter.title} (${chapter.id}) - Index: ${chapter.index}`);
+      console.log(`  ${index + 1}. ${chapter.title} (${chapter.id}) - Index: ${chapter.index} - Type: ${chapter.type || 'undefined'}`);
     });
     
     console.log('\n👥 Characters:');

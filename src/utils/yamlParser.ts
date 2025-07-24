@@ -107,7 +107,13 @@ export function parseYamlToBookData(yamlContent: string): BookData {
     });
   });
 
-  // Create chapters with locations
+  // Create hierarchy map for easy lookup
+  const hierarchyMap = new Map<string, string>();
+  data.hierarchy.forEach((item) => {
+    hierarchyMap.set(item.chapter_id, item.type);
+  });
+
+  // Create chapters with locations and type
   const chapters: Chapter[] = data.chapters.map((chapter, index) => {
     const chapterLocations = chapter.locations
       .map(locId => locationsMap.get(locId))
@@ -118,6 +124,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
       id: chapter.id,
       title: chapter.title,
       index: index + 1, // 1-based index
+      type: hierarchyMap.get(chapter.id) as 'chapter' | 'part' | 'book' | 'volume' | undefined,
       locations: chapterLocations,
     };
   });

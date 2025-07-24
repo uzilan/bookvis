@@ -34,7 +34,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   onToggleExpanded 
 }) => {
   const isExpanded = expandedNodes.has(node.chapter.title);
-  const isSelected = selectedChapterId === node.chapter.id;
+  const isSelected = node.chapter.type === 'chapter' && selectedChapterId === node.chapter.id;
   
 
 
@@ -139,8 +139,11 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     chapterTree = chapterTree[0].children;
   }
   
-  // Get current chapter for breadcrumb
-  const currentChapter = chapters.find(ch => ch.id === value);
+  // Get current chapter for breadcrumb (only actual chapters, not books or parts)
+  const currentChapter = chapters.find(ch => {
+    if (ch.type !== 'chapter') return false;
+    return ch.id === value;
+  });
 
 
 

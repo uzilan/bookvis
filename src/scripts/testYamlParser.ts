@@ -29,7 +29,7 @@ try {
   
   console.log('\n📖 Chapters:', bookData.chapters.length);
   bookData.chapters.forEach(chapter => {
-    console.log(`  - ${chapter.title} (${chapter.id})`);
+    console.log(`  - ${chapter.title} (${chapter.id}) - Type: ${chapter.type || 'undefined'}`);
     console.log(`    Locations: ${chapter.locations?.map(l => l.name).join(', ') || 'None'}`);
   });
   
