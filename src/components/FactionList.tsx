@@ -177,7 +177,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
                 ▶
               </span>
             </div>
-            {expandedFactions.has(faction.id) && faction.description && (
+            {expandedFactions.has(faction.id) && (
               <div style={{
                 fontSize: '12px',
                 color: '#666',
@@ -191,7 +191,64 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
                 position: 'relative',
                 zIndex: 1005
               }}>
-                {faction.description}
+                {faction.description && (
+                  <div style={{ marginBottom: '8px' }}>
+                    {faction.description}
+                  </div>
+                )}
+                
+                {/* Characters in this faction */}
+                {(() => {
+                  const factionCharacters = bookData.characters.filter(character => 
+                    character.factions.includes(faction.id)
+                  );
+                  
+                  if (factionCharacters.length > 0) {
+                    return (
+                      <div>
+                        <div style={{ 
+                          fontSize: '11px', 
+                          fontWeight: 'bold', 
+                          color: '#333',
+                          marginBottom: '4px',
+                          borderTop: '1px solid #e0e0e0',
+                          paddingTop: '6px'
+                        }}>
+                          Characters ({factionCharacters.length}):
+                        </div>
+                        <div style={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          gap: '2px' 
+                        }}>
+                          {factionCharacters.map(character => (
+                            <div key={character.id} style={{
+                              fontSize: '11px',
+                              color: '#555',
+                              padding: '2px 0',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}>
+                              <span style={{ fontSize: '8px' }}>👤</span>
+                              <span>{character.name}</span>
+                              {character.aliases.length > 0 && (
+                                <span style={{ 
+                                  fontSize: '10px', 
+                                  color: '#888',
+                                  fontStyle: 'italic'
+                                }}>
+                                  ({character.aliases[0]})
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             )}
           </div>
