@@ -1,15 +1,14 @@
-import FirebaseService from '../services/firebase';
-import { lotrData } from '../books/lotrData';
+import { FirebaseService } from '../services/firebase.ts';
+import { lotrData } from '../books/lotrData.ts';
 
 async function updateLotrOnly() {
   try {
-    console.log('Updating Lord of the Rings only...');
+    console.log('Uploading LOTR data to Firebase...');
     await FirebaseService.saveBook(lotrData);
-    console.log('Successfully updated LOTR in Firebase!');
+    console.log('LOTR data uploaded successfully!');
   } catch (error) {
-    console.error('Failed to update Firebase data:', error);
+    console.error('Error uploading LOTR data:', error);
   }
 }
 
-// Run the update
 updateLotrOnly(); 
