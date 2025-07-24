@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import type { BookData } from '../models/BookData';
+import type { Author } from '../models/Author';
 import { firebaseConfig } from '../credentials.ts';
 
 // Initialize Firebase
@@ -87,6 +88,32 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error fetching books:', error);
       throw new Error(`Failed to fetch books: ${error}`);
+    }
+  }
+
+  /**
+   * Fetch all unique authors from existing books
+   */
+  static async getAllAuthors(): Promise<Author[]> {
+    try {
+      const books = await this.getAllBooks();
+      const authorMap = new Map<string, Author>();
+      
+      books.forEach(book => {
+        if (book.book.author) {
+          authorMap.set(book.book.author.id, book.book.author);
+        }
+      });
+      
+      // Convert to array and sort by name
+      const authors = Array.from(authorMap.values()).sort((a, b) => 
+        a.name.localeCompare(b.name)
+      );
+      
+      return authors;
+    } catch (error) {
+      console.error('Error fetching authors:', error);
+      throw new Error(`Failed to fetch authors: ${error}`);
     }
   }
 }

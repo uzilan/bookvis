@@ -19,6 +19,7 @@ interface CharacterGraphProps {
   books: Book[];
   selectedBook: Book;
   onBookChange: (book: Book) => void;
+  onCreateBook: () => void;
 }
 
 
@@ -130,7 +131,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   onChapterChange,
   books,
   selectedBook,
-  onBookChange
+  onBookChange,
+  onCreateBook
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
@@ -616,6 +618,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         books={books}
         selectedBook={selectedBook}
         onBookChange={onBookChange}
+        onCreateBook={onCreateBook}
       />
       <CharacterDetailsPanel
         character={selectedCharacter}

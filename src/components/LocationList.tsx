@@ -217,6 +217,21 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
       {isMapModalOpen && (
         <div style={{
           position: 'fixed',
+          top: '50px',
+          left: '10px',
+          background: 'orange',
+          color: 'white',
+          padding: '10px',
+          border: '1px solid black',
+          zIndex: 10002,
+          fontSize: '12px'
+        }}>
+          Map Modal Open: {isMapModalOpen.toString()}
+        </div>
+      )}
+      {isMapModalOpen && (
+        <div style={{
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,

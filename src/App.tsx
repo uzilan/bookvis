@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
+import { CreateBookModal } from './components/CreateBookModal';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
 import { FirebaseService } from './services/firebase.ts';
@@ -10,6 +11,7 @@ function App() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const hasSetInitialBook = useRef(false);
 
   // Fetch books from Firebase on component mount
@@ -149,6 +151,14 @@ function App() {
 
 
   
+  const handleCreateBook = () => {
+    setIsCreateBookModalOpen(true);
+  };
+
+  const handleCloseCreateBookModal = () => {
+    setIsCreateBookModalOpen(false);
+  };
+
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
@@ -161,8 +171,16 @@ function App() {
           books={availableBooks}
           selectedBook={selectedBook}
           onBookChange={setSelectedBook}
+          onCreateBook={handleCreateBook}
         />
       </div>
+      {isCreateBookModalOpen && (
+        <CreateBookModal
+          open={isCreateBookModalOpen}
+          onClose={handleCloseCreateBookModal}
+        />
+      )}
+
     </div>
   );
 }

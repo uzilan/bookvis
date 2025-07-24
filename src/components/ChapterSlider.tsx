@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import type { Chapter } from '../models/Chapter';
 import type { Book } from '../models/Book';
 import Box from '@mui/material/Box';
-import { FormControl, Select, MenuItem, Typography, Chip } from '@mui/material';
+import { FormControl, Select, MenuItem, Typography, Chip, Button } from '@mui/material';
 import { buildChapterTree, type ChapterNode } from '../utils/chapterHierarchy';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import AddIcon from '@mui/icons-material/Add';
 
 interface ChapterSliderProps {
   chapters: Chapter[];
@@ -14,6 +15,7 @@ interface ChapterSliderProps {
   books: Book[];
   selectedBook: Book;
   onBookChange: (book: Book) => void;
+  onCreateBook: () => void;
 }
 
 interface ChapterItemProps {
@@ -127,7 +129,8 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
   onChange, 
   books, 
   selectedBook, 
-  onBookChange 
+  onBookChange,
+  onCreateBook
 }) => {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   
@@ -201,9 +204,25 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     >
       {/* Book Selector */}
       <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
-        <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1, fontSize: 12, color: '#111' }}>
-          Book:
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+          <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: 12, color: '#111' }}>
+            Book:
+          </Typography>
+          <Button
+            size="small"
+            startIcon={<AddIcon />}
+            onClick={onCreateBook}
+            sx={{
+              minWidth: 'auto',
+              px: 1,
+              py: 0.5,
+              fontSize: 10,
+              textTransform: 'none'
+            }}
+          >
+            Create
+          </Button>
+        </Box>
         <FormControl size="small" sx={{ width: '100%' }}>
           <Select
             value={selectedBook.id}
