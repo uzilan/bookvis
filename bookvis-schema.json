@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://bookvis.com/schema/v1.0",
+  "title": "BookVis Book Data Schema",
+  "description": "Schema for BookVis book visualization data format",
+  "type": "object",
+  "required": ["book", "locations", "characters", "factions", "relationships", "chapters"],
+  "properties": {
+    "book": {
+      "type": "object",
+      "required": ["id", "title", "author"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the book",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the book"
+        },
+        "author": {
+          "type": "object",
+          "required": ["id", "name"],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier for the author",
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the author"
+            }
+          }
+        }
+      }
+    },
+    "map_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the map image for the book"
+    },
+    "locations": {
+      "type": "array",
+      "description": "All locations mentioned in the book",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the location",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the location"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the location"
+          }
+        }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "description": "All characters in the book",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description", "first_appearance_chapter", "aliases", "factions", "faction_join_chapters", "attributes"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the character",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the character"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the character"
+          },
+          "first_appearance_chapter": {
+            "type": "string",
+            "description": "Chapter ID where character first appears",
+            "pattern": "^chapter-[0-9]+$"
+          },
+          "aliases": {
+            "type": "array",
+            "description": "Alternative names for the character",
+            "items": {
+              "type": "string"
+            }
+          },
+          "factions": {
+            "type": "array",
+            "description": "Faction IDs the character belongs to",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            }
+          },
+          "faction_join_chapters": {
+            "type": "object",
+            "description": "Mapping of faction IDs to chapter when character joins",
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^chapter-[0-9]+$"
+            }
+          },
+          "attributes": {
+            "type": "array",
+            "description": "Character attributes or traits",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "factions": {
+      "type": "array",
+      "description": "All factions in the book",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description", "color"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the faction",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "description": "Display name for the faction"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the faction"
+          },
+          "color": {
+            "type": "string",
+            "description": "Hex color code for the faction",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Character relationships and their evolution",
+      "items": {
+        "type": "object",
+        "required": ["character1", "character2", "descriptions"],
+        "properties": {
+          "character1": {
+            "type": "string",
+            "description": "ID of the first character in the relationship",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "character2": {
+            "type": "string",
+            "description": "ID of the second character in the relationship",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "descriptions": {
+            "type": "array",
+            "description": "Evolution of the relationship across chapters",
+            "items": {
+              "type": "object",
+              "required": ["chapter", "description"],
+              "properties": {
+                "chapter": {
+                  "type": "string",
+                  "description": "Chapter ID where this relationship description applies",
+                  "pattern": "^chapter-[0-9]+$"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the relationship at this point"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "description": "Chapter structure with locations",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "locations"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the chapter",
+            "pattern": "^chapter-[0-9]+$"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the chapter"
+          },
+          "locations": {
+            "type": "array",
+            "description": "Location IDs mentioned in this chapter",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            }
+          }
+        }
+      }
+    },
+    "hierarchy": {
+      "type": "array",
+      "description": "Chapter hierarchy (optional - can be auto-generated)",
+      "items": {
+        "type": "object",
+        "required": ["chapter_id", "type"],
+        "properties": {
+          "chapter_id": {
+            "type": "string",
+            "description": "ID of the chapter",
+            "pattern": "^chapter-[0-9]+$"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the chapter node",
+            "enum": ["chapter", "part", "book", "volume"]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+} 
