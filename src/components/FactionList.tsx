@@ -48,7 +48,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
       border: '2px solid #333',
       boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
       width: '100%',
-      maxHeight: '300px',
+      maxHeight: '400px',
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -117,7 +117,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
           display: 'flex', 
           flexDirection: 'column', 
           gap: '8px',
-          maxHeight: showAllFactions ? '400px' : '150px',
+          maxHeight: showAllFactions ? '800px' : '400px',
           overflowY: 'auto',
           scrollbarWidth: 'thin',
           scrollbarColor: '#c1c1c1 #f1f1f1'
