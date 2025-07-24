@@ -11,16 +11,22 @@ interface FactionListProps {
 export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) => {
   const [expandedFactions, setExpandedFactions] = useState<Set<string>>(new Set());
   const [showAllFactions, setShowAllFactions] = useState(false);
+  const [filterText, setFilterText] = useState('');
 
   // Get all factions from the book data
   const allFactions = bookData.factions || [];
   
   // Use either chapter factions or all factions based on toggle, sorted alphabetically
-  const displayFactions = (showAllFactions ? allFactions : factions).sort((a, b) => 
-    a.title.localeCompare(b.title)
-  );
+  const displayFactions = (showAllFactions ? allFactions : factions)
+    .filter(faction => 
+      faction.title.toLowerCase().includes(filterText.toLowerCase())
+    )
+    .sort((a, b) => 
+      a.title.localeCompare(b.title)
+    );
 
-  if (!displayFactions || displayFactions.length === 0) {
+  // Only return null if there are no factions at all (not just no filtered results)
+  if (!factions || factions.length === 0) {
     return null;
   }
 
@@ -42,6 +48,9 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
       border: '2px solid #333',
       boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
       width: '100%',
+      maxHeight: '300px',
+      display: 'flex',
+      flexDirection: 'column'
     }}>
         <div style={{ 
           display: 'flex', 
@@ -85,8 +94,46 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
             </RadioGroup>
           </FormControl>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {displayFactions.map((faction) => (
+        
+        {/* Filter Input */}
+        <div style={{ marginBottom: '8px' }}>
+          <input
+            type="text"
+            placeholder="Filter factions..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+                          style={{
+                width: '90%',
+                padding: '4px 8px',
+                fontSize: '11px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: 'white',
+                color: '#000'
+              }}
+          />
+        </div>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '8px',
+          maxHeight: showAllFactions ? '400px' : '150px',
+          overflowY: 'auto',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#c1c1c1 #f1f1f1'
+        }}>
+          {displayFactions.length === 0 ? (
+            <div style={{
+              fontSize: '11px',
+              color: '#666',
+              padding: '8px',
+              textAlign: 'center',
+              fontStyle: 'italic'
+            }}>
+              No factions match your filter
+            </div>
+          ) : (
+            displayFactions.map((faction) => (
           <div key={faction.id}>
             <div 
               onClick={() => toggleFaction(faction.id)}
@@ -148,7 +195,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
               </div>
             )}
           </div>
-        ))}
+        ))
+        )}
       </div>
     </div>
   );

@@ -15,16 +15,22 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   const [expandedLocations, setExpandedLocations] = useState<Set<string>>(new Set());
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [showAllLocations, setShowAllLocations] = useState(false);
+  const [filterText, setFilterText] = useState('');
 
   // Get all locations from the book data
   const allLocations = bookData.locations || [];
   
   // Use either chapter locations or all locations based on toggle, sorted alphabetically
-  const displayLocations = (showAllLocations ? allLocations : locations).sort((a, b) => 
-    a.name.localeCompare(b.name)
-  );
+  const displayLocations = (showAllLocations ? allLocations : locations)
+    .filter(location => 
+      location.name.toLowerCase().includes(filterText.toLowerCase())
+    )
+    .sort((a, b) => 
+      a.name.localeCompare(b.name)
+    );
 
-  if (!displayLocations || displayLocations.length === 0) {
+  // Only return null if there are no locations at all (not just no filtered results)
+  if (!locations || locations.length === 0) {
     return null;
   }
 
@@ -93,6 +99,25 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
             </RadioGroup>
           </FormControl>
         </div>
+        
+        {/* Filter Input */}
+        <div style={{ marginBottom: '8px' }}>
+          <input
+            type="text"
+            placeholder="Filter locations..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+                          style={{
+                width: '90%',
+                padding: '4px 8px',
+                fontSize: '11px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                backgroundColor: 'white',
+                color: '#000'
+              }}
+          />
+        </div>
         <div style={{ 
           display: 'flex', 
           flexDirection: 'column', 
@@ -104,7 +129,18 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           scrollbarWidth: 'thin',
           scrollbarColor: '#c1c1c1 #f1f1f1'
         }}>
-          {displayLocations.map((location) => (
+          {displayLocations.length === 0 ? (
+            <div style={{
+              fontSize: '11px',
+              color: '#666',
+              padding: '8px',
+              textAlign: 'center',
+              fontStyle: 'italic'
+            }}>
+              No locations match your filter
+            </div>
+          ) : (
+            displayLocations.map((location) => (
             <div key={location.id}>
               <div 
                 onClick={() => toggleLocation(location.id)}
@@ -154,7 +190,8 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                 </div>
               )}
             </div>
-          ))}
+          ))
+          )}
         </div>
         
         {/* Map Section */}
