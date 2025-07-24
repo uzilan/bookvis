@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 import type { Faction } from '../models/Faction';
 import type { BookData } from '../models/BookData';
+import type { Character } from '../models/Character';
 
 interface FactionListProps {
   factions: Faction[];
   bookData: BookData;
+  onCharacterClick?: (character: Character) => void;
 }
 
-export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) => {
+export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, onCharacterClick }) => {
   const [expandedFactions, setExpandedFactions] = useState<Set<string>>(new Set());
   const [showAllFactions, setShowAllFactions] = useState(false);
   const [filterText, setFilterText] = useState('');
@@ -228,8 +230,23 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
                               padding: '2px 0',
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '4px'
-                            }}>
+                              gap: '4px',
+                              cursor: onCharacterClick ? 'pointer' : 'default'
+                            }}
+                            onClick={() => onCharacterClick?.(character)}
+                            onMouseEnter={(e) => {
+                              if (onCharacterClick) {
+                                e.currentTarget.style.color = '#007bff';
+                                e.currentTarget.style.textDecoration = 'underline';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (onCharacterClick) {
+                                e.currentTarget.style.color = '#555';
+                                e.currentTarget.style.textDecoration = 'none';
+                              }
+                            }}
+                            >
                               <span style={{ fontSize: '8px' }}>👤</span>
                               <span>{character.name}</span>
                               {character.aliases.length > 0 && (

@@ -452,6 +452,10 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         <FactionList 
           factions={bookData.factions} 
           bookData={fullBookData}
+          onCharacterClick={(character) => {
+            setSelectedCharacter(character);
+            setIsDetailsPanelOpen(true);
+          }}
         />
 
         {/* Location List */}

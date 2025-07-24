@@ -129,7 +129,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
   return (
     <Drawer
-      anchor="right"
+      anchor="left"
       open={open}
       onClose={onClose}
       sx={{
