@@ -10,7 +10,7 @@ import {
   Tab
 } from '@mui/material';
 import { AddAuthorModal } from '../AddAuthorModal';
-import { BookInfoTab, LocationsTab, FactionsTab } from './index';
+import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab } from './index';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData, SchemaAuthor } from '../../schema/models';
 import { FirebaseService } from '../../services/firebase';
@@ -177,6 +177,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="Book Info" />
             <Tab label="Locations" />
+            <Tab label="Chapters" />
             <Tab label="Factions" />
           </Tabs>
         </Box>
@@ -203,6 +204,13 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
           )}
 
           {currentTab === 2 && (
+            <ChaptersTab
+              bookData={bookData}
+              setBookData={setBookData}
+            />
+          )}
+
+          {currentTab === 3 && (
             <FactionsTab
               bookData={bookData}
               setBookData={setBookData}
