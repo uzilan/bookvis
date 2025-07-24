@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 import type { Location } from '../models/Location';
 import type { BookData } from '../models/BookData';
 import { WorldMap } from './WorldMap';
@@ -13,8 +14,15 @@ interface LocationListProps {
 export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId, bookData }) => {
   const [expandedLocations, setExpandedLocations] = useState<Set<string>>(new Set());
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [showAllLocations, setShowAllLocations] = useState(false);
 
-  if (!locations || locations.length === 0) {
+  // Get all locations from the book data
+  const allLocations = bookData.locations || [];
+  
+  // Use either chapter locations or all locations based on toggle
+  const displayLocations = showAllLocations ? allLocations : locations;
+
+  if (!displayLocations || displayLocations.length === 0) {
     return null;
   }
 
@@ -32,7 +40,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     <>
       <div style={{
         background: 'white',
-        padding: '8px 12px',
+        padding: '12px 16px',
         borderRadius: '8px',
         border: '2px solid #333',
         boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
@@ -41,8 +49,47 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '6px', color: '#000' }}>
-          Locations:
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '6px' 
+        }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+            Locations:
+          </div>
+          <FormControl size="small">
+            <RadioGroup
+              row
+              value={showAllLocations ? 'all' : 'chapter'}
+              onChange={(e) => setShowAllLocations(e.target.value === 'all')}
+            >
+              <FormControlLabel
+                value="chapter"
+                control={<Radio size="small" />}
+                label="Chapter"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000'
+                  } 
+                }}
+              />
+              <FormControlLabel
+                value="all"
+                control={<Radio size="small" />}
+                label="All"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000'
+                  } 
+                }}
+              />
+            </RadioGroup>
+          </FormControl>
         </div>
         <div style={{ 
           display: 'flex', 
@@ -51,9 +98,11 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           marginBottom: '8px',
           flex: 1,
           overflowY: 'auto',
-          maxHeight: '150px'
+          maxHeight: showAllLocations ? '400px' : '150px',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#c1c1c1 #f1f1f1'
         }}>
-          {locations.map((location) => (
+          {displayLocations.map((location) => (
             <div key={location.id}>
               <div 
                 onClick={() => toggleLocation(location.id)}

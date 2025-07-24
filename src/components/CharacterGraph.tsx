@@ -449,7 +449,10 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         maxHeight: 'calc(100vh - 40px)',
       }}>
         {/* Faction List */}
-        <FactionList factions={bookData.factions} />
+        <FactionList 
+          factions={bookData.factions} 
+          bookData={fullBookData}
+        />
 
         {/* Location List */}
         {(() => {

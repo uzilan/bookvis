@@ -1,5 +1,5 @@
-import FirebaseService from '../services/firebase';
-import { winnieBookData } from '../books/winnieData';
+import { FirebaseService } from '../services/firebase.ts';
+import { winnieBookData } from '../books/winnieData.ts';
 
 async function updateWinnieOnly() {
   try {

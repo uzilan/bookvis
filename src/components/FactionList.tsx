@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
+import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 import type { Faction } from '../models/Faction';
+import type { BookData } from '../models/BookData';
 
 interface FactionListProps {
   factions: Faction[];
+  bookData: BookData;
 }
 
-export const FactionList: React.FC<FactionListProps> = ({ factions }) => {
+export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) => {
   const [expandedFactions, setExpandedFactions] = useState<Set<string>>(new Set());
+  const [showAllFactions, setShowAllFactions] = useState(false);
 
-  if (!factions || factions.length === 0) {
+  // Get all factions from the book data
+  const allFactions = bookData.factions || [];
+  
+  // Use either chapter factions or all factions based on toggle
+  const displayFactions = showAllFactions ? allFactions : factions;
+
+  if (!displayFactions || displayFactions.length === 0) {
     return null;
   }
 
@@ -31,11 +41,50 @@ export const FactionList: React.FC<FactionListProps> = ({ factions }) => {
       boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
       width: '100%',
     }}>
-      <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px', color: '#000' }}>
-        Factions:
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {factions.map((faction) => (
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '8px' 
+        }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+            Factions:
+          </div>
+          <FormControl size="small">
+            <RadioGroup
+              row
+              value={showAllFactions ? 'all' : 'chapter'}
+              onChange={(e) => setShowAllFactions(e.target.value === 'all')}
+            >
+              <FormControlLabel
+                value="chapter"
+                control={<Radio size="small" />}
+                label="Chapter"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000'
+                  } 
+                }}
+              />
+              <FormControlLabel
+                value="all"
+                control={<Radio size="small" />}
+                label="All"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000'
+                  } 
+                }}
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {displayFactions.map((faction) => (
           <div key={faction.id}>
             <div 
               onClick={() => toggleFaction(faction.id)}
