@@ -7,6 +7,7 @@ import { CharacterDetailsPanel } from './CharacterDetailsPanel';
 import { ChapterSlider } from './ChapterSlider';
 import { LocationList } from './LocationList';
 import { FactionList } from './FactionList';
+import { CharacterList } from './CharacterList';
 
 
 
@@ -448,6 +449,16 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         gap: '10px',
         maxHeight: 'calc(100vh - 40px)',
       }}>
+        {/* Character List */}
+        <CharacterList 
+          characters={bookData.characters} 
+          bookData={bookData}
+          onCharacterClick={(character) => {
+            setSelectedCharacter(character);
+            setIsDetailsPanelOpen(true);
+          }}
+        />
+
         {/* Faction List */}
         <FactionList 
           factions={bookData.factions} 

@@ -26,9 +26,9 @@ function App() {
 
           setSelectedBook(firstBook.book);
           
-                  // Set the initial chapter to the first chapter's index
+                  // Set the initial chapter to the first actual chapter's index
         if (firstBook.chapters.length > 0) {
-          const firstChapter = firstBook.chapters[0];
+          const firstChapter = firstBook.chapters.find(ch => ch.id.startsWith('chapter-')) || firstBook.chapters[0];
           setSelectedChapter(firstChapter.id);
         }
           
@@ -61,8 +61,8 @@ function App() {
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
     if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
-      // Set to the ID of the first chapter
-      const firstChapter = bookData.chapters[0];
+      // Find the first actual chapter (not book or part)
+      const firstChapter = bookData.chapters.find(ch => ch.id.startsWith('chapter-')) || bookData.chapters[0];
       setSelectedChapter(firstChapter.id);
     }
   }, [selectedBook, bookData]);
@@ -77,9 +77,17 @@ function App() {
   }
 
   // Find the current chapter by matching selectedChapter with id
-  const currentChapter = bookData.chapters.find(ch => 
+  let currentChapter = bookData.chapters.find(ch => 
     ch.id === selectedChapter
   );
+  
+  // If no chapter is selected, select the first one
+  if (!currentChapter && bookData.chapters.length > 0) {
+    // Find the first actual chapter (not book or part)
+    const firstChapter = bookData.chapters.find(ch => ch.id.startsWith('chapter-')) || bookData.chapters[0];
+    setSelectedChapter(firstChapter.id);
+    currentChapter = firstChapter;
+  }
   
   // Only show characters whose firstAppearanceChapter is <= selected chapter
   const visibleCharacters = bookData.characters.filter(c => {
