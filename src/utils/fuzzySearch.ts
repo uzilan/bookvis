@@ -19,12 +19,6 @@ export function fuzzySearch<T>(
     ...options
   };
 
-  // Create fuzzy search instance
-  const fuse = new Fuse(allItems, {
-    ...defaultOptions,
-    includeScore: true
-  });
-
   // Determine which items to search
   const itemsToSearch = showAll ? allItems : chapterItems;
 
@@ -32,6 +26,12 @@ export function fuzzySearch<T>(
   if (!filterText.trim()) {
     return itemsToSearch;
   }
+
+  // Create fuzzy search instance with the items we want to search
+  const fuse = new Fuse(itemsToSearch, {
+    ...defaultOptions,
+    includeScore: true
+  });
 
   // Perform fuzzy search
   const results = fuse.search(filterText);
