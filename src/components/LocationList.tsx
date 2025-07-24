@@ -26,7 +26,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     keys: ['name'],
     threshold: 0.3,
     includeScore: true,
-    minMatchCharLength: 2
+    minMatchCharLength: 1
   }), []);
   
   const fuse = useMemo(() => new Fuse(allLocations, fuseOptions), [allLocations, fuseOptions]);

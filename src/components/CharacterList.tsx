@@ -27,7 +27,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
     keys: ['name', 'aliases'],
     threshold: 0.3, // Lower = more strict matching
     includeScore: true,
-    minMatchCharLength: 2
+    minMatchCharLength: 1
   }), []);
   
   const fuse = useMemo(() => new Fuse(allCharacters, fuseOptions), [allCharacters, fuseOptions]);

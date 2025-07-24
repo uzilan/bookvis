@@ -24,7 +24,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
     keys: ['title'],
     threshold: 0.3,
     includeScore: true,
-    minMatchCharLength: 2
+    minMatchCharLength: 1
   }), []);
   
   const fuse = useMemo(() => new Fuse(allFactions, fuseOptions), [allFactions, fuseOptions]);
