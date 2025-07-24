@@ -34,7 +34,9 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   onToggleExpanded 
 }) => {
   const isExpanded = expandedNodes.has(node.chapter.title);
-  const isSelected = node.chapter.type === 'chapter' && selectedChapterId === node.chapter.id;
+  const isSelected = selectedChapterId === node.chapter.id;
+  
+
 
   const hasChildren = node.children.length > 0;
   const indent = level * 4; // Reduced from 8 to 4
@@ -137,11 +139,10 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     chapterTree = chapterTree[0].children;
   }
   
-  // Get current chapter for breadcrumb (only actual chapters, not books or parts)
-  const currentChapter = chapters.find(ch => {
-    if (ch.type !== 'chapter') return false;
-    return ch.id === value;
-  });
+  // Get current chapter for breadcrumb
+  const currentChapter = chapters.find(ch => ch.id === value);
+
+
 
   // Auto-expand parent nodes by default and ensure current chapter's parents are expanded
   useEffect(() => {
