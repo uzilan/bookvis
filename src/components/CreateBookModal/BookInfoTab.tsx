@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
+import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 
 interface BookInfoTabProps {
   authors: Author[];
@@ -93,27 +94,8 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
         />
       </Box>
 
-      {/* Development: Show current bookData state */}
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Current bookData State (Development)
-        </Typography>
-        <Box
-          sx={{
-            backgroundColor: '#f5f5f5',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            padding: '12px',
-            maxHeight: '200px',
-            overflow: 'auto',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            whiteSpace: 'pre-wrap'
-          }}
-        >
-          {JSON.stringify(bookData, null, 2)}
-        </Box>
-      </Box>
+      {/* Development JSON */}
+      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
     </Box>
   );
 }; 

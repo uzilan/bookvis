@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormC
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
+import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import type { SchemaChapter } from '../../schema/models/SchemaChapter';
 import type { SchemaHierarchyItem, SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
@@ -274,8 +275,8 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
 
       {/* Book Structure Tree */}
       <Box>
-        <Typography variant="h6" gutterBottom>
-          Book Structure
+        <Typography variant="subtitle1" gutterBottom>
+          Book Structure ({bookData.hierarchy?.length || 0})
         </Typography>
         <Box sx={{ mb: 2 }}>
           <Typography variant="body2" color="text.secondary" gutterBottom>
@@ -467,25 +468,8 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         </Box>
       </Box>
 
-      {/* Development: Show current bookData state */}
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Current bookData State (Development)
-        </Typography>
-        <Box
-          sx={{
-            backgroundColor: '#f5f5f5',
-            p: 2,
-            borderRadius: 1,
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            overflow: 'auto',
-            maxHeight: '200px'
-          }}
-        >
-          <pre>{JSON.stringify(bookData, null, 2)}</pre>
-        </Box>
-      </Box>
+      {/* Development JSON */}
+      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
 
       {/* Location Selector Modal */}
       <LocationSelectorModal
