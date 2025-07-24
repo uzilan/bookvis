@@ -5,6 +5,7 @@ import type { Author } from '../models/Author';
 import type { Chapter } from '../models/Chapter';
 import type { Faction } from '../models/Faction';
 import type { RelationshipWithChapters } from '../models/BookData';
+import type { Location } from '../models/Location';
 
 // Author definition
 const frankHerbert: Author = {
@@ -19,23 +20,131 @@ const duneBook: Book = {
   author: frankHerbert,
 };
 
-// Chapter definitions - just basic data
+// All locations in the Dune universe
+const duneLocations: Location[] = [
+  { id: 'caladan', name: 'Caladan', description: 'The ancestral homeworld of House Atreides, a lush oceanic planet.' },
+  { id: 'arrakis', name: 'Arrakis', description: 'The desert planet, also known as Dune, the only source of the spice melange.' },
+  { id: 'arakeen', name: 'Arakeen', description: 'The capital city of Arrakis, seat of planetary government.' },
+  { id: 'carthag', name: 'Carthag', description: 'The main Harkonnen city on Arrakis, a mining and industrial center.' },
+  { id: 'arrakeen-palace', name: 'Arrakeen Palace', description: 'The ducal palace in Arakeen, residence of House Atreides.' },
+  { id: 'arrakeen-spaceport', name: 'Arrakeen Spaceport', description: 'The main spaceport for interstellar travel to and from Arrakis.' },
+  { id: 'arrakeen-marketplace', name: 'Arrakeen Marketplace', description: 'The bustling marketplace where goods and information are traded.' },
+  { id: 'arrakeen-residential', name: 'Arrakeen Residential District', description: 'The residential areas where the city\'s population lives.' },
+  { id: 'carthag-palace', name: 'Carthag Palace', description: 'The Harkonnen palace in Carthag, seat of their rule.' },
+  { id: 'carthag-spaceport', name: 'Carthag Spaceport', description: 'The Harkonnen-controlled spaceport in Carthag.' },
+  { id: 'deep-desert', name: 'Deep Desert', description: 'The vast, inhospitable desert regions of Arrakis.' },
+  { id: 'sietch-tabr', name: 'Sietch Tabr', description: 'A Fremen sietch (underground community) led by Stilgar.' },
+  { id: 'sietch-tabr-caverns', name: 'Sietch Tabr Caverns', description: 'The underground caverns and living quarters of Sietch Tabr.' },
+  { id: 'sietch-tabr-water-pool', name: 'Sietch Tabr Water Pool', description: 'The sacred water pool where Fremen store their precious water.' },
+  { id: 'sietch-tabr-meeting-hall', name: 'Sietch Tabr Meeting Hall', description: 'Where Fremen leaders gather for important decisions.' },
+  { id: 'other-sietches', name: 'Other Sietches', description: 'Various other Fremen underground communities across Arrakis.' },
+  { id: 'spice-fields', name: 'Spice Fields', description: 'Vast expanses where the spice melange is harvested by sandworms.' },
+  { id: 'spice-mining-operations', name: 'Spice Mining Operations', description: 'Industrial facilities for harvesting and processing spice.' },
+  { id: 'sandworm-territory', name: 'Sandworm Territory', description: 'Areas where the massive sandworms roam and create spice.' },
+  { id: 'desert-oasis', name: 'Desert Oasis', description: 'Rare water sources in the desert, often guarded by Fremen.' },
+  { id: 'rock-outcroppings', name: 'Rock Outcroppings', description: 'Rocky areas that provide shelter from the desert sun and storms.' },
+  { id: 'wind-traps', name: 'Wind Traps', description: 'Fremen technology for capturing moisture from the air.' },
+  { id: 'stilltents', name: 'Stilltents', description: 'Portable shelters that recycle body moisture for survival in the desert.' },
+  { id: 'thopter-landing-pads', name: 'Thopter Landing Pads', description: 'Landing areas for ornithopters (flying vehicles).' },
+  { id: 'thopter-hangars', name: 'Thopter Hangars', description: 'Storage and maintenance facilities for ornithopters.' },
+  { id: 'security-headquarters', name: 'Security Headquarters', description: 'Command centers for planetary security forces.' },
+  { id: 'mentat-chambers', name: 'Mentat Chambers', description: 'Private spaces where mentats perform their computational analysis.' },
+  { id: 'bene-gesserit-quarters', name: 'Bene Gesserit Quarters', description: 'Living and training areas for Bene Gesserit acolytes.' },
+  { id: 'suk-medical-facilities', name: 'Suk Medical Facilities', description: 'Medical centers staffed by Suk-trained doctors.' },
+  { id: 'imperial-palace', name: 'Imperial Palace', description: 'The palace of the Padishah Emperor on Kaitain.' },
+  { id: 'kaitain', name: 'Kaitain', description: 'The Imperial capital planet, home of House Corrino.' },
+  { id: 'giedi-prime', name: 'Giedi Prime', description: 'The homeworld of House Harkonnen, an industrial wasteland.' },
+  { id: 'giedi-prime-palace', name: 'Giedi Prime Palace', description: 'The Harkonnen palace on their homeworld.' },
+  { id: 'space-guild-ship', name: 'Space Guild Ship', description: 'Interstellar vessels operated by the Spacing Guild.' },
+  { id: 'highliner', name: 'Highliner', description: 'Massive Guild ships that travel between star systems.' },
+  { id: 'battlefield', name: 'Battlefield', description: 'Areas where military conflicts and battles take place.' },
+  { id: 'training-grounds', name: 'Training Grounds', description: 'Areas where warriors and soldiers practice combat skills.' },
+  { id: 'underground-tunnels', name: 'Underground Tunnels', description: 'Secret passageways and escape routes beneath cities.' },
+  { id: 'secret-chambers', name: 'Secret Chambers', description: 'Hidden rooms used for private meetings and secret activities.' },
+  { id: 'water-recycling-plants', name: 'Water Recycling Plants', description: 'Industrial facilities that process and purify water.' },
+  { id: 'spice-storage-facilities', name: 'Spice Storage Facilities', description: 'Secure warehouses for storing harvested spice.' },
+  { id: 'communication-centers', name: 'Communication Centers', description: 'Facilities for interstellar and planetary communications.' },
+  { id: 'observation-posts', name: 'Observation Posts', description: 'Strategic positions for monitoring desert activity.' },
+  { id: 'escape-routes', name: 'Escape Routes', description: 'Prepared paths for emergency evacuation from dangerous areas.' },
+];
+
+// Chapter definitions with location IDs
 const duneChapterData = {
-  'chapter-1': { id: 'chapter-1', title: 'The Duke and the Lady' },
-  'chapter-2': { id: 'chapter-2', title: 'The Missionaria Protectiva' },
-  'chapter-3': { id: 'chapter-3', title: 'The Reverend Mother' },
-  'chapter-4': { id: 'chapter-4', title: 'The Spice' },
-  'chapter-5': { id: 'chapter-5', title: 'The Harkonnens' },
-  'chapter-6': { id: 'chapter-6', title: 'The Atreides Arrive' },
-  'chapter-7': { id: 'chapter-7', title: 'The Betrayal' },
-  'chapter-8': { id: 'chapter-8', title: 'The Desert' },
-  'chapter-9': { id: 'chapter-9', title: 'The Fremen' },
-  'chapter-10': { id: 'chapter-10', title: 'The Spice Melange' },
-  'chapter-11': { id: 'chapter-11', title: 'The Water of Life' },
-  'chapter-12': { id: 'chapter-12', title: 'The Prophet' },
-  'chapter-13': { id: 'chapter-13', title: 'The Jihad' },
-  'chapter-14': { id: 'chapter-14', title: 'The Emperor' },
-  'chapter-15': { id: 'chapter-15', title: 'The Final Battle' },
+  'chapter-1': { 
+    id: 'chapter-1', 
+    title: 'The Duke and the Lady',
+    locationIds: ['caladan', 'arrakeen-palace', 'arrakeen-spaceport']
+  },
+  'chapter-2': { 
+    id: 'chapter-2', 
+    title: 'The Missionaria Protectiva',
+    locationIds: ['carthag-palace', 'carthag-spaceport', 'imperial-palace']
+  },
+  'chapter-3': { 
+    id: 'chapter-3', 
+    title: 'The Reverend Mother',
+    locationIds: ['arrakeen-palace', 'bene-gesserit-quarters', 'suk-medical-facilities']
+  },
+  'chapter-4': { 
+    id: 'chapter-4', 
+    title: 'The Spice',
+    locationIds: ['spice-fields', 'spice-mining-operations', 'imperial-palace']
+  },
+  'chapter-5': { 
+    id: 'chapter-5', 
+    title: 'The Harkonnens',
+    locationIds: ['carthag-palace', 'giedi-prime-palace', 'carthag-spaceport']
+  },
+  'chapter-6': { 
+    id: 'chapter-6', 
+    title: 'The Atreides Arrive',
+    locationIds: ['arrakeen-palace', 'arrakeen-spaceport', 'arrakeen-marketplace']
+  },
+  'chapter-7': { 
+    id: 'chapter-7', 
+    title: 'The Betrayal',
+    locationIds: ['arrakeen-palace', 'carthag-palace', 'underground-tunnels']
+  },
+  'chapter-8': { 
+    id: 'chapter-8', 
+    title: 'The Desert',
+    locationIds: ['deep-desert', 'sietch-tabr', 'sietch-tabr-caverns']
+  },
+  'chapter-9': { 
+    id: 'chapter-9', 
+    title: 'The Fremen',
+    locationIds: ['sietch-tabr', 'sietch-tabr-water-pool', 'sietch-tabr-meeting-hall']
+  },
+  'chapter-10': { 
+    id: 'chapter-10', 
+    title: 'The Spice Melange',
+    locationIds: ['spice-fields', 'sandworm-territory', 'spice-storage-facilities']
+  },
+  'chapter-11': { 
+    id: 'chapter-11', 
+    title: 'The Water of Life',
+    locationIds: ['sietch-tabr', 'sietch-tabr-caverns', 'bene-gesserit-quarters']
+  },
+  'chapter-12': { 
+    id: 'chapter-12', 
+    title: 'The Prophet',
+    locationIds: ['sietch-tabr', 'other-sietches', 'deep-desert']
+  },
+  'chapter-13': { 
+    id: 'chapter-13', 
+    title: 'The Jihad',
+    locationIds: ['battlefield', 'other-sietches', 'arrakeen-palace']
+  },
+  'chapter-14': { 
+    id: 'chapter-14', 
+    title: 'The Emperor',
+    locationIds: ['imperial-palace', 'kaitain', 'highliner']
+  },
+  'chapter-15': { 
+    id: 'chapter-15', 
+    title: 'The Final Battle',
+    locationIds: ['battlefield', 'arrakeen-palace', 'imperial-palace']
+  },
 };
 
 // Hierarchy definition - order determines chapter sequence
@@ -58,15 +167,24 @@ const duneHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' |
 ];
 
 // Function to build chapters from data and hierarchy
-function buildChapters(chapterData: Record<string, { id: string; title: string }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
-  return hierarchy.map((item, index) => ({
-    book: duneBook,
-    ...chapterData[item.chapterId],
-    
-    level: item.level,
-    type: item.type,
-    index: index + 1, // For backward compatibility
-  }));
+function buildChapters(chapterData: Record<string, { id: string; title: string; locationIds: string[] }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+  return hierarchy.map((item, index) => {
+    const chapterDataItem = chapterData[item.chapterId];
+    return {
+      book: duneBook,
+      id: chapterDataItem.id,
+      title: chapterDataItem.title,
+      
+      level: item.level,
+      type: item.type,
+      index: index + 1, // For backward compatibility
+      
+      // Resolve location IDs to actual location objects
+      locations: chapterDataItem.locationIds.map(locationId =>
+        duneLocations.find(loc => loc.id === locationId)
+      ).filter(Boolean) as Location[],
+    };
+  });
 }
 
 // Characters
@@ -543,4 +661,6 @@ export const duneData: BookData = {
     beneGesseritFaction,
   ],
   relationships: duneRelationships,
+  locations: duneLocations,
+  mapUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Arrakis_map.jpg/1200px-Arrakis_map.jpg',
 }; 

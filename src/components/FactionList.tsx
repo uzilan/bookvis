@@ -15,8 +15,10 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData }) 
   // Get all factions from the book data
   const allFactions = bookData.factions || [];
   
-  // Use either chapter factions or all factions based on toggle
-  const displayFactions = showAllFactions ? allFactions : factions;
+  // Use either chapter factions or all factions based on toggle, sorted alphabetically
+  const displayFactions = (showAllFactions ? allFactions : factions).sort((a, b) => 
+    a.title.localeCompare(b.title)
+  );
 
   if (!displayFactions || displayFactions.length === 0) {
     return null;

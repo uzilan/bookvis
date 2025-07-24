@@ -19,8 +19,10 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   // Get all locations from the book data
   const allLocations = bookData.locations || [];
   
-  // Use either chapter locations or all locations based on toggle
-  const displayLocations = showAllLocations ? allLocations : locations;
+  // Use either chapter locations or all locations based on toggle, sorted alphabetically
+  const displayLocations = (showAllLocations ? allLocations : locations).sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
 
   if (!displayLocations || displayLocations.length === 0) {
     return null;
