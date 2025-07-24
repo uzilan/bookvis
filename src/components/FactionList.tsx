@@ -22,7 +22,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
   // Create fuzzy search instance for factions
   const fuseOptions = useMemo(() => ({
     keys: ['title'],
-    threshold: 0.3,
+    threshold: 0.6,
     includeScore: true,
     minMatchCharLength: 1
   }), []);
@@ -39,7 +39,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
     
     const results = fuse.search(filterText);
     return results
-      .filter(result => result.score && result.score < 0.4)
+      .filter(result => result.score && result.score < 0.7)
       .map(result => result.item)
       .sort((a, b) => a.title.localeCompare(b.title));
   }, [showAllFactions, factions, allFactions, filterText, fuse]);

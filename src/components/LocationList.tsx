@@ -24,7 +24,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   // Create fuzzy search instance for locations
   const fuseOptions = useMemo(() => ({
     keys: ['name'],
-    threshold: 0.3,
+    threshold: 0.6,
     includeScore: true,
     minMatchCharLength: 1
   }), []);
@@ -41,7 +41,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     
     const results = fuse.search(filterText);
     return results
-      .filter(result => result.score && result.score < 0.4)
+      .filter(result => result.score && result.score < 0.7)
       .map(result => result.item)
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [showAllLocations, locations, allLocations, filterText, fuse]);
