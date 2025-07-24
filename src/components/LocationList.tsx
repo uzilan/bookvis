@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
-import Fuse from 'fuse.js';
 import type { Location } from '../models/Location';
 import type { BookData } from '../models/BookData';
 import { WorldMap } from './WorldMap';
+import { fuzzySearch } from '../utils/fuzzySearch';
 
 interface LocationListProps {
   locations: Location[];
@@ -21,30 +21,17 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   // Get all locations from the book data
   const allLocations = useMemo(() => bookData.locations || [], [bookData.locations]);
   
-  // Create fuzzy search instance for locations
-  const fuseOptions = useMemo(() => ({
-    keys: ['name'],
-    threshold: 0.6,
-    includeScore: true,
-    minMatchCharLength: 1
-  }), []);
-  
-  const fuse = useMemo(() => new Fuse(allLocations, fuseOptions), [allLocations, fuseOptions]);
-  
-  // Use fuzzy search for filtering
+  // Use fuzzy search utility
   const displayLocations = useMemo(() => {
-    const locationsToSearch = showAllLocations ? allLocations : locations;
-    
-    if (!filterText.trim()) {
-      return locationsToSearch.sort((a, b) => a.name.localeCompare(b.name));
-    }
-    
-    const results = fuse.search(filterText);
-    return results
-      .filter(result => result.score && result.score < 0.7)
-      .map(result => result.item)
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [showAllLocations, locations, allLocations, filterText, fuse]);
+    const results = fuzzySearch(
+      allLocations,
+      locations,
+      filterText,
+      showAllLocations,
+      { keys: ['name'] }
+    );
+    return results.sort((a, b) => a.name.localeCompare(b.name));
+  }, [allLocations, locations, filterText, showAllLocations]);
 
   // Only return null if there are no locations at all (not just no filtered results)
   if (!locations || locations.length === 0) {

@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
-import Fuse from 'fuse.js';
 import type { Character } from '../models/Character';
 import type { BookData } from '../models/BookData';
 import type { Faction } from '../models/Faction';
+import { fuzzySearch } from '../utils/fuzzySearch';
 
 interface CharacterListProps {
   characters: Character[];
@@ -22,30 +22,17 @@ export const CharacterList: React.FC<CharacterListProps> = ({
   // Get all characters from the book data
   const allCharacters = useMemo(() => bookData.characters || [], [bookData.characters]);
   
-  // Create fuzzy search instance for characters
-  const fuseOptions = useMemo(() => ({
-    keys: ['name', 'aliases'],
-    threshold: 0.6, // Higher = more flexible matching
-    includeScore: true,
-    minMatchCharLength: 1
-  }), []);
-  
-  const fuse = useMemo(() => new Fuse(allCharacters, fuseOptions), [allCharacters, fuseOptions]);
-  
-  // Use fuzzy search for filtering
+  // Use fuzzy search utility
   const displayCharacters = useMemo(() => {
-    const charactersToSearch = showAllCharacters ? allCharacters : characters;
-    
-    if (!filterText.trim()) {
-      return charactersToSearch.sort((a, b) => a.name.localeCompare(b.name));
-    }
-    
-    const results = fuse.search(filterText);
-    return results
-      .filter(result => result.score && result.score < 0.7) // More flexible threshold
-      .map(result => result.item)
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [showAllCharacters, characters, allCharacters, filterText, fuse]);
+    const results = fuzzySearch(
+      allCharacters,
+      characters,
+      filterText,
+      showAllCharacters,
+      { keys: ['name', 'aliases'] }
+    );
+    return results.sort((a, b) => a.name.localeCompare(b.name));
+  }, [allCharacters, characters, filterText, showAllCharacters]);
 
   return (
     <div style={{
