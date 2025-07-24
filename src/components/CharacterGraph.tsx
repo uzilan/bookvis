@@ -452,7 +452,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         {/* Character List */}
         <CharacterList 
           characters={bookData.characters} 
-          bookData={bookData}
+          bookData={fullBookData}
           onCharacterClick={(character) => {
             setSelectedCharacter(character);
             setIsDetailsPanelOpen(true);
