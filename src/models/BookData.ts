@@ -17,4 +17,5 @@ export interface BookData {
   factions: Faction[];
   relationships: RelationshipWithChapters[];
   locations: Location[];
+  mapUrl?: string;
 }

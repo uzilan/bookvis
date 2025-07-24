@@ -459,6 +459,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               locations={currentChapter.locations} 
               chapterTitle={currentChapter.title}
               chapterId={selectedChapter}
+              bookData={bookData}
             />
           ) : null;
         })()}

@@ -1,5 +1,5 @@
-import FirebaseService from '../services/firebase';
-import { aliceBookData } from '../books/aliceData';
+import { FirebaseService } from '../services/firebase.ts';
+import { aliceBookData } from '../books/aliceData.ts';
 
 async function updateAliceOnly() {
   try {

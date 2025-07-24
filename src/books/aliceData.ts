@@ -325,4 +325,5 @@ export const aliceBookData: BookData = {
   factions: aliceFactions,
   relationships: aliceRelationships,
   locations: aliceLocations,
+  mapUrl: 'https://home-underground.nyc3.cdn.digitaloceanspaces.com/disney-pins/lg/82324_x23o.jpg',
 }; 

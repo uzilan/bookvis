@@ -3,7 +3,7 @@ import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
-import FirebaseService from './services/firebase';
+import { FirebaseService } from './services/firebase.ts';
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');

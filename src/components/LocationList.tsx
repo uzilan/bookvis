@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import type { Location } from '../models/Location';
-import { WonderlandMap } from './WonderlandMap';
+import type { BookData } from '../models/BookData';
+import { WorldMap } from './WorldMap';
 
 interface LocationListProps {
   locations: Location[];
   chapterTitle: string;
   chapterId: string;
+  bookData: BookData;
 }
 
-export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId }) => {
+export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId, bookData }) => {
   const [expandedLocations, setExpandedLocations] = useState<Set<string>>(new Set());
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
@@ -30,25 +32,36 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     <>
       <div style={{
         background: 'white',
-        padding: '12px 16px',
+        padding: '8px 12px',
         borderRadius: '8px',
         border: '2px solid #333',
         boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
         width: '100%',
+        maxHeight: '300px',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
-        <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '8px', color: '#000' }}>
+        <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '6px', color: '#000' }}>
           Locations:
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '12px' }}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '4px', 
+          marginBottom: '8px',
+          flex: 1,
+          overflowY: 'auto',
+          maxHeight: '150px'
+        }}>
           {locations.map((location) => (
             <div key={location.id}>
               <div 
                 onClick={() => toggleLocation(location.id)}
                 style={{ 
-                  fontSize: '13px', 
+                  fontSize: '12px', 
                   color: '#000', 
                   fontWeight: '500',
-                  padding: '8px 12px',
+                  padding: '6px 8px',
                   backgroundColor: '#f8f9fa',
                   borderRadius: '4px',
                   border: '1px solid #e9ecef',
@@ -77,14 +90,14 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
               </div>
               {expandedLocations.has(location.id) && location.description && (
                 <div style={{
-                  fontSize: '12px',
+                  fontSize: '11px',
                   color: '#666',
-                  padding: '8px 12px',
-                  marginTop: '4px',
+                  padding: '6px 8px',
+                  marginTop: '3px',
                   backgroundColor: '#f1f3f4',
                   borderRadius: '4px',
                   border: '1px solid #e0e0e0',
-                  lineHeight: '1.4'
+                  lineHeight: '1.3'
                 }}>
                   {location.description}
                 </div>
@@ -96,14 +109,15 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         {/* Map Section */}
         <div style={{
           borderTop: '1px solid #e0e0e0',
-          paddingTop: '12px',
-          marginTop: '8px'
+          paddingTop: '6px',
+          marginTop: '6px',
+          flexShrink: 0
         }}>
           <div 
             onClick={() => setIsMapModalOpen(true)}
             style={{ cursor: 'pointer' }}
           >
-            <WonderlandMap chapterId={chapterId} />
+            <WorldMap chapterId={chapterId} bookData={bookData} />
           </div>
         </div>
       </div>
@@ -156,8 +170,8 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
               ×
             </button>
             <img 
-              src="/Underland_Map.webp" 
-              alt="Wonderland Map"
+              src={bookData.mapUrl}
+              alt="World Map"
               style={{
                 maxWidth: '100%',
                 maxHeight: '100%',
