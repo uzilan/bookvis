@@ -1,4 +1,4 @@
-import { SchemaAuthor } from './SchemaAuthor';
+import type { SchemaAuthor } from './SchemaAuthor';
 
 /**
  * Book interface based on BookVis schema

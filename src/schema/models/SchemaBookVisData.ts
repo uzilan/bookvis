@@ -1,10 +1,10 @@
-import { SchemaBook } from './SchemaBook';
-import { SchemaLocation } from './SchemaLocation';
-import { SchemaCharacter } from './SchemaCharacter';
-import { SchemaFaction } from './SchemaFaction';
-import { SchemaRelationship } from './SchemaRelationship';
-import { SchemaChapter } from './SchemaChapter';
-import { SchemaHierarchyItem } from './SchemaHierarchy';
+import type { SchemaBook } from './SchemaBook';
+import type { SchemaLocation } from './SchemaLocation';
+import type { SchemaCharacter } from './SchemaCharacter';
+import type { SchemaFaction } from './SchemaFaction';
+import type { SchemaRelationship } from './SchemaRelationship';
+import type { SchemaChapter } from './SchemaChapter';
+import type { SchemaHierarchyItem } from './SchemaHierarchy';
 
 /**
  * Main BookVis data interface based on BookVis schema
