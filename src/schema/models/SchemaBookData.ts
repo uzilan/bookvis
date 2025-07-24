@@ -1,4 +1,3 @@
-import type { SchemaAuthor } from './SchemaAuthor';
 import type { SchemaBook } from './SchemaBook';
 import type { SchemaLocation } from './SchemaLocation';
 import type { SchemaCharacter } from './SchemaCharacter';

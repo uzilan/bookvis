@@ -7,10 +7,7 @@ import {
   Button,
   Box,
   Typography,
-  TextField,
-  FormControl,
-  InputLabel,
-  Input
+  TextField
 } from '@mui/material';
 import type { Author } from '../models/Author';
 

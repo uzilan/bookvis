@@ -34,7 +34,6 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
   onClose
 }) => {
   const [selectedAuthor, setSelectedAuthor] = useState<string>('');
-  const [bookTitle, setBookTitle] = useState<string>('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
   const [isAddAuthorModalOpen, setIsAddAuthorModalOpen] = useState(false);
@@ -102,7 +101,6 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
 
   const handleClose = () => {
     setSelectedAuthor('');
-    setBookTitle('');
     setIsAddAuthorModalOpen(false);
     setBookData({
       book: {
@@ -189,7 +187,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
     }));
   };
 
-  const handleStartEditingLocation = (location: any) => {
+  const handleStartEditingLocation = (location: { id: string; name: string }) => {
     setEditingLocationId(location.id);
     setEditingLocationName(location.name);
   };
