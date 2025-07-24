@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
+import Fuse from 'fuse.js';
 import type { Character } from '../models/Character';
 import type { BookData } from '../models/BookData';
 import type { Faction } from '../models/Faction';
@@ -19,15 +20,32 @@ export const CharacterList: React.FC<CharacterListProps> = ({
   const [filterText, setFilterText] = useState('');
 
   // Get all characters from the book data
-  const allCharacters = bookData.characters || [];
+  const allCharacters = useMemo(() => bookData.characters || [], [bookData.characters]);
   
-  // Use either chapter characters or all characters based on toggle, sorted alphabetically
-  const displayCharacters = (showAllCharacters ? allCharacters : characters)
-    .filter(character =>
-      character.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      character.aliases.some(alias => alias.toLowerCase().includes(filterText.toLowerCase()))
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
+  // Create fuzzy search instance for characters
+  const fuseOptions = useMemo(() => ({
+    keys: ['name', 'aliases'],
+    threshold: 0.3, // Lower = more strict matching
+    includeScore: true,
+    minMatchCharLength: 2
+  }), []);
+  
+  const fuse = useMemo(() => new Fuse(allCharacters, fuseOptions), [allCharacters, fuseOptions]);
+  
+  // Use fuzzy search for filtering
+  const displayCharacters = useMemo(() => {
+    const charactersToSearch = showAllCharacters ? allCharacters : characters;
+    
+    if (!filterText.trim()) {
+      return charactersToSearch.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    
+    const results = fuse.search(filterText);
+    return results
+      .filter(result => result.score && result.score < 0.4) // Only include good matches
+      .map(result => result.item)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [showAllCharacters, characters, allCharacters, filterText, fuse]);
 
   return (
     <div style={{

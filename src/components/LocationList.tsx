@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
+import Fuse from 'fuse.js';
 import type { Location } from '../models/Location';
 import type { BookData } from '../models/BookData';
 import { WorldMap } from './WorldMap';
@@ -18,16 +19,32 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   const [filterText, setFilterText] = useState('');
 
   // Get all locations from the book data
-  const allLocations = bookData.locations || [];
+  const allLocations = useMemo(() => bookData.locations || [], [bookData.locations]);
   
-  // Use either chapter locations or all locations based on toggle, sorted alphabetically
-  const displayLocations = (showAllLocations ? allLocations : locations)
-    .filter(location => 
-      location.name.toLowerCase().includes(filterText.toLowerCase())
-    )
-    .sort((a, b) => 
-      a.name.localeCompare(b.name)
-    );
+  // Create fuzzy search instance for locations
+  const fuseOptions = useMemo(() => ({
+    keys: ['name'],
+    threshold: 0.3,
+    includeScore: true,
+    minMatchCharLength: 2
+  }), []);
+  
+  const fuse = useMemo(() => new Fuse(allLocations, fuseOptions), [allLocations, fuseOptions]);
+  
+  // Use fuzzy search for filtering
+  const displayLocations = useMemo(() => {
+    const locationsToSearch = showAllLocations ? allLocations : locations;
+    
+    if (!filterText.trim()) {
+      return locationsToSearch.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    
+    const results = fuse.search(filterText);
+    return results
+      .filter(result => result.score && result.score < 0.4)
+      .map(result => result.item)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [showAllLocations, locations, allLocations, filterText, fuse]);
 
   // Only return null if there are no locations at all (not just no filtered results)
   if (!locations || locations.length === 0) {

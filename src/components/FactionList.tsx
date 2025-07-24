@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
+import Fuse from 'fuse.js';
 import type { Faction } from '../models/Faction';
 import type { BookData } from '../models/BookData';
 import type { Character } from '../models/Character';
@@ -16,16 +17,32 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
   const [filterText, setFilterText] = useState('');
 
   // Get all factions from the book data
-  const allFactions = bookData.factions || [];
+  const allFactions = useMemo(() => bookData.factions || [], [bookData.factions]);
   
-  // Use either chapter factions or all factions based on toggle, sorted alphabetically
-  const displayFactions = (showAllFactions ? allFactions : factions)
-    .filter(faction => 
-      faction.title.toLowerCase().includes(filterText.toLowerCase())
-    )
-    .sort((a, b) => 
-      a.title.localeCompare(b.title)
-    );
+  // Create fuzzy search instance for factions
+  const fuseOptions = useMemo(() => ({
+    keys: ['title'],
+    threshold: 0.3,
+    includeScore: true,
+    minMatchCharLength: 2
+  }), []);
+  
+  const fuse = useMemo(() => new Fuse(allFactions, fuseOptions), [allFactions, fuseOptions]);
+  
+  // Use fuzzy search for filtering
+  const displayFactions = useMemo(() => {
+    const factionsToSearch = showAllFactions ? allFactions : factions;
+    
+    if (!filterText.trim()) {
+      return factionsToSearch.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    
+    const results = fuse.search(filterText);
+    return results
+      .filter(result => result.score && result.score < 0.4)
+      .map(result => result.item)
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [showAllFactions, factions, allFactions, filterText, fuse]);
 
   // Only return null if there are no factions at all (not just no filtered results)
   if (!factions || factions.length === 0) {
