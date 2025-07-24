@@ -1,0 +1,120 @@
+# BookVis Standard Format Example
+# A simple example showing the structure for a small book
+
+book:
+  id: "alice"
+  title: "Alice's Adventures in Wonderland"
+  author:
+    id: "lewis-carroll"
+    name: "Lewis Carroll"
+
+# Map image URL for the book
+map_url: "https://example.com/alice-map.jpg"
+
+# All locations in the book
+locations:
+  - id: "wonderland"
+    name: "Wonderland"
+    description: "A magical underground world where Alice falls through the rabbit hole."
+  
+  - id: "rabbit-hole"
+    name: "The Rabbit Hole"
+    description: "A deep tunnel that Alice falls down to reach Wonderland."
+  
+  - id: "queens-garden"
+    name: "The Queen's Garden"
+    description: "A beautiful garden where the Queen of Hearts lives."
+  
+  - id: "mad-tea-party"
+    name: "Mad Tea Party"
+    description: "A never-ending tea party with the Mad Hatter and March Hare."
+
+# All characters in the book
+characters:
+  - id: "alice"
+    name: "Alice"
+    description: "A curious young girl who falls into Wonderland."
+    first_appearance_chapter: "chapter-1"
+    aliases: ["Miss Alice"]
+    factions: ["humans"]
+    faction_join_chapters:
+      humans: "chapter-1"
+    attributes: ["Curious", "Brave", "Young"]
+
+  - id: "white-rabbit"
+    name: "White Rabbit"
+    description: "A rabbit in a waistcoat who is always late."
+    first_appearance_chapter: "chapter-1"
+    aliases: ["The Rabbit"]
+    factions: ["wonderland-creatures"]
+    faction_join_chapters:
+      wonderland-creatures: "chapter-1"
+    attributes: ["Nervous", "Always Late", "Waistcoat"]
+
+  - id: "queen-of-hearts"
+    name: "Queen of Hearts"
+    description: "The tyrannical queen who wants to behead everyone."
+    first_appearance_chapter: "chapter-8"
+    aliases: ["The Queen"]
+    factions: ["royalty"]
+    faction_join_chapters:
+      royalty: "chapter-8"
+    attributes: ["Tyrannical", "Angry", "Royal"]
+
+# All factions in the book
+factions:
+  - id: "humans"
+    title: "Humans"
+    description: "Human characters from the real world."
+    color: "#8B4513"
+
+  - id: "wonderland-creatures"
+    title: "Wonderland Creatures"
+    description: "Magical creatures that live in Wonderland."
+    color: "#32CD32"
+
+  - id: "royalty"
+    title: "Royalty"
+    description: "Royal characters like the Queen of Hearts."
+    color: "#DC143C"
+
+# Character relationships
+relationships:
+  - character1: "alice"
+    character2: "white-rabbit"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Alice follows the White Rabbit down the rabbit hole."
+      - chapter: "chapter-8"
+        description: "Alice meets the White Rabbit again at the Queen's garden."
+
+  - character1: "alice"
+    character2: "queen-of-hearts"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "Alice meets the Queen of Hearts and plays croquet."
+
+# Chapter structure with locations
+chapters:
+  - id: "chapter-1"
+    title: "Down the Rabbit Hole"
+    locations: ["rabbit-hole", "wonderland"]
+
+  - id: "chapter-2"
+    title: "The Pool of Tears"
+    locations: ["wonderland"]
+
+  - id: "chapter-8"
+    title: "The Queen's Croquet Ground"
+    locations: ["queens-garden", "mad-tea-party"]
+
+# Chapter hierarchy (optional - can be auto-generated)
+hierarchy:
+  - chapter_id: "chapter-1"
+    type: "chapter"
+  
+  - chapter_id: "chapter-2"
+    type: "chapter"
+  
+  - chapter_id: "chapter-8"
+    type: "chapter" 

@@ -26,13 +26,11 @@ function App() {
 
           setSelectedBook(firstBook.book);
           
-          // Set the initial chapter to the first actual chapter's index
-          if (firstBook.chapters.length > 0) {
-            const firstActualChapter = firstBook.chapters.find(ch => ch.type === 'chapter');
-            if (firstActualChapter) {
-              setSelectedChapter(firstActualChapter.id);
-            }
-          }
+                  // Set the initial chapter to the first chapter's index
+        if (firstBook.chapters.length > 0) {
+          const firstChapter = firstBook.chapters[0];
+          setSelectedChapter(firstChapter.id);
+        }
           
           hasSetInitialBook.current = true;
         }
@@ -63,11 +61,9 @@ function App() {
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
     if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
-      // Set to the ID of the first actual chapter
-      const firstActualChapter = bookData.chapters.find(ch => ch.type === 'chapter');
-      if (firstActualChapter) {
-        setSelectedChapter(firstActualChapter.id);
-      }
+      // Set to the ID of the first chapter
+      const firstChapter = bookData.chapters[0];
+      setSelectedChapter(firstChapter.id);
     }
   }, [selectedBook, bookData]);
 
@@ -82,7 +78,7 @@ function App() {
 
   // Find the current chapter by matching selectedChapter with id
   const currentChapter = bookData.chapters.find(ch => 
-    ch.type === 'chapter' && ch.id === selectedChapter
+    ch.id === selectedChapter
   );
   
   // Only show characters whose firstAppearanceChapter is <= selected chapter
@@ -98,6 +94,8 @@ function App() {
     }
     return false;
   });
+
+
   // Only show factions that have at least one visible character and are active in current chapter
   const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const activeFactionIds = new Set();
