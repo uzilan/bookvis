@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Radio, RadioGroup, FormControlLabel, FormControl } from '@mui/material';
 import type { Character } from '../models/Character';
 import type { BookData } from '../models/BookData';
+import type { Faction } from '../models/Faction';
 
 interface CharacterListProps {
   characters: Character[];
@@ -13,16 +15,19 @@ export const CharacterList: React.FC<CharacterListProps> = ({
   bookData,
   onCharacterClick 
 }) => {
+  const [showAllCharacters, setShowAllCharacters] = useState(false);
   const [filterText, setFilterText] = useState('');
 
-  // Filter characters based on search text
-  const filteredCharacters = characters.filter(character =>
-    character.name.toLowerCase().includes(filterText.toLowerCase()) ||
-    character.aliases.some(alias => alias.toLowerCase().includes(filterText.toLowerCase()))
-  );
-
-  // Sort characters alphabetically
-  const sortedCharacters = filteredCharacters.sort((a, b) => a.name.localeCompare(b.name));
+  // Get all characters from the book data
+  const allCharacters = bookData.characters || [];
+  
+  // Use either chapter characters or all characters based on toggle, sorted alphabetically
+  const displayCharacters = (showAllCharacters ? allCharacters : characters)
+    .filter(character =>
+      character.name.toLowerCase().includes(filterText.toLowerCase()) ||
+      character.aliases.some(alias => alias.toLowerCase().includes(filterText.toLowerCase()))
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div style={{
@@ -47,29 +52,61 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         color: '#000'
       }}>
         <span>Characters:</span>
-        <span style={{ fontSize: '12px', color: '#666' }}>
-          {sortedCharacters.length}/{characters.length}
-        </span>
+        <FormControl size="small">
+          <RadioGroup
+            row
+            value={showAllCharacters ? 'all' : 'chapter'}
+            onChange={(e) => setShowAllCharacters(e.target.value === 'all')}
+          >
+            <FormControlLabel
+              value="chapter"
+              control={<Radio size="small" />}
+              label="Chapter"
+              sx={{ 
+                fontSize: '10px', 
+                '& .MuiFormControlLabel-label': { 
+                  fontSize: '10px',
+                  color: '#000'
+                } 
+              }}
+            />
+            <FormControlLabel
+              value="all"
+              control={<Radio size="small" />}
+              label="All"
+              sx={{ 
+                fontSize: '10px', 
+                '& .MuiFormControlLabel-label': { 
+                  fontSize: '10px',
+                  color: '#000'
+                } 
+              }}
+            />
+          </RadioGroup>
+        </FormControl>
       </div>
 
-      {/* Filter Input */}
-      <div style={{ marginBottom: '8px' }}>
-        <input
-          type="text"
-          placeholder="Filter characters..."
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-          style={{
-            width: '90%',
-            padding: '4px 8px',
-            fontSize: '11px',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor: 'white',
-            color: '#000'
-          }}
-        />
-      </div>
+              {/* Filter Input */}
+        <div style={{ marginBottom: '8px' }}>
+          <input
+            type="text"
+            placeholder="Filter characters..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            style={{
+              width: '90%',
+              padding: '4px 8px',
+              fontSize: '11px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              backgroundColor: 'white',
+              color: '#000'
+            }}
+          />
+          <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
+            {displayCharacters.length}/{showAllCharacters ? allCharacters.length : characters.length}
+          </div>
+        </div>
 
       {/* Characters List */}
       <div style={{
@@ -83,15 +120,15 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         scrollbarWidth: 'thin',
         scrollbarColor: '#888 #f1f1f1'
       }}>
-        {sortedCharacters.length > 0 ? (
-          sortedCharacters.map((character) => {
+        {displayCharacters.length > 0 ? (
+          displayCharacters.map((character: Character) => {
             // Get character's current factions and their colors
-            const currentFactions = character.factions.map(factionId => {
-              const faction = bookData.factions.find(f => f.id === factionId);
+            const currentFactions = character.factions.map((factionId: string) => {
+              const faction = bookData.factions.find((f: Faction) => f.id === factionId);
               return faction;
-            }).filter(Boolean);
+            }).filter((f): f is Faction => f !== undefined);
 
-            const factionColors = currentFactions.map(f => f!.color);
+            const factionColors = currentFactions.map((f: Faction) => f.color);
 
             return (
               <div
@@ -158,7 +195,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                       color: '#666',
                       marginTop: '2px'
                     }}>
-                      {currentFactions.map(f => f!.title).join(', ')}
+                      {currentFactions.map((f: Faction) => f.title).join(', ')}
                     </div>
                   )}
                 </div>
