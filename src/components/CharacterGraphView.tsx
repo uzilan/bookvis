@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './App.css';
-import { CharacterGraph } from './components/CharacterGraph';
-import { CreateBookModal } from './components/CreateBookModal';
-import { LoginButton } from './components/LoginButton';
-import type { Book } from './models/Book';
-import type { BookData } from './models/BookData';
-import { FirebaseService } from './services/firebase.ts';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CharacterGraph } from './CharacterGraph';
+import { CreateBookModal } from './CreateBookModal';
+import { LoginButton } from './LoginButton';
+import type { Book } from '../models/Book';
+import type { BookData } from '../models/BookData';
+import { FirebaseService } from '../services/firebase.ts';
 
-function App() {
+export const CharacterGraphView: React.FC = () => {
+  const { bookId } = useParams<{ bookId?: string }>();
+  const navigate = useNavigate();
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
@@ -23,19 +25,29 @@ function App() {
         const books = await FirebaseService.getAllBooks();
         setBooksFromFirebase(books);
         
-        // Set the first book as selected if we have books and no book is currently selected
-        if (books.length > 0 && !hasSetInitialBook.current) {
-          const firstBook = books[0];
-
-          setSelectedBook(firstBook.book);
+        // Set the book based on URL parameter or first book
+        if (books.length > 0) {
+          let targetBook: BookData;
           
-                  // Set the initial chapter to the first actual chapter's index
-        if (firstBook.chapters.length > 0) {
-          const firstChapter = firstBook.chapters.find(ch => ch.id.startsWith('chapter-')) || firstBook.chapters[0];
-          setSelectedChapter(firstChapter.id);
-        }
+          if (bookId) {
+            // Find the book specified in the URL
+            targetBook = books.find(b => b.book.id === bookId) || books[0];
+          } else {
+            // Use the first book if no bookId specified
+            targetBook = books[0];
+          }
           
-          hasSetInitialBook.current = true;
+          if (!hasSetInitialBook.current) {
+            setSelectedBook(targetBook.book);
+            
+            // Set the initial chapter to the first actual chapter's index
+            if (targetBook.chapters.length > 0) {
+              const firstChapter = targetBook.chapters.find(ch => ch.id.startsWith('chapter-')) || targetBook.chapters[0];
+              setSelectedChapter(firstChapter.id);
+            }
+            
+            hasSetInitialBook.current = true;
+          }
         }
       } catch (error) {
         console.error('Failed to fetch books from Firebase:', error);
@@ -45,7 +57,7 @@ function App() {
     };
 
     fetchBooks();
-  }, []);
+  }, [bookId]);
 
   // Use only Firebase books
   const availableBooks = booksFromFirebase.map(bd => bd.book);
@@ -69,6 +81,13 @@ function App() {
       setSelectedChapter(firstChapter.id);
     }
   }, [selectedBook, bookData]);
+
+  // Update URL when book changes
+  useEffect(() => {
+    if (selectedBook) {
+      navigate(`/visualize/${selectedBook.id}`, { replace: true });
+    }
+  }, [selectedBook, navigate]);
 
   // Show loading or no data message if no book data
   if (loading) {
@@ -106,7 +125,6 @@ function App() {
     return false;
   });
 
-
   // Only show factions that have at least one visible character and are active in current chapter
   const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const activeFactionIds = new Set();
@@ -138,7 +156,6 @@ function App() {
   
   const visibleFactions = bookData.factions.filter(f => activeFactionIds.has(f.id));
 
-
   // Create filtered book data for the graph
   const filteredBookData: BookData = {
     ...bookData,
@@ -150,8 +167,6 @@ function App() {
     factions: visibleFactions,
   };
 
-
-  
   const handleCreateBook = () => {
     setIsCreateBookModalOpen(true);
   };
@@ -195,9 +210,6 @@ function App() {
           onClose={handleCloseCreateBookModal}
         />
       )}
-
     </div>
   );
-}
-
-export default App;
+}; 
