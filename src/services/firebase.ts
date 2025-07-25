@@ -150,12 +150,15 @@ export class FirebaseService {
 
         // If user is authenticated, show their books + public books
         // If user is not authenticated, show only public books
+        // For backward compatibility, treat books without isPublic field as public
+        const isPublic = data.isPublic !== undefined ? data.isPublic : true;
+        
         if (currentUser) {
-          if (data.ownerId === currentUser.uid || data.isPublic) {
+          if (data.ownerId === currentUser.uid || isPublic) {
             books.push(bookData);
           }
         } else {
-          if (data.isPublic) {
+          if (isPublic) {
             books.push(bookData);
           }
         }

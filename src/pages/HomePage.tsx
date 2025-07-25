@@ -47,10 +47,13 @@ export const HomePage: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoadingData(true);
+      console.log('Fetching data...');
       const [fetchedAuthors, fetchedBooks] = await Promise.all([
         FirebaseService.getAllAuthors(),
         FirebaseService.getAllBooks()
       ]);
+      console.log('Fetched authors:', fetchedAuthors);
+      console.log('Fetched books:', fetchedBooks);
       setAuthors(fetchedAuthors);
       setBooks(fetchedBooks);
     } catch (error) {
