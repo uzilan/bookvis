@@ -294,11 +294,31 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
             }}
           />
           
+          {/* First Appearance Section */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <TextField
+              select
+              size="small"
+              label="First Appearance Chapter"
+              value={newCharacterFirstAppearance}
+              onChange={(e) => setNewCharacterFirstAppearance(e.target.value)}
+              sx={{ flex: 1 }}
+            >
+              <MenuItem value="">
+                <em>Select a chapter</em>
+              </MenuItem>
+              {buildHierarchyTree()
+                .filter(({ item }) => item.type === 'chapter')
+                .map(({ item, chapter }) => (
+                  <MenuItem key={item.chapter_id} value={item.chapter_id}>
+                    {chapter.title}
+                  </MenuItem>
+                ))}
+            </TextField>
+          </Box>
+          
           {/* Aliases Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              Aliases (optional):
-            </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
                 size="small"
@@ -339,9 +359,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
           
           {/* Attributes Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              Attributes (optional):
-            </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
                 size="small"
@@ -383,9 +400,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
           
           {/* Factions Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              Factions (optional):
-            </Typography>
             {newCharacterFactions.length > 0 && (
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {newCharacterFactions.map((membership, index) => (
@@ -450,66 +464,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               Add Faction
             </Button>
           </Box>
-          
-          {/* First Appearance Section */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              First Appearance (optional):
-            </Typography>
-            {buildHierarchyTree().length > 0 ? (
-              <Box sx={{ maxHeight: '150px', overflow: 'auto', border: '1px solid #ddd', borderRadius: 1, p: 1 }}>
-                {buildHierarchyTree().map(({ item, chapter, level }) => (
-                  <Box
-                    key={item.chapter_id}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      pl: level * 2,
-                      py: 0.5,
-                      cursor: item.type === 'chapter' ? 'pointer' : 'default',
-                      backgroundColor: item.type === 'chapter' && newCharacterFirstAppearance === item.chapter_id ? 'primary.light' : 'transparent',
-                      borderRadius: 1,
-                      '&:hover': item.type === 'chapter' ? {
-                        backgroundColor: 'action.hover'
-                      } : {}
-                    }}
-                    onClick={() => {
-                      if (item.type === 'chapter') {
-                        setNewCharacterFirstAppearance(item.chapter_id);
-                      }
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: level === 0 ? 'bold' : 'normal',
-                        color: level === 0 ? '#1976d2' : 'inherit',
-                        opacity: item.type === 'chapter' ? 1 : 0.7
-                      }}
-                    >
-                      {chapter.title}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      sx={{ color: 'text.secondary' }}
-                    >
-                      ({item.type})
-                    </Typography>
-                    {item.type === 'chapter' && newCharacterFirstAppearance === item.chapter_id && (
-                      <Typography variant="caption" color="primary" sx={{ ml: 'auto' }}>
-                        ✓ Selected
-                      </Typography>
-                    )}
-                  </Box>
-                ))}
-              </Box>
-            ) : (
-              <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
-                No chapters available. Create chapters first.
-              </Typography>
-            )}
-          </Box>
         </Box>
       </Box>
 
@@ -561,11 +515,31 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       rows={2}
                     />
                     
+                    {/* First Appearance Section for Editing */}
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      <TextField
+                        select
+                        size="small"
+                        label="First Appearance Chapter"
+                        value={editingCharacterFirstAppearance}
+                        onChange={(e) => setEditingCharacterFirstAppearance(e.target.value)}
+                        sx={{ flex: 1 }}
+                      >
+                        <MenuItem value="">
+                          <em>Select a chapter</em>
+                        </MenuItem>
+                        {buildHierarchyTree()
+                          .filter(({ item }) => item.type === 'chapter')
+                          .map(({ item, chapter }) => (
+                            <MenuItem key={item.chapter_id} value={item.chapter_id}>
+                              {chapter.title}
+                            </MenuItem>
+                          ))}
+                      </TextField>
+                    </Box>
+                    
                     {/* Aliases Section */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
-                        Aliases:
-                      </Typography>
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                         <TextField
                           size="small"
@@ -606,9 +580,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     
                     {/* Attributes Section for Editing */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
-                        Attributes:
-                      </Typography>
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                         <TextField
                           size="small"
@@ -650,9 +621,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     
                     {/* Factions Section for Editing */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
-                        Factions:
-                      </Typography>
                       {editingCharacterFactions.length > 0 && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                           {editingCharacterFactions.map((membership, index) => (
@@ -716,67 +684,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       >
                         Add Faction
                       </Button>
-                    </Box>
-                    
-                    {/* First Appearance Section for Editing */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                      <Typography variant="caption" color="text.secondary">
-                        First Appearance:
-                      </Typography>
-                      {buildHierarchyTree().length > 0 ? (
-                        <Box sx={{ maxHeight: '120px', overflow: 'auto', border: '1px solid #ddd', borderRadius: 1, p: 1 }}>
-                          {buildHierarchyTree().map(({ item, chapter, level }) => (
-                            <Box
-                              key={item.chapter_id}
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                pl: level * 2,
-                                py: 0.5,
-                                cursor: item.type === 'chapter' ? 'pointer' : 'default',
-                                backgroundColor: item.type === 'chapter' && editingCharacterFirstAppearance === item.chapter_id ? 'primary.light' : 'transparent',
-                                borderRadius: 1,
-                                '&:hover': item.type === 'chapter' ? {
-                                  backgroundColor: 'action.hover'
-                                } : {}
-                              }}
-                              onClick={() => {
-                                if (item.type === 'chapter') {
-                                  setEditingCharacterFirstAppearance(item.chapter_id);
-                                }
-                              }}
-                            >
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  fontWeight: level === 0 ? 'bold' : 'normal',
-                                  color: level === 0 ? '#1976d2' : 'inherit',
-                                  opacity: item.type === 'chapter' ? 1 : 0.7,
-                                  fontSize: '0.8rem'
-                                }}
-                              >
-                                {chapter.title}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                sx={{ color: 'text.secondary', fontSize: '0.7rem' }}
-                              >
-                                ({item.type})
-                              </Typography>
-                              {item.type === 'chapter' && editingCharacterFirstAppearance === item.chapter_id && (
-                                <Typography variant="caption" color="primary" sx={{ ml: 'auto', fontSize: '0.7rem' }}>
-                                  ✓ Selected
-                                </Typography>
-                              )}
-                            </Box>
-                          ))}
-                        </Box>
-                      ) : (
-                        <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', fontSize: '0.8rem' }}>
-                          No chapters available.
-                        </Typography>
-                      )}
                     </Box>
                     
                     <Box sx={{ display: 'flex', gap: 1 }}>
