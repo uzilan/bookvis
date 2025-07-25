@@ -1,6 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signOut, 
+  onAuthStateChanged,
+  type User 
+} from 'firebase/auth';
 import type { BookData } from '../models/BookData';
 import type { Author } from '../models/Author';
 import { firebaseConfig } from '../credentials.ts';
@@ -9,8 +17,51 @@ import { firebaseConfig } from '../credentials.ts';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 export class FirebaseService {
+  /**
+   * Sign in with Google
+   */
+  static async signInWithGoogle(): Promise<User> {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('Successfully signed in with Google:', result.user.displayName);
+      return result.user;
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+      throw new Error(`Failed to sign in with Google: ${error}`);
+    }
+  }
+
+  /**
+   * Sign out the current user
+   */
+  static async signOut(): Promise<void> {
+    try {
+      await signOut(auth);
+      console.log('Successfully signed out');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      throw new Error(`Failed to sign out: ${error}`);
+    }
+  }
+
+  /**
+   * Get the current user
+   */
+  static getCurrentUser(): User | null {
+    return auth.currentUser;
+  }
+
+  /**
+   * Listen to authentication state changes
+   */
+  static onAuthStateChanged(callback: (user: User | null) => void): () => void {
+    return onAuthStateChanged(auth, callback);
+  }
+
   /**
    * Save a book to Firebase
    */
