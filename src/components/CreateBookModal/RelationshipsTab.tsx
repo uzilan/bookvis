@@ -223,78 +223,76 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
           </Box>
 
           {/* Relationship Descriptions for New Relationship */}
-          (
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Typography variant="caption" color="text.secondary">
-                Relationship Descriptions:
-              </Typography>
-              
-              {/* Add New Description */}
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <TextField
-                  select
-                  size="small"
-                  label="Chapter"
-                  value={newDescriptionChapter}
-                  onChange={(e) => setNewDescriptionChapter(e.target.value)}
-                  sx={{ flex: 1 }}
-                >
-                  <MenuItem value="">
-                    <em>Select chapter</em>
-                  </MenuItem>
-                  {buildHierarchyTree()
-                    .filter(({ item }) => item.type === 'chapter')
-                    .map(({ item, chapter }) => (
-                      <MenuItem key={item.chapter_id} value={item.chapter_id}>
-                        {chapter.title}
-                      </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                  size="small"
-                  label="Description"
-                  value={newDescriptionText}
-                  onChange={(e) => setNewDescriptionText(e.target.value)}
-                  placeholder="Describe the relationship at this point"
-                  sx={{ flex: 2 }}
-                />
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={handleAddNewDescription}
-                  disabled={!newDescriptionChapter || !newDescriptionText}
-                >
-                  Add
-                </Button>
-              </Box>
-
-              {/* Existing Descriptions */}
-              {newRelationshipDescriptions.length > 0 && (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  {newRelationshipDescriptions.map((description, index) => (
-                    <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                      <Chip
-                        label={bookData.chapters.find(ch => ch.id === description.chapter)?.title || description.chapter}
-                        size="small"
-                        variant="outlined"
-                        sx={{ minWidth: '120px' }}
-                      />
-                      <Typography variant="body2" sx={{ flex: 1 }}>
-                        {description.description}
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => handleRemoveNewDescription(index)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+              Relationship Descriptions:
+            </Typography>
+            
+            {/* Add New Description */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <TextField
+                select
+                size="small"
+                label="Chapter"
+                value={newDescriptionChapter}
+                onChange={(e) => setNewDescriptionChapter(e.target.value)}
+                sx={{ flex: 1 }}
+              >
+                <MenuItem value="">
+                  <em>Select chapter</em>
+                </MenuItem>
+                {buildHierarchyTree()
+                  .filter(({ item }) => item.type === 'chapter')
+                  .map(({ item, chapter }) => (
+                    <MenuItem key={item.chapter_id} value={item.chapter_id}>
+                      {chapter.title}
+                    </MenuItem>
                   ))}
-                </Box>
-              )}
+              </TextField>
+              <TextField
+                size="small"
+                label="Description"
+                value={newDescriptionText}
+                onChange={(e) => setNewDescriptionText(e.target.value)}
+                placeholder="Describe the relationship at this point"
+                sx={{ flex: 2 }}
+              />
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={handleAddNewDescription}
+                disabled={!newDescriptionChapter || !newDescriptionText}
+              >
+                Add
+              </Button>
             </Box>
-          )
+
+            {/* Existing Descriptions */}
+            {newRelationshipDescriptions.length > 0 && (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {newRelationshipDescriptions.map((description, index) => (
+                  <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Chip
+                      label={bookData.chapters.find(ch => ch.id === description.chapter)?.title || description.chapter}
+                      size="small"
+                      variant="outlined"
+                      sx={{ minWidth: '120px' }}
+                    />
+                    <Typography variant="body2" sx={{ flex: 1 }}>
+                      {description.description}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      color="error"
+                      onClick={() => handleRemoveNewDescription(index)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
 
