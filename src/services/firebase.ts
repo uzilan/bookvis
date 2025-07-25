@@ -65,11 +65,19 @@ export class FirebaseService {
   /**
    * Save a book to Firebase
    */
-  static async saveBook(bookData: BookData): Promise<void> {
+  static async saveBook(bookData: BookData, isPublic: boolean = false): Promise<void> {
     try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to save books');
+      }
+
       const bookRef = doc(db, 'bookvis', bookData.book.id);
       const firebaseBookData = {
         ...bookData,
+        ownerId: currentUser.uid,
+        ownerEmail: currentUser.email,
+        isPublic: isPublic,
         createdAt: new Date(),
         updatedAt: new Date()
       };
@@ -117,6 +125,7 @@ export class FirebaseService {
    */
   static async getAllBooks(): Promise<BookData[]> {
     try {
+      const currentUser = this.getCurrentUser();
       const booksRef = collection(db, 'bookvis');
       const q = query(booksRef, orderBy('createdAt', 'desc'));
       const querySnapshot = await getDocs(q);
@@ -124,15 +133,32 @@ export class FirebaseService {
       const books: BookData[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        books.push({
+        const bookData = {
           book: data.book,
           characters: data.characters,
           chapters: data.chapters,
           factions: data.factions,
           relationships: data.relationships,
           locations: data.locations || [], // Include locations with fallback to empty array
-          mapUrl: data.mapUrl // Include mapUrl field
-        });
+          mapUrl: data.mapUrl, // Include mapUrl field
+          ownerId: data.ownerId,
+          ownerEmail: data.ownerEmail,
+          isPublic: data.isPublic || false,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt
+        };
+
+        // If user is authenticated, show their books + public books
+        // If user is not authenticated, show only public books
+        if (currentUser) {
+          if (data.ownerId === currentUser.uid || data.isPublic) {
+            books.push(bookData);
+          }
+        } else {
+          if (data.isPublic) {
+            books.push(bookData);
+          }
+        }
       });
       
       return books;
@@ -165,6 +191,112 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error fetching authors:', error);
       throw new Error(`Failed to fetch authors: ${error}`);
+    }
+  }
+
+  /**
+   * Delete a book from Firebase
+   */
+  static async deleteBook(bookId: string): Promise<void> {
+    try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to delete books');
+      }
+
+      // First, get the book to check ownership
+      const bookRef = doc(db, 'bookvis', bookId);
+      const bookDoc = await getDocs(collection(db, 'bookvis'));
+      let bookData: BookData | null = null;
+      
+      bookDoc.forEach((doc) => {
+        if (doc.id === bookId) {
+          const data = doc.data();
+          bookData = {
+            book: data.book,
+            characters: data.characters,
+            chapters: data.chapters,
+            factions: data.factions,
+            relationships: data.relationships,
+            locations: data.locations || [],
+            mapUrl: data.mapUrl,
+            ownerId: data.ownerId,
+            ownerEmail: data.ownerEmail,
+            isPublic: data.isPublic || false,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt
+          } as BookData;
+        }
+      });
+
+      if (!bookData) {
+        throw new Error('Book not found');
+      }
+
+      if (bookData.ownerId && bookData.ownerId !== currentUser.uid) {
+        throw new Error('You can only delete your own books');
+      }
+
+      await setDoc(bookRef, { deleted: true, deletedAt: new Date() });
+      console.log(`Book "${bookData.book.title}" marked as deleted`);
+    } catch (error) {
+      console.error('Error deleting book:', error);
+      throw new Error(`Failed to delete book: ${error}`);
+    }
+  }
+
+  /**
+   * Update book visibility (public/private)
+   */
+  static async updateBookVisibility(bookId: string, isPublic: boolean): Promise<void> {
+    try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to update book visibility');
+      }
+
+      // First, get the book to check ownership
+      const bookRef = doc(db, 'bookvis', bookId);
+      const bookDoc = await getDocs(collection(db, 'bookvis'));
+      let bookData: BookData | null = null;
+      
+      bookDoc.forEach((doc) => {
+        if (doc.id === bookId) {
+          const data = doc.data();
+          bookData = {
+            book: data.book,
+            characters: data.characters,
+            chapters: data.chapters,
+            factions: data.factions,
+            relationships: data.relationships,
+            locations: data.locations || [],
+            mapUrl: data.mapUrl,
+            ownerId: data.ownerId,
+            ownerEmail: data.ownerEmail,
+            isPublic: data.isPublic || false,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt
+          } as BookData;
+        }
+      });
+
+      if (!bookData) {
+        throw new Error('Book not found');
+      }
+
+      if (bookData.ownerId && bookData.ownerId !== currentUser.uid) {
+        throw new Error('You can only update your own books');
+      }
+
+      await setDoc(bookRef, { 
+        ...bookData, 
+        isPublic: isPublic, 
+        updatedAt: new Date() 
+      });
+      console.log(`Book "${bookData.book.title}" visibility updated to ${isPublic ? 'public' : 'private'}`);
+    } catch (error) {
+      console.error('Error updating book visibility:', error);
+      throw new Error(`Failed to update book visibility: ${error}`);
     }
   }
 }

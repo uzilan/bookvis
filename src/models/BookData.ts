@@ -18,4 +18,11 @@ export interface BookData {
   relationships: RelationshipWithChapters[];
   locations: Location[];
   mapUrl?: string;
+  ownerId?: string;
+  ownerEmail?: string;
+  isPublic?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deleted?: boolean;
+  deletedAt?: Date;
 }
