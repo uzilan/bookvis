@@ -27,11 +27,7 @@ export const AppWithRouting: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route 
           path="/visualize/:bookId?" 
-          element={
-            <ProtectedRoute>
-              <CharacterGraphView />
-            </ProtectedRoute>
-          } 
+          element={<CharacterGraphView />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
