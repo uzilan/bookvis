@@ -4,8 +4,7 @@ import type { Book } from '../models/Book';
 import Box from '@mui/material/Box';
 import { FormControl, Select, MenuItem, Typography, Chip, Button } from '@mui/material';
 import { buildChapterTree, type ChapterNode } from '../utils/chapterHierarchy';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import AddIcon from '@mui/icons-material/Add';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -44,23 +43,30 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
 
 
   const hasChildren = node.children.length > 0;
-  const indent = level * 4; // Reduced from 8 to 4
+  // Book: 0px, Part: 2px, Chapter: 4px
+  // Since the hierarchy is flattened (book level removed), adjust indentation
+  // Material-UI spacing: 1 = 8px, so 0.25 = 2px, 0.5 = 4px
+  // Book: 0px, Part: 2px, Chapter: 4px
+  // After book level removal: Part (level 0) gets 2px, Chapter (level 1) gets 4px
+  // No indentation, use font weights for hierarchy
+  
 
   return (
-    <Box>
-      <Box
-        sx={{
+    <div style={{ width: '100%' }}>
+      <div
+        style={{
           display: 'flex',
           alignItems: 'center',
           cursor: 'pointer',
-          py: 0.5,
-          px: 1,
-          ml: indent,
-          borderRadius: 1,
+          padding: node.chapter.type === 'part' ? '12px 0px 4px 0px' : '4px 0px',
+          borderRadius: '4px',
           backgroundColor: isSelected ? 'rgba(25, 118, 210, 0.1)' : 'transparent',
-          '&:hover': {
-            backgroundColor: isSelected ? 'rgba(25, 118, 210, 0.15)' : 'rgba(0, 0, 0, 0.04)',
-          },
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = isSelected ? 'rgba(25, 118, 210, 0.15)' : 'rgba(0, 0, 0, 0.04)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = isSelected ? 'rgba(25, 118, 210, 0.1)' : 'transparent';
         }}
         onClick={() => {
           if (hasChildren) {
@@ -70,24 +76,21 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           }
         }}
       >
-        {hasChildren && (
-          <Box sx={{ mr: 0.5, display: 'flex', alignItems: 'center' }}>
-            {isExpanded ? (
-              <ExpandLessIcon sx={{ fontSize: 16 }} />
-            ) : (
-              <ChevronRightIcon sx={{ fontSize: 16 }} />
-            )}
-          </Box>
-        )}
+        {/* Removed expand/collapse icons to eliminate indentation */}
         
         <Typography
-          variant="body2"
-          sx={{
-            fontSize: 11,
-            color: isSelected ? '#1976d2' : (level === 0 ? '#111' : '#666'),
-            fontWeight: isSelected ? 'bold' : (level === 0 ? 'medium' : 'normal'),
+          variant={node.chapter.type === 'book' ? 'h6' : 'body2'}
+          style={{
+            fontSize: node.chapter.type === 'book' ? 14 : 11,
+            color: isSelected ? '#1976d2' : '#111',
+            fontWeight: isSelected ? 'bold' : (
+              node.chapter.type === 'book' ? 'bold' : 
+              node.chapter.type === 'part' ? 'bold' : 
+              'normal'
+            ),
             textDecoration: isSelected ? 'underline' : 'none',
             flex: 1,
+            textAlign: 'left',
           }}
         >
           {node.chapter.title}
@@ -105,10 +108,10 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
             }}
           />
         )}
-      </Box>
+      </div>
       
       {hasChildren && isExpanded && (
-        <Box>
+        <div>
           {node.children.map((child, index) => (
             <ChapterItem
               key={`${child.chapter.title}-${index}`}
@@ -120,9 +123,9 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
               onToggleExpanded={onToggleExpanded}
             />
           ))}
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 
@@ -200,7 +203,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         background: 'rgba(255,255,255,0.98)',
         borderRight: '3px solid #ccc',
         zIndex: 1000,
-        p: '24px 16px',
+        padding: '24px 16px',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
@@ -274,6 +277,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         height: '70vh',
         overflow: 'auto',
         pr: 1,
+        textAlign: 'left',
         '&::-webkit-scrollbar': {
           width: '8px',
         },
@@ -296,9 +300,9 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
           <ChapterItem
             key={`${node.chapter.title}-${index}`}
             node={node}
-                          selectedChapterId={value}
+            selectedChapterId={value}
             onSelect={onChange}
-            level={0}
+            level={node.level}
             expandedNodes={expandedNodes}
             onToggleExpanded={handleToggleExpanded}
           />

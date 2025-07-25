@@ -326,6 +326,22 @@ function buildChapters(chapterData: Record<string, { id: string; title: string; 
     // Resolve location IDs to Location objects
     const locations = locationIds.map(id => lotrLocations.find(loc => loc.id === id)).filter(Boolean) as Location[];
     
+    // Build path based on hierarchy
+    const path: string[] = [];
+    let currentLevel = item.level;
+
+    
+    // Walk backwards through hierarchy to build path
+    for (let i = index; i >= 0; i--) {
+      const currentItem = hierarchy[i];
+      if (currentItem.level < currentLevel) {
+        // This is a parent
+        const parentInfo = chapterData[currentItem.chapterId];
+        path.unshift(parentInfo.title);
+        currentLevel = currentItem.level;
+      }
+    }
+    
     return {
       book: lotrBook,
       ...chapterInfo,
@@ -333,6 +349,7 @@ function buildChapters(chapterData: Record<string, { id: string; title: string; 
       level: item.level,
       type: item.type,
       index: index + 1, // For backward compatibility
+      path: path,
     };
   });
 }

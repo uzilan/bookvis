@@ -54,7 +54,8 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
+        textAlign: 'left'
       }}>
         <span>Characters:</span>
         <FormControl size="small">
@@ -63,30 +64,32 @@ export const CharacterList: React.FC<CharacterListProps> = ({
             value={showAllCharacters ? 'all' : 'chapter'}
             onChange={(e) => setShowAllCharacters(e.target.value === 'all')}
           >
-            <FormControlLabel
-              value="chapter"
-              control={<Radio size="small" />}
-              label="Chapter"
-              sx={{ 
-                fontSize: '10px', 
-                '& .MuiFormControlLabel-label': { 
-                  fontSize: '10px',
-                  color: '#000'
-                } 
-              }}
-            />
-            <FormControlLabel
-              value="all"
-              control={<Radio size="small" />}
-              label="All"
-              sx={{ 
-                fontSize: '10px', 
-                '& .MuiFormControlLabel-label': { 
-                  fontSize: '10px',
-                  color: '#000'
-                } 
-              }}
-            />
+                          <FormControlLabel
+                value="chapter"
+                control={<Radio size="small" />}
+                label="Chapter"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000',
+                    textAlign: 'left'
+                  } 
+                }}
+              />
+              <FormControlLabel
+                value="all"
+                control={<Radio size="small" />}
+                label="All"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: '#000',
+                    textAlign: 'left'
+                  } 
+                }}
+              />
           </RadioGroup>
         </FormControl>
       </div>
@@ -108,7 +111,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
               color: '#000'
             }}
           />
-          <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
+          <div style={{ fontSize: '10px', color: '#666', marginTop: '4px', textAlign: 'left' }}>
             {displayCharacters.length}/{showAllCharacters ? allCharacters.length : characters.length}
           </div>
         </div>
@@ -180,7 +183,8 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                     fontWeight: 'bold',
                     color: '#000',
                     fontSize: '11px',
-                    marginBottom: '2px'
+                    marginBottom: '2px',
+                    textAlign: 'left'
                   }}>
                     {character.name}
                   </div>
@@ -188,7 +192,8 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                     <div style={{
                       fontSize: '9px',
                       color: '#666',
-                      fontStyle: 'italic'
+                      fontStyle: 'italic',
+                      textAlign: 'left'
                     }}>
                       {character.aliases.join(', ')}
                     </div>
@@ -197,7 +202,8 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                     <div style={{
                       fontSize: '9px',
                       color: '#666',
-                      marginTop: '2px'
+                      marginTop: '2px',
+                      textAlign: 'left'
                     }}>
                       {currentFactions.map((f: Faction) => f.title).join(', ')}
                     </div>
@@ -209,7 +215,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         ) : (
           <div style={{
             padding: '12px',
-            textAlign: 'center',
+            textAlign: 'left',
             color: '#666',
             fontSize: '11px',
             fontStyle: 'italic'

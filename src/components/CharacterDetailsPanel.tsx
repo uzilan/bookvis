@@ -35,11 +35,10 @@ function getBreadcrumbDisplay(chapter: Chapter, chapters: Chapter[]): string {
       // Simple structure: just book and chapter
       breadcrumbs.push(chapter.title);
     } else if (path.length > 1) {
-      // Has parts
-      breadcrumbs.push(path[1]); // Part name
-      if (path.length > 2) {
-        breadcrumbs.push(path[2]); // Chapter name
-      }
+      // Has parts - show part name and chapter title
+      const partName = path[1];
+      breadcrumbs.push(partName);
+      breadcrumbs.push(chapter.title);
     }
   } else {
     // Multiple books, show book name
@@ -141,7 +140,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
     >
       <Box sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
             {character.name}
           </Typography>
           <IconButton onClick={onClose} size="small">
@@ -150,18 +149,18 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
         </Box>
 
         <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2, textAlign: 'left' }}>
             {character.description}
           </Typography>
           
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'left' }}>
             First appears in {firstAppearanceDisplay}
           </Typography>
         </Paper>
 
         {character.aliases.length > 0 && (
           <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
               Aliases
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -174,7 +173,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
         {characterFactions.length > 0 && (
           <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
               Current Factions
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -199,7 +198,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
         {character.attributes.length > 0 && (
           <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
               Attributes
             </Typography>
             <List dense>
@@ -214,7 +213,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
         {characterRelationships.length > 0 && (
           <Paper elevation={1} sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
               Current Relationships
             </Typography>
             <List dense>

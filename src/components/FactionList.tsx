@@ -64,7 +64,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
           alignItems: 'center',
           marginBottom: '8px' 
         }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
             Factions:
           </div>
           <FormControl size="small">
@@ -81,7 +81,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000'
+                    color: '#000',
+                    textAlign: 'left'
                   } 
                 }}
               />
@@ -93,7 +94,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000'
+                    color: '#000',
+                    textAlign: 'left'
                   } 
                 }}
               />
@@ -133,7 +135,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
               fontSize: '11px',
               color: '#666',
               padding: '8px',
-              textAlign: 'center',
+              textAlign: 'left',
               fontStyle: 'italic'
             }}>
               No factions match your filter
@@ -170,7 +172,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                 fontSize: '13px', 
                 color: '#000', 
                 fontWeight: '500',
-                flex: 1
+                flex: 1,
+                textAlign: 'left'
               }}>
                 {faction.title}
               </span>
@@ -198,7 +201,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                 zIndex: 1005
               }}>
                 {faction.description && (
-                  <div style={{ marginBottom: '8px' }}>
+                  <div style={{ marginBottom: '8px', textAlign: 'left' }}>
                     {faction.description}
                   </div>
                 )}
@@ -218,7 +221,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                           color: '#333',
                           marginBottom: '4px',
                           borderTop: '1px solid #e0e0e0',
-                          paddingTop: '6px'
+                          paddingTop: '6px',
+                          textAlign: 'left'
                         }}>
                           Characters ({factionCharacters.length}):
                         </div>
@@ -235,7 +239,8 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
                               display: 'flex',
                               alignItems: 'center',
                               gap: '4px',
-                              cursor: onCharacterClick ? 'pointer' : 'default'
+                              cursor: onCharacterClick ? 'pointer' : 'default',
+                              textAlign: 'left'
                             }}
                             onClick={() => onCharacterClick?.(character)}
                             onMouseEnter={(e) => {

@@ -67,7 +67,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           alignItems: 'center',
           marginBottom: '6px' 
         }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
             Locations:
           </div>
           <FormControl size="small">
@@ -84,7 +84,8 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000'
+                    color: '#000',
+                    textAlign: 'left'
                   } 
                 }}
               />
@@ -96,7 +97,8 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000'
+                    color: '#000',
+                    textAlign: 'left'
                   } 
                 }}
               />
@@ -137,7 +139,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
               fontSize: '11px',
               color: '#666',
               padding: '8px',
-              textAlign: 'center',
+              textAlign: 'left',
               fontStyle: 'italic'
             }}>
               No locations match your filter
@@ -168,7 +170,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   e.currentTarget.style.backgroundColor = '#f8f9fa';
                 }}
               >
-                <span>📍 {location.name}</span>
+                <span style={{ textAlign: 'left' }}>📍 {location.name}</span>
                 <span style={{ 
                   fontSize: '12px', 
                   color: '#666',
@@ -187,7 +189,8 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   backgroundColor: '#f1f3f4',
                   borderRadius: '4px',
                   border: '1px solid #e0e0e0',
-                  lineHeight: '1.3'
+                  lineHeight: '1.3',
+                  textAlign: 'left'
                 }}>
                   {location.description}
                 </div>
