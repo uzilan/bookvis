@@ -3,6 +3,7 @@ export { LocationsTab } from './LocationsTab';
 export { FactionsTab } from './FactionsTab';
 export { ChaptersTab } from './ChaptersTab';
 export { CharactersTab } from './CharactersTab';
+export { RelationshipsTab } from './RelationshipsTab';
 export { LocationSelectorModal } from './LocationSelectorModal';
 export { DevelopmentDataViewer } from './DevelopmentDataViewer';
 export { CreateBookModal } from './CreateBookModal'; 
