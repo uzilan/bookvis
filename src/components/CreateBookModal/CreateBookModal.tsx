@@ -164,7 +164,12 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
       {open && (
         <Dialog
           open={open}
-          onClose={handleClose}
+          onClose={(event, reason) => {
+            if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+              return; // Prevent closing on backdrop click or escape key
+            }
+            handleClose();
+          }}
           maxWidth="md"
           fullWidth
         >
