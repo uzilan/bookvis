@@ -223,7 +223,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
           </Box>
 
           {/* Relationship Descriptions for New Relationship */}
-          {(newRelationshipCharacter1 || newRelationshipCharacter2) && (
+          (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography variant="caption" color="text.secondary">
                 Relationship Descriptions:
@@ -294,7 +294,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                 </Box>
               )}
             </Box>
-          )}
+          )
         </Box>
       </Box>
 
