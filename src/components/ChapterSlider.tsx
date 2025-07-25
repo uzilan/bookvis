@@ -7,6 +7,8 @@ import { buildChapterTree, type ChapterNode } from '../utils/chapterHierarchy';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AddIcon from '@mui/icons-material/Add';
+import { Home as HomeIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 interface ChapterSliderProps {
   chapters: Chapter[];
@@ -16,6 +18,7 @@ interface ChapterSliderProps {
   selectedBook: Book;
   onBookChange: (book: Book) => void;
   onCreateBook: () => void;
+  showBookSelector?: boolean;
 }
 
 interface ChapterItemProps {
@@ -130,8 +133,10 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
   books, 
   selectedBook, 
   onBookChange,
-  onCreateBook
+  onCreateBook,
+  showBookSelector = true
 }) => {
+  const navigate = useNavigate();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   
   // Build hierarchical structure
@@ -202,45 +207,64 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
       }}
     >
-      {/* Book Selector */}
+      {/* Home Link */}
       <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: 12, color: '#111' }}>
-            Book:
-          </Typography>
-          <Button
-            size="small"
-            startIcon={<AddIcon />}
-            onClick={onCreateBook}
-            sx={{
-              minWidth: 'auto',
-              px: 1,
-              py: 0.5,
-              fontSize: 10,
-              textTransform: 'none'
-            }}
-          >
-            Create
-          </Button>
-        </Box>
-        <FormControl size="small" sx={{ width: '100%' }}>
-          <Select
-            value={selectedBook.id}
-            onChange={(e) => {
-              const book = books.find(b => b.id === e.target.value);
-              if (book) onBookChange(book);
-            }}
-            displayEmpty
-            sx={{ fontSize: 12 }}
-          >
-            {books.map((book) => (
-              <MenuItem key={book.id} value={book.id} sx={{ fontSize: 12 }}>
-                {book.title}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Button
+          variant="outlined"
+          startIcon={<HomeIcon />}
+          onClick={() => navigate('/')}
+          size="small"
+          sx={{
+            width: '100%',
+            justifyContent: 'flex-start',
+            textTransform: 'none',
+            fontSize: 12
+          }}
+        >
+          Back to Home
+        </Button>
       </Box>
+      {/* Book Selector */}
+      {showBookSelector && (
+        <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: 12, color: '#111' }}>
+              Book:
+            </Typography>
+            <Button
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={onCreateBook}
+              sx={{
+                minWidth: 'auto',
+                px: 1,
+                py: 0.5,
+                fontSize: 10,
+                textTransform: 'none'
+              }}
+            >
+              Create
+            </Button>
+          </Box>
+          <FormControl size="small" sx={{ width: '100%' }}>
+            <Select
+              value={selectedBook.id}
+              onChange={(e) => {
+                const book = books.find(b => b.id === e.target.value);
+                if (book) onBookChange(book);
+              }}
+              displayEmpty
+              sx={{ fontSize: 12 }}
+            >
+              {books.map((book) => (
+                <MenuItem key={book.id} value={book.id} sx={{ fontSize: 12 }}>
+                  {book.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
 
       {/* Chapter Tree */}
       <Box sx={{ 

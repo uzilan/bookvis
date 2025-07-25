@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CharacterGraph } from './CharacterGraph';
 import { CreateBookModal } from './CreateBookModal';
-import { LoginButton } from './LoginButton';
 import type { Book } from '../models/Book';
 import type { BookData } from '../models/BookData';
 import { FirebaseService } from '../services/firebase.ts';
@@ -177,20 +176,6 @@ export const CharacterGraphView: React.FC = () => {
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
-      {/* Login Button - Top Right Corner */}
-      <div style={{ 
-        position: 'absolute', 
-        top: '20px', 
-        right: '20px', 
-        zIndex: 1003,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        padding: '10px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-      }}>
-        <LoginButton />
-      </div>
-      
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
           key={selectedBook.id}

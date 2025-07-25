@@ -619,6 +619,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         selectedBook={selectedBook}
         onBookChange={onBookChange}
         onCreateBook={onCreateBook}
+        showBookSelector={false}
       />
       <CharacterDetailsPanel
         character={selectedCharacter}
