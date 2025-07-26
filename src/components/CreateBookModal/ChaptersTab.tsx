@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormC
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
+import { CharacterSelectorModal } from './CharacterSelectorModal';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import type { SchemaChapter } from '../../schema/models/SchemaChapter';
 import type { SchemaHierarchyItem, SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
@@ -26,16 +27,21 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   const [editingTitle, setEditingTitle] = useState('');
   const [editingType, setEditingType] = useState<SchemaHierarchyType>('chapter');
   const [editingLocations, setEditingLocations] = useState<string[]>([]);
+  const [editingCharacters, setEditingCharacters] = useState<string[]>([]);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [locationModalTitle, setLocationModalTitle] = useState('');
   const [newChapterLocations, setNewChapterLocations] = useState<string[]>([]);
+  const [isCharacterModalOpen, setIsCharacterModalOpen] = useState(false);
+  const [characterModalTitle, setCharacterModalTitle] = useState('');
+  const [newChapterCharacters, setNewChapterCharacters] = useState<string[]>([]);
 
   const handleAddChapter = () => {
     if (newChapterTitle.trim()) {
       const newChapter: SchemaChapter = {
         id: `chapter-${bookData.chapters.length + 1}`,
         title: newChapterTitle.trim(),
-        locations: selectedHierarchyType === 'chapter' ? newChapterLocations : []
+        locations: selectedHierarchyType === 'chapter' ? newChapterLocations : [],
+        characterMentions: selectedHierarchyType === 'chapter' ? newChapterCharacters : []
       };
 
       const newHierarchyItem: SchemaHierarchyItem = {
@@ -141,6 +147,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle(currentTitle);
     setEditingType(currentType);
     setEditingLocations(chapter?.locations || []);
+    setEditingCharacters(chapter?.characterMentions || []);
   };
 
   const handleSaveEdit = () => {
@@ -149,7 +156,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         ...prev,
         chapters: prev.chapters.map(chapter => 
           chapter.id === editingChapterId 
-            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [] }
+            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [], characterMentions: editingType === 'chapter' ? editingCharacters : [] }
             : chapter
         ),
         hierarchy: prev.hierarchy?.map(item => 
@@ -163,6 +170,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle('');
     setEditingType('chapter');
     setEditingLocations([]);
+    setEditingCharacters([]);
   };
 
   const handleCancelEdit = () => {
@@ -170,6 +178,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle('');
     setEditingType('chapter');
     setEditingLocations([]);
+    setEditingCharacters([]);
   };
 
 
@@ -189,6 +198,32 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
       setEditingLocations(selectedLocationIds);
     } else {
       setNewChapterLocations(selectedLocationIds);
+    }
+  };
+
+  const handleOpenCharacterModal = (title: string) => {
+    setCharacterModalTitle(title);
+    setIsCharacterModalOpen(true);
+  };
+
+  const handleCharacterModalSave = (selectedCharacterIds: string[]) => {
+    // Check if we're editing an existing chapter or creating a new one
+    if (editingChapterId) {
+      // Handle editing existing chapter characters
+      const chapterIndex = bookData.chapters.findIndex(ch => ch.id === editingChapterId);
+      if (chapterIndex !== -1) {
+        const updatedChapters = [...bookData.chapters];
+        updatedChapters[chapterIndex] = {
+          ...updatedChapters[chapterIndex],
+          characterMentions: selectedCharacterIds
+        };
+        setBookData(prev => ({
+          ...prev,
+          chapters: updatedChapters
+        }));
+      }
+    } else {
+      setNewChapterCharacters(selectedCharacterIds);
     }
   };
 
@@ -294,6 +329,37 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                 variant="outlined"
                 disabled
                 title={`Locations are only available for chapters. ${selectedHierarchyType.charAt(0).toUpperCase() + selectedHierarchyType.slice(1)}s are organizational structures.`}
+                sx={{ 
+                  cursor: 'help',
+                  '&:hover': {
+                    backgroundColor: 'action.hover'
+                  }
+                }}
+              >
+                Not available
+              </Button>
+            )}
+          </Box>
+          
+          {/* Characters Row - Always show, but read-only for non-chapters */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="body2" sx={{ minWidth: 80 }}>
+              Characters:
+            </Typography>
+            {selectedHierarchyType === 'chapter' ? (
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => handleOpenCharacterModal(`Select Characters for New Chapter`)}
+              >
+                {newChapterCharacters.length} selected
+              </Button>
+            ) : (
+              <Button
+                size="small"
+                variant="outlined"
+                disabled
+                title={`Characters are only available for chapters. ${selectedHierarchyType.charAt(0).toUpperCase() + selectedHierarchyType.slice(1)}s are organizational structures.`}
                 sx={{ 
                   cursor: 'help',
                   '&:hover': {
@@ -491,6 +557,40 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                         )}
                       </Box>
                       
+                      {/* Characters Button */}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography variant="body2" sx={{ minWidth: 80 }}>
+                          Characters:
+                        </Typography>
+                        {editingType === 'chapter' ? (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenCharacterModal(`Select Characters for "${editingTitle}"`);
+                            }}
+                          >
+                            {editingCharacters.length} selected
+                          </Button>
+                        ) : (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            disabled
+                            title={`Characters are only available for chapters. ${editingType.charAt(0).toUpperCase() + editingType.slice(1)}s are organizational structures.`}
+                            sx={{ 
+                              cursor: 'help',
+                              '&:hover': {
+                                backgroundColor: 'action.hover'
+                              }
+                            }}
+                          >
+                            Not available
+                          </Button>
+                        )}
+                      </Box>
+                      
                       {/* Buttons Row */}
                       <Box sx={{ display: 'flex', gap: 1 }}>
                         <Button 
@@ -594,6 +694,16 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         bookData={bookData}
         initialSelectedLocationIds={editingLocations}
         title={locationModalTitle}
+      />
+
+      {/* Character Selector Modal */}
+      <CharacterSelectorModal
+        open={isCharacterModalOpen}
+        onClose={() => setIsCharacterModalOpen(false)}
+        onSave={handleCharacterModalSave}
+        bookData={bookData}
+        initialSelectedCharacterIds={editingCharacters}
+        title={characterModalTitle}
       />
     </Box>
   );

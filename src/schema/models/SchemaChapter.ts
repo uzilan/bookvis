@@ -8,4 +8,6 @@ export interface SchemaChapter {
   title: string;
   /** Location IDs mentioned in this chapter */
   locations: string[];
+  /** Character IDs mentioned in this chapter */
+  characterMentions: string[];
 } 

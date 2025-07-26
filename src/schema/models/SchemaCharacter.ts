@@ -8,8 +8,6 @@ export interface SchemaCharacter {
   name: string;
   /** Description of the character */
   description: string;
-  /** Chapter ID where character first appears */
-  first_appearance_chapter: string;
   /** Alternative names for the character */
   aliases: string[];
   /** Faction IDs the character belongs to */
