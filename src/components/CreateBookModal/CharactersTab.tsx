@@ -5,7 +5,8 @@ import {
   TextField,
   Button,
   Chip,
-  MenuItem
+  MenuItem,
+  Divider
 } from '@mui/material';
 import type { SchemaBookData, SchemaCharacter, SchemaChapter, SchemaHierarchyItem } from '../../schema/models';
 
@@ -247,31 +248,26 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Add Character Form */}
-      <Box>
+    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+      {/* Left Column - Add Character Form */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Add New Character
+        </Typography>
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField
-              fullWidth
-              label="Character Name"
-              placeholder="Enter character name"
-              value={newCharacterName}
-              onChange={(e) => setNewCharacterName(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleAddCharacter();
-                }
-              }}
-            />
-            <Button
-              variant="contained"
-              onClick={handleAddCharacter}
-              disabled={!newCharacterName.trim() || !newCharacterDescription.trim()}
-            >
-              Add
-            </Button>
-          </Box>
+          <TextField
+            fullWidth
+            label="Character Name"
+            placeholder="Enter character name"
+            value={newCharacterName}
+            onChange={(e) => setNewCharacterName(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleAddCharacter();
+              }
+            }}
+          />
           
           <TextField
             fullWidth
@@ -458,16 +454,27 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               Add Faction
             </Button>
           </Box>
+          
+          <Button
+            variant="contained"
+            onClick={handleAddCharacter}
+            disabled={!newCharacterName.trim() || !newCharacterDescription.trim()}
+          >
+            Add Character
+          </Button>
         </Box>
       </Box>
 
-      {/* Characters List */}
-      <Box>
+      {/* Divider between columns */}
+      <Divider orientation="vertical" flexItem />
+
+      {/* Right Column - Characters List */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
           Current Characters ({bookData.characters.length})
         </Typography>
         {bookData.characters.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
             {bookData.characters.map((character) => (
               <Box
                 key={character.id}
@@ -763,14 +770,15 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     )}
                   </Box>
                 )}
-                <Button
-                  size="small"
-                  color="error"
-                  onClick={() => handleDeleteCharacter(character.id)}
-                  disabled={editingCharacterId === character.id}
-                >
-                  Remove
-                </Button>
+                {editingCharacterId !== character.id && (
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => handleDeleteCharacter(character.id)}
+                  >
+                    Remove
+                  </Button>
+                )}
               </Box>
             ))}
           </Box>
@@ -780,8 +788,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
           </Typography>
         )}
       </Box>
-
-
     </Box>
   );
 }; 

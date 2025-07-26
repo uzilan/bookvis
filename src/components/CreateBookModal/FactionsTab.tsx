@@ -3,7 +3,8 @@ import {
   Box,
   Typography,
   TextField,
-  Button
+  Button,
+  Divider
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 
@@ -16,14 +17,6 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
   bookData,
   setBookData
 }) => {
-  const [editingFactionId, setEditingFactionId] = useState<string | null>(null);
-  const [editingFactionName, setEditingFactionName] = useState('');
-  const [editingFactionDescription, setEditingFactionDescription] = useState('');
-  const [editingFactionColor, setEditingFactionColor] = useState('#3f51b5');
-  const [newFactionName, setNewFactionName] = useState('');
-  const [newFactionDescription, setNewFactionDescription] = useState('');
-  const [newFactionColor, setNewFactionColor] = useState('#3f51b5');
-
   const generateRandomColor = (): string => {
     const colors = [
       '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
@@ -31,8 +24,55 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
       '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800',
       '#ff5722', '#795548', '#9e9e9e', '#607d8b'
     ];
-    return colors[Math.floor(Math.random() * colors.length)];
+    
+    // Calculate color distance using RGB values
+    const colorDistance = (color1: string, color2: string): number => {
+      const hexToRgb = (hex: string) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null;
+      };
+      
+      const rgb1 = hexToRgb(color1);
+      const rgb2 = hexToRgb(color2);
+      
+      if (!rgb1 || !rgb2) return 0;
+      
+      return Math.sqrt(
+        Math.pow(rgb1.r - rgb2.r, 2) +
+        Math.pow(rgb1.g - rgb2.g, 2) +
+        Math.pow(rgb1.b - rgb2.b, 2)
+      );
+    };
+    
+    // Get existing faction colors
+    const existingColors = bookData.factions.map(faction => faction.color);
+    
+    // Filter out colors that are too similar to existing ones
+    const availableColors = colors.filter(color => {
+      return !existingColors.some(existingColor => 
+        colorDistance(color, existingColor) < 100 // Minimum distance threshold
+      );
+    });
+    
+    // If no colors are available (all are too similar), return a random one
+    if (availableColors.length === 0) {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
+    return availableColors[Math.floor(Math.random() * availableColors.length)];
   };
+
+  const [editingFactionId, setEditingFactionId] = useState<string | null>(null);
+  const [editingFactionName, setEditingFactionName] = useState('');
+  const [editingFactionDescription, setEditingFactionDescription] = useState('');
+  const [editingFactionColor, setEditingFactionColor] = useState('#3f51b5');
+  const [newFactionName, setNewFactionName] = useState('');
+  const [newFactionDescription, setNewFactionDescription] = useState('');
+  const [newFactionColor, setNewFactionColor] = useState(generateRandomColor());
 
   const handleAddFaction = (factionName: string, description: string = '', color: string = '') => {
     const newFaction = {
@@ -95,15 +135,19 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
       handleAddFaction(newFactionName, newFactionDescription, newFactionColor);
       setNewFactionName('');
       setNewFactionDescription('');
-      setNewFactionColor('#3f51b5');
+      setNewFactionColor(generateRandomColor());
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Add Faction Form */}
-      <Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>
+    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+      {/* Left Column - Add Faction Form */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Add New Faction
+        </Typography>
+        
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <TextField
               fullWidth
@@ -144,13 +188,6 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                 }}
               />
             </Box>
-            <Button
-              variant="contained"
-              onClick={handleAddFactionWithForm}
-              disabled={!newFactionName.trim()}
-            >
-              Add
-            </Button>
           </Box>
           <TextField
             fullWidth
@@ -161,11 +198,22 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
             multiline
             rows={2}
           />
+          
+          <Button
+            variant="contained"
+            onClick={handleAddFactionWithForm}
+            disabled={!newFactionName.trim()}
+          >
+            Add
+          </Button>
         </Box>
       </Box>
 
-      {/* Factions List */}
-      <Box>
+      {/* Divider between columns */}
+      <Divider orientation="vertical" flexItem />
+
+      {/* Right Column - Factions List */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
           Current Factions ({bookData.factions.length})
         </Typography>
@@ -174,7 +222,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
             No factions added yet.
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
             {bookData.factions.map((faction) => (
               <Box
                 key={faction.id}
@@ -296,8 +344,6 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
           </Box>
         )}
       </Box>
-
-
     </Box>
   );
 }; 

@@ -6,7 +6,8 @@ import {
   Button,
   Chip,
   MenuItem,
-  IconButton
+  IconButton,
+  Divider
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData, SchemaRelationship, SchemaRelationshipDescription, SchemaHierarchyItem, SchemaChapter } from '../../schema/models';
@@ -170,96 +171,94 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Add Relationship Form */}
-      <Box>
+    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+      {/* Left Column - Add Relationship Form */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Add New Relationship
+        </Typography>
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField
-              select
-              fullWidth
-              label="First Character"
-              value={newRelationshipCharacter1}
-              onChange={(e) => setNewRelationshipCharacter1(e.target.value)}
-            >
-              <MenuItem value="">
-                <em>Select first character</em>
+          <TextField
+            select
+            fullWidth
+            label="First Character"
+            value={newRelationshipCharacter1}
+            onChange={(e) => setNewRelationshipCharacter1(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>Select first character</em>
+            </MenuItem>
+            {bookData.characters.map((character) => (
+              <MenuItem key={character.id} value={character.id}>
+                {character.name}
               </MenuItem>
-              {bookData.characters.map((character) => (
-                <MenuItem key={character.id} value={character.id}>
-                  {character.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              select
-              fullWidth
-              label="Second Character"
-              value={newRelationshipCharacter2}
-              onChange={(e) => setNewRelationshipCharacter2(e.target.value)}
-            >
-              <MenuItem value="">
-                <em>Select second character</em>
+            ))}
+          </TextField>
+          <TextField
+            select
+            fullWidth
+            label="Second Character"
+            value={newRelationshipCharacter2}
+            onChange={(e) => setNewRelationshipCharacter2(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>Select second character</em>
+            </MenuItem>
+            {bookData.characters.map((character) => (
+              <MenuItem key={character.id} value={character.id}>
+                {character.name}
               </MenuItem>
-              {bookData.characters.map((character) => (
-                <MenuItem key={character.id} value={character.id}>
-                  {character.name}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Button
-              variant="contained"
-              onClick={handleAddRelationship}
-              disabled={!newRelationshipCharacter1 || !newRelationshipCharacter2 || newRelationshipCharacter1 === newRelationshipCharacter2}
-            >
-              Add
-            </Button>
-          </Box>
+            ))}
+          </TextField>
 
           {/* Relationship Descriptions for New Relationship */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Typography variant="caption" color="text.secondary">
               Relationship Descriptions:
             </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
+              Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
+            </Typography>
             
             {/* Add New Description */}
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-              <TextField
-                select
-                size="small"
-                label="Chapter"
-                value={newDescriptionChapter}
-                onChange={(e) => setNewDescriptionChapter(e.target.value)}
-                sx={{ flex: 1 }}
-              >
-                <MenuItem value="">
-                  <em>Select chapter</em>
-                </MenuItem>
-                {buildHierarchyTree()
-                  .filter(({ item }) => item.type === 'chapter')
-                  .map(({ item, chapter }) => (
-                    <MenuItem key={item.chapter_id} value={item.chapter_id}>
-                      {chapter.title}
-                    </MenuItem>
-                  ))}
-              </TextField>
-              <TextField
-                size="small"
-                label="Description"
-                value={newDescriptionText}
-                onChange={(e) => setNewDescriptionText(e.target.value)}
-                placeholder="Describe the relationship at this point"
-                sx={{ flex: 2 }}
-              />
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={handleAddNewDescription}
-                disabled={!newDescriptionChapter || !newDescriptionText}
-              >
-                Add
-              </Button>
-            </Box>
+            <TextField
+              select
+              size="small"
+              label="Chapter"
+              value={newDescriptionChapter}
+              onChange={(e) => setNewDescriptionChapter(e.target.value)}
+              fullWidth
+            >
+              <MenuItem value="">
+                <em>Select chapter</em>
+              </MenuItem>
+              {buildHierarchyTree()
+                .filter(({ item }) => item.type === 'chapter')
+                .map(({ item, chapter }) => (
+                  <MenuItem key={item.chapter_id} value={item.chapter_id}>
+                    {chapter.title}
+                  </MenuItem>
+                ))}
+            </TextField>
+            <TextField
+              size="small"
+              label="Description"
+              value={newDescriptionText}
+              onChange={(e) => setNewDescriptionText(e.target.value)}
+              placeholder="Describe the relationship at this point"
+              fullWidth
+              multiline
+              rows={2}
+            />
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleAddNewDescription}
+              disabled={!newDescriptionChapter || !newDescriptionText}
+            >
+              Add Description
+            </Button>
 
             {/* Existing Descriptions */}
             {newRelationshipDescriptions.length > 0 && (
@@ -287,16 +286,27 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               </Box>
             )}
           </Box>
+          
+          <Button
+            variant="contained"
+            onClick={handleAddRelationship}
+            disabled={!newRelationshipCharacter1 || !newRelationshipCharacter2 || newRelationshipCharacter1 === newRelationshipCharacter2}
+          >
+            Add Relationship
+          </Button>
         </Box>
       </Box>
 
-      {/* Relationships List */}
-      <Box>
+      {/* Divider between columns */}
+      <Divider orientation="vertical" flexItem />
+
+      {/* Right Column - Relationships List */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
           Current Relationships ({bookData.relationships.length})
         </Typography>
         {bookData.relationships.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
             {bookData.relationships.map((relationship) => {
               const relationshipId = `${relationship.character1}-${relationship.character2}`;
               const isEditing = editingRelationshipId === relationshipId;
@@ -325,81 +335,82 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                 >
                   {isEditing ? (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
-                      <Box sx={{ display: 'flex', gap: 1 }}>
-                        <TextField
-                          select
-                          size="small"
-                          label="First Character"
-                          value={editingRelationshipCharacter1}
-                          onChange={(e) => setEditingRelationshipCharacter1(e.target.value)}
-                          sx={{ flex: 1 }}
-                        >
-                          {bookData.characters.map((character) => (
-                            <MenuItem key={character.id} value={character.id}>
-                              {character.name}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                        <TextField
-                          select
-                          size="small"
-                          label="Second Character"
-                          value={editingRelationshipCharacter2}
-                          onChange={(e) => setEditingRelationshipCharacter2(e.target.value)}
-                          sx={{ flex: 1 }}
-                        >
-                          {bookData.characters.map((character) => (
-                            <MenuItem key={character.id} value={character.id}>
-                              {character.name}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Box>
+                      <TextField
+                        select
+                        size="small"
+                        label="First Character"
+                        value={editingRelationshipCharacter1}
+                        onChange={(e) => setEditingRelationshipCharacter1(e.target.value)}
+                        fullWidth
+                      >
+                        {bookData.characters.map((character) => (
+                          <MenuItem key={character.id} value={character.id}>
+                            {character.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                      <TextField
+                        select
+                        size="small"
+                        label="Second Character"
+                        value={editingRelationshipCharacter2}
+                        onChange={(e) => setEditingRelationshipCharacter2(e.target.value)}
+                        fullWidth
+                      >
+                        {bookData.characters.map((character) => (
+                          <MenuItem key={character.id} value={character.id}>
+                            {character.name}
+                          </MenuItem>
+                        ))}
+                      </TextField>
 
                       {/* Relationship Descriptions */}
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant="caption" color="text.secondary">
                           Relationship Descriptions:
                         </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
+                          Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
+                        </Typography>
                         
                         {/* Add New Description */}
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                          <TextField
-                            select
-                            size="small"
-                            label="Chapter"
-                            value={editingDescriptionChapter}
-                            onChange={(e) => setEditingDescriptionChapter(e.target.value)}
-                            sx={{ flex: 1 }}
-                          >
-                            <MenuItem value="">
-                              <em>Select chapter</em>
-                            </MenuItem>
-                            {buildHierarchyTree()
-                              .filter(({ item }) => item.type === 'chapter')
-                              .map(({ item, chapter }) => (
-                                <MenuItem key={item.chapter_id} value={item.chapter_id}>
-                                  {chapter.title}
-                                </MenuItem>
-                              ))}
-                          </TextField>
-                          <TextField
-                            size="small"
-                            label="Description"
-                            value={editingDescriptionText}
-                            onChange={(e) => setEditingDescriptionText(e.target.value)}
-                            placeholder="Describe the relationship at this point"
-                            sx={{ flex: 2 }}
-                          />
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={handleAddEditingDescription}
-                            disabled={!editingDescriptionChapter || !editingDescriptionText}
-                          >
-                            Add
-                          </Button>
-                        </Box>
+                        <TextField
+                          select
+                          size="small"
+                          label="Chapter"
+                          value={editingDescriptionChapter}
+                          onChange={(e) => setEditingDescriptionChapter(e.target.value)}
+                          fullWidth
+                        >
+                          <MenuItem value="">
+                            <em>Select chapter</em>
+                          </MenuItem>
+                          {buildHierarchyTree()
+                            .filter(({ item }) => item.type === 'chapter')
+                            .map(({ item, chapter }) => (
+                              <MenuItem key={item.chapter_id} value={item.chapter_id}>
+                                {chapter.title}
+                              </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                          size="small"
+                          label="Description"
+                          value={editingDescriptionText}
+                          onChange={(e) => setEditingDescriptionText(e.target.value)}
+                          placeholder="Describe the relationship at this point"
+                          fullWidth
+                          multiline
+                          rows={2}
+                        />
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddEditingDescription}
+                          disabled={!editingDescriptionChapter || !editingDescriptionText}
+                        >
+                          Add Description
+                        </Button>
 
                         {/* Existing Descriptions */}
                         {editingRelationshipDescriptions.length > 0 && (
@@ -473,14 +484,15 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                       )}
                     </Box>
                   )}
-                  <Button
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteRelationship(relationshipId)}
-                    disabled={isEditing}
-                  >
-                    Remove
-                  </Button>
+                  {editingRelationshipId !== relationshipId && (
+                    <Button
+                      size="small"
+                      color="error"
+                      onClick={() => handleDeleteRelationship(relationshipId)}
+                    >
+                      Remove
+                    </Button>
+                  )}
                 </Box>
               );
             })}
@@ -491,8 +503,6 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
           </Typography>
         )}
       </Box>
-
-
     </Box>
   );
 }; 

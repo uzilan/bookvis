@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip } from '@mui/material';
+import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip, Divider } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
@@ -191,45 +191,42 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Add Chapter Form */}
-      <Box>
+    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+      {/* Left Column - Add Chapter Form */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Add New Chapter
+        </Typography>
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {/* Title, Type, and Add Button Row */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField
-              fullWidth
-              label="Chapter Title"
-              placeholder="Enter chapter title"
-              value={newChapterTitle}
-              onChange={(e) => setNewChapterTitle(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleAddChapter();
-                }
-              }}
-            />
-            <FormControl sx={{ minWidth: 120 }}>
-              <InputLabel>Type</InputLabel>
-              <Select
-                value={selectedHierarchyType}
-                label="Type"
-                onChange={(e) => setSelectedHierarchyType(e.target.value as SchemaHierarchyType)}
-              >
-                <MenuItem value="volume">Volume</MenuItem>
-                <MenuItem value="book">Book</MenuItem>
-                <MenuItem value="part">Part</MenuItem>
-                <MenuItem value="chapter">Chapter</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              onClick={handleAddChapter}
-              disabled={!newChapterTitle.trim()}
+          {/* Chapter Title */}
+          <TextField
+            fullWidth
+            label="Chapter Title"
+            placeholder="Enter chapter title"
+            value={newChapterTitle}
+            onChange={(e) => setNewChapterTitle(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleAddChapter();
+              }
+            }}
+          />
+          
+          {/* Type Select */}
+          <FormControl fullWidth>
+            <InputLabel>Type</InputLabel>
+            <Select
+              value={selectedHierarchyType}
+              label="Type"
+              onChange={(e) => setSelectedHierarchyType(e.target.value as SchemaHierarchyType)}
             >
-              Add
-            </Button>
-          </Box>
+              <MenuItem value="volume">Volume</MenuItem>
+              <MenuItem value="book">Book</MenuItem>
+              <MenuItem value="part">Part</MenuItem>
+              <MenuItem value="chapter">Chapter</MenuItem>
+            </Select>
+          </FormControl>
           
           {/* Locations Row - Always show, but read-only for non-chapters */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -261,29 +258,29 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               </Button>
             )}
           </Box>
+          
+          {/* Add Button */}
+          <Button
+            variant="contained"
+            onClick={handleAddChapter}
+            disabled={!newChapterTitle.trim()}
+          >
+            Add
+          </Button>
         </Box>
       </Box>
 
+      {/* Divider between columns */}
+      <Divider orientation="vertical" flexItem />
 
-
-      {/* Book Structure Tree */}
-      <Box>
+      {/* Right Column - Book Structure Tree */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
-          Book Structure ({bookData.hierarchy?.length || 0})
+          Book Structure Tree (drag to reorder):
         </Typography>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            Chapters are automatically added to the structure when created. Drag and drop to reorder them.
-          </Typography>
-        </Box>
-
-
 
         {/* Tree View */}
-        <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Book Structure Tree (drag to reorder):
-          </Typography>
+        <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
           <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
             {buildHierarchyTree().map(({ item, chapter, level }) => (
               <Box
@@ -310,13 +307,15 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                   '&:active': { cursor: 'grabbing' }
                 }}
               >
-                <DragIndicatorIcon 
-                  sx={{ 
-                    mr: 1, 
-                    color: 'text.secondary',
-                    fontSize: '16px'
-                  }} 
-                />
+                {editingChapterId !== item.chapter_id && (
+                  <DragIndicatorIcon 
+                    sx={{ 
+                      mr: 1, 
+                      color: 'text.secondary',
+                      fontSize: '16px'
+                    }} 
+                  />
+                )}
                 <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                   {editingChapterId === item.chapter_id ? (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>

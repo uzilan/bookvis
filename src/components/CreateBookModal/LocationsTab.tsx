@@ -3,7 +3,8 @@ import {
   Box,
   Typography,
   TextField,
-  Button
+  Button,
+  Divider
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 
@@ -78,31 +79,26 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Add Location Form */}
-      <Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <TextField
-              fullWidth
-              label="Location Name"
-              placeholder="Enter location name"
-              value={newLocationName}
-              onChange={(e) => setNewLocationName(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  handleAddLocationWithForm();
-                }
-              }}
-            />
-            <Button
-              variant="contained"
-              onClick={handleAddLocationWithForm}
-              disabled={!newLocationName.trim()}
-            >
-              Add
-            </Button>
-          </Box>
+    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+      {/* Left Column - Add Location Form */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Add New Location
+        </Typography>
+        
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            fullWidth
+            label="Location Name"
+            placeholder="Enter location name"
+            value={newLocationName}
+            onChange={(e) => setNewLocationName(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleAddLocationWithForm();
+              }
+            }}
+          />
           <TextField
             fullWidth
             label="Description (optional)"
@@ -112,11 +108,22 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
             multiline
             rows={2}
           />
+          
+          <Button
+            variant="contained"
+            onClick={handleAddLocationWithForm}
+            disabled={!newLocationName.trim()}
+          >
+            Add
+          </Button>
         </Box>
       </Box>
 
-      {/* Locations List */}
-      <Box>
+      {/* Divider between columns */}
+      <Divider orientation="vertical" flexItem />
+
+      {/* Right Column - Locations List */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
           Current Locations ({bookData.locations.length})
         </Typography>
@@ -125,7 +132,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
             No locations added yet.
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
             {bookData.locations.map((location) => (
               <Box
                 key={location.id}
@@ -196,21 +203,20 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                     )}
                   </Box>
                 )}
-                <Button
-                  size="small"
-                  color="error"
-                  onClick={() => handleRemoveLocation(location.id)}
-                  disabled={editingLocationId === location.id}
-                >
-                  Remove
-                </Button>
+                {editingLocationId !== location.id && (
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => handleRemoveLocation(location.id)}
+                  >
+                    Remove
+                  </Button>
+                )}
               </Box>
             ))}
           </Box>
         )}
       </Box>
-
-
     </Box>
   );
 }; 
