@@ -252,19 +252,25 @@ export const HomePage: React.FC = () => {
       }}>
         {/* Header */}
         <Box sx={{ mb: 6, position: 'relative' }}>
-          {/* Theme Toggle - Top Right */}
           <Box sx={{ 
-            position: 'absolute', 
-            top: 0, 
-            right: 0,
-            zIndex: 1000
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            position: 'relative',
+            mb: 2
           }}>
-            <ThemeToggle />
+            <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
+              BookVis
+            </Typography>
+            <Box sx={{ 
+              position: 'absolute', 
+              right: 0,
+              top: '50%',
+              transform: 'translateY(-50%)'
+            }}>
+              <ThemeToggle />
+            </Box>
           </Box>
-          
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
-            BookVis
-          </Typography>
           <Typography variant="h5" sx={{ color: 'var(--color-text)' }} gutterBottom>
             Visualize Character Relationships in Your Books
           </Typography>

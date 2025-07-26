@@ -13,7 +13,7 @@ export const ThemeToggle: React.FC = () => {
         sx={{
           color: 'var(--color-text)',
           backgroundColor: 'var(--color-surface)',
-          border: '1px solid var(--color-border)',
+          border: '1px solid var(--color-textSecondary)',
           '&:hover': {
             backgroundColor: 'var(--color-overlay)',
           },
