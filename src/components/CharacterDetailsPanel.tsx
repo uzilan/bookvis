@@ -81,6 +81,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   onClose,
 }) => {
 
+
   if (!character) return null;
 
   // Filter factions based on current chapter - only show factions the character has joined by this chapter
@@ -135,45 +136,47 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
         '& .MuiDrawer-paper': {
           width: 400,
           boxSizing: 'border-box',
+          backgroundColor: 'var(--color-background)',
+          color: 'var(--color-text)',
         },
       }}
     >
       <Box sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'left' }}>
+          <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold', textAlign: 'left', color: 'var(--color-text)' }}>
             {character.name}
           </Typography>
-          <IconButton onClick={onClose} size="small">
+          <IconButton onClick={onClose} size="small" sx={{ color: 'var(--color-text)' }}>
             <CloseIcon />
           </IconButton>
         </Box>
 
-        <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2, textAlign: 'left' }}>
+        <Paper elevation={1} sx={{ p: 2, mb: 2, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <Typography variant="body1" sx={{ mb: 2, textAlign: 'left', color: 'var(--color-text)' }}>
             {character.description}
           </Typography>
           
-          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'left' }}>
+          <Typography variant="body2" sx={{ textAlign: 'left', color: 'var(--color-textSecondary)' }}>
             First appears in {firstAppearanceDisplay}
           </Typography>
         </Paper>
 
         {character.aliases.length > 0 && (
-          <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
+          <Paper elevation={1} sx={{ p: 2, mb: 2, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left', color: 'var(--color-text)' }}>
               Aliases
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               {character.aliases.map((alias, index) => (
-                <Chip key={index} label={alias} size="small" />
+                <Chip key={index} label={alias} size="small" sx={{ backgroundColor: 'var(--color-buttonActive)', color: 'white' }} />
               ))}
             </Box>
           </Paper>
         )}
 
         {characterFactions.length > 0 && (
-          <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
+          <Paper elevation={1} sx={{ p: 2, mb: 2, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left', color: 'var(--color-text)' }}>
               Current Factions
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -197,14 +200,21 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
         )}
 
         {character.attributes.length > 0 && (
-          <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
+          <Paper elevation={1} sx={{ p: 2, mb: 2, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left', color: 'var(--color-text)' }}>
               Attributes
             </Typography>
             <List dense>
               {character.attributes.map((attribute, index) => (
                 <ListItem key={index} sx={{ py: 0.5 }}>
-                  <ListItemText primary={attribute} />
+                  <ListItemText 
+                    primary={attribute} 
+                    sx={{ 
+                      '& .MuiListItemText-primary': { 
+                        color: 'var(--color-text)' 
+                      } 
+                    }} 
+                  />
                 </ListItem>
               ))}
             </List>
@@ -212,8 +222,8 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
         )}
 
         {characterRelationships.length > 0 && (
-          <Paper elevation={1} sx={{ p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left' }}>
+          <Paper elevation={1} sx={{ p: 2, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <Typography variant="h6" sx={{ mb: 1, textAlign: 'left', color: 'var(--color-text)' }}>
               Current Relationships
             </Typography>
             <List dense>
@@ -224,6 +234,14 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
                     <ListItemText 
                       primary={otherCharacter.name}
                       secondary={rel.descriptions[0]?.description || 'Related'}
+                      sx={{ 
+                        '& .MuiListItemText-primary': { 
+                          color: 'var(--color-text)' 
+                        },
+                        '& .MuiListItemText-secondary': { 
+                          color: 'var(--color-textSecondary)' 
+                        }
+                      }} 
                     />
                   </ListItem>
                 );
