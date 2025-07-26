@@ -62,13 +62,13 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           cursor: 'pointer',
           padding: node.chapter.type === 'part' ? '12px 0px 4px 0px' : '4px 0px',
           borderRadius: '4px',
-          backgroundColor: isSelected ? 'var(--color-primary)' : 'transparent',
+          backgroundColor: isSelected ? 'var(--color-buttonActive)' : 'transparent',
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-primary)' : 'rgba(0, 0, 0, 0.04)';
+          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-buttonActive)' : 'rgba(0, 0, 0, 0.04)';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-primary)' : 'transparent';
+          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-buttonActive)' : 'transparent';
         }}
         onClick={() => {
           if (hasChildren) {
@@ -84,7 +84,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           variant={node.chapter.type === 'book' ? 'h6' : 'body2'}
           style={{
             fontSize: node.chapter.type === 'book' ? 14 : 11,
-            color: isSelected ? 'var(--color-primary)' : 'var(--color-text)',
+            color: isSelected ? 'white' : 'var(--color-text)',
             fontWeight: isSelected ? 'bold' : (
               node.chapter.type === 'book' ? 'bold' : 
               node.chapter.type === 'part' ? 'bold' : 
