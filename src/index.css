@@ -56,6 +56,12 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Override center alignment for modal content */
+.MuiDialog-root,
+.MuiDialog-root * {
+  text-align: left !important;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

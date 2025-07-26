@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -8,7 +8,6 @@ import {
   Grid,
   Container,
   Paper,
-  Divider,
   Chip,
   CircularProgress,
   IconButton,
@@ -17,7 +16,8 @@ import {
   DialogContent,
   DialogActions,
   Switch,
-  FormControlLabel
+  FormControlLabel,
+  TextField
 } from '@mui/material';
 import { Google as GoogleIcon } from '@mui/icons-material';
 import { Delete as DeleteIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
@@ -26,6 +26,8 @@ import { FirebaseService } from '../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import type { Author } from '../models/Author';
 import type { BookData } from '../models/BookData';
+import { fuzzySearch } from '../utils/fuzzySearch';
+import { CreateBookModal } from '../components/CreateBookModal';
 
 export const HomePage: React.FC = () => {
   const { user, loading, signInWithGoogle, signOut, isAuthenticated } = useAuth();
@@ -33,6 +35,7 @@ export const HomePage: React.FC = () => {
   const [authors, setAuthors] = useState<Author[]>([]);
   const [books, setBooks] = useState<BookData[]>([]);
   const [allBooks, setAllBooks] = useState<BookData[]>([]); // Store all books for filtering
+  const [allAuthors, setAllAuthors] = useState<Author[]>([]); // Store all authors for filtering
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
   const [loadingData, setLoadingData] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -40,25 +43,57 @@ export const HomePage: React.FC = () => {
   const [visibilityDialogOpen, setVisibilityDialogOpen] = useState(false);
   const [bookToUpdateVisibility, setBookToUpdateVisibility] = useState<BookData | null>(null);
   const [newVisibility, setNewVisibility] = useState(false);
+  const [showOnlyMyBooks, setShowOnlyMyBooks] = useState(false);
+  const [authorFilterText, setAuthorFilterText] = useState('');
+  const [bookFilterText, setBookFilterText] = useState('');
+  const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
+  const [hasFetchedData, setHasFetchedData] = useState(false);
 
-  // Fetch authors and books for all users
+  // Fetch authors and books for all users (only once)
   useEffect(() => {
-    fetchData();
-  }, [isAuthenticated]);
+    if (!hasFetchedData) {
+      fetchData();
+    }
+  }, [isAuthenticated, hasFetchedData]);
+
+  // Filter authors and books based on toggle and author selection
+  useEffect(() => {
+    let filteredBooks = allBooks;
+    let filteredAuthors = allAuthors;
+    
+    // Filter by ownership if toggle is on and user is authenticated
+    if (showOnlyMyBooks && isAuthenticated && user) {
+      filteredBooks = allBooks.filter(book => book.ownerId === user.uid);
+      // Get unique author IDs from filtered books
+      const myAuthorIds = [...new Set(filteredBooks.map(book => book.book.author.id))];
+      filteredAuthors = allAuthors.filter(author => myAuthorIds.includes(author.id));
+    } else {
+      // When toggle is off, show all authors and books
+      filteredBooks = allBooks;
+      filteredAuthors = allAuthors;
+    }
+    
+    // Filter books by author if selected
+    if (selectedAuthor) {
+      filteredBooks = filteredBooks.filter(book => book.book.author.id === selectedAuthor);
+    }
+    
+    setBooks(filteredBooks);
+    setAuthors(filteredAuthors);
+  }, [allBooks, allAuthors, showOnlyMyBooks, selectedAuthor, isAuthenticated, user]);
 
   const fetchData = async () => {
     try {
       setLoadingData(true);
-      console.log('Fetching data...');
       const [fetchedAuthors, fetchedBooks] = await Promise.all([
         FirebaseService.getAllAuthors(),
         FirebaseService.getAllBooks()
       ]);
-      console.log('Fetched authors:', fetchedAuthors);
-      console.log('Fetched books:', fetchedBooks);
       setAuthors(fetchedAuthors);
+      setAllAuthors(fetchedAuthors);
       setAllBooks(fetchedBooks);
       setBooks(fetchedBooks);
+      setHasFetchedData(true);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -139,19 +174,53 @@ export const HomePage: React.FC = () => {
     if (selectedAuthor === authorId) {
       // If clicking the same author, clear the filter
       setSelectedAuthor(null);
-      setBooks(allBooks);
     } else {
       // Filter books by the selected author
       setSelectedAuthor(authorId);
-      const filteredBooks = allBooks.filter(book => book.book.author.id === authorId);
-      setBooks(filteredBooks);
     }
   };
 
   const clearAuthorFilter = () => {
     setSelectedAuthor(null);
-    setBooks(allBooks);
   };
+
+  const handleOpenCreateBookModal = () => {
+    setIsCreateBookModalOpen(true);
+  };
+
+  const handleCloseCreateBookModal = () => {
+    setIsCreateBookModalOpen(false);
+  };
+
+  // Filter authors using fuzzy search
+  const filteredAuthors = useMemo(() => {
+    if (!authorFilterText.trim()) {
+      return authors;
+    }
+    
+    return fuzzySearch(
+      authors,
+      authors, // For authors, we always search all authors
+      authorFilterText,
+      true, // Always show all for authors
+      { keys: ['name'] }
+    );
+  }, [authors, authorFilterText]);
+
+  // Filter books using fuzzy search
+  const filteredBooks = useMemo(() => {
+    if (!bookFilterText.trim()) {
+      return books;
+    }
+    
+    return fuzzySearch(
+      books,
+      books, // For books, we always search all books
+      bookFilterText,
+      true, // Always show all for books
+      { keys: ['book.title', 'book.author.name'] }
+    );
+  }, [books, bookFilterText]);
 
   if (loading) {
     return (
@@ -173,7 +242,7 @@ export const HomePage: React.FC = () => {
       py: 4,
       width: '100%'
     }}>
-      <Container maxWidth="md" sx={{ 
+      <Container maxWidth="lg" sx={{ 
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
@@ -185,7 +254,7 @@ export const HomePage: React.FC = () => {
           <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
             BookVis
           </Typography>
-          <Typography variant="h5" color="text.secondary" gutterBottom>
+          <Typography variant="h5" sx={{ color: '#ffffff' }} gutterBottom>
             Visualize Character Relationships in Your Books
           </Typography>
           
@@ -205,19 +274,20 @@ export const HomePage: React.FC = () => {
               >
                 Sign in with Google
               </Button>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+              <Typography variant="body2" sx={{ mt: 2, color: '#ffffff' }}>
                 Sign in to view and manage your books
               </Typography>
             </Box>
           ) : (
             <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" sx={{ color: '#ffffff' }}>
                 Welcome, {user?.displayName || user?.email}!
               </Typography>
               <Button
                 variant="outlined"
                 onClick={handleSignOut}
                 size="small"
+                sx={{ color: '#ffffff', borderColor: '#ffffff' }}
               >
                 Sign Out
               </Button>
@@ -227,46 +297,77 @@ export const HomePage: React.FC = () => {
 
         {/* Content for all users */}
         <>
+          {/* Toggle Section */}
+          {isAuthenticated && (
+            <Paper sx={{ p: 3, mb: 3, textAlign: 'center', width: '100%', maxWidth: '800px' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={showOnlyMyBooks}
+                      onChange={(e) => setShowOnlyMyBooks(e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label="Show only my books"
+                  labelPlacement="start"
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={handleOpenCreateBookModal}
+                  sx={{ ml: 2 }}
+                >
+                  Create New Book
+                </Button>
+              </Box>
+            </Paper>
+          )}
+
           {/* Authors Section */}
           <Paper sx={{ p: 3, mb: 4, textAlign: 'center', width: '100%', maxWidth: '800px' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
               <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                Authors ({authors.length})
+                Authors ({filteredAuthors.length})
               </Typography>
-              {selectedAuthor && (
-                <Button
-                  variant="outlined"
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <TextField
                   size="small"
-                  onClick={clearAuthorFilter}
-                  sx={{ ml: 2 }}
-                >
-                  Clear Filter
-                </Button>
-              )}
+                  placeholder="Filter authors..."
+                  value={authorFilterText}
+                  onChange={(e) => setAuthorFilterText(e.target.value)}
+                  sx={{ minWidth: '200px' }}
+                />
+                {selectedAuthor && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={clearAuthorFilter}
+                  >
+                    Clear Filter
+                  </Button>
+                )}
+              </Box>
             </Box>
             {loadingData ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                 <CircularProgress />
               </Box>
-            ) : authors.length > 0 ? (
+            ) : filteredAuthors.length > 0 ? (
               <Grid container spacing={3} justifyContent="center" sx={{ width: '100%' }}>
-                {authors.map((author) => (
-                  <Grid item xs={12} sm={6} md={4} key={author.id}>
+                {filteredAuthors.map((author) => (
+                  <Grid size={{ xs: 12, sm: 6, md: 4 }} key={author.id}>
                     <Card 
                       sx={{ 
                         height: '100%',
                         cursor: 'pointer',
                         border: selectedAuthor === author.id ? '2px solid #1976d2' : '1px solid #e0e0e0',
-                        backgroundColor: selectedAuthor === author.id ? '#f3f6ff' : 'inherit',
-                        '&:hover': {
-                          boxShadow: 3,
-                          transform: 'translateY(-2px)',
-                          transition: 'all 0.2s ease-in-out'
-                        }
+                        backgroundColor: selectedAuthor === author.id ? '#f3f6ff' : 'inherit'
                       }}
                       onClick={() => handleAuthorClick(author.id)}
                     >
-                      <CardContent>
+                      <CardContent sx={{ padding: '8px 12px 2px 12px !important' }}>
                         <Typography variant="h6" component="h3" gutterBottom>
                           {author.name}
                         </Typography>
@@ -292,27 +393,37 @@ export const HomePage: React.FC = () => {
 
           {/* Books Section */}
           <Paper sx={{ p: 3, textAlign: 'center', width: '100%', maxWidth: '800px' }}>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
-              Books ({books.length})
-              {selectedAuthor && (
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Filtered by: {authors.find(a => a.id === selectedAuthor)?.name}
-                </Typography>
-              )}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                Books ({filteredBooks.length})
+                {selectedAuthor && (
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    Filtered by: {authors.find(a => a.id === selectedAuthor)?.name}
+                  </Typography>
+                )}
+              </Typography>
+              <TextField
+                size="small"
+                placeholder="Filter books..."
+                value={bookFilterText}
+                onChange={(e) => setBookFilterText(e.target.value)}
+                sx={{ minWidth: '200px' }}
+              />
+            </Box>
             {loadingData ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                 <CircularProgress />
               </Box>
-            ) : books.length > 0 ? (
-              <Grid container spacing={3} justifyContent="center" sx={{ width: '100%' }}>
-                {books.map((bookData) => (
-                  <Grid item xs={12} sm={6} md={4} key={bookData.book.id}>
+            ) : filteredBooks.length > 0 ? (
+              <Grid container spacing={1} justifyContent="center" sx={{ width: '100%', maxWidth: '1200px' }}>
+                {filteredBooks.map((bookData) => (
+                  <Grid size={{ xs: 12, sm: 4, md: 4 }} key={bookData.book.id}>
                     <Card 
                       sx={{ 
                         height: '100%', 
                         position: 'relative',
                         cursor: 'pointer',
+                        maxWidth: '300px',
                         '&:hover': {
                           boxShadow: 3,
                           transform: 'translateY(-2px)',
@@ -321,7 +432,7 @@ export const HomePage: React.FC = () => {
                       }}
                       onClick={() => handleBookClick(bookData)}
                     >
-                      <CardContent>
+                      <CardContent sx={{ padding: '8px 12px 2px 12px !important' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                           <Typography variant="h6" component="h3" sx={{ flex: 1 }}>
                             {bookData.book.title}
@@ -357,44 +468,7 @@ export const HomePage: React.FC = () => {
                           by {bookData.book.author.name}
                         </Typography>
                         
-                        {isAuthenticated && isOwnBook(bookData) && (
-                          <Chip 
-                            label={bookData.isPublic ? 'Public' : 'Private'} 
-                            size="small" 
-                            color={bookData.isPublic ? 'success' : 'warning'} 
-                            variant="outlined"
-                            sx={{ mb: 1 }}
-                          />
-                        )}
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2, justifyContent: 'center' }}>
-                          <Chip 
-                            label={`${bookData.characters.length} Characters`} 
-                            size="small" 
-                            color="primary" 
-                            variant="outlined"
-                          />
-                          <Chip 
-                            label={`${bookData.chapters.length} Chapters`} 
-                            size="small" 
-                            color="secondary" 
-                            variant="outlined"
-                          />
-                          <Chip 
-                            label={`${bookData.factions.length} Factions`} 
-                            size="small" 
-                            color="success" 
-                            variant="outlined"
-                          />
-                        </Box>
-                        
-                        {bookData.ownerEmail && (
-                          <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
-                            Owner: {bookData.ownerEmail}
-                          </Typography>
-                        )}
+
                       </CardContent>
                     </Card>
                   </Grid>
@@ -455,6 +529,14 @@ export const HomePage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Create Book Modal */}
+      {isCreateBookModalOpen && (
+        <CreateBookModal
+          open={isCreateBookModalOpen}
+          onClose={handleCloseCreateBookModal}
+        />
+      )}
     </Box>
   );
 }; 
