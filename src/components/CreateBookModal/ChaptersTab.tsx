@@ -3,7 +3,6 @@ import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormC
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import type { SchemaChapter } from '../../schema/models/SchemaChapter';
 import type { SchemaHierarchyItem, SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
@@ -193,12 +192,6 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Chapters
-        </Typography>
-      </Box>
-
       {/* Add Chapter Form */}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -468,8 +461,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         </Box>
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
+
 
       {/* Location Selector Modal */}
       <LocationSelectorModal

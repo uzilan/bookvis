@@ -8,7 +8,7 @@ import {
   MenuItem
 } from '@mui/material';
 import type { SchemaBookData, SchemaCharacter, SchemaChapter, SchemaHierarchyItem } from '../../schema/models';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
+
 
 interface CharactersTabProps {
   bookData: SchemaBookData;
@@ -248,12 +248,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Characters
-        </Typography>
-      </Box>
-
       {/* Add Character Form */}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -787,8 +781,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
         )}
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} />
+
     </Box>
   );
 }; 

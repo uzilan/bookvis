@@ -6,7 +6,6 @@ import {
   Button
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 
 interface LocationsTabProps {
   bookData: SchemaBookData;
@@ -80,12 +79,6 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Locations
-        </Typography>
-      </Box>
-
       {/* Add Location Form */}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>
@@ -217,8 +210,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
         )}
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
+
     </Box>
   );
 }; 

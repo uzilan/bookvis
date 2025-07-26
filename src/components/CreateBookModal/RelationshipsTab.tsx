@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData, SchemaRelationship, SchemaRelationshipDescription, SchemaHierarchyItem, SchemaChapter } from '../../schema/models';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
+
 
 interface RelationshipsTabProps {
   bookData: SchemaBookData;
@@ -171,12 +171,6 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Character Relationships
-        </Typography>
-      </Box>
-
       {/* Add Relationship Form */}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -498,8 +492,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
         )}
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} />
+
     </Box>
   );
 }; 

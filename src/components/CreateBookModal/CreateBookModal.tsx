@@ -8,7 +8,8 @@ import {
   Box,
   Tabs,
   Tab,
-  DialogContentText
+  DialogContentText,
+  Typography
 } from '@mui/material';
 import { AddAuthorModal } from '../AddAuthorModal';
 import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab, CharactersTab, RelationshipsTab } from './index';
@@ -33,6 +34,8 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
   const [isAddAuthorModalOpen, setIsAddAuthorModalOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState(0);
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
+  const [showRequirementsDialog, setShowRequirementsDialog] = useState(false);
+  const [missingRequirements, setMissingRequirements] = useState<string[]>([]);
   
   // SchemaBookData instance that we'll populate step by step
   const [bookData, setBookData] = useState<SchemaBookData>({
@@ -73,9 +76,43 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
   };
 
   const handleCreateBook = () => {
-    // Use the bookData state as the single source of truth
+    const missing: string[] = [];
+
+    // Validate basic book information
     if (!bookData.book.title || !bookData.book.author.id) {
-      console.error('Missing required book data');
+      missing.push('Book title and author');
+    }
+
+    // Validate chapters
+    if (!bookData.chapters || bookData.chapters.length === 0) {
+      missing.push('At least one chapter');
+    }
+
+    // Validate locations
+    if (!bookData.locations || bookData.locations.length === 0) {
+      missing.push('At least one location');
+    }
+
+    // Validate factions
+    if (!bookData.factions || bookData.factions.length === 0) {
+      missing.push('At least one faction');
+    }
+
+    // Validate characters
+    if (!bookData.characters || bookData.characters.length === 0) {
+      missing.push('At least one character');
+    }
+
+    // Validate relationships
+    if (!bookData.relationships || bookData.relationships.length === 0) {
+      missing.push('At least one relationship');
+    }
+
+
+
+    if (missing.length > 0) {
+      setMissingRequirements(missing);
+      setShowRequirementsDialog(true);
       return;
     }
 
@@ -210,11 +247,11 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
         <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
           <Tabs value={currentTab} onChange={handleTabChange}>
             <Tab label="Book Info" />
-            <Tab label="Locations" />
-            <Tab label="Chapters" />
-            <Tab label="Factions" />
-            <Tab label="Characters" />
-            <Tab label="Relationships" />
+            <Tab label={`Locations (${bookData.locations?.length || 0})`} />
+            <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
+            <Tab label={`Factions (${bookData.factions?.length || 0})`} />
+            <Tab label={`Characters (${bookData.characters?.length || 0})`} />
+            <Tab label={`Relationships (${bookData.relationships?.length || 0})`} />
           </Tabs>
         </Box>
 
@@ -274,9 +311,19 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
         </Button>
         <Button 
           onClick={handleCreateBook} 
-          color="primary" 
+          color={
+            !bookData.book.author.id || 
+            !bookData.book.title.trim() || 
+            !bookData.chapters?.length ||
+            !bookData.locations?.length ||
+            !bookData.factions?.length ||
+            !bookData.characters?.length ||
+            !bookData.relationships?.length
+              ? "warning"
+              : "primary"
+          }
           variant="contained"
-          disabled={!bookData.book.author.id || !bookData.book.title.trim() || loading}
+          disabled={loading}
         >
           Create Book
         </Button>
@@ -306,6 +353,50 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
           </Button>
           <Button onClick={handleConfirmCancel} color="error" variant="contained">
             Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Requirements Dialog */}
+      <Dialog
+        open={showRequirementsDialog}
+        onClose={() => setShowRequirementsDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          Missing Requirements
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText gutterBottom>
+            Please complete the following requirements before creating your book:
+          </DialogContentText>
+          <Box sx={{ mt: 2 }}>
+            {missingRequirements.map((requirement, index) => (
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                <Box 
+                  sx={{ 
+                    width: 16, 
+                    height: 16, 
+                    borderRadius: '50%', 
+                    bgcolor: 'error.main',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Box sx={{ fontSize: 12, color: 'white' }}>!</Box>
+                </Box>
+                <Typography variant="body2" color="error.main">
+                  {requirement}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowRequirementsDialog(false)} color="primary">
+            Continue Editing
           </Button>
         </DialogActions>
       </Dialog>

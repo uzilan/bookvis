@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Box,
-  Typography,
   FormControl,
   InputLabel,
   Select,
@@ -12,7 +11,6 @@ import {
 } from '@mui/material';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 
 interface BookInfoTabProps {
   authors: Author[];
@@ -35,12 +33,6 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
 }) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Book Information
-        </Typography>
-      </Box>
-      
       <Box>
         <FormControl fullWidth>
           <InputLabel>Author</InputLabel>
@@ -94,8 +86,24 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
         />
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
+      <Box>
+        <TextField
+          fullWidth
+          label="Map Link (optional)"
+          value={bookData.book.mapLink || ''}
+          onChange={(e) => setBookData(prev => ({
+            ...prev,
+            book: {
+              ...prev.book,
+              mapLink: e.target.value
+            }
+          }))}
+          placeholder="Enter a link to the book's map"
+          helperText="URL to a static image of the book's world map"
+        />
+      </Box>
+
+
     </Box>
   );
 }; 

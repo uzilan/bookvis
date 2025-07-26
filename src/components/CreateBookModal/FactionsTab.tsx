@@ -6,7 +6,6 @@ import {
   Button
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
-import { DevelopmentDataViewer } from './DevelopmentDataViewer';
 
 interface FactionsTabProps {
   bookData: SchemaBookData;
@@ -102,12 +101,6 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Typography variant="h6" gutterBottom>
-          Factions
-        </Typography>
-      </Box>
-
       {/* Add Faction Form */}
       <Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 2 }}>
@@ -304,8 +297,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
         )}
       </Box>
 
-      {/* Development JSON */}
-      <DevelopmentDataViewer bookData={bookData} title="Current bookData State (Development)" />
+
     </Box>
   );
 }; 
