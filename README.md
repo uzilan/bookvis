@@ -83,6 +83,17 @@ npm run dev
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint issues
 
+### Pre-commit Hook
+
+The project includes a pre-commit hook that automatically runs:
+- **TypeScript type checking** - Ensures type safety
+- **ESLint** - Checks code style and potential issues
+
+The hook will prevent commits if any checks fail. To bypass the hook (not recommended), use:
+```bash
+git commit --no-verify -m "Your message"
+```
+
 ### Adding New Books
 
 1. Create a new data file in `src/books/`

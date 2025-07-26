@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 
+
 interface FactionsTabProps {
   bookData: SchemaBookData;
   setBookData: React.Dispatch<React.SetStateAction<SchemaBookData>>;
@@ -17,6 +18,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
   bookData,
   setBookData
 }) => {
+
   const generateRandomColor = (): string => {
     const colors = [
       '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
@@ -160,6 +162,28 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                   handleAddFactionWithForm();
                 }
               }}
+              sx={{
+                '& .MuiInputLabel-root': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiInputBase-input': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&:hover fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&.Mui-focused fieldset': {
+                    border: '1px solid #1976d2 !important',
+                  },
+                },
+              }}
             />
             <Box
               sx={{
@@ -197,12 +221,48 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
             onChange={(e) => setNewFactionDescription(e.target.value)}
             multiline
             rows={2}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           
           <Button
             variant="contained"
             onClick={handleAddFactionWithForm}
             disabled={!newFactionName.trim()}
+            sx={{
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
+              '&:hover': {
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
+              },
+              '&:disabled': {
+                backgroundColor: 'var(--color-disabled)',
+                color: 'var(--color-onDisabled)',
+                border: '1px solid var(--color-border)',
+              },
+            }}
           >
             Add
           </Button>
@@ -210,7 +270,13 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
       </Box>
 
       {/* Divider between columns */}
-      <Divider orientation="vertical" flexItem />
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Factions List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -218,7 +284,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
           Current Factions ({bookData.factions.length})
         </Typography>
         {bookData.factions.length === 0 ? (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)' }}>
             No factions added yet.
           </Typography>
         ) : (
@@ -231,12 +297,12 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   p: 1,
-                  border: '1px solid #ddd',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '4px',
-                  backgroundColor: '#f9f9f9',
+                  backgroundColor: 'var(--color-surface)',
                   cursor: editingFactionId === faction.id ? 'default' : 'pointer',
                   '&:hover': {
-                    backgroundColor: editingFactionId === faction.id ? '#f9f9f9' : '#f0f0f0'
+                    backgroundColor: editingFactionId === faction.id ? 'var(--color-surface)' : 'var(--color-hover)'
                   }
                 }}
                 onClick={() => {
@@ -253,7 +319,26 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                         label="Name"
                         value={editingFactionName}
                         onChange={(e) => setEditingFactionName(e.target.value)}
-                        sx={{ flex: 1 }}
+                        sx={{ 
+                          flex: 1,
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
                       />
                       <Box
                         sx={{
@@ -291,18 +376,57 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                       placeholder="Enter faction description"
                       multiline
                       rows={2}
+                      sx={{
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     />
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       <Button
                         size="small"
                         color="primary"
                         onClick={() => handleSaveFactionEdit(faction.id)}
+                        sx={{
+                          backgroundColor: 'var(--color-buttonActive)',
+                          color: 'white',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-buttonActiveHover)',
+                            border: '1px solid var(--color-border)',
+                          },
+                        }}
                       >
                         Save
                       </Button>
                       <Button
                         size="small"
                         onClick={handleCancelFactionEdit}
+                        sx={{
+                          backgroundColor: 'var(--color-surface)',
+                          color: 'var(--color-text)',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-hover)',
+                          },
+                        }}
                       >
                         Cancel
                       </Button>
@@ -320,12 +444,12 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                           border: '1px solid #ccc'
                         }}
                       />
-                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
                         {faction.title}
                       </Typography>
                     </Box>
                     {faction.description && (
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 2 }}>
+                      <Typography variant="caption" sx={{ ml: 2, color: 'var(--color-textSecondary)' }}>
                         {faction.description}
                       </Typography>
                     )}

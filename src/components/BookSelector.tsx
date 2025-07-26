@@ -16,11 +16,11 @@ export const BookSelector: React.FC<BookSelectorProps> = ({ books, selectedBook,
       left: '50%', 
       transform: 'translateX(-50%)', 
       zIndex: 2000,
-      background: 'rgba(255,255,255,0.95)',
+      background: 'var(--color-overlay)',
       padding: '8px 16px',
       borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      border: '1px solid #ddd'
+      boxShadow: '0 2px 8px var(--color-shadow)',
+      border: '1px solid var(--color-border)'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Typography variant="body2" sx={{ fontWeight: 'bold' }}>

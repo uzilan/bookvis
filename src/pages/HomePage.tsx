@@ -28,6 +28,7 @@ import type { Author } from '../models/Author';
 import type { BookData } from '../models/BookData';
 import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export const HomePage: React.FC = () => {
   const { user, loading, signInWithGoogle, signOut, isAuthenticated } = useAuth();
@@ -250,11 +251,21 @@ export const HomePage: React.FC = () => {
         width: '100%'
       }}>
         {/* Header */}
-        <Box sx={{ mb: 6 }}>
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+        <Box sx={{ mb: 6, position: 'relative' }}>
+          {/* Theme Toggle - Top Right */}
+          <Box sx={{ 
+            position: 'absolute', 
+            top: 0, 
+            right: 0,
+            zIndex: 1000
+          }}>
+            <ThemeToggle />
+          </Box>
+          
+          <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
             BookVis
           </Typography>
-          <Typography variant="h5" sx={{ color: '#ffffff' }} gutterBottom>
+          <Typography variant="h5" sx={{ color: 'var(--color-text)' }} gutterBottom>
             Visualize Character Relationships in Your Books
           </Typography>
           
@@ -274,20 +285,24 @@ export const HomePage: React.FC = () => {
               >
                 Sign in with Google
               </Button>
-              <Typography variant="body2" sx={{ mt: 2, color: '#ffffff' }}>
+              <Typography variant="body2" sx={{ mt: 2, color: 'var(--color-textSecondary)' }}>
                 Sign in to view and manage your books
               </Typography>
             </Box>
           ) : (
             <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-              <Typography variant="body1" sx={{ color: '#ffffff' }}>
+              <Typography variant="body1" sx={{ color: 'var(--color-text)' }}>
                 Welcome, {user?.displayName || user?.email}!
               </Typography>
               <Button
                 variant="outlined"
                 onClick={handleSignOut}
                 size="small"
-                sx={{ color: '#ffffff', borderColor: '#ffffff' }}
+                sx={{ 
+                  color: 'var(--color-text)', 
+                  borderColor: 'var(--color-textSecondary)',
+                  border: '1px solid var(--color-textSecondary)'
+                }}
               >
                 Sign Out
               </Button>
@@ -424,6 +439,7 @@ export const HomePage: React.FC = () => {
                         position: 'relative',
                         cursor: 'pointer',
                         maxWidth: '300px',
+                        border: '1px solid #e0e0e0',
                         '&:hover': {
                           boxShadow: 3,
                           transform: 'translateY(-2px)',
@@ -446,6 +462,7 @@ export const HomePage: React.FC = () => {
                                   handleUpdateVisibility(bookData);
                                 }}
                                 title={bookData.isPublic ? 'Make Private' : 'Make Public'}
+                                sx={{ color: 'var(--color-textSecondary)' }}
                               >
                                 {bookData.isPublic ? <VisibilityIcon /> : <VisibilityOffIcon />}
                               </IconButton>
@@ -464,7 +481,7 @@ export const HomePage: React.FC = () => {
                           )}
                         </Box>
                         
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                        <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)' }} gutterBottom>
                           by {bookData.book.author.name}
                         </Typography>
                         

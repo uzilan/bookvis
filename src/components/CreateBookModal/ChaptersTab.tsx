@@ -7,6 +7,7 @@ import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import type { SchemaChapter } from '../../schema/models/SchemaChapter';
 import type { SchemaHierarchyItem, SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
 
+
 interface ChaptersTabProps {
   bookData: SchemaBookData;
   setBookData: React.Dispatch<React.SetStateAction<SchemaBookData>>;
@@ -16,6 +17,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   bookData,
   setBookData
 }) => {
+
   const [newChapterTitle, setNewChapterTitle] = useState('');
   const [selectedHierarchyType, setSelectedHierarchyType] = useState<SchemaHierarchyType>('chapter');
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -211,15 +213,60 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                 handleAddChapter();
               }
             }}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           
           {/* Type Select */}
-          <FormControl fullWidth>
-            <InputLabel>Type</InputLabel>
+          <FormControl 
+            fullWidth
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
+          >
+            <InputLabel sx={{ color: 'var(--color-textSecondary)' }}>Type</InputLabel>
             <Select
               value={selectedHierarchyType}
               label="Type"
               onChange={(e) => setSelectedHierarchyType(e.target.value as SchemaHierarchyType)}
+              sx={{
+                '& .MuiInputBase-input': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiSelect-select': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+              }}
             >
               <MenuItem value="volume">Volume</MenuItem>
               <MenuItem value="book">Book</MenuItem>
@@ -264,6 +311,20 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
             variant="contained"
             onClick={handleAddChapter}
             disabled={!newChapterTitle.trim()}
+            sx={{
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
+              '&:hover': {
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
+              },
+              '&:disabled': {
+                backgroundColor: 'var(--color-disabled)',
+                color: 'var(--color-onDisabled)',
+                border: '1px solid var(--color-border)',
+              },
+            }}
           >
             Add
           </Button>
@@ -271,7 +332,13 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
       </Box>
 
       {/* Divider between columns */}
-      <Divider orientation="vertical" flexItem />
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Book Structure Tree */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -334,13 +401,53 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                           }}
                           onClick={(e) => e.stopPropagation()}
                           autoFocus
-                          sx={{ flex: 1 }}
+                          sx={{ 
+                            flex: 1,
+                            '& .MuiInputBase-input': {
+                              color: 'var(--color-text)',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
                         />
-                        <FormControl size="small" sx={{ minWidth: 100 }}>
+                        <FormControl 
+                          size="small" 
+                          sx={{ 
+                            minWidth: 100,
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
+                        >
                           <Select
                             value={editingType}
                             onChange={(e) => setEditingType(e.target.value as SchemaHierarchyType)}
                             onClick={(e) => e.stopPropagation()}
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                color: 'var(--color-text)',
+                              },
+                              '& .MuiSelect-select': {
+                                color: level === 0 ? 'var(--color-primary)' : 'var(--color-text)',
+                              },
+                            }}
                           >
                             <MenuItem value="volume">Volume</MenuItem>
                             <MenuItem value="book">Book</MenuItem>
@@ -392,6 +499,15 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                             e.stopPropagation();
                             handleSaveEdit();
                           }}
+                          sx={{
+                            backgroundColor: 'var(--color-buttonActive)',
+                            color: 'white',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-buttonActiveHover)',
+                              border: '1px solid var(--color-border)',
+                            },
+                          }}
                         >
                           Save
                         </Button>
@@ -400,6 +516,14 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                           onClick={(e) => {
                             e.stopPropagation();
                             handleCancelEdit();
+                          }}
+                          sx={{
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-hover)',
+                            },
                           }}
                         >
                           Cancel
@@ -412,14 +536,14 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                         variant="body2"
                         sx={{
                           fontWeight: level === 0 ? 'bold' : 'normal',
-                          color: level === 0 ? '#1976d2' : 'inherit'
+                          color: level === 0 ? 'var(--color-primary)' : 'var(--color-text)'
                         }}
                       >
                         {chapter.title}
                       </Typography>
                       <Typography
                         variant="caption"
-                        sx={{ ml: 1, color: 'text.secondary' }}
+                        sx={{ ml: 1, color: 'var(--color-textSecondary)' }}
                       >
                         ({item.type})
                       </Typography>
@@ -452,7 +576,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               </Box>
             ))}
             {buildHierarchyTree().length === 0 && (
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
+              <Typography variant="body2" sx={{ textAlign: 'center', py: 2, color: 'var(--color-textSecondary)' }}>
                 No structure defined yet. Add chapters above to build your book structure.
               </Typography>
             )}

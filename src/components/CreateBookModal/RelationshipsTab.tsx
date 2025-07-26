@@ -13,6 +13,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData, SchemaRelationship, SchemaRelationshipDescription, SchemaHierarchyItem, SchemaChapter } from '../../schema/models';
 
 
+
 interface RelationshipsTabProps {
   bookData: SchemaBookData;
   setBookData: React.Dispatch<React.SetStateAction<SchemaBookData>>;
@@ -22,6 +23,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
   bookData,
   setBookData
 }) => {
+
   const [newRelationshipCharacter1, setNewRelationshipCharacter1] = useState('');
   const [newRelationshipCharacter2, setNewRelationshipCharacter2] = useState('');
   const [newRelationshipDescriptions, setNewRelationshipDescriptions] = useState<SchemaRelationshipDescription[]>([]);
@@ -185,6 +187,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             label="First Character"
             value={newRelationshipCharacter1}
             onChange={(e) => setNewRelationshipCharacter1(e.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiSelect-select': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           >
             <MenuItem value="">
               <em>Select first character</em>
@@ -201,6 +225,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             label="Second Character"
             value={newRelationshipCharacter2}
             onChange={(e) => setNewRelationshipCharacter2(e.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiSelect-select': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           >
             <MenuItem value="">
               <em>Select second character</em>
@@ -214,10 +260,10 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
 
           {/* Relationship Descriptions for New Relationship */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)' }}>
               Relationship Descriptions:
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
+            <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', fontStyle: 'italic', mb: 1 }}>
               Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
             </Typography>
             
@@ -229,6 +275,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               value={newDescriptionChapter}
               onChange={(e) => setNewDescriptionChapter(e.target.value)}
               fullWidth
+              sx={{
+                '& .MuiInputLabel-root': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiInputBase-input': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiSelect-select': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&:hover fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&.Mui-focused fieldset': {
+                    border: '1px solid #1976d2 !important',
+                  },
+                },
+              }}
             >
               <MenuItem value="">
                 <em>Select chapter</em>
@@ -250,12 +318,47 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               fullWidth
               multiline
               rows={2}
+              sx={{
+                '& .MuiInputLabel-root': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiInputBase-input': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&:hover fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&.Mui-focused fieldset': {
+                    border: '1px solid #1976d2 !important',
+                  },
+                },
+              }}
             />
             <Button
               size="small"
               variant="outlined"
               onClick={handleAddNewDescription}
               disabled={!newDescriptionChapter || !newDescriptionText}
+              sx={{
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                border: '1px solid var(--color-border)',
+                '&:hover': {
+                  backgroundColor: 'var(--color-hover)',
+                },
+                '&:disabled': {
+                  backgroundColor: 'var(--color-disabled)',
+                  color: 'var(--color-onDisabled)',
+                  border: '1px solid var(--color-border)',
+                },
+              }}
             >
               Add Description
             </Button>
@@ -291,6 +394,20 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             variant="contained"
             onClick={handleAddRelationship}
             disabled={!newRelationshipCharacter1 || !newRelationshipCharacter2 || newRelationshipCharacter1 === newRelationshipCharacter2}
+            sx={{
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
+              '&:hover': {
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
+              },
+              '&:disabled': {
+                backgroundColor: 'var(--color-disabled)',
+                color: 'var(--color-onDisabled)',
+                border: '1px solid var(--color-border)',
+              },
+            }}
           >
             Add Relationship
           </Button>
@@ -298,7 +415,13 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
       </Box>
 
       {/* Divider between columns */}
-      <Divider orientation="vertical" flexItem />
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Relationships List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -319,12 +442,12 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
                     p: 2,
-                    border: '1px solid #ddd',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '4px',
-                    backgroundColor: '#f9f9f9',
+                    backgroundColor: 'var(--color-surface)',
                     cursor: isEditing ? 'default' : 'pointer',
                     '&:hover': {
-                      backgroundColor: isEditing ? '#f9f9f9' : '#f0f0f0'
+                      backgroundColor: isEditing ? 'var(--color-surface)' : 'var(--color-hover)'
                     }
                   }}
                   onClick={() => {
@@ -342,6 +465,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                         value={editingRelationshipCharacter1}
                         onChange={(e) => setEditingRelationshipCharacter1(e.target.value)}
                         fullWidth
+                        sx={{
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiSelect-select': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
                       >
                         {bookData.characters.map((character) => (
                           <MenuItem key={character.id} value={character.id}>
@@ -356,6 +501,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                         value={editingRelationshipCharacter2}
                         onChange={(e) => setEditingRelationshipCharacter2(e.target.value)}
                         fullWidth
+                        sx={{
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiSelect-select': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
                       >
                         {bookData.characters.map((character) => (
                           <MenuItem key={character.id} value={character.id}>
@@ -366,10 +533,10 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
 
                       {/* Relationship Descriptions */}
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)' }}>
                           Relationship Descriptions:
                         </Typography>
-                        <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic', mb: 1 }}>
+                        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', fontStyle: 'italic', mb: 1 }}>
                           Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
                         </Typography>
                         
@@ -381,6 +548,28 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           value={editingDescriptionChapter}
                           onChange={(e) => setEditingDescriptionChapter(e.target.value)}
                           fullWidth
+                          sx={{
+                            '& .MuiInputLabel-root': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiInputBase-input': {
+                              color: 'var(--color-textSecondary) !important',
+                            },
+                            '& .MuiSelect-select': {
+                              color: 'var(--color-textSecondary) !important',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
                         >
                           <MenuItem value="">
                             <em>Select chapter</em>
@@ -402,12 +591,47 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           fullWidth
                           multiline
                           rows={2}
+                          sx={{
+                            '& .MuiInputLabel-root': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiInputBase-input': {
+                              color: 'var(--color-textSecondary) !important',
+                            },
+                            '& .MuiInputBase-input::placeholder': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
                         />
                         <Button
                           size="small"
                           variant="outlined"
                           onClick={handleAddEditingDescription}
                           disabled={!editingDescriptionChapter || !editingDescriptionText}
+                          sx={{
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-hover)',
+                            },
+                            '&:disabled': {
+                              backgroundColor: 'var(--color-disabled)',
+                              color: 'var(--color-onDisabled)',
+                              border: '1px solid var(--color-border)',
+                            },
+                          }}
                         >
                           Add Description
                         </Button>
@@ -444,12 +668,29 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           size="small"
                           color="primary"
                           onClick={handleSaveRelationshipEdit}
+                                                                                                     sx={{
+                           backgroundColor: 'var(--color-buttonActive)',
+                           color: 'white',
+                           border: '1px solid var(--color-border)',
+                           '&:hover': {
+                             backgroundColor: 'var(--color-buttonActiveHover)',
+                             border: '1px solid var(--color-border)',
+                           },
+                         }}
                         >
                           Save
                         </Button>
                         <Button
                           size="small"
                           onClick={handleCancelRelationshipEdit}
+                          sx={{
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-hover)',
+                            },
+                          }}
                         >
                           Cancel
                         </Button>
@@ -457,7 +698,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                     </Box>
                   ) : (
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
                         {getCharacterName(relationship.character1)} ↔ {getCharacterName(relationship.character2)}
                       </Typography>
                       {relationship.descriptions.length > 0 && (
@@ -470,7 +711,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                                 variant="outlined"
                                 sx={{ fontSize: '0.7rem', height: '20px', minWidth: '100px' }}
                               />
-                              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
+                              <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'var(--color-textSecondary)' }}>
                                 {description.description}
                               </Typography>
                             </Box>
@@ -478,7 +719,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                         </Box>
                       )}
                       {relationship.descriptions.length === 0 && (
-                        <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+                        <Typography variant="caption" sx={{ fontStyle: 'italic', color: 'var(--color-textSecondary)' }}>
                           No relationship descriptions added yet.
                         </Typography>
                       )}
@@ -489,6 +730,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                       size="small"
                       color="error"
                       onClick={() => handleDeleteRelationship(relationshipId)}
+                      sx={{
+                        backgroundColor: 'var(--color-error)',
+                        color: 'var(--color-onError)',
+                        border: '1px solid var(--color-border)',
+                        '&:hover': {
+                          backgroundColor: 'var(--color-errorHover)',
+                        },
+                      }}
                     >
                       Remove
                     </Button>
@@ -498,7 +747,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             })}
           </Box>
         ) : (
-          <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+          <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'var(--color-textSecondary)' }}>
             No relationships created yet.
           </Typography>
         )}

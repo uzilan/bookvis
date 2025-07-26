@@ -48,11 +48,11 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     // Show empty state for preview mode
     return (
       <div style={{
-        background: 'white',
+        background: 'var(--color-surface)',
         padding: '12px 16px',
         borderRadius: '8px',
-        border: '2px solid #333',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+        border: '2px solid var(--color-border)',
+        boxShadow: '0 4px 8px var(--color-shadow)',
         width: '100%',
         height: '30vh',
         display: 'flex',
@@ -64,7 +64,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           alignItems: 'center',
           marginBottom: '8px' 
         }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
             Locations:
           </div>
         </div>
@@ -74,7 +74,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          color: '#666',
+          color: 'var(--color-textSecondary)',
           fontSize: '12px'
         }}>
           <div style={{ marginBottom: '8px' }}>📍</div>
@@ -98,11 +98,11 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   return (
     <>
       <div style={{
-        background: 'white',
+        background: 'var(--color-surface)',
         padding: '12px 16px',
         borderRadius: '8px',
-        border: '2px solid #333',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+        border: '2px solid var(--color-border)',
+        boxShadow: '0 4px 8px var(--color-shadow)',
         width: '100%',
         height: '30vh',
         display: 'flex',
@@ -114,7 +114,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           alignItems: 'center',
           marginBottom: '6px' 
         }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
             Locations:
           </div>
           <FormControl size="small">
@@ -131,7 +131,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -144,7 +144,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -164,10 +164,10 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                 width: '90%',
                 padding: '4px 8px',
                 fontSize: '11px',
-                border: '1px solid #ccc',
+                border: '1px solid var(--color-border)',
                 borderRadius: '4px',
-                backgroundColor: 'white',
-                color: '#000'
+                backgroundColor: 'var(--color-background)',
+                color: 'var(--color-text)'
               }}
           />
         </div>
@@ -184,7 +184,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           {displayLocations.length === 0 ? (
             <div style={{
               fontSize: '11px',
-              color: '#666',
+              color: 'var(--color-textSecondary)',
               padding: '8px',
               textAlign: 'left',
               fontStyle: 'italic'
@@ -198,12 +198,12 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                 onClick={() => toggleLocation(location.id)}
                 style={{ 
                   fontSize: '12px', 
-                  color: '#000', 
+                  color: 'var(--color-text)', 
                   fontWeight: '500',
                   padding: '6px 8px',
-                  backgroundColor: '#f8f9fa',
+                  backgroundColor: 'var(--color-surface)',
                   borderRadius: '4px',
-                  border: '1px solid #e9ecef',
+                  border: '1px solid var(--color-border)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -211,16 +211,16 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
                   transition: 'background-color 0.2s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e9ecef';
+                  e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f8f9fa';
+                  e.currentTarget.style.backgroundColor = 'var(--color-surface)';
                 }}
               >
                 <span style={{ textAlign: 'left' }}>📍 {location.name}</span>
                 <span style={{ 
                   fontSize: '12px', 
-                  color: '#666',
+                  color: 'var(--color-textSecondary)',
                   transition: 'transform 0.2s ease',
                   transform: expandedLocations.has(location.id) ? 'rotate(90deg)' : 'rotate(0deg)'
                 }}>
@@ -230,12 +230,12 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
               {expandedLocations.has(location.id) && location.description && (
                 <div style={{
                   fontSize: '11px',
-                  color: '#666',
+                  color: 'var(--color-textSecondary)',
                   padding: '6px 8px',
                   marginTop: '3px',
-                  backgroundColor: '#f1f3f4',
+                  backgroundColor: 'var(--color-background)',
                   borderRadius: '4px',
-                  border: '1px solid #e0e0e0',
+                  border: '1px solid var(--color-border)',
                   lineHeight: '1.3',
                   textAlign: 'left'
                 }}>
@@ -249,7 +249,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         
         {/* Map Section */}
         <div style={{
-          borderTop: '1px solid #e0e0e0',
+          borderTop: '1px solid var(--color-border)',
           paddingTop: '6px',
           marginTop: '6px',
           flexShrink: 0

@@ -31,15 +31,32 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
   onAuthorSelect,
   onAddAuthorClick
 }) => {
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
-        <FormControl fullWidth>
+        <FormControl 
+          fullWidth
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&:hover fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&.Mui-focused fieldset': {
+                border: '1px solid #1976d2 !important',
+              },
+            },
+          }}
+        >
           <InputLabel 
             sx={{ 
               zIndex: 1,
-              backgroundColor: 'white',
-              padding: '0 4px'
+              backgroundColor: 'var(--color-background)',
+              padding: '0 4px',
+              color: 'var(--color-textSecondary)'
             }}
           >
             Author
@@ -49,6 +66,25 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             onChange={(e) => onAuthorSelect(e.target.value)}
             disabled={loading}
             displayEmpty
+            sx={{
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiSelect-select': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           >
             {loading ? (
               <MenuItem disabled>
@@ -90,6 +126,28 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             }
           }))}
           placeholder="Enter the book title"
+          sx={{
+            '& .MuiInputLabel-root': {
+              color: 'var(--color-textSecondary)',
+            },
+            '& .MuiInputBase-input': {
+              color: 'var(--color-text)',
+            },
+            '& .MuiInputBase-input::placeholder': {
+              color: 'var(--color-textSecondary)',
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&:hover fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&.Mui-focused fieldset': {
+                border: '1px solid #1976d2 !important',
+              },
+            },
+          }}
         />
       </Box>
 
@@ -107,6 +165,31 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
           }))}
           placeholder="Enter a link to the book's map"
           helperText="URL to a static image of the book's world map"
+          sx={{
+            '& .MuiInputLabel-root': {
+              color: 'var(--color-textSecondary)',
+            },
+            '& .MuiInputBase-input': {
+              color: 'var(--color-text)',
+            },
+            '& .MuiInputBase-input::placeholder': {
+              color: 'var(--color-textSecondary)',
+            },
+            '& .MuiFormHelperText-root': {
+              color: 'var(--color-textSecondary)',
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&:hover fieldset': {
+                border: '1px solid #e0e0e0 !important',
+              },
+              '&.Mui-focused fieldset': {
+                border: '1px solid #1976d2 !important',
+              },
+            },
+          }}
         />
       </Box>
 

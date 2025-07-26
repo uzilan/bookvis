@@ -3,9 +3,30 @@
   line-height: 1.5;
   font-weight: 400;
 
+  /* Default light theme colors */
+  --color-primary: #1976d2;
+  --color-primaryHover: #1565c0;
+  --color-secondary: #dc004e;
+  --color-background: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-text: #213547;
+  --color-textSecondary: #666666;
+  --color-border: #e0e0e0;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-overlay: rgba(255, 255, 255, 0.9);
+  --color-buttonActive: #1565c0;
+  --color-buttonActiveHover: #0d47a1;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-text);
+  background-color: var(--color-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,13 +34,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark mode overrides */
+.dark-mode {
+  --color-primary: #90caf9;
+  --color-primaryHover: #64b5f6;
+  --color-secondary: #f48fb1;
+  --color-background: #121212;
+  --color-surface: #1e1e1e;
+  --color-text: #ffffff;
+  --color-textSecondary: #b0b0b0;
+  --color-border: #333333;
+  --color-shadow: rgba(0, 0, 0, 0.3);
+  --color-overlay: rgba(18, 18, 18, 0.9);
+  --color-buttonActive: #1976d2;
+  --color-buttonActiveHover: #1565c0;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--color-primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--color-secondary);
 }
 
 body {
@@ -30,11 +67,15 @@ body {
   min-width: 320px;
   min-height: 100vh;
   text-align: center;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: var(--color-text);
 }
 
 button {
@@ -44,12 +85,14 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s, color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--color-primary);
+  background-color: var(--color-overlay);
 }
 button:focus,
 button:focus-visible {
@@ -62,15 +105,44 @@ button:focus-visible {
   text-align: left !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Material-UI theme overrides for dark mode */
+.dark-mode .MuiPaper-root {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+}
+
+.dark-mode .MuiDialog-paper {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+}
+
+.dark-mode .MuiTextField-root .MuiInputBase-root {
+  background-color: var(--color-background) !important;
+  color: var(--color-text) !important;
+}
+
+.dark-mode .MuiSelect-select {
+  background-color: var(--color-background) !important;
+  color: var(--color-text) !important;
+}
+
+.dark-mode .MuiMenuItem-root {
+  color: var(--color-text) !important;
+}
+
+.dark-mode .MuiMenuItem-root:hover {
+  background-color: var(--color-overlay) !important;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode overrides for Vis.js edge labels */
+.dark-mode .vis-network .vis-edge-label,
+.dark-mode .vis-network .vis-edge .vis-label,
+.dark-mode .vis-network text {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }

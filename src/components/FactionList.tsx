@@ -52,11 +52,11 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
 
   return (
     <div style={{
-      background: 'white',
+      background: 'var(--color-surface)',
       padding: '12px 16px',
       borderRadius: '8px',
-      border: '2px solid #333',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+      border: '2px solid var(--color-border)',
+      boxShadow: '0 4px 8px var(--color-shadow)',
       width: '100%',
       height: '30vh',
       display: 'flex',
@@ -68,7 +68,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
           alignItems: 'center',
           marginBottom: '8px' 
         }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
             Factions:
           </div>
           <FormControl size="small">
@@ -85,7 +85,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -98,7 +98,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -118,10 +118,10 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                 width: '90%',
                 padding: '4px 8px',
                 fontSize: '11px',
-                border: '1px solid #ccc',
+                border: '1px solid var(--color-border)',
                 borderRadius: '4px',
-                backgroundColor: 'white',
-                color: '#000'
+                backgroundColor: 'var(--color-background)',
+                color: 'var(--color-text)'
               }}
           />
         </div>
@@ -137,7 +137,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
           {displayFactions.length === 0 ? (
             <div style={{
               fontSize: '11px',
-              color: '#666',
+              color: 'var(--color-textSecondary)',
               padding: '8px',
               textAlign: 'left',
               fontStyle: 'italic'
@@ -159,7 +159,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                 transition: 'background-color 0.2s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f8f9fa';
+                e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
@@ -169,12 +169,12 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                 width: '16px',
                 height: '16px',
                 backgroundColor: faction.color,
-                border: '2px solid #333',
+                border: '2px solid var(--color-border)',
                 borderRadius: '3px',
               }} />
               <span style={{ 
                 fontSize: '13px', 
-                color: '#000', 
+                color: 'var(--color-text)', 
                 fontWeight: '500',
                 flex: 1,
                 textAlign: 'left'

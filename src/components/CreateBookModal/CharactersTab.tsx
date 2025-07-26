@@ -11,6 +11,7 @@ import {
 import type { SchemaBookData, SchemaCharacter, SchemaChapter, SchemaHierarchyItem } from '../../schema/models';
 
 
+
 interface CharactersTabProps {
   bookData: SchemaBookData;
   setBookData: React.Dispatch<React.SetStateAction<SchemaBookData>>;
@@ -20,6 +21,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   bookData,
   setBookData
 }) => {
+
   const [newCharacterName, setNewCharacterName] = useState('');
   const [newCharacterDescription, setNewCharacterDescription] = useState('');
   const [newCharacterAliases, setNewCharacterAliases] = useState<string[]>([]);
@@ -267,6 +269,28 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 handleAddCharacter();
               }
             }}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           
           <TextField
@@ -282,6 +306,28 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 handleAddCharacter();
               }
             }}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           
           {/* First Appearance Section */}
@@ -292,7 +338,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               label="First Appearance Chapter"
               value={newCharacterFirstAppearance}
               onChange={(e) => setNewCharacterFirstAppearance(e.target.value)}
-              sx={{ flex: 1 }}
+              sx={{ 
+                flex: 1,
+                '& .MuiInputLabel-root': {
+                  color: 'var(--color-textSecondary)',
+                },
+                '& .MuiInputBase-input': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiSelect-select': {
+                  color: 'var(--color-textSecondary) !important',
+                },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&:hover fieldset': {
+                    border: '1px solid #e0e0e0 !important',
+                  },
+                  '&.Mui-focused fieldset': {
+                    border: '1px solid #1976d2 !important',
+                  },
+                },
+              }}
             >
               <MenuItem value="">
                 <em>Select a chapter</em>
@@ -321,28 +389,74 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     handleAddNewCharacterAlias();
                   }
                 }}
-                sx={{ flex: 1 }}
+                sx={{ 
+                  flex: 1,
+                  '& .MuiInputLabel-root': {
+                    color: 'var(--color-textSecondary)',
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--color-textSecondary) !important',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: 'var(--color-textSecondary)',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      border: '1px solid #e0e0e0 !important',
+                    },
+                    '&:hover fieldset': {
+                      border: '1px solid #e0e0e0 !important',
+                    },
+                    '&.Mui-focused fieldset': {
+                      border: '1px solid #1976d2 !important',
+                    },
+                  },
+                }}
               />
               <Button
                 size="small"
                 variant="outlined"
                 onClick={handleAddNewCharacterAlias}
                 disabled={!newAlias.trim()}
+                sx={{
+                  backgroundColor: 'var(--color-surface)',
+                  color: 'var(--color-text)',
+                  border: '1px solid var(--color-border)',
+                  '&:hover': {
+                    backgroundColor: 'var(--color-hover)',
+                  },
+                  '&:disabled': {
+                    backgroundColor: 'var(--color-disabled)',
+                    color: 'var(--color-onDisabled)',
+                    border: '1px solid var(--color-border)',
+                  },
+                }}
               >
                 Add
               </Button>
             </Box>
             {newCharacterAliases.length > 0 && (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {newCharacterAliases.map((alias) => (
-                  <Chip
-                    key={alias}
-                    label={alias}
-                    size="small"
-                    onDelete={() => handleRemoveNewCharacterAlias(alias)}
-                    variant="outlined"
-                  />
-                ))}
+                                        {newCharacterAliases.map((alias) => (
+                          <Chip
+                            key={alias}
+                            label={alias}
+                            size="small"
+                            onDelete={() => handleRemoveNewCharacterAlias(alias)}
+                            variant="outlined"
+                            sx={{
+                              backgroundColor: 'var(--color-surface)',
+                              color: 'var(--color-text)',
+                              border: '1px solid var(--color-border)',
+                              '& .MuiChip-deleteIcon': {
+                                color: 'var(--color-text)',
+                              },
+                              '&:hover': {
+                                backgroundColor: 'var(--color-hover)',
+                              },
+                            }}
+                          />
+                        ))}
               </Box>
             )}
           </Box>
@@ -361,13 +475,48 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     handleAddNewCharacterAttribute();
                   }
                 }}
-                sx={{ flex: 1 }}
+                sx={{ 
+                  flex: 1,
+                  '& .MuiInputLabel-root': {
+                    color: 'var(--color-textSecondary)',
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--color-textSecondary) !important',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    color: 'var(--color-textSecondary)',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      border: '1px solid #e0e0e0 !important',
+                    },
+                    '&:hover fieldset': {
+                      border: '1px solid #e0e0e0 !important',
+                    },
+                    '&.Mui-focused fieldset': {
+                      border: '1px solid #1976d2 !important',
+                    },
+                  },
+                }}
               />
               <Button
                 size="small"
                 variant="outlined"
                 onClick={handleAddNewCharacterAttribute}
                 disabled={!newAttribute.trim()}
+                sx={{
+                  backgroundColor: 'var(--color-surface)',
+                  color: 'var(--color-text)',
+                  border: '1px solid var(--color-border)',
+                  '&:hover': {
+                    backgroundColor: 'var(--color-hover)',
+                  },
+                  '&:disabled': {
+                    backgroundColor: 'var(--color-disabled)',
+                    color: 'var(--color-onDisabled)',
+                    border: '1px solid var(--color-border)',
+                  },
+                }}
               >
                 Add
               </Button>
@@ -382,6 +531,17 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     onDelete={() => handleRemoveNewCharacterAttribute(attribute)}
                     variant="outlined"
                     color="secondary"
+                    sx={{
+                      backgroundColor: 'var(--color-surface)',
+                      color: 'var(--color-text)',
+                      border: '1px solid var(--color-border)',
+                      '& .MuiChip-deleteIcon': {
+                        color: 'var(--color-text)',
+                      },
+                      '&:hover': {
+                        backgroundColor: 'var(--color-hover)',
+                      },
+                    }}
                   />
                 ))}
               </Box>
@@ -400,7 +560,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       label="Faction"
                       value={membership.factionId}
                       onChange={(e) => handleUpdateFactionMembership(index, 'factionId', e.target.value, false)}
-                      sx={{ flex: 1 }}
+                      sx={{ 
+                        flex: 1,
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiSelect-select': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Select a faction</em>
@@ -420,7 +602,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       label="Join Chapter"
                       value={membership.joinChapterId}
                       onChange={(e) => handleUpdateFactionMembership(index, 'joinChapterId', e.target.value, false)}
-                      sx={{ flex: 1 }}
+                      sx={{ 
+                        flex: 1,
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiSelect-select': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     >
                       <MenuItem value="">
                         <em>Select a chapter</em>
@@ -450,6 +654,19 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               variant="outlined"
               onClick={() => handleAddFactionMembership(false)}
               disabled={bookData.factions.length === 0}
+              sx={{
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                border: '1px solid var(--color-border)',
+                '&:hover': {
+                  backgroundColor: 'var(--color-hover)',
+                },
+                '&:disabled': {
+                  backgroundColor: 'var(--color-disabled)',
+                  color: 'var(--color-onDisabled)',
+                  border: '1px solid var(--color-border)',
+                },
+              }}
             >
               Add Faction
             </Button>
@@ -459,6 +676,20 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
             variant="contained"
             onClick={handleAddCharacter}
             disabled={!newCharacterName.trim() || !newCharacterDescription.trim()}
+            sx={{
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
+              '&:hover': {
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
+              },
+              '&:disabled': {
+                backgroundColor: 'var(--color-disabled)',
+                color: 'var(--color-onDisabled)',
+                border: '1px solid var(--color-border)',
+              },
+            }}
           >
             Add Character
           </Button>
@@ -466,7 +697,13 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
       </Box>
 
       {/* Divider between columns */}
-      <Divider orientation="vertical" flexItem />
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Characters List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -483,12 +720,12 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                   justifyContent: 'space-between',
                   alignItems: 'flex-start',
                   p: 1,
-                  border: '1px solid #ddd',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '4px',
-                  backgroundColor: '#f9f9f9',
+                  backgroundColor: 'var(--color-surface)',
                   cursor: editingCharacterId === character.id ? 'default' : 'pointer',
                   '&:hover': {
-                    backgroundColor: editingCharacterId === character.id ? '#f9f9f9' : '#f0f0f0'
+                    backgroundColor: editingCharacterId === character.id ? 'var(--color-surface)' : 'var(--color-hover)'
                   }
                 }}
                 onClick={() => {
@@ -498,13 +735,32 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 }}
               >
                 {editingCharacterId === character.id ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
                     <TextField
                       size="small"
                       label="Name"
                       value={editingCharacterName}
                       onChange={(e) => setEditingCharacterName(e.target.value)}
-                      sx={{ flex: 1 }}
+                      sx={{ 
+                        flex: 1,
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     />
                     <TextField
                       size="small"
@@ -514,17 +770,61 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       placeholder="Enter character description"
                       multiline
                       rows={2}
+                      sx={{
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     />
                     
                     {/* First Appearance Section for Editing */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       <TextField
                         select
                         size="small"
                         label="First Appearance Chapter"
                         value={editingCharacterFirstAppearance}
                         onChange={(e) => setEditingCharacterFirstAppearance(e.target.value)}
-                        sx={{ flex: 1 }}
+                        sx={{ 
+                          flex: 1,
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiSelect-select': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
                       >
                         <MenuItem value="">
                           <em>Select a chapter</em>
@@ -540,7 +840,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     </Box>
                     
                     {/* Aliases Section */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                         <TextField
                           size="small"
@@ -553,7 +853,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                               handleAddAlias();
                             }
                           }}
-                          sx={{ flex: 1 }}
+                          sx={{ 
+                            flex: 1,
+                            '& .MuiInputLabel-root': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiInputBase-input': {
+                              color: 'var(--color-textSecondary) !important',
+                            },
+                            '& .MuiInputBase-input::placeholder': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
                         />
                         <Button
                           size="small"
@@ -573,6 +895,17 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                               size="small"
                               onDelete={() => handleRemoveAlias(alias)}
                               variant="outlined"
+                              sx={{
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                border: '1px solid var(--color-border)',
+                                '& .MuiChip-deleteIcon': {
+                                  color: 'var(--color-text)',
+                                },
+                                '&:hover': {
+                                  backgroundColor: 'var(--color-hover)',
+                                },
+                              }}
                             />
                           ))}
                         </Box>
@@ -580,7 +913,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     </Box>
                     
                     {/* Attributes Section for Editing */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                         <TextField
                           size="small"
@@ -593,7 +926,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                               handleAddAttribute();
                             }
                           }}
-                          sx={{ flex: 1 }}
+                          sx={{ 
+                            flex: 1,
+                            '& .MuiInputLabel-root': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiInputBase-input': {
+                              color: 'var(--color-textSecondary) !important',
+                            },
+                            '& .MuiInputBase-input::placeholder': {
+                              color: 'var(--color-textSecondary)',
+                            },
+                            '& .MuiOutlinedInput-root': {
+                              '& fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&:hover fieldset': {
+                                border: '1px solid #e0e0e0 !important',
+                              },
+                              '&.Mui-focused fieldset': {
+                                border: '1px solid #1976d2 !important',
+                              },
+                            },
+                          }}
                         />
                         <Button
                           size="small"
@@ -614,6 +969,17 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                               onDelete={() => handleRemoveAttribute(attribute)}
                               variant="outlined"
                               color="secondary"
+                              sx={{
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                border: '1px solid var(--color-border)',
+                                '& .MuiChip-deleteIcon': {
+                                  color: 'var(--color-text)',
+                                },
+                                '&:hover': {
+                                  backgroundColor: 'var(--color-hover)',
+                                },
+                              }}
                             />
                           ))}
                         </Box>
@@ -621,7 +987,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     </Box>
                     
                     {/* Factions Section for Editing */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       {editingCharacterFactions.length > 0 && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                           {editingCharacterFactions.map((membership, index) => (
@@ -632,7 +998,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                                 label="Faction"
                                 value={membership.factionId}
                                 onChange={(e) => handleUpdateFactionMembership(index, 'factionId', e.target.value, true)}
-                                sx={{ flex: 1 }}
+                                sx={{ 
+                                  flex: 1,
+                                  '& .MuiInputLabel-root': {
+                                    color: 'var(--color-textSecondary)',
+                                  },
+                                  '& .MuiInputBase-input': {
+                                    color: 'var(--color-textSecondary) !important',
+                                  },
+                                  '& .MuiSelect-select': {
+                                    color: 'var(--color-textSecondary) !important',
+                                  },
+                                  '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                      border: '1px solid #e0e0e0 !important',
+                                    },
+                                    '&:hover fieldset': {
+                                      border: '1px solid #e0e0e0 !important',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                      border: '1px solid #1976d2 !important',
+                                    },
+                                  },
+                                }}
                               >
                                 <MenuItem value="">
                                   <em>Select a faction</em>
@@ -652,7 +1040,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                                 label="Join Chapter"
                                 value={membership.joinChapterId}
                                 onChange={(e) => handleUpdateFactionMembership(index, 'joinChapterId', e.target.value, true)}
-                                sx={{ flex: 1 }}
+                                sx={{ 
+                                  flex: 1,
+                                  '& .MuiInputLabel-root': {
+                                    color: 'var(--color-textSecondary)',
+                                  },
+                                  '& .MuiInputBase-input': {
+                                    color: 'var(--color-textSecondary) !important',
+                                  },
+                                  '& .MuiSelect-select': {
+                                    color: 'var(--color-textSecondary) !important',
+                                  },
+                                  '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                      border: '1px solid #e0e0e0 !important',
+                                    },
+                                    '&:hover fieldset': {
+                                      border: '1px solid #e0e0e0 !important',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                      border: '1px solid #1976d2 !important',
+                                    },
+                                  },
+                                }}
                               >
                                 <MenuItem value="">
                                   <em>Select a chapter</em>
@@ -692,12 +1102,29 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                         size="small"
                         color="primary"
                         onClick={() => handleSaveCharacterEdit(character.id)}
+                        sx={{
+                          backgroundColor: 'var(--color-buttonActive)',
+                          color: 'white',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-buttonActiveHover)',
+                            border: '1px solid var(--color-border)',
+                          },
+                        }}
                       >
                         Save
                       </Button>
                       <Button
                         size="small"
                         onClick={handleCancelCharacterEdit}
+                        sx={{
+                          backgroundColor: 'var(--color-surface)',
+                          color: 'var(--color-text)',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-hover)',
+                          },
+                        }}
                       >
                         Cancel
                       </Button>
@@ -705,11 +1132,11 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                   </Box>
                 ) : (
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                      {character.name}
-                    </Typography>
+                                          <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
+                        {character.name}
+                      </Typography>
                     {character.description && (
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                      <Typography variant="caption" sx={{ ml: 1, color: 'var(--color-textSecondary)' }}>
                         {character.description}
                       </Typography>
                     )}
@@ -721,7 +1148,13 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                             label={alias}
                             size="small"
                             variant="outlined"
-                            sx={{ fontSize: '0.7rem', height: '20px' }}
+                            sx={{ 
+                              fontSize: '0.7rem', 
+                              height: '20px',
+                              backgroundColor: 'var(--color-surface)',
+                              color: 'var(--color-text)',
+                              border: '1px solid var(--color-border)',
+                            }}
                           />
                         ))}
                       </Box>
@@ -735,7 +1168,13 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                             size="small"
                             variant="outlined"
                             color="secondary"
-                            sx={{ fontSize: '0.7rem', height: '20px' }}
+                            sx={{ 
+                              fontSize: '0.7rem', 
+                              height: '20px',
+                              backgroundColor: 'var(--color-surface)',
+                              color: 'var(--color-text)',
+                              border: '1px solid var(--color-border)',
+                            }}
                           />
                         ))}
                       </Box>
@@ -764,7 +1203,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       </Box>
                     )}
                     {character.first_appearance_chapter && (
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 1, fontSize: '0.7rem' }}>
+                      <Typography variant="caption" sx={{ ml: 1, fontSize: '0.7rem', color: 'var(--color-textSecondary)' }}>
                         First appears in: {bookData.chapters.find(ch => ch.id === character.first_appearance_chapter)?.title || character.first_appearance_chapter}
                       </Typography>
                     )}
@@ -783,7 +1222,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
             ))}
           </Box>
         ) : (
-          <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+          <Typography variant="body2" sx={{ fontStyle: 'italic', color: 'var(--color-textSecondary)' }}>
             No characters created yet.
           </Typography>
         )}

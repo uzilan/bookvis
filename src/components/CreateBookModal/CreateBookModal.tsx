@@ -19,6 +19,7 @@ import type { BookData } from '../../models/BookData';
 import { FirebaseService } from '../../services/firebase';
 import { convertSchemaToBookData } from '../../utils/schemaToBookDataConverter';
 
+
 interface CreateBookModalProps {
   open: boolean;
   onClose: () => void;
@@ -31,6 +32,7 @@ interface CreateBookModalProps {
 
 export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
   const { open, onClose, onPreview, initialData } = props;
+
   const [selectedAuthor, setSelectedAuthor] = useState<string>('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
@@ -271,14 +273,41 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           }}
           maxWidth="md"
           fullWidth
+          sx={{
+            '& .MuiDialog-paper': {
+              backgroundColor: 'var(--color-background)',
+              color: 'var(--color-text)',
+            }
+          }}
         >
-      <DialogTitle>
+      <DialogTitle sx={{ color: 'var(--color-text)' }}>
         Create New Book
       </DialogTitle>
-      <DialogContent sx={{ display: 'flex', flexDirection: 'column', height: '600px', p: 0 }}>
+      <DialogContent sx={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '600px', 
+        p: 0,
+        backgroundColor: 'var(--color-background)',
+        color: 'var(--color-text)'
+      }}>
         {/* Tabs - Always visible */}
         <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
-          <Tabs value={currentTab} onChange={handleTabChange}>
+          <Tabs 
+            value={currentTab} 
+            onChange={handleTabChange}
+            sx={{
+              '& .MuiTab-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .Mui-selected': {
+                color: 'var(--color-text) !important',
+              },
+              '& .MuiTabs-indicator': {
+                backgroundColor: 'var(--color-primary)',
+              },
+            }}
+          >
             <Tab label="Book Info" />
             <Tab label={`Locations (${bookData.locations?.length || 0})`} />
             <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
@@ -388,12 +417,18 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         onClose={() => setShowCancelConfirmation(false)}
         maxWidth="xs"
         fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text)',
+          }
+        }}
       >
-        <DialogTitle>
+        <DialogTitle sx={{ color: 'var(--color-text)' }}>
           Cancel Book Creation?
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
+        <DialogContent sx={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}>
+          <DialogContentText sx={{ color: 'var(--color-text)' }}>
             Are you sure you want to cancel? All unsaved changes will be lost.
           </DialogContentText>
         </DialogContent>
@@ -413,12 +448,18 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         onClose={() => setShowRequirementsDialog(false)}
         maxWidth="sm"
         fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text)',
+          }
+        }}
       >
-        <DialogTitle>
+        <DialogTitle sx={{ color: 'var(--color-text)' }}>
           Missing Requirements
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText gutterBottom>
+        <DialogContent sx={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}>
+          <DialogContentText gutterBottom sx={{ color: 'var(--color-text)' }}>
             Please complete the following requirements before creating your book:
           </DialogContentText>
           <Box sx={{ mt: 2 }}>

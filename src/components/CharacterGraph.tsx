@@ -8,6 +8,7 @@ import { ChapterSlider } from './ChapterSlider';
 import { LocationList } from './LocationList';
 import { FactionList } from './FactionList';
 import { CharacterList } from './CharacterList';
+import { useTheme } from '../hooks/useTheme';
 
 
 
@@ -138,6 +139,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   isPreview = false,
   onExitPreview
 }) => {
+  const { isDarkMode } = useTheme();
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
   const [isClustered] = useState(true); // Start with clustering enabled by default
@@ -278,12 +280,19 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         label: rel.descriptions[0]?.description || 'Related',
         color: '#888',
         width: 2,
-        font: { size: 14, color: '#333' },
+        font: { 
+          size: 14, 
+          color: isDarkMode ? '#ffffff' : '#000000',
+          strokeWidth: 0
+        },
+        labelHighlightBold: false,
+        smooth: { type: 'continuous' },
+        shadow: { enabled: false }
       });
     });
 
     return { nodes, edges };
-  }, [bookData.characters, bookData.factions, bookData.relationships, bookData.chapters, selectedChapter, isClustered]);
+  }, [bookData.characters, bookData.factions, bookData.relationships, bookData.chapters, selectedChapter, isClustered, isDarkMode]);
 
   // Network options
   const options = useMemo(() => ({
@@ -305,7 +314,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     edges: {
       color: '#888',
       width: 2,
-      font: { size: 14, color: '#333' },
+      font: { size: 14, color: isDarkMode ? '#ffffff' : '#000000', strokeWidth: 0 },
       smooth: {
         enabled: true,
         type: 'continuous',
@@ -364,7 +373,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       enabled: false, // Disable node manipulation but enable zoom controls
     },
 
-  }), [bookData.factions]);
+  }), [bookData.factions, isDarkMode]);
 
   // Initialize network
   useEffect(() => {
@@ -373,18 +382,21 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       const style = document.createElement('style');
       style.textContent = `
         .vis-navigation {
-          background: white !important;
-          border: 1px solid #ccc !important;
+          background: var(--color-background) !important;
+          border: 0.5px solid var(--color-border) !important;
           border-radius: 4px !important;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+          padding: 2px !important;
         }
         .vis-navigation button {
-          color: #333 !important;
-          background: white !important;
-          border: 1px solid #ccc !important;
+          color: var(--color-text) !important;
+          background: var(--color-background) !important;
+          border: 0.5px solid var(--color-border) !important;
+          margin: 1px !important;
+          padding: 4px !important;
         }
         .vis-navigation button:hover {
-          background: #f0f0f0 !important;
+          background: var(--color-hover) !important;
         }
       `;
       document.head.appendChild(style);
@@ -434,7 +446,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
     <div style={{
       width: '100%',
       height: '100%',
-      background: '#f8fafc',
+      background: 'var(--color-background)',
       overflow: 'hidden',
       position: 'relative',
     }}>
@@ -530,7 +542,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         left: '300px',
         zIndex: 100,
         background: 'white',
-        padding: '6px',
+        padding: '3px',
         borderRadius: '6px',
         border: '1px solid #ccc',
         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
@@ -553,12 +565,12 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           style={{
             width: '32px',
             height: '32px',
-            border: '1px solid #ddd',
-            background: 'white',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '18px',
-            color: '#333',
+            color: 'var(--color-text)',
             fontWeight: 'bold',
             display: 'flex',
             alignItems: 'center',
@@ -582,12 +594,12 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           style={{
             width: '32px',
             height: '32px',
-            border: '1px solid #ddd',
-            background: 'white',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '18px',
-            color: '#333',
+            color: 'var(--color-text)',
             fontWeight: 'bold',
             display: 'flex',
             alignItems: 'center',
@@ -620,12 +632,12 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           style={{
             width: '32px',
             height: '32px',
-            border: '1px solid #ddd',
-            background: 'white',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '18px',
-            color: '#333',
+            color: 'var(--color-text)',
             fontWeight: 'bold',
             display: 'flex',
             alignItems: 'center',

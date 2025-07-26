@@ -62,13 +62,13 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           cursor: 'pointer',
           padding: node.chapter.type === 'part' ? '12px 0px 4px 0px' : '4px 0px',
           borderRadius: '4px',
-          backgroundColor: isSelected ? 'rgba(25, 118, 210, 0.1)' : 'transparent',
+          backgroundColor: isSelected ? 'var(--color-primary)' : 'transparent',
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'rgba(25, 118, 210, 0.15)' : 'rgba(0, 0, 0, 0.04)';
+          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-primary)' : 'rgba(0, 0, 0, 0.04)';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'rgba(25, 118, 210, 0.1)' : 'transparent';
+          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-primary)' : 'transparent';
         }}
         onClick={() => {
           if (hasChildren) {
@@ -84,7 +84,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
           variant={node.chapter.type === 'book' ? 'h6' : 'body2'}
           style={{
             fontSize: node.chapter.type === 'book' ? 14 : 11,
-            color: isSelected ? '#1976d2' : '#111',
+            color: isSelected ? 'var(--color-primary)' : 'var(--color-text)',
             fontWeight: isSelected ? 'bold' : (
               node.chapter.type === 'book' ? 'bold' : 
               node.chapter.type === 'part' ? 'bold' : 
@@ -204,14 +204,14 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         left: 0,
         width: 280,
         height: '100vh',
-        background: 'rgba(255,255,255,0.98)',
-        borderRight: '3px solid #ccc',
+        background: 'var(--color-overlay)',
+        borderRight: '3px solid var(--color-border)',
         zIndex: 1000,
         padding: '24px 16px',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
-        boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+        boxShadow: '2px 0 10px var(--color-shadow)',
       }}
     >
       {/* Home Link / Return to Editor */}
@@ -313,7 +313,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
           },
         },
       }}>
-        <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 2, fontSize: 12, color: '#111' }}>
+        <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 2, fontSize: 12, color: 'var(--color-text)' }}>
           Chapters:
         </Typography>
         {chapterTree.map((node, index) => (

@@ -36,11 +36,11 @@ export const CharacterList: React.FC<CharacterListProps> = ({
 
   return (
     <div style={{
-      background: 'white',
+      background: 'var(--color-surface)',
       padding: '12px 16px',
       borderRadius: '8px',
-      border: '2px solid #333',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+      border: '2px solid var(--color-border)',
+      boxShadow: '0 4px 8px var(--color-shadow)',
       width: '100%',
       height: '30vh',
       display: 'flex',
@@ -54,7 +54,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
         marginBottom: '8px',
         fontSize: '14px',
         fontWeight: 'bold',
-        color: '#000',
+        color: 'var(--color-text)',
         textAlign: 'left'
       }}>
         <span>Characters:</span>
@@ -72,7 +72,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -85,7 +85,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   fontSize: '10px', 
                   '& .MuiFormControlLabel-label': { 
                     fontSize: '10px',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     textAlign: 'left'
                   } 
                 }}
@@ -105,13 +105,13 @@ export const CharacterList: React.FC<CharacterListProps> = ({
               width: '90%',
               padding: '4px 8px',
               fontSize: '11px',
-              border: '1px solid #ccc',
+              border: '1px solid var(--color-border)',
               borderRadius: '4px',
-              backgroundColor: 'white',
-              color: '#000'
+              backgroundColor: 'var(--color-background)',
+              color: 'var(--color-text)'
             }}
           />
-          <div style={{ fontSize: '10px', color: '#666', marginTop: '4px', textAlign: 'left' }}>
+          <div style={{ fontSize: '10px', color: 'var(--color-textSecondary)', marginTop: '4px', textAlign: 'left' }}>
             {displayCharacters.length}/{showAllCharacters ? allCharacters.length : characters.length}
           </div>
         </div>
@@ -143,10 +143,10 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                 onClick={() => onCharacterClick(character)}
                 style={{
                   padding: '8px',
-                  border: '1px solid #ddd',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  backgroundColor: '#f9f9f9',
+                  backgroundColor: 'var(--color-surface)',
                   transition: 'background-color 0.2s',
                   display: 'flex',
                   alignItems: 'center',
@@ -154,10 +154,10 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   fontSize: '11px'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e9e9e9';
+                  e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f9f9f9';
+                  e.currentTarget.style.backgroundColor = 'var(--color-surface)';
                 }}
               >
                 {/* Character Icon */}
@@ -172,7 +172,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   fontWeight: 'bold',
                   color: 'white',
                   background: factionColors.length > 0 ? factionColors[0] : '#999',
-                  border: '1px solid #333'
+                  border: '1px solid var(--color-border)'
                 }}>
                   {character.name.charAt(0).toUpperCase()}
                 </div>
@@ -181,7 +181,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     fontWeight: 'bold',
-                    color: '#000',
+                    color: 'var(--color-text)',
                     fontSize: '11px',
                     marginBottom: '2px',
                     textAlign: 'left'
@@ -191,7 +191,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   {character.aliases.length > 0 && (
                     <div style={{
                       fontSize: '9px',
-                      color: '#666',
+                      color: 'var(--color-textSecondary)',
                       fontStyle: 'italic',
                       textAlign: 'left'
                     }}>
@@ -201,7 +201,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
                   {currentFactions.length > 0 && (
                     <div style={{
                       fontSize: '9px',
-                      color: '#666',
+                      color: 'var(--color-textSecondary)',
                       marginTop: '2px',
                       textAlign: 'left'
                     }}>
@@ -216,7 +216,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
           <div style={{
             padding: '12px',
             textAlign: 'left',
-            color: '#666',
+            color: 'var(--color-textSecondary)',
             fontSize: '11px',
             fontStyle: 'italic'
           }}>

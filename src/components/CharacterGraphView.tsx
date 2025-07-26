@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { CharacterGraph } from './CharacterGraph';
 import { CreateBookModal } from './CreateBookModal';
+import { LoginButton } from './LoginButton';
+import { ThemeToggle } from './ThemeToggle';
 import type { Book } from '../models/Book';
 import type { BookData } from '../models/BookData';
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
@@ -251,6 +253,28 @@ export const CharacterGraphView: React.FC = () => {
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
+      {/* Top Right Controls */}
+      <div style={{ 
+        position: 'absolute', 
+        top: '20px', 
+        right: '20px', 
+        zIndex: 1003,
+        display: 'flex',
+        gap: '10px',
+        alignItems: 'center'
+      }}>
+        <ThemeToggle />
+        <div style={{
+          backgroundColor: 'var(--color-overlay)',
+          padding: '10px',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px var(--color-shadow)',
+          border: '1px solid var(--color-border)'
+        }}>
+          <LoginButton />
+        </div>
+      </div>
+      
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
           key={previewBookData ? `preview-${previewBookData.book.id}-${previewTimestamp}` : selectedBook?.id || 'no-book'}

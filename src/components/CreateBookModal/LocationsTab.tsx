@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 
+
 interface LocationsTabProps {
   bookData: SchemaBookData;
   setBookData: React.Dispatch<React.SetStateAction<SchemaBookData>>;
@@ -17,6 +18,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
   bookData,
   setBookData
 }) => {
+
   const [editingLocationId, setEditingLocationId] = useState<string | null>(null);
   const [editingLocationName, setEditingLocationName] = useState('');
   const [editingLocationDescription, setEditingLocationDescription] = useState('');
@@ -98,6 +100,28 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                 handleAddLocationWithForm();
               }
             }}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           <TextField
             fullWidth
@@ -107,12 +131,48 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
             onChange={(e) => setNewLocationDescription(e.target.value)}
             multiline
             rows={2}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
           />
           
           <Button
             variant="contained"
             onClick={handleAddLocationWithForm}
             disabled={!newLocationName.trim()}
+            sx={{
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
+              '&:hover': {
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
+              },
+              '&:disabled': {
+                backgroundColor: 'var(--color-disabled)',
+                color: 'var(--color-onDisabled)',
+                border: '1px solid var(--color-border)',
+              },
+            }}
           >
             Add
           </Button>
@@ -120,7 +180,13 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
       </Box>
 
       {/* Divider between columns */}
-      <Divider orientation="vertical" flexItem />
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Locations List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -141,12 +207,12 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   p: 1,
-                  border: '1px solid #ddd',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '4px',
-                  backgroundColor: '#f9f9f9',
+                  backgroundColor: 'var(--color-surface)',
                   cursor: editingLocationId === location.id ? 'default' : 'pointer',
                   '&:hover': {
-                    backgroundColor: editingLocationId === location.id ? '#f9f9f9' : '#f0f0f0'
+                    backgroundColor: editingLocationId === location.id ? 'var(--color-surface)' : 'var(--color-hover)'
                   }
                 }}
                 onClick={() => {
@@ -163,7 +229,26 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                         label="Name"
                         value={editingLocationName}
                         onChange={(e) => setEditingLocationName(e.target.value)}
-                        sx={{ flex: 1 }}
+                        sx={{ 
+                          flex: 1,
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-text)',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
                       />
                     </Box>
                     <TextField
@@ -174,18 +259,57 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                       placeholder="Enter location description"
                       multiline
                       rows={2}
+                      sx={{
+                        '& .MuiInputLabel-root': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-text)',
+                        },
+                        '& .MuiInputBase-input::placeholder': {
+                          color: 'var(--color-textSecondary)',
+                        },
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&:hover fieldset': {
+                            border: '1px solid #e0e0e0 !important',
+                          },
+                          '&.Mui-focused fieldset': {
+                            border: '1px solid #1976d2 !important',
+                          },
+                        },
+                      }}
                     />
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       <Button
                         size="small"
                         color="primary"
                         onClick={() => handleSaveLocationEdit(location.id)}
+                        sx={{
+                          backgroundColor: 'var(--color-buttonActive)',
+                          color: 'white',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-buttonActiveHover)',
+                            border: '1px solid var(--color-border)',
+                          },
+                        }}
                       >
                         Save
                       </Button>
                       <Button
                         size="small"
                         onClick={handleCancelLocationEdit}
+                        sx={{
+                          backgroundColor: 'var(--color-surface)',
+                          color: 'var(--color-text)',
+                          border: '1px solid var(--color-border)',
+                          '&:hover': {
+                            backgroundColor: 'var(--color-hover)',
+                          },
+                        }}
                       >
                         Cancel
                       </Button>
@@ -193,11 +317,11 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                   </Box>
                 ) : (
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
                       {location.name}
                     </Typography>
                     {location.description && (
-                      <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                      <Typography variant="caption" sx={{ ml: 1, color: 'var(--color-textSecondary)' }}>
                         {location.description}
                       </Typography>
                     )}
@@ -208,6 +332,13 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                     size="small"
                     color="error"
                     onClick={() => handleRemoveLocation(location.id)}
+                    sx={{
+                      backgroundColor: 'var(--color-error)',
+                      color: 'var(--color-onError)',
+                      '&:hover': {
+                        backgroundColor: 'var(--color-errorHover)',
+                      },
+                    }}
                   >
                     Remove
                   </Button>
