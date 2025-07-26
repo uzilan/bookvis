@@ -468,15 +468,31 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         />
 
         {/* Faction List */}
-        <FactionList 
-          factions={bookData.factions} 
-          bookData={fullBookData}
-          isPreview={isPreview}
-          onCharacterClick={(character) => {
-            setSelectedCharacter(character);
-            setIsDetailsPanelOpen(true);
-          }}
-        />
+        {(() => {
+          // Calculate factions relevant to the current chapter
+          const chapterRelevantFactions = bookData.factions.filter(faction => {
+            // Check if any character in this chapter belongs to this faction
+            return bookData.characters.some(character => {
+              // Check if character appears in current chapter
+              const characterAppearsInChapter = character.firstAppearanceChapter === selectedChapter;
+              // Check if character belongs to this faction
+              const characterBelongsToFaction = character.factions.includes(faction.id);
+              return characterAppearsInChapter && characterBelongsToFaction;
+            });
+          });
+
+          return (
+            <FactionList 
+              factions={chapterRelevantFactions} 
+              bookData={fullBookData}
+              isPreview={isPreview}
+              onCharacterClick={(character) => {
+                setSelectedCharacter(character);
+                setIsDetailsPanelOpen(true);
+              }}
+            />
+          );
+        })()}
 
         {/* Location List */}
         {(() => {
