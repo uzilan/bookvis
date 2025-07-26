@@ -482,10 +482,10 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         {(() => {
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
           // Always show LocationList in preview mode, or if there are locations
-          return currentChapter && (isPreview || (bookData.locations && bookData.locations.length > 0)) ? (
+          return (isPreview || (bookData.locations && bookData.locations.length > 0)) ? (
             <LocationList 
-              locations={currentChapter.locations || []} 
-              chapterTitle={currentChapter.title}
+              locations={currentChapter?.locations || []} 
+              chapterTitle={currentChapter?.title || 'All Locations'}
               chapterId={selectedChapter}
               bookData={bookData}
               isPreview={isPreview}

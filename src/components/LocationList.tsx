@@ -19,12 +19,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [filterText, setFilterText] = useState('');
 
-  // Debug logging
-  console.log('LocationList props:', { 
-    locations: locations?.map(l => ({ id: l.id, name: l.name })), 
-    chapterId, 
-    allLocationsCount: bookData.locations?.length 
-  });
+
 
   // Get all locations from the book data
   const allLocations = useMemo(() => bookData.locations || [], [bookData.locations]);
@@ -46,7 +41,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
 
   // Only return null if there are no locations at all (not just no filtered results)
   // But show empty state in preview mode
-  if (!locations || locations.length === 0) {
+  if ((!locations || locations.length === 0) && (!isPreview || allLocations.length === 0)) {
     if (!isPreview) {
       return null;
     }

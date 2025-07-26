@@ -29,6 +29,13 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     factionJoinChapters: char.faction_join_chapters || {}
   }));
 
+  // Convert Locations first (needed for chapters)
+  const locations: Location[] = schemaData.locations.map(location => ({
+    id: location.id,
+    name: location.name,
+    description: location.description || ''
+  }));
+
   // Convert Chapters
   const chapters: Chapter[] = schemaData.chapters.map(chapter => ({
     book: book,
@@ -36,7 +43,10 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     title: chapter.title,
     index: 0, // Will be set based on hierarchy
     type: 'chapter',
-    locations: chapter.locations || []
+    locations: (chapter.locations || []).map(locationId => {
+      const location = locations.find(loc => loc.id === locationId);
+      return location || { id: locationId, name: 'Unknown Location', description: '' };
+    })
   }));
 
   // Convert Factions
@@ -45,13 +55,6 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     title: faction.title,
     description: faction.description || '',
     color: faction.color
-  }));
-
-  // Convert Locations
-  const locations: Location[] = schemaData.locations.map(location => ({
-    id: location.id,
-    name: location.name,
-    description: location.description || ''
   }));
 
   // Convert Relationships
@@ -122,7 +125,7 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
   const chapters = bookData.chapters.map(chapter => ({
     id: chapter.id,
     title: chapter.title,
-    locations: chapter.locations
+    locations: chapter.locations.map(location => location.id)
   }));
 
   // Convert Factions

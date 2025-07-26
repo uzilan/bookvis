@@ -219,13 +219,21 @@ export const CharacterGraphView: React.FC = () => {
   };
 
   const handleExitPreview = () => {
-    if (previewBookData) {
-      const schemaData = convertBookDataToSchema(previewBookData);
+    // Use the correct preview data source
+    const currentPreviewData = previewBookData || previewDataFromUrl;
+    
+    if (currentPreviewData) {
+      const schemaData = convertBookDataToSchema(currentPreviewData);
       setInitialModalData(schemaData);
+      // Open modal after setting the data
+      setTimeout(() => {
+        setIsCreateBookModalOpen(true);
+      }, 0);
+    } else {
+      setIsCreateBookModalOpen(true);
     }
     setPreviewBookData(null);
     setPreviewTimestamp(0);
-    setIsCreateBookModalOpen(true);
   };
 
   const handleCloseCreateBookModal = () => {
@@ -264,7 +272,6 @@ export const CharacterGraphView: React.FC = () => {
           onClose={handleCloseCreateBookModal}
           onPreview={handlePreview}
           initialData={initialModalData}
-          onInitialDataUsed={() => setInitialModalData(undefined)}
         />
       )}
     </div>

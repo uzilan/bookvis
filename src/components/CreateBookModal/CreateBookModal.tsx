@@ -30,7 +30,7 @@ interface CreateBookModalProps {
 
 
 export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
-  const { open, onClose, onPreview, initialData, onInitialDataUsed } = props;
+  const { open, onClose, onPreview, initialData } = props;
   const [selectedAuthor, setSelectedAuthor] = useState<string>('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
@@ -66,13 +66,9 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       if (initialData) {
         setBookData(initialData);
         setSelectedAuthor(initialData.book.author.id);
-        // Notify parent that initial data has been used
-        if (onInitialDataUsed) {
-          onInitialDataUsed();
-        }
       }
     }
-  }, [open, initialData, onInitialDataUsed]);
+  }, [open, initialData]);
 
   const fetchAuthors = async () => {
     try {
@@ -239,11 +235,11 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
             name: bookData.book.author.name || 'Unknown Author'
           }
         },
-        chapters: bookData.chapters.length > 0 ? bookData.chapters : [{
-          id: 'preview-chapter-1',
-          title: 'Preview Chapter',
-          locations: bookData.locations.length > 0 ? bookData.locations.slice(0, 3).map(loc => loc.id) : []
-        }],
+        chapters: bookData.chapters.map(chapter => ({
+          ...chapter,
+          // Ensure locations is always an array of location IDs
+          locations: chapter.locations || []
+        })),
         characters: bookData.characters.length > 0 ? bookData.characters : [],
         locations: bookData.locations.length > 0 ? bookData.locations : [],
         factions: bookData.factions.length > 0 ? bookData.factions : [],
