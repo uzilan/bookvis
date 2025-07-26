@@ -35,10 +35,17 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
         <FormControl fullWidth>
-          <InputLabel>Author</InputLabel>
+          <InputLabel 
+            sx={{ 
+              zIndex: 1,
+              backgroundColor: 'white',
+              padding: '0 4px'
+            }}
+          >
+            Author
+          </InputLabel>
           <Select
             value={selectedAuthor}
-            label="Author"
             onChange={(e) => onAuthorSelect(e.target.value)}
             disabled={loading}
             displayEmpty

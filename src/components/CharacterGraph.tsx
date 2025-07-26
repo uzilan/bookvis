@@ -20,6 +20,8 @@ interface CharacterGraphProps {
   selectedBook: Book;
   onBookChange: (book: Book) => void;
   onCreateBook: () => void;
+  isPreview?: boolean; // New prop to indicate preview mode
+  onExitPreview?: () => void; // New prop to handle exiting preview mode
 }
 
 
@@ -132,7 +134,9 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
   books,
   selectedBook,
   onBookChange,
-  onCreateBook
+  onCreateBook,
+  isPreview = false,
+  onExitPreview
 }) => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false);
@@ -434,6 +438,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       overflow: 'hidden',
       position: 'relative',
     }}>
+      
+
 
 
 
@@ -465,6 +471,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         <FactionList 
           factions={bookData.factions} 
           bookData={fullBookData}
+          isPreview={isPreview}
           onCharacterClick={(character) => {
             setSelectedCharacter(character);
             setIsDetailsPanelOpen(true);
@@ -474,12 +481,14 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         {/* Location List */}
         {(() => {
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return currentChapter && currentChapter.locations ? (
+          // Always show LocationList in preview mode, or if there are locations
+          return currentChapter && (isPreview || (bookData.locations && bookData.locations.length > 0)) ? (
             <LocationList 
-              locations={currentChapter.locations} 
+              locations={currentChapter.locations || []} 
               chapterTitle={currentChapter.title}
               chapterId={selectedChapter}
               bookData={bookData}
+              isPreview={isPreview}
             />
           ) : null;
         })()}
@@ -620,6 +629,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         onBookChange={onBookChange}
         onCreateBook={onCreateBook}
         showBookSelector={false}
+        isPreview={isPreview}
+        onExitPreview={onExitPreview}
       />
       <CharacterDetailsPanel
         character={selectedCharacter}

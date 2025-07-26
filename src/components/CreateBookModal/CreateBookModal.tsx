@@ -15,19 +15,22 @@ import { AddAuthorModal } from '../AddAuthorModal';
 import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab, CharactersTab, RelationshipsTab } from './index';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData, SchemaAuthor } from '../../schema/models';
+import type { BookData } from '../../models/BookData';
 import { FirebaseService } from '../../services/firebase';
+import { convertSchemaToBookData } from '../../utils/schemaToBookDataConverter';
 
 interface CreateBookModalProps {
   open: boolean;
   onClose: () => void;
+  onPreview?: (previewData: BookData) => void;
+  initialData?: SchemaBookData; // New prop to restore data when returning from preview
+  onInitialDataUsed?: () => void; // Callback to notify when initial data has been used
 }
 
 
 
-export const CreateBookModal: React.FC<CreateBookModalProps> = ({
-  open,
-  onClose
-}) => {
+export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
+  const { open, onClose, onPreview, initialData, onInitialDataUsed } = props;
   const [selectedAuthor, setSelectedAuthor] = useState<string>('');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,12 +58,21 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
     hierarchy: []
   });
 
-  // Fetch authors when modal opens
+  // Fetch authors when modal opens and restore initial data if provided
   useEffect(() => {
     if (open) {
       fetchAuthors();
+      // Restore initial data if provided (when returning from preview)
+      if (initialData) {
+        setBookData(initialData);
+        setSelectedAuthor(initialData.book.author.id);
+        // Notify parent that initial data has been used
+        if (onInitialDataUsed) {
+          onInitialDataUsed();
+        }
+      }
     }
-  }, [open]);
+  }, [open, initialData, onInitialDataUsed]);
 
   const fetchAuthors = async () => {
     try {
@@ -116,15 +128,6 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
       return;
     }
 
-    const completeBookData: SchemaBookData = {
-      ...bookData,
-      book: {
-        ...bookData.book,
-        id: bookData.book.title.trim().toLowerCase().replace(/\s+/g, '-')
-      }
-    };
-
-    console.log('Creating book with SchemaBookData:', completeBookData);
     // TODO: Save the complete book data to Firebase or your storage
     onClose();
   };
@@ -179,9 +182,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
   };
 
   const handleAuthorSelect = (authorId: string) => {
-    console.log('handleAuthorSelect called with:', authorId);
     if (authorId === 'new-author') {
-      console.log('Setting isAddAuthorModalOpen to true');
       setIsAddAuthorModalOpen(true);
     } else {
       setSelectedAuthor(authorId);
@@ -225,6 +226,42 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
     setCurrentTab(newValue);
   };
 
+  const handlePreview = () => {
+    try {
+      // Create a copy of bookData with default values for missing required fields
+      const previewData: SchemaBookData = {
+        ...bookData,
+        book: {
+          id: bookData.book.id || 'preview-book',
+          title: bookData.book.title || 'Untitled Book',
+          author: {
+            id: bookData.book.author.id || 'preview-author',
+            name: bookData.book.author.name || 'Unknown Author'
+          }
+        },
+        chapters: bookData.chapters.length > 0 ? bookData.chapters : [{
+          id: 'preview-chapter-1',
+          title: 'Preview Chapter',
+          locations: bookData.locations.length > 0 ? bookData.locations.slice(0, 3).map(loc => loc.id) : []
+        }],
+        characters: bookData.characters.length > 0 ? bookData.characters : [],
+        locations: bookData.locations.length > 0 ? bookData.locations : [],
+        factions: bookData.factions.length > 0 ? bookData.factions : [],
+        relationships: bookData.relationships.length > 0 ? bookData.relationships : []
+      };
+
+      const convertedBookData = convertSchemaToBookData(previewData);
+      if (onPreview) {
+        onPreview(convertedBookData);
+      }
+    } catch (error) {
+      console.error('Error converting to preview:', error);
+      // You might want to show an error message to the user here
+    }
+  };
+
+
+
   return (
     <>
       {open && (
@@ -254,6 +291,8 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
             <Tab label={`Relationships (${bookData.relationships?.length || 0})`} />
           </Tabs>
         </Box>
+
+
 
         {/* Scrollable Content */}
         <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
@@ -306,8 +345,22 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancelClick} color="primary">
+        <Button 
+          onClick={handleCancelClick} 
+          variant="outlined"
+          color="primary"
+          sx={{ minWidth: '120px' }}
+        >
           Cancel
+        </Button>
+        <Button 
+          onClick={handlePreview}
+          color="info"
+          variant="contained"
+          title="Preview your book visualization to see how it will look"
+          sx={{ minWidth: '120px' }}
+        >
+          Preview
         </Button>
         <Button 
           onClick={handleCreateBook} 
@@ -324,6 +377,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
           }
           variant="contained"
           disabled={loading}
+          sx={{ minWidth: '120px' }}
         >
           Create Book
         </Button>
@@ -401,6 +455,8 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = ({
         </DialogActions>
       </Dialog>
     
+
+
       {open && (
         <AddAuthorModal
           open={isAddAuthorModalOpen}

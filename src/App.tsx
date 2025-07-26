@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
 import { CreateBookModal } from './components/CreateBookModal';
 import { LoginButton } from './components/LoginButton';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
+import type { SchemaBookData } from './schema/models/SchemaBookData';
 import { FirebaseService } from './services/firebase.ts';
+import { convertBookDataToSchema } from './utils/schemaToBookDataConverter';
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
@@ -13,7 +15,13 @@ function App() {
   const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
+  const [previewBookData, setPreviewBookData] = useState<BookData | null>(null);
+  const [initialModalData, setInitialModalData] = useState<SchemaBookData | undefined>(undefined);
   const hasSetInitialBook = useRef(false);
+
+  const handlePreview = useCallback((previewData: BookData) => {
+    setPreviewBookData(previewData);
+  }, []);
 
   // Fetch books from Firebase on component mount
   useEffect(() => {
@@ -59,7 +67,10 @@ function App() {
     return bookDataMap[book.id] || null;
   };
 
-  const bookData = selectedBook ? getBookData(selectedBook) : null;
+  const bookData = previewBookData || (selectedBook ? getBookData(selectedBook) : null);
+  
+  // If we're in preview mode, use the preview data for all the logic
+  const currentBookData = previewBookData || bookData;
 
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
@@ -93,18 +104,18 @@ function App() {
   }
   
   // Only show characters whose firstAppearanceChapter is <= selected chapter
-  const visibleCharacters = bookData.characters.filter(c => {
+  const visibleCharacters = currentBookData?.characters?.filter(c => {
     if (typeof c.firstAppearanceChapter === 'number') {
       // For backward compatibility with numeric chapter indices
       return currentChapter && typeof currentChapter.index === 'number' && c.firstAppearanceChapter <= currentChapter.index;
     } else if (typeof c.firstAppearanceChapter === 'string') {
       // For string chapter IDs, find the target chapter and compare by index
-      const targetChapter = bookData.chapters.find(ch => ch.id === c.firstAppearanceChapter);
+      const targetChapter = currentBookData?.chapters?.find(ch => ch.id === c.firstAppearanceChapter);
       return targetChapter && currentChapter && targetChapter.index && currentChapter.index && 
              targetChapter.index <= currentChapter.index;
     }
     return false;
-  });
+  }) || [];
 
 
   // Only show factions that have at least one visible character and are active in current chapter
@@ -119,12 +130,12 @@ function App() {
         let shouldAdd = false;
         if (typeof joinChapter === 'number') {
           // For backward compatibility with numeric chapter indices
-          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          const currentChapter = currentBookData?.chapters?.find(ch => ch.id === selectedChapter);
           shouldAdd = !!(currentChapter && (joinChapter as number) <= (currentChapter.index || 0));
         } else if (typeof joinChapter === 'string') {
           // For string chapter IDs, find the target chapter and current chapter
-          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
-          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          const targetChapter = currentBookData?.chapters?.find(ch => ch.id === joinChapter);
+          const currentChapter = currentBookData?.chapters?.find(ch => ch.id === selectedChapter);
           if (targetChapter && targetChapter.index && currentChapter && currentChapter.index) {
             shouldAdd = targetChapter.index <= currentChapter.index;
           }
@@ -136,18 +147,25 @@ function App() {
     });
   });
   
-  const visibleFactions = bookData.factions.filter(f => activeFactionIds.has(f.id));
+  const visibleFactions = currentBookData?.factions?.filter(f => activeFactionIds.has(f.id)) || [];
 
 
   // Create filtered book data for the graph
-  const filteredBookData: BookData = {
-    ...bookData,
+  const filteredBookData: BookData = currentBookData ? {
+    ...currentBookData,
     characters: visibleCharacters,
-    relationships: bookData.relationships.filter(r => {
+    relationships: currentBookData.relationships.filter(r => {
       // Only include relationships where both characters are visible
       return visibleCharacterIds.has(r.character1.id) && visibleCharacterIds.has(r.character2.id);
     }),
     factions: visibleFactions,
+  } : {
+    book: { id: '', title: '', author: { id: '', name: '' } },
+    characters: [],
+    chapters: [],
+    factions: [],
+    relationships: [],
+    locations: []
   };
 
 
@@ -158,6 +176,8 @@ function App() {
 
   const handleCloseCreateBookModal = () => {
     setIsCreateBookModalOpen(false);
+    setPreviewBookData(null); // Clear preview when closing modal
+    setInitialModalData(undefined); // Clear initial data when closing modal
   };
 
   return (
@@ -178,7 +198,7 @@ function App() {
       
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
-          key={selectedBook.id}
+          key={previewBookData ? `preview-${previewBookData.book.id}` : selectedBook?.id || 'no-book'}
           bookData={filteredBookData}
           fullBookData={bookData}
           selectedChapter={selectedChapter}
@@ -187,13 +207,24 @@ function App() {
           selectedBook={selectedBook}
           onBookChange={setSelectedBook}
           onCreateBook={handleCreateBook}
+          isPreview={!!previewBookData}
+          onExitPreview={() => {
+            if (previewBookData) {
+              const schemaData = convertBookDataToSchema(previewBookData);
+              setInitialModalData(schemaData);
+            }
+            setPreviewBookData(null);
+            setIsCreateBookModalOpen(true);
+          }}
         />
       </div>
       {isCreateBookModalOpen && (
         <CreateBookModal
-          open={isCreateBookModalOpen}
-          onClose={handleCloseCreateBookModal}
-        />
+            open={isCreateBookModalOpen}
+            onClose={handleCloseCreateBookModal}
+            onPreview={handlePreview}
+            initialData={initialModalData}
+          />
       )}
 
     </div>

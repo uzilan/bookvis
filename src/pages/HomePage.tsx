@@ -535,6 +535,11 @@ export const HomePage: React.FC = () => {
         <CreateBookModal
           open={isCreateBookModalOpen}
           onClose={handleCloseCreateBookModal}
+          onPreview={(previewData) => {
+            // Navigate to visualization page with preview data in URL parameters
+            const previewDataString = encodeURIComponent(JSON.stringify(previewData));
+            navigate(`/visualize?preview=${previewDataString}`);
+          }}
         />
       )}
     </Box>

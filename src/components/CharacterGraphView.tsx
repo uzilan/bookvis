@@ -1,23 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { CharacterGraph } from './CharacterGraph';
 import { CreateBookModal } from './CreateBookModal';
 import type { Book } from '../models/Book';
 import type { BookData } from '../models/BookData';
+import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { FirebaseService } from '../services/firebase.ts';
+import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
 
 export const CharacterGraphView: React.FC = () => {
   const { bookId } = useParams<{ bookId?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const previewParam = searchParams.get('preview');
+  
+  // Parse preview data from URL parameter
+  const previewDataFromUrl = previewParam ? (() => {
+    try {
+      return JSON.parse(decodeURIComponent(previewParam)) as BookData;
+    } catch (error) {
+      console.error('Error parsing preview data from URL:', error);
+      return null;
+    }
+  })() : null;
+  
+  const previewData = location.state?.previewData as BookData | null;
+  // Use local previewBookData state instead of location state for isPreview
+  const isPreviewFromLocation = location.state?.isPreview || false;
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [booksFromFirebase, setBooksFromFirebase] = useState<BookData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
+  const [previewBookData, setPreviewBookData] = useState<BookData | null>(null);
+  const [initialModalData, setInitialModalData] = useState<SchemaBookData | undefined>(undefined);
+  const [previewTimestamp, setPreviewTimestamp] = useState<number>(0);
   const hasSetInitialBook = useRef(false);
 
-  // Fetch books from Firebase on component mount
+  // Fetch books from Firebase on component mount (skip if in preview mode)
   useEffect(() => {
+    if (isPreviewFromLocation) {
+      setLoading(false);
+      return;
+    }
+
     const fetchBooks = async () => {
       try {
         setLoading(true);
@@ -56,7 +83,7 @@ export const CharacterGraphView: React.FC = () => {
     };
 
     fetchBooks();
-  }, [bookId]);
+  }, [bookId, isPreviewFromLocation]);
 
   // Use only Firebase books
   const availableBooks = booksFromFirebase.map(bd => bd.book);
@@ -70,30 +97,33 @@ export const CharacterGraphView: React.FC = () => {
     return bookDataMap[book.id] || null;
   };
 
-  const bookData = selectedBook ? getBookData(selectedBook) : null;
+  const bookData = previewBookData || previewDataFromUrl || previewData || (selectedBook ? getBookData(selectedBook) : null);
 
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
-    if (bookData && bookData.chapters.length > 0 && hasSetInitialBook.current) {
-      // Find the first actual chapter (not book or part)
-      const firstChapter = bookData.chapters.find(ch => ch.id.startsWith('chapter-')) || bookData.chapters[0];
-      setSelectedChapter(firstChapter.id);
+    if (bookData && bookData.chapters.length > 0) {
+      // In preview mode, always set the first chapter
+      if (previewBookData || previewDataFromUrl || isPreviewFromLocation || hasSetInitialBook.current) {
+        // Find the first actual chapter (not book or part)
+        const firstChapter = bookData.chapters.find(ch => ch.id.startsWith('chapter-')) || bookData.chapters[0];
+        setSelectedChapter(firstChapter.id);
+      }
     }
-  }, [selectedBook, bookData]);
+  }, [selectedBook, bookData, previewBookData, previewDataFromUrl, isPreviewFromLocation]);
 
-  // Update URL when book changes
+  // Update URL when book changes (skip in preview mode)
   useEffect(() => {
-    if (selectedBook) {
+    if (selectedBook && !previewBookData && !previewDataFromUrl && !isPreviewFromLocation) {
       navigate(`/visualize/${selectedBook.id}`, { replace: true });
     }
-  }, [selectedBook, navigate]);
+  }, [selectedBook, navigate, previewBookData, previewDataFromUrl, isPreviewFromLocation]);
 
   // Show loading or no data message if no book data
-  if (loading) {
+  if (loading && !previewBookData && !previewDataFromUrl && !isPreviewFromLocation) {
     return <div style={{ padding: '20px', textAlign: 'center' }}>Loading books from Firebase...</div>;
   }
 
-  if (!bookData || !selectedBook) {
+  if (!bookData) {
     return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
   }
 
@@ -166,33 +196,75 @@ export const CharacterGraphView: React.FC = () => {
     factions: visibleFactions,
   };
 
+  // Use previewBookData if available, otherwise use filtered data
+  const displayBookData = previewBookData || filteredBookData;
+
   const handleCreateBook = () => {
+    setIsCreateBookModalOpen(true);
+  };
+
+  const handlePreview = (previewData: BookData) => {
+    // Close the modal first
+    setIsCreateBookModalOpen(false);
+    
+    // Clear any existing preview data first
+    setPreviewBookData(null);
+    setPreviewTimestamp(0);
+    
+    // Use setTimeout to ensure the clear happens before setting new data
+    setTimeout(() => {
+      setPreviewBookData(previewData);
+      setPreviewTimestamp(Date.now());
+    }, 0);
+  };
+
+  const handleExitPreview = () => {
+    if (previewBookData) {
+      const schemaData = convertBookDataToSchema(previewBookData);
+      setInitialModalData(schemaData);
+    }
+    setPreviewBookData(null);
+    setPreviewTimestamp(0);
     setIsCreateBookModalOpen(true);
   };
 
   const handleCloseCreateBookModal = () => {
     setIsCreateBookModalOpen(false);
+    setPreviewBookData(null);
+    setInitialModalData(undefined);
+    
+    // If we're in preview mode, navigate back to home page
+    if (previewBookData || previewDataFromUrl) {
+      navigate('/');
+    }
   };
+
+
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
-          key={selectedBook.id}
-          bookData={filteredBookData}
-          fullBookData={bookData}
+          key={previewBookData ? `preview-${previewBookData.book.id}-${previewTimestamp}` : selectedBook?.id || 'no-book'}
+          bookData={displayBookData}
+          fullBookData={displayBookData}
           selectedChapter={selectedChapter}
           onChapterChange={setSelectedChapter}
           books={availableBooks}
-          selectedBook={selectedBook}
+          selectedBook={previewBookData ? previewBookData.book : (selectedBook || bookData.book)}
           onBookChange={setSelectedBook}
           onCreateBook={handleCreateBook}
+          isPreview={!!previewBookData || !!previewDataFromUrl}
+          onExitPreview={handleExitPreview}
         />
       </div>
       {isCreateBookModalOpen && (
         <CreateBookModal
           open={isCreateBookModalOpen}
           onClose={handleCloseCreateBookModal}
+          onPreview={handlePreview}
+          initialData={initialModalData}
+          onInitialDataUsed={() => setInitialModalData(undefined)}
         />
       )}
     </div>

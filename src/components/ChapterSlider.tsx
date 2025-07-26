@@ -18,6 +18,8 @@ interface ChapterSliderProps {
   onBookChange: (book: Book) => void;
   onCreateBook: () => void;
   showBookSelector?: boolean;
+  isPreview?: boolean; // New prop to indicate preview mode
+  onExitPreview?: () => void; // New prop to handle exiting preview mode
 }
 
 interface ChapterItemProps {
@@ -137,7 +139,9 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
   selectedBook, 
   onBookChange,
   onCreateBook,
-  showBookSelector = true
+  showBookSelector = true,
+  isPreview = false,
+  onExitPreview
 }) => {
   const navigate = useNavigate();
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
@@ -210,21 +214,37 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
         boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
       }}
     >
-      {/* Home Link */}
+      {/* Home Link / Return to Editor */}
       <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
         <Button
           variant="outlined"
-          startIcon={<HomeIcon />}
-          onClick={() => navigate('/')}
+          startIcon={isPreview ? <span style={{ fontSize: '16px' }}>✏️</span> : <HomeIcon />}
+          onClick={() => {
+            console.log('ChapterSlider button clicked:', { isPreview, onExitPreview: !!onExitPreview });
+            if (isPreview && onExitPreview) {
+              console.log('Calling onExitPreview');
+              onExitPreview();
+            } else {
+              console.log('Navigating to home');
+              navigate('/');
+            }
+          }}
           size="small"
           sx={{
             width: '100%',
             justifyContent: 'flex-start',
             textTransform: 'none',
-            fontSize: 12
+            fontSize: 12,
+            ...(isPreview && {
+              backgroundColor: '#2196f3',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#1976d2',
+              }
+            })
           }}
         >
-          Back to Home
+          {isPreview ? 'Return to Editor' : 'Back to Home'}
         </Button>
       </Box>
       {/* Book Selector */}

@@ -8,10 +8,11 @@ import { fuzzySearch } from '../utils/fuzzySearch';
 interface FactionListProps {
   factions: Faction[];
   bookData: BookData;
+  isPreview?: boolean;
   onCharacterClick?: (character: Character) => void;
 }
 
-export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, onCharacterClick }) => {
+export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, isPreview = false, onCharacterClick }) => {
   const [expandedFactions, setExpandedFactions] = useState<Set<string>>(new Set());
   const [showAllFactions, setShowAllFactions] = useState(false);
   const [filterText, setFilterText] = useState('');
@@ -32,8 +33,11 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
   }, [allFactions, factions, filterText, showAllFactions]);
 
   // Only return null if there are no factions at all (not just no filtered results)
+  // But show empty state in preview mode
   if (!factions || factions.length === 0) {
-    return null;
+    if (!isPreview) {
+      return null;
+    }
   }
 
   const toggleFaction = (factionId: string) => {
@@ -138,7 +142,7 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, on
               textAlign: 'left',
               fontStyle: 'italic'
             }}>
-              No factions match your filter
+              {filterText ? 'No factions match your filter' : 'No factions available'}
             </div>
           ) : (
             displayFactions.map((faction) => (

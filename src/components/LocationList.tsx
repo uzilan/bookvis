@@ -10,13 +10,21 @@ interface LocationListProps {
   chapterTitle: string;
   chapterId: string;
   bookData: BookData;
+  isPreview?: boolean;
 }
 
-export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId, bookData }) => {
+export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId, bookData, isPreview = false }) => {
   const [expandedLocations, setExpandedLocations] = useState<Set<string>>(new Set());
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [filterText, setFilterText] = useState('');
+
+  // Debug logging
+  console.log('LocationList props:', { 
+    locations: locations?.map(l => ({ id: l.id, name: l.name })), 
+    chapterId, 
+    allLocationsCount: bookData.locations?.length 
+  });
 
   // Get all locations from the book data
   const allLocations = useMemo(() => bookData.locations || [], [bookData.locations]);
@@ -30,12 +38,56 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
       showAllLocations,
       { keys: ['name'] }
     );
-    return results.sort((a, b) => a.name.localeCompare(b.name));
+    // Filter out empty locations and sort
+    return results
+      .filter(location => location.name && location.name.trim() !== '')
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [allLocations, locations, filterText, showAllLocations]);
 
   // Only return null if there are no locations at all (not just no filtered results)
+  // But show empty state in preview mode
   if (!locations || locations.length === 0) {
-    return null;
+    if (!isPreview) {
+      return null;
+    }
+    // Show empty state for preview mode
+    return (
+      <div style={{
+        background: 'white',
+        padding: '12px 16px',
+        borderRadius: '8px',
+        border: '2px solid #333',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+        width: '100%',
+        height: '30vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '8px' 
+        }}>
+          <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#000', textAlign: 'left' }}>
+            Locations:
+          </div>
+        </div>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: '#666',
+          fontSize: '12px'
+        }}>
+          <div style={{ marginBottom: '8px' }}>📍</div>
+          <div>No locations added yet</div>
+          <div style={{ fontSize: '10px', marginTop: '4px' }}>Add locations in the editor</div>
+        </div>
+      </div>
+    );
   }
 
   const toggleLocation = (locationId: string) => {
