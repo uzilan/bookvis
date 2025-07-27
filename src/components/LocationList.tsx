@@ -62,11 +62,80 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           display: 'flex', 
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '8px' 
+          marginBottom: '6px' 
         }}>
           <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
             Locations:
           </div>
+          <FormControl size="small">
+            <RadioGroup
+              row
+              value={showAllLocations ? 'all' : 'chapter'}
+              onChange={(e) => setShowAllLocations(e.target.value === 'all')}
+            >
+              <FormControlLabel
+                value="chapter"
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
+                label="Chapter"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: 'var(--color-text)',
+                    textAlign: 'left'
+                  } 
+                }}
+              />
+              <FormControlLabel
+                value="all"
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
+                label="All"
+                sx={{ 
+                  fontSize: '10px', 
+                  '& .MuiFormControlLabel-label': { 
+                    fontSize: '10px',
+                    color: 'var(--color-text)',
+                    textAlign: 'left'
+                  } 
+                }}
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+        
+        {/* Filter Input */}
+        <div style={{ marginBottom: '8px' }}>
+          <input
+            type="text"
+            placeholder="Filter locations..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            style={{
+              width: '90%',
+              padding: '4px 8px',
+              fontSize: '11px',
+              border: '1px solid var(--color-border)',
+              borderRadius: '4px',
+              backgroundColor: 'var(--color-background)',
+              color: 'var(--color-text)'
+            }}
+          />
         </div>
         <div style={{ 
           display: 'flex', 
@@ -77,9 +146,7 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
           color: 'var(--color-textSecondary)',
           fontSize: '12px'
         }}>
-          <div style={{ marginBottom: '8px' }}>📍</div>
-          <div>No locations added yet</div>
-          <div style={{ fontSize: '10px', marginTop: '4px' }}>Add locations in the editor</div>
+          No locations available
         </div>
       </div>
     );
@@ -125,7 +192,15 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
             >
               <FormControlLabel
                 value="chapter"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="Chapter"
                 sx={{ 
                   fontSize: '10px', 
@@ -138,7 +213,15 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
               />
               <FormControlLabel
                 value="all"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="All"
                 sx={{ 
                   fontSize: '10px', 

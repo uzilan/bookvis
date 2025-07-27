@@ -41,7 +41,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         id: `chapter-${bookData.chapters.length + 1}`,
         title: newChapterTitle.trim(),
         locations: selectedHierarchyType === 'chapter' ? newChapterLocations : [],
-        characterMentions: selectedHierarchyType === 'chapter' ? newChapterCharacters : []
+        characters: selectedHierarchyType === 'chapter' ? newChapterCharacters : []
       };
 
       const newHierarchyItem: SchemaHierarchyItem = {
@@ -147,7 +147,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle(currentTitle);
     setEditingType(currentType);
     setEditingLocations(chapter?.locations || []);
-    setEditingCharacters(chapter?.characterMentions || []);
+    setEditingCharacters(chapter?.characters || []);
   };
 
   const handleSaveEdit = () => {
@@ -156,7 +156,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         ...prev,
         chapters: prev.chapters.map(chapter => 
           chapter.id === editingChapterId 
-            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [], characterMentions: editingType === 'chapter' ? editingCharacters : [] }
+            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [], characters: editingType === 'chapter' ? editingCharacters : [] }
             : chapter
         ),
         hierarchy: prev.hierarchy?.map(item => 
@@ -215,7 +215,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         const updatedChapters = [...bookData.chapters];
         updatedChapters[chapterIndex] = {
           ...updatedChapters[chapterIndex],
-          characterMentions: selectedCharacterIds
+          characters: selectedCharacterIds
         };
         setBookData(prev => ({
           ...prev,

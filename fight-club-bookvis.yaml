@@ -58,7 +58,6 @@ characters:
   - id: "narrator"
     name: "Narrator"
     description: "The unnamed protagonist who suffers from insomnia and creates Tyler Durden."
-    first_appearance_chapter: "chapter-1"
     aliases: ["Jack", "The Narrator"]
     factions: ["corporate", "fight-club", "project-mayhem"]
     faction_join_chapters:
@@ -70,7 +69,6 @@ characters:
   - id: "tyler-durden"
     name: "Tyler Durden"
     description: "The charismatic leader of Fight Club and Project Mayhem, later revealed to be the narrator's alter ego."
-    first_appearance_chapter: "chapter-2"
     aliases: ["Tyler"]
     factions: ["fight-club", "project-mayhem"]
     faction_join_chapters:
@@ -81,7 +79,6 @@ characters:
   - id: "marla-singer"
     name: "Marla Singer"
     description: "A troubled woman who attends support groups and becomes involved with both the narrator and Tyler."
-    first_appearance_chapter: "chapter-2"
     aliases: ["Marla"]
     factions: ["support-groups"]
     faction_join_chapters:
@@ -91,7 +88,6 @@ characters:
   - id: "bob"
     name: "Bob"
     description: "A former bodybuilder with testicular cancer who attends support groups and later joins Fight Club."
-    first_appearance_chapter: "chapter-1"
     aliases: ["Big Bob"]
     factions: ["support-groups", "fight-club"]
     faction_join_chapters:
@@ -169,47 +165,57 @@ relationships:
       - chapter: "chapter-4"
         description: "Tyler recruits Bob into Fight Club."
 
-# Chapter structure with locations
+# Chapter structure with locations and character mentions
 chapters:
   - id: "chapter-1"
     title: "The Narrator's Life"
     locations: ["narrator-apartment", "support-groups", "office-building"]
+    characters: ["narrator", "bob"]
 
   - id: "chapter-2"
     title: "Meeting Tyler"
     locations: ["airplane", "support-groups", "bar"]
+    characters: ["narrator", "tyler-durden", "marla-singer"]
 
   - id: "chapter-3"
     title: "First Fight"
     locations: ["fight-club-basement", "bar"]
+    characters: ["narrator", "tyler-durden"]
 
   - id: "chapter-4"
     title: "Fight Club Grows"
     locations: ["fight-club-basement", "bar", "restaurant"]
+    characters: ["narrator", "tyler-durden", "bob"]
 
   - id: "chapter-5"
     title: "The Rules"
     locations: ["fight-club-basement", "paper-street-house"]
+    characters: ["narrator", "tyler-durden"]
 
   - id: "chapter-6"
     title: "Marla and Tyler"
     locations: ["hotel-room", "restaurant", "car"]
+    characters: ["narrator", "tyler-durden", "marla-singer"]
 
   - id: "chapter-7"
     title: "Project Mayhem Begins"
     locations: ["paper-street-house", "office-building"]
+    characters: ["narrator", "tyler-durden"]
 
   - id: "chapter-8"
     title: "The Space Monkeys"
     locations: ["paper-street-house", "office-building", "car"]
+    characters: ["narrator", "tyler-durden"]
 
   - id: "chapter-9"
     title: "The Truth"
     locations: ["hotel-room", "paper-street-house"]
+    characters: ["narrator", "tyler-durden", "marla-singer"]
 
   - id: "chapter-10"
     title: "The End"
     locations: ["office-building", "hotel-room"]
+    characters: ["narrator", "tyler-durden"]
 
 # Chapter hierarchy (optional - can be auto-generated)
 hierarchy:

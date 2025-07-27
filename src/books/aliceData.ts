@@ -38,67 +38,79 @@ const aliceLocations: Location[] = [
   { id: 'witness-box', name: 'Witness Box', description: 'The witness box where Alice gives evidence during the trial, growing larger and causing chaos in the court.' },
 ];
 
-// Chapter definitions with location IDs
+// Chapter definitions with location IDs and character mentions
 const aliceChapterData = {
   'chapter-1': { 
     id: 'chapter-1', 
     title: 'Down the Rabbit-Hole',
-    locationIds: ['rabbit-hole', 'wonderland-entrance']
+    locationIds: ['rabbit-hole', 'wonderland-entrance'],
+    characterIds: ['alice', 'white-rabbit']
   },
   'chapter-2': { 
     id: 'chapter-2', 
     title: 'The Pool of Tears',
-    locationIds: ['pool-of-tears', 'wonderland-garden']
+    locationIds: ['pool-of-tears', 'wonderland-garden'],
+    characterIds: ['alice', 'mouse', 'dodo']
   },
   'chapter-3': { 
     id: 'chapter-3', 
     title: 'A Caucus-Race and a Long Tale',
-    locationIds: ['shore', 'caucus-race-ground']
+    locationIds: ['shore', 'caucus-race-ground'],
+    characterIds: ['alice', 'mouse', 'dodo', 'lory', 'eaglet', 'duck']
   },
   'chapter-4': { 
     id: 'chapter-4', 
     title: 'The Rabbit Sends in a Little Bill',
-    locationIds: ['white-rabbit-house', 'wonderland-street']
+    locationIds: ['white-rabbit-house', 'wonderland-street'],
+    characterIds: ['alice', 'white-rabbit', 'lizard']
   },
   'chapter-5': { 
     id: 'chapter-5', 
     title: 'Advice from a Caterpillar',
-    locationIds: ['mushroom', 'forest-clearing']
+    locationIds: ['mushroom', 'forest-clearing'],
+    characterIds: ['alice', 'caterpillar']
   },
   'chapter-6': { 
     id: 'chapter-6', 
     title: 'Pig and Pepper',
-    locationIds: ['duchess-house', 'kitchen']
+    locationIds: ['duchess-house', 'kitchen'],
+    characterIds: ['alice', 'duchess', 'cook', 'baby', 'cheshire-cat']
   },
   'chapter-7': { 
     id: 'chapter-7', 
     title: 'A Mad Tea-Party',
-    locationIds: ['mad-tea-party', 'tea-table']
+    locationIds: ['mad-tea-party', 'tea-table'],
+    characterIds: ['alice', 'mad-hatter', 'march-hare', 'dormouse']
   },
   'chapter-8': { 
     id: 'chapter-8', 
     title: 'The Queen\'s Croquet-Ground',
-    locationIds: ['queens-garden', 'croquet-ground']
+    locationIds: ['queens-garden', 'croquet-ground'],
+    characterIds: ['alice', 'queen-of-hearts', 'king-of-hearts', 'cheshire-cat']
   },
   'chapter-9': { 
     id: 'chapter-9', 
     title: 'The Mock Turtle\'s Story',
-    locationIds: ['mock-turtle-beach', 'shore-line']
+    locationIds: ['mock-turtle-beach', 'shore-line'],
+    characterIds: ['alice', 'mock-turtle', 'gryphon']
   },
   'chapter-10': { 
     id: 'chapter-10', 
     title: 'The Lobster Quadrille',
-    locationIds: ['dance-floor', 'underwater-scene']
+    locationIds: ['dance-floor', 'underwater-scene'],
+    characterIds: ['alice', 'mock-turtle', 'gryphon']
   },
   'chapter-11': { 
     id: 'chapter-11', 
     title: 'Who Stole the Tarts?',
-    locationIds: ['courtroom', 'witness-stand']
+    locationIds: ['courtroom', 'witness-stand'],
+    characterIds: ['alice', 'queen-of-hearts', 'king-of-hearts', 'knave-of-hearts', 'white-rabbit']
   },
   'chapter-12': { 
     id: 'chapter-12', 
     title: 'Alice\'s Evidence',
-    locationIds: ['courtroom', 'witness-box']
+    locationIds: ['courtroom', 'witness-box'],
+    characterIds: ['alice', 'queen-of-hearts', 'king-of-hearts', 'knave-of-hearts', 'white-rabbit']
   },
 };
 
@@ -119,7 +131,7 @@ const aliceHierarchy: Array<{ chapterId: string; level: number; type: 'chapter' 
 ];
 
 // Function to build chapters from data and hierarchy
-function buildChapters(chapterData: Record<string, { id: string; title: string; locationIds: string[] }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
+function buildChapters(chapterData: Record<string, { id: string; title: string; locationIds: string[]; characterIds: string[] }>, hierarchy: Array<{ chapterId: string; level: number; type: 'chapter' | 'part' | 'book' }>): Chapter[] {
   return hierarchy.map((item, index) => {
     const chapterDataItem = chapterData[item.chapterId];
     return {
@@ -135,6 +147,9 @@ function buildChapters(chapterData: Record<string, { id: string; title: string; 
       locations: chapterDataItem.locationIds.map(locationId => 
         aliceLocations.find(loc => loc.id === locationId)
       ).filter(Boolean) as Location[],
+      
+      // Add character mentions
+      characters: chapterDataItem.characterIds,
     };
   });
 }
@@ -143,7 +158,6 @@ const alice: Character = {
   id: 'alice',
   name: 'Alice',
   description: 'A curious young girl who falls down a rabbit hole into Wonderland',
-  firstAppearanceChapter: 'chapter-1',
   aliases: ['Alice Liddell'],
   factions: ['wonderlanders'],
   factionJoinChapters: {
@@ -156,7 +170,6 @@ const whiteRabbit: Character = {
   id: 'white-rabbit',
   name: 'White Rabbit',
   description: 'A nervous rabbit in a waistcoat who is always late',
-  firstAppearanceChapter: 'chapter-1',
   aliases: ['The Rabbit'],
   factions: ['wonderlanders'],
   factionJoinChapters: {
@@ -169,7 +182,6 @@ const caterpillar: Character = {
   id: 'caterpillar',
   name: 'Caterpillar',
   description: 'A wise but rude caterpillar who smokes a hookah',
-  firstAppearanceChapter: 'chapter-7',
   aliases: ['Absolem'],
   factions: ['wonderlanders'],
   factionJoinChapters: {
@@ -182,7 +194,6 @@ const cheshireCat: Character = {
   id: 'cheshire-cat',
   name: 'Cheshire Cat',
   description: 'A mysterious cat with a disappearing grin',
-  firstAppearanceChapter: 'chapter-8',
   aliases: ['The Cat'],
   factions: ['wonderlanders'],
   factionJoinChapters: {
@@ -195,7 +206,6 @@ const madHatter: Character = {
   id: 'mad-hatter',
   name: 'Mad Hatter',
   description: 'A mad tea party host with a large hat',
-  firstAppearanceChapter: 'chapter-6',
   aliases: ['The Hatter'],
   factions: ['wonderlanders'],
   factionJoinChapters: {
@@ -209,7 +219,6 @@ const queenOfHearts: Character = {
   id: 'queen-of-hearts',
   name: 'Queen of Hearts',
   description: 'The tyrannical queen of Wonderland who constantly threatens to behead people',
-  firstAppearanceChapter: 'chapter-8',
   aliases: ['The Queen'],
   factions: ['royalty'],
   factionJoinChapters: {
@@ -222,7 +231,6 @@ const kingOfHearts: Character = {
   id: 'king-of-hearts',
   name: 'King of Hearts',
   description: 'The timid king who is often overshadowed by his wife, the Queen of Hearts',
-  firstAppearanceChapter: 'chapter-11',
   aliases: ['The King'],
   factions: ['royalty'],
   factionJoinChapters: {
@@ -231,7 +239,179 @@ const kingOfHearts: Character = {
   attributes: ['Timid', 'Submissive', 'Royal', 'Quiet'],
 };
 
-const aliceCharacters: Character[] = [alice, whiteRabbit, madHatter, caterpillar, cheshireCat, queenOfHearts, kingOfHearts];
+// Add missing characters
+const mouse: Character = {
+  id: 'mouse',
+  name: 'Mouse',
+  description: 'A mouse who helps Alice after the pool of tears',
+  aliases: ['The Mouse'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-2',
+  },
+  attributes: ['Helpful', 'Small', 'Swimming'],
+};
+
+const dodo: Character = {
+  id: 'dodo',
+  name: 'Dodo',
+  description: 'A dodo bird who organizes the caucus race',
+  aliases: ['The Dodo'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-2',
+  },
+  attributes: ['Organized', 'Bird', 'Leader'],
+};
+
+const lory: Character = {
+  id: 'lory',
+  name: 'Lory',
+  description: 'A lory bird who participates in the caucus race',
+  aliases: ['The Lory'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-3',
+  },
+  attributes: ['Bird', 'Racing'],
+};
+
+const eaglet: Character = {
+  id: 'eaglet',
+  name: 'Eaglet',
+  description: 'A young eagle who participates in the caucus race',
+  aliases: ['The Eaglet'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-3',
+  },
+  attributes: ['Young', 'Bird', 'Racing'],
+};
+
+const duck: Character = {
+  id: 'duck',
+  name: 'Duck',
+  description: 'A duck who participates in the caucus race',
+  aliases: ['The Duck'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-3',
+  },
+  attributes: ['Bird', 'Racing', 'Swimming'],
+};
+
+const lizard: Character = {
+  id: 'lizard',
+  name: 'Lizard',
+  description: 'A lizard who works for the White Rabbit',
+  aliases: ['Little Bill'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-4',
+  },
+  attributes: ['Servant', 'Small', 'Reptile'],
+};
+
+const duchess: Character = {
+  id: 'duchess',
+  name: 'Duchess',
+  description: 'A duchess who lives in a house with too much pepper',
+  aliases: ['The Duchess'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-6',
+  },
+  attributes: ['Noble', 'Chaotic', 'Mother'],
+};
+
+const cook: Character = {
+  id: 'cook',
+  name: 'Cook',
+  description: 'A cook in the Duchess\'s house who throws things',
+  aliases: ['The Cook'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-6',
+  },
+  attributes: ['Violent', 'Kitchen', 'Throwing'],
+};
+
+const baby: Character = {
+  id: 'baby',
+  name: 'Baby',
+  description: 'The Duchess\'s baby who turns into a pig',
+  aliases: ['The Baby'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-6',
+  },
+  attributes: ['Young', 'Transforming', 'Pig'],
+};
+
+const marchHare: Character = {
+  id: 'march-hare',
+  name: 'March Hare',
+  description: 'A hare who hosts the mad tea party',
+  aliases: ['The Hare'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-7',
+  },
+  attributes: ['Mad', 'Host', 'Tea-loving'],
+};
+
+const dormouse: Character = {
+  id: 'dormouse',
+  name: 'Dormouse',
+  description: 'A sleepy mouse at the mad tea party',
+  aliases: ['The Dormouse'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-7',
+  },
+  attributes: ['Sleepy', 'Small', 'Tea-loving'],
+};
+
+const mockTurtle: Character = {
+  id: 'mock-turtle',
+  name: 'Mock Turtle',
+  description: 'A turtle with a calf\'s head who tells stories',
+  aliases: ['The Mock Turtle'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-9',
+  },
+  attributes: ['Sad', 'Storyteller', 'Hybrid'],
+};
+
+const gryphon: Character = {
+  id: 'gryphon',
+  name: 'Gryphon',
+  description: 'A gryphon who escorts Alice to the Mock Turtle',
+  aliases: ['The Gryphon'],
+  factions: ['wonderlanders'],
+  factionJoinChapters: {
+    'wonderlanders': 'chapter-9',
+  },
+  attributes: ['Mythical', 'Escort', 'Hybrid'],
+};
+
+const knaveOfHearts: Character = {
+  id: 'knave-of-hearts',
+  name: 'Knave of Hearts',
+  description: 'The knave accused of stealing the tarts',
+  aliases: ['The Knave'],
+  factions: ['royalty'],
+  factionJoinChapters: {
+    'royalty': 'chapter-11',
+  },
+  attributes: ['Accused', 'Royal', 'Criminal'],
+};
+
+const aliceCharacters: Character[] = [
+  alice, whiteRabbit, madHatter, caterpillar, cheshireCat, queenOfHearts, kingOfHearts,
+  mouse, dodo, lory, eaglet, duck, lizard, duchess, cook, baby, marchHare, dormouse, mockTurtle, gryphon, knaveOfHearts
+];
 
 const aliceFactions: Faction[] = [
   { 
@@ -252,32 +432,72 @@ const aliceFactions: Faction[] = [
 const aliceChapters = buildChapters(aliceChapterData, aliceHierarchy);
 
 const aliceRelationships: RelationshipWithChapters[] = [
+  // Alice's relationships
   {
     character1: alice,
     character2: whiteRabbit,
     descriptions: [
       { chapter: 1, description: 'Alice follows the White Rabbit' },
+      { chapter: 4, description: 'Alice helps the White Rabbit' },
     ],
   },
   {
     character1: alice,
-    character2: madHatter,
+    character2: mouse,
     descriptions: [
-      { chapter: 7, description: 'Alice attends the mad tea party' },
+      { chapter: 2, description: 'Alice meets the Mouse in the pool of tears' },
+      { chapter: 3, description: 'Alice participates in the caucus race with the Mouse' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: dodo,
+    descriptions: [
+      { chapter: 2, description: 'Alice meets the Dodo in the pool of tears' },
+      { chapter: 3, description: 'Alice participates in the caucus race organized by the Dodo' },
     ],
   },
   {
     character1: alice,
     character2: caterpillar,
     descriptions: [
-      { chapter: 7, description: 'Alice meets the Caterpillar' },
+      { chapter: 5, description: 'Alice receives advice from the Caterpillar' },
     ],
   },
   {
     character1: alice,
     character2: cheshireCat,
     descriptions: [
-      { chapter: 8, description: 'Alice meets the Cheshire Cat' },
+      { chapter: 6, description: 'Alice meets the Cheshire Cat at the Duchess\'s house' },
+      { chapter: 8, description: 'Alice encounters the Cheshire Cat at the croquet game' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: duchess,
+    descriptions: [
+      { chapter: 6, description: 'Alice meets the Duchess at her chaotic house' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: madHatter,
+    descriptions: [
+      { chapter: 7, description: 'Alice attends the mad tea party with the Mad Hatter' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: marchHare,
+    descriptions: [
+      { chapter: 7, description: 'Alice meets the March Hare at the tea party' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: dormouse,
+    descriptions: [
+      { chapter: 7, description: 'Alice meets the Dormouse at the tea party' },
     ],
   },
   {
@@ -292,13 +512,102 @@ const aliceRelationships: RelationshipWithChapters[] = [
     character1: alice,
     character2: kingOfHearts,
     descriptions: [
+      { chapter: 8, description: 'Alice meets the King of Hearts at the croquet game' },
       { chapter: 11, description: 'Alice meets the King of Hearts at the trial' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: mockTurtle,
+    descriptions: [
+      { chapter: 9, description: 'Alice meets the Mock Turtle and hears his story' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: gryphon,
+    descriptions: [
+      { chapter: 9, description: 'Alice meets the Gryphon who takes her to the Mock Turtle' },
+    ],
+  },
+  {
+    character1: alice,
+    character2: knaveOfHearts,
+    descriptions: [
+      { chapter: 11, description: 'Alice witnesses the trial of the Knave of Hearts' },
+    ],
+  },
+  
+  // Character relationships with each other
+  {
+    character1: mouse,
+    character2: dodo,
+    descriptions: [
+      { chapter: 2, description: 'The Mouse and Dodo are both in the pool of tears' },
+      { chapter: 3, description: 'The Mouse and Dodo participate in the caucus race together' },
+    ],
+  },
+  {
+    character1: lory,
+    character2: eaglet,
+    descriptions: [
+      { chapter: 3, description: 'The Lory and Eaglet participate in the caucus race' },
+    ],
+  },
+  {
+    character1: whiteRabbit,
+    character2: lizard,
+    descriptions: [
+      { chapter: 4, description: 'The White Rabbit sends the Lizard to help Alice' },
+    ],
+  },
+  {
+    character1: duchess,
+    character2: cook,
+    descriptions: [
+      { chapter: 6, description: 'The Duchess and Cook work together in the chaotic kitchen' },
+    ],
+  },
+  {
+    character1: duchess,
+    character2: baby,
+    descriptions: [
+      { chapter: 6, description: 'The Duchess holds the Baby that turns into a pig' },
+    ],
+  },
+  {
+    character1: cheshireCat,
+    character2: duchess,
+    descriptions: [
+      { chapter: 6, description: 'The Cheshire Cat appears at the Duchess\'s house' },
+    ],
+  },
+  {
+    character1: madHatter,
+    character2: marchHare,
+    descriptions: [
+      { chapter: 7, description: 'The Mad Hatter and March Hare host the tea party together' },
+    ],
+  },
+  {
+    character1: madHatter,
+    character2: dormouse,
+    descriptions: [
+      { chapter: 7, description: 'The Mad Hatter and Dormouse are at the tea party' },
+    ],
+  },
+  {
+    character1: marchHare,
+    character2: dormouse,
+    descriptions: [
+      { chapter: 7, description: 'The March Hare and Dormouse are at the tea party' },
     ],
   },
   {
     character1: queenOfHearts,
     character2: kingOfHearts,
     descriptions: [
+      { chapter: 8, description: 'The Queen and King preside over the croquet game' },
       { chapter: 11, description: 'The Queen and King preside over the trial together' },
     ],
   },
@@ -314,6 +623,27 @@ const aliceRelationships: RelationshipWithChapters[] = [
     character2: queenOfHearts,
     descriptions: [
       { chapter: 8, description: 'The White Rabbit serves as the Queen\'s herald' },
+    ],
+  },
+  {
+    character1: mockTurtle,
+    character2: gryphon,
+    descriptions: [
+      { chapter: 9, description: 'The Mock Turtle and Gryphon tell Alice stories together' },
+    ],
+  },
+  {
+    character1: queenOfHearts,
+    character2: knaveOfHearts,
+    descriptions: [
+      { chapter: 11, description: 'The Queen presides over the trial of the Knave of Hearts' },
+    ],
+  },
+  {
+    character1: kingOfHearts,
+    character2: knaveOfHearts,
+    descriptions: [
+      { chapter: 11, description: 'The King presides over the trial of the Knave of Hearts' },
     ],
   },
 ];

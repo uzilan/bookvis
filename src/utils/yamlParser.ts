@@ -27,7 +27,6 @@ interface YamlBookData {
     id: string;
     name: string;
     description: string;
-    first_appearance_chapter: string;
     aliases: string[];
     factions: string[];
     faction_join_chapters: Record<string, string>;
@@ -51,6 +50,7 @@ interface YamlBookData {
     id: string;
     title: string;
     locations: string[];
+    characters: string[];
   }>;
   hierarchy: Array<{
     chapter_id: string;
@@ -99,7 +99,6 @@ export function parseYamlToBookData(yamlContent: string): BookData {
       id: char.id,
       name: char.name,
       description: char.description,
-      firstAppearanceChapter: char.first_appearance_chapter,
       aliases: char.aliases,
       factions: char.factions,
       factionJoinChapters: char.faction_join_chapters,
@@ -113,7 +112,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
     hierarchyMap.set(item.chapter_id, item.type);
   });
 
-  // Create chapters with locations and type
+  // Create chapters with locations, characters, and type
   const chapters: Chapter[] = data.chapters.map((chapter, index) => {
     const chapterLocations = chapter.locations
       .map(locId => locationsMap.get(locId))
@@ -126,6 +125,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
       index: index + 1, // 1-based index
       type: hierarchyMap.get(chapter.id) as 'chapter' | 'part' | 'book' | 'volume' | undefined,
       locations: chapterLocations,
+      characters: chapter.characters || [],
     };
   });
 

@@ -79,7 +79,15 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
             >
               <FormControlLabel
                 value="chapter"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="Chapter"
                 sx={{ 
                   fontSize: '10px', 
@@ -92,7 +100,15 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
               />
               <FormControlLabel
                 value="all"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="All"
                 sx={{ 
                   fontSize: '10px', 

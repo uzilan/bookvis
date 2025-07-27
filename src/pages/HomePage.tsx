@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Box,
   Typography,
@@ -17,10 +17,12 @@ import {
   DialogActions,
   Switch,
   FormControlLabel,
-  TextField
+  TextField,
+  Alert,
+  Snackbar
 } from '@mui/material';
 import { Google as GoogleIcon } from '@mui/icons-material';
-import { Delete as DeleteIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon, Upload as UploadIcon } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth';
 import { FirebaseService } from '../services/firebase';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +31,7 @@ import type { BookData } from '../models/BookData';
 import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { loadBookDataFromYamlString } from '../utils/yamlParser';
 
 export const HomePage: React.FC = () => {
   const { user, loading, signInWithGoogle, signOut, isAuthenticated } = useAuth();
@@ -49,6 +52,19 @@ export const HomePage: React.FC = () => {
   const [bookFilterText, setBookFilterText] = useState('');
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const [hasFetchedData, setHasFetchedData] = useState(false);
+  
+  // YAML upload functionality
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingYaml, setUploadingYaml] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error' | 'info';
+  }>({
+    open: false,
+    message: '',
+    severity: 'info'
+  });
 
   // Fetch authors and books for all users (only once)
   useEffect(() => {
@@ -193,6 +209,63 @@ export const HomePage: React.FC = () => {
     setIsCreateBookModalOpen(false);
   };
 
+  // YAML upload handlers
+  const handleYamlUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.yaml') && !file.name.endsWith('.yml')) {
+      setUploadStatus({
+        open: true,
+        message: 'Please select a YAML file (.yaml or .yml)',
+        severity: 'error'
+      });
+      return;
+    }
+
+    try {
+      setUploadingYaml(true);
+      const fileContent = await file.text();
+      
+      // Parse YAML to BookData
+      const bookData = loadBookDataFromYamlString(fileContent);
+      
+      // Upload to Firebase (BookData format is already correct)
+      await FirebaseService.saveBook(bookData);
+      
+      setUploadStatus({
+        open: true,
+        message: `Successfully uploaded "${bookData.book.title}" with ${bookData.characters.length} characters and ${bookData.relationships.length} relationships!`,
+        severity: 'success'
+      });
+      
+      // Refresh data
+      fetchData();
+      
+    } catch (error) {
+      console.error('Error uploading YAML:', error);
+      setUploadStatus({
+        open: true,
+        message: `Error uploading YAML: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        severity: 'error'
+      });
+    } finally {
+      setUploadingYaml(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleCloseUploadStatus = () => {
+    setUploadStatus(prev => ({ ...prev, open: false }));
+  };
+
   // Filter authors using fuzzy search
   const filteredAuthors = useMemo(() => {
     if (!authorFilterText.trim()) {
@@ -333,15 +406,26 @@ export const HomePage: React.FC = () => {
                   label="Show only my books"
                   labelPlacement="start"
                 />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={handleOpenCreateBookModal}
-                  sx={{ ml: 2 }}
-                >
-                  Create New Book
-                </Button>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={handleOpenCreateBookModal}
+                  >
+                    Create New Book
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    startIcon={<UploadIcon />}
+                    onClick={handleYamlUpload}
+                    disabled={uploadingYaml}
+                  >
+                    {uploadingYaml ? 'Uploading...' : 'Upload YAML'}
+                  </Button>
+                </Box>
               </Box>
             </Paper>
           )}
@@ -552,6 +636,31 @@ export const HomePage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Hidden file input for YAML upload */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept=".yaml,.yml"
+        style={{ display: 'none' }}
+      />
+
+      {/* Upload status snackbar */}
+      <Snackbar
+        open={uploadStatus.open}
+        autoHideDuration={6000}
+        onClose={handleCloseUploadStatus}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseUploadStatus} 
+          severity={uploadStatus.severity}
+          sx={{ width: '100%' }}
+        >
+          {uploadStatus.message}
+        </Alert>
+      </Snackbar>
 
       {/* Create Book Modal */}
       {isCreateBookModalOpen && (

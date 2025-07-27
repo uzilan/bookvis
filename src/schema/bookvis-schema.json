@@ -69,7 +69,7 @@
       "description": "All characters in the book",
       "items": {
         "type": "object",
-        "required": ["id", "name", "description", "first_appearance_chapter", "aliases", "factions", "faction_join_chapters", "attributes"],
+        "required": ["id", "name", "description", "aliases", "factions", "faction_join_chapters", "attributes"],
         "properties": {
           "id": {
             "type": "string",
@@ -84,11 +84,7 @@
             "type": "string",
             "description": "Description of the character"
           },
-          "first_appearance_chapter": {
-            "type": "string",
-            "description": "Chapter ID where character first appears",
-            "pattern": "^chapter-[0-9]+$"
-          },
+
           "aliases": {
             "type": "array",
             "description": "Alternative names for the character",
@@ -194,7 +190,7 @@
       "description": "Chapter structure with locations",
       "items": {
         "type": "object",
-        "required": ["id", "title", "locations"],
+        "required": ["id", "title", "locations", "characters"],
         "properties": {
           "id": {
             "type": "string",
@@ -208,6 +204,14 @@
           "locations": {
             "type": "array",
             "description": "Location IDs mentioned in this chapter",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            }
+          },
+          "characters": {
+            "type": "array",
+            "description": "Character IDs mentioned in this chapter",
             "items": {
               "type": "string",
               "pattern": "^[a-z0-9-]+$"

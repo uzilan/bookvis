@@ -9,5 +9,5 @@ export interface SchemaChapter {
   /** Location IDs mentioned in this chapter */
   locations: string[];
   /** Character IDs mentioned in this chapter */
-  characterMentions: string[];
+  characters: string[];
 } 

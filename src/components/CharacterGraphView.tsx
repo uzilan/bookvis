@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { CharacterGraph } from './CharacterGraph';
 import { CreateBookModal } from './CreateBookModal';
-import { LoginButton } from './LoginButton';
-import { ThemeToggle } from './ThemeToggle';
+
+
 import type { Book } from '../models/Book';
 import type { BookData } from '../models/BookData';
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { FirebaseService } from '../services/firebase.ts';
 import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
+import { aliceBookData } from '../books/aliceData';
 
 export const CharacterGraphView: React.FC = () => {
   const { bookId } = useParams<{ bookId?: string }>();
@@ -51,18 +52,24 @@ export const CharacterGraphView: React.FC = () => {
       try {
         setLoading(true);
         const books = await FirebaseService.getAllBooks();
-        setBooksFromFirebase(books);
+        
+        // Add local books (Alice) to the books list
+        const allBooks = [aliceBookData, ...books];
+        
+
+        
+        setBooksFromFirebase(allBooks);
         
         // Set the book based on URL parameter or first book
-        if (books.length > 0) {
+        if (allBooks.length > 0) {
           let targetBook: BookData;
           
           if (bookId) {
             // Find the book specified in the URL
-            targetBook = books.find(b => b.book.id === bookId) || books[0];
+            targetBook = allBooks.find(b => b.book.id === bookId) || allBooks[0];
           } else {
             // Use the first book if no bookId specified
-            targetBook = books[0];
+            targetBook = allBooks[0];
           }
           
           if (!hasSetInitialBook.current) {
@@ -93,13 +100,22 @@ export const CharacterGraphView: React.FC = () => {
   const bookDataMap: Record<string, BookData> = Object.fromEntries(
     booksFromFirebase.map(bd => [bd.book.id, bd])
   );
+  
+
 
   // Get the appropriate book data based on selected book
   const getBookData = (book: Book): BookData | null => {
+    // Special handling for Alice book to avoid data corruption
+    if (book.id === 'alice') {
+      return aliceBookData;
+    }
+    
     return bookDataMap[book.id] || null;
   };
 
   const bookData = previewBookData || previewDataFromUrl || previewData || (selectedBook ? getBookData(selectedBook) : null);
+  
+
 
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
@@ -142,22 +158,13 @@ export const CharacterGraphView: React.FC = () => {
     currentChapter = firstChapter;
   }
   
-  // Only show characters whose firstAppearanceChapter is <= selected chapter
+  // Only show characters who are mentioned in the current chapter
   const visibleCharacters = bookData.characters.filter(c => {
-    if (typeof c.firstAppearanceChapter === 'number') {
-      // For backward compatibility with numeric chapter indices
-      return currentChapter && typeof currentChapter.index === 'number' && c.firstAppearanceChapter <= currentChapter.index;
-    } else if (typeof c.firstAppearanceChapter === 'string') {
-      // For string chapter IDs, find the target chapter and compare by index
-      const targetChapter = bookData.chapters.find(ch => ch.id === c.firstAppearanceChapter);
-      return targetChapter && currentChapter && targetChapter.index && currentChapter.index && 
-             targetChapter.index <= currentChapter.index;
-    }
-    return false;
+    const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+    return currentChapter && currentChapter.characters && currentChapter.characters.includes(c.id);
   });
 
   // Only show factions that have at least one visible character and are active in current chapter
-  const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const activeFactionIds = new Set();
   
   visibleCharacters.forEach(character => {
@@ -185,21 +192,12 @@ export const CharacterGraphView: React.FC = () => {
     });
   });
   
-  const visibleFactions = bookData.factions.filter(f => activeFactionIds.has(f.id));
 
-  // Create filtered book data for the graph
-  const filteredBookData: BookData = {
-    ...bookData,
-    characters: visibleCharacters,
-    relationships: bookData.relationships.filter(r => {
-      // Only include relationships where both characters are visible
-      return visibleCharacterIds.has(r.character1.id) && visibleCharacterIds.has(r.character2.id);
-    }),
-    factions: visibleFactions,
-  };
 
-  // Use previewBookData if available, otherwise use filtered data
-  const displayBookData = previewBookData || filteredBookData;
+
+
+  // Use previewBookData if available, otherwise use full book data (let graph handle filtering)
+  const displayBookData = previewBookData || bookData;
 
   const handleCreateBook = () => {
     setIsCreateBookModalOpen(true);
@@ -253,27 +251,7 @@ export const CharacterGraphView: React.FC = () => {
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
-      {/* Top Right Controls */}
-      <div style={{ 
-        position: 'absolute', 
-        top: '20px', 
-        right: '20px', 
-        zIndex: 1003,
-        display: 'flex',
-        gap: '10px',
-        alignItems: 'center'
-      }}>
-        <ThemeToggle />
-        <div style={{
-          backgroundColor: 'var(--color-overlay)',
-          padding: '10px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px var(--color-shadow)',
-          border: '1px solid var(--color-border)'
-        }}>
-          <LoginButton />
-        </div>
-      </div>
+
       
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph

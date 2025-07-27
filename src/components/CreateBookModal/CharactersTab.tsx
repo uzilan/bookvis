@@ -31,8 +31,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   const [editingCharacterDescription, setEditingCharacterDescription] = useState('');
   const [editingCharacterAliases, setEditingCharacterAliases] = useState<string[]>([]);
   const [editingAlias, setEditingAlias] = useState('');
-  const [newCharacterFirstAppearance, setNewCharacterFirstAppearance] = useState('');
-  const [editingCharacterFirstAppearance, setEditingCharacterFirstAppearance] = useState('');
   const [newCharacterAttributes, setNewCharacterAttributes] = useState<string[]>([]);
   const [newAttribute, setNewAttribute] = useState('');
   const [editingCharacterAttributes, setEditingCharacterAttributes] = useState<string[]>([]);
@@ -52,7 +50,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
         id: `character-${bookData.characters.length + 1}`,
         name: newCharacterName.trim(),
         description: newCharacterDescription.trim(),
-        first_appearance_chapter: newCharacterFirstAppearance,
         aliases: newCharacterAliases,
         factions: newCharacterFactions.map(fm => fm.factionId),
         faction_join_chapters: newCharacterFactions.reduce((acc, fm) => {
@@ -70,7 +67,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
       setNewCharacterName('');
       setNewCharacterDescription('');
       setNewCharacterAliases([]);
-      setNewCharacterFirstAppearance('');
       setNewCharacterAttributes([]);
       setNewCharacterFactions([]);
     }
@@ -83,12 +79,11 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
     }));
   };
 
-  const handleStartEditingCharacter = (character: { id: string; name: string; description: string; aliases: string[]; first_appearance_chapter: string; attributes: string[]; factions: string[]; faction_join_chapters: Record<string, string> }) => {
+  const handleStartEditingCharacter = (character: SchemaCharacter) => {
     setEditingCharacterId(character.id);
     setEditingCharacterName(character.name);
     setEditingCharacterDescription(character.description);
     setEditingCharacterAliases(character.aliases || []);
-    setEditingCharacterFirstAppearance(character.first_appearance_chapter || '');
     setEditingCharacterAttributes(character.attributes || []);
     
     // Convert faction data to FactionMembership format
@@ -110,7 +105,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 name: editingCharacterName.trim(),
                 description: editingCharacterDescription,
                 aliases: editingCharacterAliases,
-                first_appearance_chapter: editingCharacterFirstAppearance,
+        
                 attributes: editingCharacterAttributes,
                 factions: editingCharacterFactions.map(fm => fm.factionId),
                 faction_join_chapters: editingCharacterFactions.reduce((acc, fm) => {
@@ -1202,11 +1197,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                         })}
                       </Box>
                     )}
-                    {character.first_appearance_chapter && (
-                      <Typography variant="caption" sx={{ ml: 1, fontSize: '0.7rem', color: 'var(--color-textSecondary)' }}>
-                        First appears in: {bookData.chapters.find(ch => ch.id === character.first_appearance_chapter)?.title || character.first_appearance_chapter}
-                      </Typography>
-                    )}
+
                   </Box>
                 )}
                 {editingCharacterId !== character.id && (

@@ -1,0 +1,602 @@
+# BookVis Standard Format for Alice's Adventures in Wonderland
+# Based on the novel by Lewis Carroll
+
+book:
+  id: "alice"
+  title: "Alice's Adventures in Wonderland"
+  author:
+    id: "carroll"
+    name: "Lewis Carroll"
+
+# Map image URL for the book
+map_url: "https://home-underground.nyc3.cdn.digitaloceanspaces.com/disney-pins/lg/82324_x23o.jpg"
+
+# All locations in the book
+locations:
+  - id: "rabbit-hole"
+    name: "Rabbit Hole"
+    description: "A deep, dark hole that Alice falls down to enter Wonderland. It seems to go on forever and is filled with strange objects."
+  
+  - id: "wonderland-entrance"
+    name: "Wonderland Entrance"
+    description: "The magical gateway between the real world and Wonderland, where Alice first arrives after her fall."
+  
+  - id: "pool-of-tears"
+    name: "Pool of Tears"
+    description: "A large pool created from Alice's own tears when she was very small. It becomes a lake where various creatures gather."
+  
+  - id: "wonderland-garden"
+    name: "Wonderland Garden"
+    description: "A beautiful garden filled with talking flowers and other strange plants that can communicate with Alice."
+  
+  - id: "shore"
+    name: "Shore"
+    description: "The edge of the Pool of Tears where Alice and other creatures gather after swimming across the pool."
+  
+  - id: "caucus-race-ground"
+    name: "Caucus Race Ground"
+    description: "A circular race track where the Dodo organizes a race to dry off the wet creatures from the pool."
+  
+  - id: "white-rabbit-house"
+    name: "White Rabbit's House"
+    description: "The home of the White Rabbit, where Alice grows too large and gets stuck, causing chaos."
+  
+  - id: "wonderland-street"
+    name: "Wonderland Street"
+    description: "A street in Wonderland where Alice encounters various strange characters and follows the White Rabbit."
+  
+  - id: "mushroom"
+    name: "Mushroom"
+    description: "A large mushroom where the Caterpillar sits smoking a hookah. It has magical properties that can change Alice's size."
+  
+  - id: "forest-clearing"
+    name: "Forest Clearing"
+    description: "An open area in the forest where Alice meets the Caterpillar and learns about the mushroom's properties."
+  
+  - id: "duchess-house"
+    name: "Duchess's House"
+    description: "The home of the Duchess, filled with pepper and chaos. The Duchess holds a baby that turns into a pig."
+  
+  - id: "kitchen"
+    name: "Kitchen"
+    description: "The chaotic kitchen in the Duchess's house where there's too much pepper and everything is in disorder."
+  
+  - id: "mad-tea-party"
+    name: "Mad Tea Party"
+    description: "An endless tea party hosted by the Mad Hatter, March Hare, and Dormouse. Time is stuck at 6 o'clock."
+  
+  - id: "tea-table"
+    name: "Tea Table"
+    description: "A long table set for tea where the Mad Tea Party takes place, with endless cups of tea and riddles."
+  
+  - id: "queens-garden"
+    name: "Queen's Garden"
+    description: "The beautiful garden belonging to the Queen of Hearts, filled with roses and other flowers."
+  
+  - id: "croquet-ground"
+    name: "Croquet Ground"
+    description: "A croquet court where Alice plays a chaotic game with flamingos as mallets and hedgehogs as balls."
+  
+  - id: "mock-turtle-beach"
+    name: "Mock Turtle's Beach"
+    description: "A beach where Alice meets the Mock Turtle, who tells her stories about his education and the Lobster Quadrille."
+  
+  - id: "shore-line"
+    name: "Shore Line"
+    description: "The shoreline where the Mock Turtle and Gryphon tell Alice about their underwater adventures and dances."
+  
+  - id: "dance-floor"
+    name: "Dance Floor"
+    description: "An underwater dance floor where the Lobster Quadrille takes place, with sea creatures dancing in formation."
+  
+  - id: "underwater-scene"
+    name: "Underwater Scene"
+    description: "A magical underwater world where Alice imagines the Lobster Quadrille dance taking place."
+  
+  - id: "courtroom"
+    name: "Courtroom"
+    description: "The court where the trial for the stolen tarts takes place, with Alice as a witness and the King and Queen as judges."
+  
+  - id: "witness-stand"
+    name: "Witness Stand"
+    description: "Where Alice stands to give her testimony during the trial of the Knave of Hearts."
+  
+  - id: "witness-box"
+    name: "Witness Box"
+    description: "The witness box where Alice gives evidence during the trial, growing larger and causing chaos in the court."
+
+# All characters in the book
+characters:
+  - id: "alice"
+    name: "Alice"
+    description: "The curious young girl who falls down a rabbit hole and explores the strange world of Wonderland."
+    aliases: ["Alice"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-1"
+    attributes: ["Curious", "Adventurous", "Logical", "Young"]
+
+  - id: "white-rabbit"
+    name: "White Rabbit"
+    description: "A nervous, time-conscious rabbit who Alice follows into Wonderland. He is always in a hurry and carries a pocket watch."
+    aliases: ["The Rabbit", "The White Rabbit"]
+    factions: ["wonderlanders", "royalty"]
+    faction_join_chapters:
+      wonderlanders: "chapter-1"
+      royalty: "chapter-8"
+    attributes: ["Nervous", "Time-conscious", "Herald", "Royal Servant"]
+
+  - id: "mad-hatter"
+    name: "Mad Hatter"
+    description: "A eccentric hatter who hosts an endless tea party. He is stuck at 6 o'clock and loves riddles and wordplay."
+    aliases: ["The Hatter", "The Mad Hatter"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-7"
+    attributes: ["Eccentric", "Riddle-loving", "Tea Party Host", "Time-stuck"]
+
+  - id: "caterpillar"
+    name: "Caterpillar"
+    description: "A wise but somewhat rude caterpillar who sits on a mushroom smoking a hookah. He gives Alice advice about size and identity."
+    aliases: ["The Caterpillar"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-5"
+    attributes: ["Wise", "Rude", "Hookah-smoking", "Philosophical"]
+
+  - id: "cheshire-cat"
+    name: "Cheshire Cat"
+    description: "A mysterious cat with a wide grin who can disappear and reappear at will. He often gives Alice cryptic advice."
+    aliases: ["The Cheshire Cat", "The Cat"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-6"
+    attributes: ["Mysterious", "Disappearing", "Cryptic", "Grinning"]
+
+  - id: "queen-of-hearts"
+    name: "Queen of Hearts"
+    description: "The tyrannical queen of Wonderland who is known for her famous phrase 'Off with their heads!' She is irrational and quick to anger."
+    aliases: ["The Queen", "The Queen of Hearts"]
+    factions: ["royalty"]
+    faction_join_chapters:
+      royalty: "chapter-8"
+    attributes: ["Tyrannical", "Irrational", "Quick-tempered", "Royal"]
+
+  - id: "king-of-hearts"
+    name: "King of Hearts"
+    description: "The king of Wonderland who is somewhat more reasonable than his wife but still part of the chaotic royal court."
+    aliases: ["The King", "The King of Hearts"]
+    factions: ["royalty"]
+    faction_join_chapters:
+      royalty: "chapter-8"
+    attributes: ["Royal", "More Reasonable", "Court Judge", "Husband"]
+
+  - id: "mouse"
+    name: "Mouse"
+    description: "A mouse who Alice meets in the pool of tears. He is sensitive and easily offended, especially by mentions of cats."
+    aliases: ["The Mouse"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-2"
+    attributes: ["Sensitive", "Easily Offended", "Cat-fearing", "Swimming"]
+
+  - id: "dodo"
+    name: "Dodo"
+    description: "A dodo bird who organizes the caucus race to dry off the wet creatures from the pool of tears."
+    aliases: ["The Dodo"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-2"
+    attributes: ["Organizer", "Race Leader", "Extinct Bird", "Helpful"]
+
+  - id: "lory"
+    name: "Lory"
+    description: "A lory bird who participates in the caucus race and other activities in Wonderland."
+    aliases: ["The Lory"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-3"
+    attributes: ["Bird", "Race Participant", "Wonderland Resident"]
+
+  - id: "eaglet"
+    name: "Eaglet"
+    description: "A young eagle who participates in the caucus race and other activities in Wonderland."
+    aliases: ["The Eaglet"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-3"
+    attributes: ["Young Eagle", "Race Participant", "Wonderland Resident"]
+
+  - id: "duck"
+    name: "Duck"
+    description: "A duck who participates in the caucus race and other activities in Wonderland."
+    aliases: ["The Duck"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-3"
+    attributes: ["Duck", "Race Participant", "Wonderland Resident"]
+
+  - id: "lizard"
+    name: "Lizard"
+    description: "A lizard who is sent by the White Rabbit to help Alice when she is stuck in his house."
+    aliases: ["The Lizard", "Bill"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-4"
+    attributes: ["Helper", "Messenger", "Small", "Agile"]
+
+  - id: "duchess"
+    name: "Duchess"
+    description: "A duchess who lives in a chaotic house filled with pepper. She holds a baby that turns into a pig."
+    aliases: ["The Duchess"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-6"
+    attributes: ["Chaotic", "Pepper-loving", "Baby-holder", "Noble"]
+
+  - id: "cook"
+    name: "Cook"
+    description: "A cook who works in the Duchess's chaotic kitchen, throwing pots and pans around."
+    aliases: ["The Cook"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-6"
+    attributes: ["Chaotic", "Pot-throwing", "Kitchen Worker", "Violent"]
+
+  - id: "baby"
+    name: "Baby"
+    description: "A baby held by the Duchess that turns into a pig during Alice's visit."
+    aliases: ["The Baby", "Pig"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-6"
+    attributes: ["Transforming", "Baby", "Pig", "Crying"]
+
+  - id: "march-hare"
+    name: "March Hare"
+    description: "A hare who hosts the mad tea party along with the Mad Hatter and Dormouse."
+    aliases: ["The March Hare", "The Hare"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-7"
+    attributes: ["Tea Party Host", "March Hare", "Eccentric", "Riddle-loving"]
+
+  - id: "dormouse"
+    name: "Dormouse"
+    description: "A sleepy dormouse who is part of the mad tea party. He often falls asleep during conversations."
+    aliases: ["The Dormouse"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-7"
+    attributes: ["Sleepy", "Tea Party Guest", "Dormouse", "Napping"]
+
+  - id: "mock-turtle"
+    name: "Mock Turtle"
+    description: "A turtle with a calf's head who tells Alice stories about his education and the Lobster Quadrille."
+    aliases: ["The Mock Turtle"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-9"
+    attributes: ["Storyteller", "Educated", "Melancholy", "Hybrid"]
+
+  - id: "gryphon"
+    name: "Gryphon"
+    description: "A gryphon who takes Alice to meet the Mock Turtle and tells her about underwater adventures."
+    aliases: ["The Gryphon"]
+    factions: ["wonderlanders"]
+    faction_join_chapters:
+      wonderlanders: "chapter-9"
+    attributes: ["Guide", "Mythical", "Storyteller", "Underwater Expert"]
+
+  - id: "knave-of-hearts"
+    name: "Knave of Hearts"
+    description: "The knave accused of stealing the tarts in the trial that Alice witnesses."
+    aliases: ["The Knave", "The Knave of Hearts"]
+    factions: ["royalty"]
+    faction_join_chapters:
+      royalty: "chapter-11"
+    attributes: ["Accused", "Royal", "Criminal", "Trial Defendant"]
+
+# All factions in the book
+factions:
+  - id: "wonderlanders"
+    title: "Wonderlanders"
+    description: "The diverse inhabitants of Wonderland, including talking animals, magical creatures, and other strange beings. They represent the chaotic and whimsical nature of Wonderland, each with their own peculiar personalities and behaviors."
+    color: "#E7C7A7"
+
+  - id: "royalty"
+    title: "Royalty"
+    description: "The ruling class of Wonderland, including the Queen of Hearts and her court. They represent authority and power, though often portrayed as irrational and tyrannical, especially the Queen who is known for her famous phrase 'Off with their heads!'"
+    color: "#E7A7A7"
+
+# Character relationships
+relationships:
+  - character1: "alice"
+    character2: "white-rabbit"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Alice follows the White Rabbit"
+      - chapter: "chapter-4"
+        description: "Alice helps the White Rabbit"
+
+  - character1: "alice"
+    character2: "mouse"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Alice meets the Mouse in the pool of tears"
+      - chapter: "chapter-3"
+        description: "Alice participates in the caucus race with the Mouse"
+
+  - character1: "alice"
+    character2: "dodo"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Alice meets the Dodo in the pool of tears"
+      - chapter: "chapter-3"
+        description: "Alice participates in the caucus race organized by the Dodo"
+
+  - character1: "alice"
+    character2: "caterpillar"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Alice receives advice from the Caterpillar"
+
+  - character1: "alice"
+    character2: "cheshire-cat"
+    descriptions:
+      - chapter: "chapter-6"
+        description: "Alice meets the Cheshire Cat at the Duchess's house"
+      - chapter: "chapter-8"
+        description: "Alice encounters the Cheshire Cat at the croquet game"
+
+  - character1: "alice"
+    character2: "duchess"
+    descriptions:
+      - chapter: "chapter-6"
+        description: "Alice meets the Duchess at her chaotic house"
+
+  - character1: "alice"
+    character2: "mad-hatter"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "Alice attends the mad tea party with the Mad Hatter"
+
+  - character1: "alice"
+    character2: "march-hare"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "Alice meets the March Hare at the tea party"
+
+  - character1: "alice"
+    character2: "dormouse"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "Alice meets the Dormouse at the tea party"
+
+  - character1: "alice"
+    character2: "queen-of-hearts"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "Alice meets the Queen of Hearts at the croquet game"
+      - chapter: "chapter-11"
+        description: "Alice witnesses the Queen's trial"
+
+  - character1: "alice"
+    character2: "king-of-hearts"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "Alice meets the King of Hearts at the croquet game"
+      - chapter: "chapter-11"
+        description: "Alice meets the King of Hearts at the trial"
+
+  - character1: "alice"
+    character2: "mock-turtle"
+    descriptions:
+      - chapter: "chapter-9"
+        description: "Alice meets the Mock Turtle and hears his story"
+
+  - character1: "alice"
+    character2: "gryphon"
+    descriptions:
+      - chapter: "chapter-9"
+        description: "Alice meets the Gryphon who takes her to the Mock Turtle"
+
+  - character1: "alice"
+    character2: "knave-of-hearts"
+    descriptions:
+      - chapter: "chapter-11"
+        description: "Alice witnesses the trial of the Knave of Hearts"
+
+  - character1: "mouse"
+    character2: "dodo"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "The Mouse and Dodo are both in the pool of tears"
+      - chapter: "chapter-3"
+        description: "The Mouse and Dodo participate in the caucus race together"
+
+  - character1: "lory"
+    character2: "eaglet"
+    descriptions:
+      - chapter: "chapter-3"
+        description: "The Lory and Eaglet participate in the caucus race"
+
+  - character1: "white-rabbit"
+    character2: "lizard"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "The White Rabbit sends the Lizard to help Alice"
+
+  - character1: "duchess"
+    character2: "cook"
+    descriptions:
+      - chapter: "chapter-6"
+        description: "The Duchess and Cook work together in the chaotic kitchen"
+
+  - character1: "duchess"
+    character2: "baby"
+    descriptions:
+      - chapter: "chapter-6"
+        description: "The Duchess holds the Baby that turns into a pig"
+
+  - character1: "cheshire-cat"
+    character2: "duchess"
+    descriptions:
+      - chapter: "chapter-6"
+        description: "The Cheshire Cat appears at the Duchess's house"
+
+  - character1: "mad-hatter"
+    character2: "march-hare"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "The Mad Hatter and March Hare host the tea party together"
+
+  - character1: "mad-hatter"
+    character2: "dormouse"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "The Mad Hatter and Dormouse are at the tea party"
+
+  - character1: "march-hare"
+    character2: "dormouse"
+    descriptions:
+      - chapter: "chapter-7"
+        description: "The March Hare and Dormouse are at the tea party"
+
+  - character1: "queen-of-hearts"
+    character2: "king-of-hearts"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "The Queen and King preside over the croquet game"
+      - chapter: "chapter-11"
+        description: "The Queen and King preside over the trial together"
+
+  - character1: "queen-of-hearts"
+    character2: "cheshire-cat"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "The Queen is frustrated by the Cheshire Cat's disappearing act"
+
+  - character1: "white-rabbit"
+    character2: "queen-of-hearts"
+    descriptions:
+      - chapter: "chapter-8"
+        description: "The White Rabbit serves as the Queen's herald"
+
+  - character1: "mock-turtle"
+    character2: "gryphon"
+    descriptions:
+      - chapter: "chapter-9"
+        description: "The Mock Turtle and Gryphon tell Alice stories together"
+
+  - character1: "queen-of-hearts"
+    character2: "knave-of-hearts"
+    descriptions:
+      - chapter: "chapter-11"
+        description: "The Queen presides over the trial of the Knave of Hearts"
+
+  - character1: "king-of-hearts"
+    character2: "knave-of-hearts"
+    descriptions:
+      - chapter: "chapter-11"
+        description: "The King presides over the trial of the Knave of Hearts"
+
+# Chapter structure with locations and character mentions
+chapters:
+  - id: "chapter-1"
+    title: "Down the Rabbit-Hole"
+    locations: ["rabbit-hole", "wonderland-entrance"]
+    characters: ["alice", "white-rabbit"]
+
+  - id: "chapter-2"
+    title: "The Pool of Tears"
+    locations: ["pool-of-tears", "wonderland-garden"]
+    characters: ["alice", "mouse", "dodo"]
+
+  - id: "chapter-3"
+    title: "A Caucus-Race and a Long Tale"
+    locations: ["shore", "caucus-race-ground"]
+    characters: ["alice", "mouse", "dodo", "lory", "eaglet", "duck"]
+
+  - id: "chapter-4"
+    title: "The Rabbit Sends in a Little Bill"
+    locations: ["white-rabbit-house", "wonderland-street"]
+    characters: ["alice", "white-rabbit", "lizard"]
+
+  - id: "chapter-5"
+    title: "Advice from a Caterpillar"
+    locations: ["mushroom", "forest-clearing"]
+    characters: ["alice", "caterpillar"]
+
+  - id: "chapter-6"
+    title: "Pig and Pepper"
+    locations: ["duchess-house", "kitchen"]
+    characters: ["alice", "duchess", "cook", "baby", "cheshire-cat"]
+
+  - id: "chapter-7"
+    title: "A Mad Tea-Party"
+    locations: ["mad-tea-party", "tea-table"]
+    characters: ["alice", "mad-hatter", "march-hare", "dormouse"]
+
+  - id: "chapter-8"
+    title: "The Queen's Croquet-Ground"
+    locations: ["queens-garden", "croquet-ground"]
+    characters: ["alice", "queen-of-hearts", "king-of-hearts", "cheshire-cat"]
+
+  - id: "chapter-9"
+    title: "The Mock Turtle's Story"
+    locations: ["mock-turtle-beach", "shore-line"]
+    characters: ["alice", "mock-turtle", "gryphon"]
+
+  - id: "chapter-10"
+    title: "The Lobster Quadrille"
+    locations: ["dance-floor", "underwater-scene"]
+    characters: ["alice", "mock-turtle", "gryphon"]
+
+  - id: "chapter-11"
+    title: "Who Stole the Tarts?"
+    locations: ["courtroom", "witness-stand", "witness-box"]
+    characters: ["alice", "queen-of-hearts", "king-of-hearts", "knave-of-hearts"]
+
+  - id: "chapter-12"
+    title: "Alice's Evidence"
+    locations: ["courtroom", "witness-stand", "witness-box"]
+    characters: ["alice", "queen-of-hearts", "king-of-hearts", "knave-of-hearts"]
+
+# Chapter hierarchy
+hierarchy:
+  - chapter_id: "chapter-1"
+    type: "chapter"
+  
+  - chapter_id: "chapter-2"
+    type: "chapter"
+  
+  - chapter_id: "chapter-3"
+    type: "chapter"
+  
+  - chapter_id: "chapter-4"
+    type: "chapter"
+  
+  - chapter_id: "chapter-5"
+    type: "chapter"
+  
+  - chapter_id: "chapter-6"
+    type: "chapter"
+  
+  - chapter_id: "chapter-7"
+    type: "chapter"
+  
+  - chapter_id: "chapter-8"
+    type: "chapter"
+  
+  - chapter_id: "chapter-9"
+    type: "chapter"
+  
+  - chapter_id: "chapter-10"
+    type: "chapter"
+  
+  - chapter_id: "chapter-11"
+    type: "chapter"
+  
+  - chapter_id: "chapter-12"
+    type: "chapter" 

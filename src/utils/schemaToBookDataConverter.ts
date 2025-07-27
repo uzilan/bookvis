@@ -22,7 +22,6 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     id: char.id,
     name: char.name,
     description: char.description,
-    firstAppearanceChapter: char.first_appearance_chapter || '',
     aliases: char.aliases || [],
     attributes: char.attributes || [],
     factions: char.factions || [],
@@ -46,7 +45,8 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     locations: (chapter.locations || []).map(locationId => {
       const location = locations.find(loc => loc.id === locationId);
       return location || { id: locationId, name: 'Unknown Location', description: '' };
-    })
+    }),
+    characters: chapter.characters || []
   }));
 
   // Convert Factions
@@ -114,7 +114,6 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
     id: char.id,
     name: char.name,
     description: char.description,
-    first_appearance_chapter: char.firstAppearanceChapter,
     aliases: char.aliases,
     attributes: char.attributes,
     factions: char.factions,
@@ -125,7 +124,8 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
   const chapters = bookData.chapters.map(chapter => ({
     id: chapter.id,
     title: chapter.title,
-    locations: chapter.locations.map(location => location.id)
+    locations: chapter.locations.map(location => location.id),
+    characters: chapter.characters || []
   }));
 
   // Convert Factions

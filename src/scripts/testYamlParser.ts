@@ -1,47 +1,43 @@
-import { readFileSync } from 'fs';
-import { loadBookDataFromYamlString } from '../utils/yamlParser.ts';
+import { parseYamlToBookData } from '../utils/yamlParser';
+import fs from 'fs';
 
-// Read the Fight Club YAML file
-const yamlContent = readFileSync('fight-club-bookvis.yaml', 'utf8');
+function testYamlParser() {
+  try {
+    console.log('🧪 Testing YAML parser with new character mentions structure...');
+    
+    // Read the Fight Club YAML file
+    const yamlContent = fs.readFileSync('fight-club-bookvis.yaml', 'utf8');
+    
+    // Parse the YAML
+    const bookData = parseYamlToBookData(yamlContent);
+    
+    console.log('✅ YAML parsing successful!');
+    console.log('Book:', bookData.book.title);
+    console.log('Author:', bookData.book.author.name);
+    console.log('Characters count:', bookData.characters.length);
+    console.log('Chapters count:', bookData.chapters.length);
+    console.log('Locations count:', bookData.locations.length);
+    console.log('Factions count:', bookData.factions.length);
+    console.log('Relationships count:', bookData.relationships.length);
+    
+    console.log('\n📖 Character mentions per chapter:');
+    bookData.chapters.forEach(chapter => {
+      if (chapter.characters && chapter.characters.length > 0) {
+        const characterNames = chapter.characters.map(charId => {
+          const char = bookData.characters.find(c => c.id === charId);
+          return char ? char.name : charId;
+        });
+        console.log(`  ${chapter.title}: ${characterNames.join(', ')}`);
+      } else {
+        console.log(`  ${chapter.title}: No characters mentioned`);
+      }
+    });
+    
+    console.log('\n✅ YAML parser test completed successfully!');
+    
+  } catch (error) {
+    console.error('❌ Error testing YAML parser:', error);
+  }
+}
 
-try {
-  const bookData = loadBookDataFromYamlString(yamlContent);
-  
-  console.log('✅ YAML parsing successful!');
-  console.log('\n📚 Book:', bookData.book.title, 'by', bookData.book.author.name);
-  console.log('🗺️  Map URL:', bookData.mapUrl);
-  
-  console.log('\n📍 Locations:', bookData.locations.length);
-  bookData.locations.forEach(loc => {
-    console.log(`  - ${loc.name} (${loc.id})`);
-  });
-  
-  console.log('\n👥 Characters:', bookData.characters.length);
-  bookData.characters.forEach(char => {
-    console.log(`  - ${char.name} (${char.id})`);
-    console.log(`    Factions: ${char.factions.join(', ')}`);
-  });
-  
-  console.log('\n🏛️  Factions:', bookData.factions.length);
-  bookData.factions.forEach(faction => {
-    console.log(`  - ${faction.title} (${faction.id}) - ${faction.color}`);
-  });
-  
-  console.log('\n📖 Chapters:', bookData.chapters.length);
-  bookData.chapters.forEach(chapter => {
-    console.log(`  - ${chapter.title} (${chapter.id}) - Type: ${chapter.type || 'undefined'}`);
-    console.log(`    Locations: ${chapter.locations?.map(l => l.name).join(', ') || 'None'}`);
-  });
-  
-  console.log('\n🔗 Relationships:', bookData.relationships.length);
-  bookData.relationships.forEach(rel => {
-    console.log(`  - ${rel.character1.name} ↔ ${rel.character2.name}`);
-    console.log(`    Descriptions: ${rel.descriptions.length}`);
-  });
-  
-  console.log('\n🎉 All data parsed successfully!');
-  
-} catch (error) {
-  console.error('❌ Error parsing YAML:', error);
-  process.exit(1);
-} 
+testYamlParser(); 

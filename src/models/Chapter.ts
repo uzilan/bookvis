@@ -17,4 +17,7 @@ export interface Chapter {
   
   // Locations mentioned in this chapter
   locations?: Location[];
+  
+  // Character IDs mentioned in this chapter
+  characters?: string[];
 }

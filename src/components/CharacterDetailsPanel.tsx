@@ -108,24 +108,33 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
     factions.find(f => f.id === factionId)
   ).filter(Boolean) as Faction[];
 
-  const firstAppearanceChapter = chapters.find(ch => {
-    if (typeof character.firstAppearanceChapter === 'number') {
-      return ch.index === character.firstAppearanceChapter;
-    } else if (typeof character.firstAppearanceChapter === 'string') {
-      return ch.id === character.firstAppearanceChapter;
-    }
-    return false;
-  });
-
-  // Find relationships where this character is involved
-  const characterRelationships = relationships.filter(rel => 
-    rel.character1.id === character.id || rel.character2.id === character.id
+  // Find chapters where this character is mentioned
+  const characterMentionedChapters = chapters.filter(ch => 
+    ch.characters && ch.characters.includes(character.id)
   );
 
-  // Get the formatted display path for first appearance
-  const firstAppearanceDisplay = firstAppearanceChapter 
-    ? getBreadcrumbDisplay(firstAppearanceChapter, chapters)
-    : `Chapter ${character.firstAppearanceChapter}`;
+  // Find relationships where this character is involved and filter by current chapter
+  const characterRelationships = relationships.filter(rel => {
+    // Check if this character is involved in the relationship
+    const isInvolved = rel.character1.id === character.id || rel.character2.id === character.id;
+    if (!isInvolved) return false;
+    
+    // Filter by current chapter - only show relationships where both characters appear in the current chapter
+    const currentChapter = chapters.find(ch => ch.id === selectedChapter);
+    if (!currentChapter) return false;
+    
+    // Check if both characters appear in the current chapter (same logic as the graph)
+    const character1Appears = currentChapter.characters && currentChapter.characters.includes(rel.character1.id);
+    const character2Appears = currentChapter.characters && currentChapter.characters.includes(rel.character2.id);
+    
+    // Only show relationships where both characters appear in the current chapter
+    return character1Appears && character2Appears;
+  });
+
+  // Get the formatted display for character mentions
+  const characterMentionsDisplay = characterMentionedChapters.length > 0
+    ? characterMentionedChapters.map(ch => getBreadcrumbDisplay(ch, chapters)).join(', ')
+    : 'Not mentioned in any chapters';
 
   return (
     <Drawer
@@ -157,7 +166,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
           </Typography>
           
           <Typography variant="body2" sx={{ textAlign: 'left', color: 'var(--color-textSecondary)' }}>
-            First appears in {firstAppearanceDisplay}
+            Appears in: {characterMentionsDisplay}
           </Typography>
         </Paper>
 
@@ -229,11 +238,15 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
             <List dense>
               {characterRelationships.map((rel, index) => {
                 const otherCharacter = rel.character1.id === character.id ? rel.character2 : rel.character1;
+                
+                // Use the first description since both characters are present in the current chapter
+                const relevantDescription = rel.descriptions[0]?.description || 'Related';
+                
                 return (
                   <ListItem key={index} sx={{ py: 0.5 }}>
                     <ListItemText 
                       primary={otherCharacter.name}
-                      secondary={rel.descriptions[0]?.description || 'Related'}
+                      secondary={relevantDescription}
                       sx={{ 
                         '& .MuiListItemText-primary': { 
                           color: 'var(--color-text)' 

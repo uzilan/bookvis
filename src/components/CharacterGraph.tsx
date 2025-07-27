@@ -198,6 +198,17 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
     // Add character nodes with faction-based positioning
     bookData.characters.forEach((character) => {
+      // Check if character appears in current chapter using character mentions
+      const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+      const characterAppearsInChapter = currentChapter && currentChapter.characters && currentChapter.characters.includes(character.id);
+      
+
+      
+      // Only show characters that appear in the current chapter
+      if (!characterAppearsInChapter) {
+        return; // Skip this character
+      }
+      
       // Filter factions based on current chapter
       const currentFactions = character.factions.filter(factionId => {
         const joinChapter = character.factionJoinChapters?.[factionId];
@@ -271,24 +282,31 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       });
     });
 
-    // Add relationship edges
+    // Add relationship edges (only for characters that appear in current chapter)
     bookData.relationships.forEach((rel, index) => {
-      edges.push({
-        id: `rel-${index}`,
-        from: rel.character1.id,
-        to: rel.character2.id,
-        label: rel.descriptions[0]?.description || 'Related',
-        color: '#888',
-        width: 2,
-        font: { 
-          size: 14, 
-          color: isDarkMode ? '#ffffff' : '#000000',
-          strokeWidth: 0
-        },
-        labelHighlightBold: false,
-        smooth: { type: 'continuous' },
-        shadow: { enabled: false }
-      });
+      const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+      const character1Appears = currentChapter && currentChapter.characters && currentChapter.characters.includes(rel.character1.id);
+      const character2Appears = currentChapter && currentChapter.characters && currentChapter.characters.includes(rel.character2.id);
+      
+      // Only show relationships where both characters appear in the current chapter
+      if (character1Appears && character2Appears) {
+        edges.push({
+          id: `rel-${index}`,
+          from: rel.character1.id,
+          to: rel.character2.id,
+          label: rel.descriptions[0]?.description || 'Related',
+          color: '#888',
+          width: 2,
+          font: { 
+            size: 14, 
+            color: isDarkMode ? '#ffffff' : '#000000',
+            strokeWidth: 0
+          },
+          labelHighlightBold: false,
+          smooth: { type: 'continuous' },
+          shadow: { enabled: false }
+        });
+      }
     });
 
     return { nodes, edges };
@@ -486,7 +504,9 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
             // Check if any character in this chapter belongs to this faction
             return bookData.characters.some(character => {
               // Check if character appears in current chapter
-              const characterAppearsInChapter = character.firstAppearanceChapter === selectedChapter;
+              const characterAppearsInChapter = bookData.chapters.some(ch => 
+                ch.id === selectedChapter && ch.characters && ch.characters.includes(character.id)
+              );
               // Check if character belongs to this faction
               const characterBelongsToFaction = character.factions.includes(faction.id);
               return characterAppearsInChapter && characterBelongsToFaction;

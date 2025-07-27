@@ -8,6 +8,9 @@ import type { BookData } from './models/BookData';
 import type { SchemaBookData } from './schema/models/SchemaBookData';
 import { FirebaseService } from './services/firebase.ts';
 import { convertBookDataToSchema } from './utils/schemaToBookDataConverter';
+import { aliceBookData } from './books/aliceData';
+
+console.log('🔧 App.tsx is being imported');
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
@@ -29,19 +32,22 @@ function App() {
       try {
         setLoading(true);
         const books = await FirebaseService.getAllBooks();
-        setBooksFromFirebase(books);
+        
+        // Add local books (Alice) to the books list
+        const allBooks = [aliceBookData, ...books];
+        setBooksFromFirebase(allBooks);
         
         // Set the first book as selected if we have books and no book is currently selected
-        if (books.length > 0 && !hasSetInitialBook.current) {
-          const firstBook = books[0];
+        if (allBooks.length > 0 && !hasSetInitialBook.current) {
+          const firstBook = allBooks[0];
 
           setSelectedBook(firstBook.book);
           
-                  // Set the initial chapter to the first actual chapter's index
-        if (firstBook.chapters.length > 0) {
-          const firstChapter = firstBook.chapters.find(ch => ch.id.startsWith('chapter-')) || firstBook.chapters[0];
-          setSelectedChapter(firstChapter.id);
-        }
+          // Set the initial chapter to the first actual chapter's index
+          if (firstBook.chapters.length > 0) {
+            const firstChapter = firstBook.chapters.find(ch => ch.id.startsWith('chapter-')) || firstBook.chapters[0];
+            setSelectedChapter(firstChapter.id);
+          }
           
           hasSetInitialBook.current = true;
         }
@@ -69,6 +75,8 @@ function App() {
 
   const bookData = previewBookData || (selectedBook ? getBookData(selectedBook) : null);
   
+
+  
   // If we're in preview mode, use the preview data for all the logic
   const currentBookData = previewBookData || bookData;
 
@@ -95,6 +103,8 @@ function App() {
     ch.id === selectedChapter
   );
   
+
+  
   // If no chapter is selected, select the first one
   if (!currentChapter && bookData.chapters.length > 0) {
     // Find the first actual chapter (not book or part)
@@ -103,23 +113,15 @@ function App() {
     currentChapter = firstChapter;
   }
   
-  // Only show characters whose firstAppearanceChapter is <= selected chapter
+  // Only show characters who are mentioned in the current chapter
   const visibleCharacters = currentBookData?.characters?.filter(c => {
-    if (typeof c.firstAppearanceChapter === 'number') {
-      // For backward compatibility with numeric chapter indices
-      return currentChapter && typeof currentChapter.index === 'number' && c.firstAppearanceChapter <= currentChapter.index;
-    } else if (typeof c.firstAppearanceChapter === 'string') {
-      // For string chapter IDs, find the target chapter and compare by index
-      const targetChapter = currentBookData?.chapters?.find(ch => ch.id === c.firstAppearanceChapter);
-      return targetChapter && currentChapter && targetChapter.index && currentChapter.index && 
-             targetChapter.index <= currentChapter.index;
-    }
-    return false;
+    const currentChapter = currentBookData?.chapters?.find(ch => ch.id === selectedChapter);
+    const isVisible = currentChapter && currentChapter.characters && currentChapter.characters.includes(c.id);
+    return isVisible;
   }) || [];
 
 
   // Only show factions that have at least one visible character and are active in current chapter
-  const visibleCharacterIds = new Set(visibleCharacters.map(c => c.id));
   const activeFactionIds = new Set();
   
   visibleCharacters.forEach(character => {
@@ -147,18 +149,17 @@ function App() {
     });
   });
   
-  const visibleFactions = currentBookData?.factions?.filter(f => activeFactionIds.has(f.id)) || [];
+
 
 
   // Create filtered book data for the graph
+  // Pass the full book data to the graph component and let it handle filtering
   const filteredBookData: BookData = currentBookData ? {
     ...currentBookData,
-    characters: visibleCharacters,
-    relationships: currentBookData.relationships.filter(r => {
-      // Only include relationships where both characters are visible
-      return visibleCharacterIds.has(r.character1.id) && visibleCharacterIds.has(r.character2.id);
-    }),
-    factions: visibleFactions,
+    // Don't filter characters here - let the graph component handle it
+    characters: currentBookData.characters,
+    relationships: currentBookData.relationships,
+    factions: currentBookData.factions,
   } : {
     book: { id: '', title: '', author: { id: '', name: '' } },
     characters: [],
@@ -167,6 +168,8 @@ function App() {
     relationships: [],
     locations: []
   };
+  
+
 
 
   

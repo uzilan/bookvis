@@ -66,7 +66,15 @@ export const CharacterList: React.FC<CharacterListProps> = ({
           >
                           <FormControlLabel
                 value="chapter"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="Chapter"
                 sx={{ 
                   fontSize: '10px', 
@@ -79,7 +87,15 @@ export const CharacterList: React.FC<CharacterListProps> = ({
               />
               <FormControlLabel
                 value="all"
-                control={<Radio size="small" />}
+                control={<Radio size="small" sx={{
+                  color: 'var(--color-textSecondary)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primary)',
+                  },
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '16px',
+                  },
+                }} />}
                 label="All"
                 sx={{ 
                   fontSize: '10px', 
@@ -111,9 +127,6 @@ export const CharacterList: React.FC<CharacterListProps> = ({
               color: 'var(--color-text)'
             }}
           />
-          <div style={{ fontSize: '10px', color: 'var(--color-textSecondary)', marginTop: '4px', textAlign: 'left' }}>
-            {displayCharacters.length}/{showAllCharacters ? allCharacters.length : characters.length}
-          </div>
         </div>
 
       {/* Characters List */}
