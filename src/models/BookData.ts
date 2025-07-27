@@ -10,6 +10,11 @@ export interface RelationshipWithChapters {
   descriptions: { chapter: number | string; description: string }[]; // number for backward compatibility, string for chapter IDs
 }
 
+export interface HierarchyItem {
+  chapter_id: string;
+  type: string;
+}
+
 export interface BookData {
   book: Book;
   characters: Character[];
@@ -17,6 +22,7 @@ export interface BookData {
   factions: Faction[];
   relationships: RelationshipWithChapters[];
   locations: Location[];
+  hierarchy: HierarchyItem[];
   mapUrl?: string;
   ownerId?: string;
   ownerEmail?: string;

@@ -3,7 +3,9 @@ import { lotrData } from '../books/lotrData';
 import { aliceBookData } from '../books/aliceData';
 import { winnieBookData } from '../books/winnieData';
 import { duneData } from '../books/duneData';
-import { crimeAndPunishmentData } from '../books/crimeAndPunishmentData';
+import { parseYamlToBookData } from '../utils/yamlParser';
+import fs from 'fs';
+import path from 'path';
 
 async function updateAllBooks() {
   try {
@@ -27,6 +29,9 @@ async function updateAllBooks() {
     
     // Update Crime and Punishment
     console.log('Updating Crime and Punishment...');
+    const yamlPath = path.join(process.cwd(), 'crime-and-punishment-bookvis.yaml');
+    const yamlContent = fs.readFileSync(yamlPath, 'utf8');
+    const crimeAndPunishmentData = parseYamlToBookData(yamlContent);
     await FirebaseService.saveBook(crimeAndPunishmentData);
     
     console.log('Successfully updated all books in Firebase!');

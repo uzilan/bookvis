@@ -18,44 +18,30 @@ import type { RelationshipWithChapters } from '../models/BookData';
 
 // Helper function to create breadcrumb display for chapter
 function getBreadcrumbDisplay(chapter: Chapter, chapters: Chapter[]): string {
-  // Get all unique books and parts to determine what to show
-  const books = chapters.filter(ch => ch.type === 'book');
-  const parts = chapters.filter(ch => ch.type === 'part');
-  
   const path = chapter.path || [];
   const breadcrumbs: string[] = [];
   
-  // If there's only one book, skip the book name
-  if (books.length <= 1) {
-    // For simple books without parts, just show the chapter title
-    if (path.length === 0) {
-      // Simple structure: no path, just show chapter title
-      breadcrumbs.push(chapter.title);
-    } else if (path.length === 1) {
-      // Simple structure: just book and chapter
-      breadcrumbs.push(chapter.title);
-    } else if (path.length > 1) {
-      // Has parts - show part name and chapter title
-      const partName = path[1];
-      breadcrumbs.push(partName);
-      breadcrumbs.push(chapter.title);
-    }
-  } else {
-    // Multiple books, show book name
-    if (path.length > 0) {
+  // Determine the structure based on path length
+  if (path.length === 0) {
+    // Simple structure: no path, just show chapter title
+    breadcrumbs.push(chapter.title);
+  } else if (path.length === 1) {
+    // Book only: show book and chapter
+    breadcrumbs.push(path[0]);
+    breadcrumbs.push(chapter.title);
+  } else if (path.length === 2) {
+    // Book and part: show part and chapter (skip book if only one book)
+    const books = chapters.filter(ch => ch.type === 'book');
+    if (books.length > 1) {
       breadcrumbs.push(path[0]); // Book name
     }
-    if (path.length > 1) {
-      breadcrumbs.push(path[1]); // Part name
-    }
-    if (path.length > 2) {
-      breadcrumbs.push(path[2]); // Chapter name
-    }
-  }
-  
-  // If there's only one part, skip the part name
-  if (parts.length <= 1 && breadcrumbs.length > 1) {
-    breadcrumbs.splice(1, 1); // Remove part name
+    breadcrumbs.push(path[1]); // Part name
+    breadcrumbs.push(chapter.title);
+  } else if (path.length > 2) {
+    // Complex structure: show all levels
+    breadcrumbs.push(path[0]); // Book name
+    breadcrumbs.push(path[1]); // Part name
+    breadcrumbs.push(chapter.title);
   }
   
   return breadcrumbs.join(', ');
@@ -131,10 +117,7 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
     return character1Appears && character2Appears;
   });
 
-  // Get the formatted display for character mentions
-  const characterMentionsDisplay = characterMentionedChapters.length > 0
-    ? characterMentionedChapters.map(ch => getBreadcrumbDisplay(ch, chapters)).join(', ')
-    : 'Not mentioned in any chapters';
+
 
   return (
     <Drawer
@@ -165,9 +148,38 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
             {character.description}
           </Typography>
           
-          <Typography variant="body2" sx={{ textAlign: 'left', color: 'var(--color-textSecondary)' }}>
-            Appears in: {characterMentionsDisplay}
+          <Typography variant="body2" sx={{ textAlign: 'left', color: 'var(--color-textSecondary)', mb: 1 }}>
+            Appears in:
           </Typography>
+          {characterMentionedChapters.length > 0 ? (
+            <Box sx={{ 
+              maxHeight: 200, 
+              overflow: 'auto',
+              border: '1px solid var(--color-border)',
+              borderRadius: 1,
+              backgroundColor: 'var(--color-background)'
+            }}>
+              <List dense sx={{ py: 0 }}>
+                {characterMentionedChapters.map((chapter, index) => (
+                  <ListItem key={index} sx={{ py: 0.1, px: 1 }}>
+                    <ListItemText 
+                      primary={getBreadcrumbDisplay(chapter, chapters)}
+                      sx={{ 
+                        '& .MuiListItemText-primary': { 
+                          color: 'var(--color-textSecondary)',
+                          fontSize: '0.875rem'
+                        } 
+                      }} 
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          ) : (
+            <Typography variant="body2" sx={{ textAlign: 'left', color: 'var(--color-textSecondary)', fontStyle: 'italic' }}>
+              Not mentioned in any chapters
+            </Typography>
+          )}
         </Paper>
 
         {character.aliases.length > 0 && (

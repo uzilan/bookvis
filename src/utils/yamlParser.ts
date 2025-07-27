@@ -112,9 +112,44 @@ export function parseYamlToBookData(yamlContent: string): BookData {
     hierarchyMap.set(item.chapter_id, item.type);
   });
 
-  // Create chapters with locations, characters, and type
+  // Build path from hierarchy
+  const buildPathFromHierarchy = (chapterId: string): string[] => {
+    const path: string[] = [];
+    let currentLevel = -1;
+    
+    // Find the chapter in hierarchy and build path backwards
+    for (let i = data.hierarchy.length - 1; i >= 0; i--) {
+      const item = data.hierarchy[i];
+      if (item.chapter_id === chapterId) {
+        // Found our chapter, now build path backwards
+        currentLevel = i;
+        break;
+      }
+    }
+    
+    if (currentLevel === -1) {
+      // Chapter not found in hierarchy, return just the title
+      const chapter = data.chapters.find(ch => ch.id === chapterId);
+      return chapter ? [chapter.title] : [];
+    }
+    
+    // Find the immediate parent part by looking backwards from current position
+    for (let i = currentLevel - 1; i >= 0; i--) {
+      const item = data.hierarchy[i];
+      const chapter = data.chapters.find(ch => ch.id === item.chapter_id);
+      if (chapter && item.type === 'part') {
+        // Found the immediate parent part, add it to path
+        path.unshift(chapter.title);
+        break; // Stop after finding the first (immediate) parent part
+      }
+    }
+    
+    return path;
+  };
+
+  // Create chapters with locations, characters, type, and path
   const chapters: Chapter[] = data.chapters.map((chapter, index) => {
-    const chapterLocations = chapter.locations
+    const chapterLocations = (chapter.locations || [])
       .map(locId => locationsMap.get(locId))
       .filter((loc): loc is Location => loc !== undefined);
 
@@ -124,6 +159,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
       title: chapter.title,
       index: index + 1, // 1-based index
       type: hierarchyMap.get(chapter.id) as 'chapter' | 'part' | 'book' | 'volume' | undefined,
+      path: buildPathFromHierarchy(chapter.id),
       locations: chapterLocations,
       characters: chapter.characters || [],
     };
@@ -160,6 +196,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
     factions,
     relationships,
     locations,
+    hierarchy: data.hierarchy,
     mapUrl: data.map_url,
   };
 }

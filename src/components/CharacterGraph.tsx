@@ -256,12 +256,36 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           y: clusterY + (Math.random() - 0.5) * 50,
         };
       } else {
-        // Use existing position or random
+        // Smart positioning based on relationships and character count
         const existingPosition = currentPositions[character.id];
-        position = existingPosition || {
-          x: (Math.random() - 0.5) * 400,
-          y: (Math.random() - 0.5) * 400,
-        };
+        if (existingPosition) {
+          position = existingPosition;
+        } else {
+          // Calculate smart initial positions
+          const chapterCharacters = bookData.characters.filter(char => {
+            const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+            return currentChapter && currentChapter.characters && currentChapter.characters.includes(char.id);
+          });
+          
+          const characterIndex = chapterCharacters.findIndex(char => char.id === character.id);
+          const totalCharacters = chapterCharacters.length;
+          
+          if (totalCharacters <= 2) {
+            // For 1-2 characters, position them close together
+            position = {
+              x: characterIndex * 100 - 50, // 100px apart for 2 characters
+              y: 0,
+            };
+          } else {
+            // For more characters, use circular layout
+            const angle = (characterIndex / totalCharacters) * 2 * Math.PI;
+            const radius = 150;
+            position = {
+              x: Math.cos(angle) * radius,
+              y: Math.sin(angle) * radius,
+            };
+          }
+        }
       }
       
       // Use SVG image for all characters (single or multiple factions)
@@ -308,6 +332,53 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         });
       }
     });
+
+    // Add invisible edges between orphan nodes to keep them closer together
+    const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+    if (currentChapter && currentChapter.characters) {
+      const chapterCharacters = currentChapter.characters;
+      const connectedCharacters = new Set<string>();
+      
+      // Find all characters that have relationships
+      bookData.relationships.forEach(rel => {
+        if (chapterCharacters.includes(rel.character1.id) && chapterCharacters.includes(rel.character2.id)) {
+          connectedCharacters.add(rel.character1.id);
+          connectedCharacters.add(rel.character2.id);
+        }
+      });
+      
+      // Find orphan characters (those without relationships)
+      const orphanCharacters = chapterCharacters.filter(charId => !connectedCharacters.has(charId));
+      
+      // If we have 2 or more orphan characters, connect them with invisible edges
+      if (orphanCharacters.length >= 2) {
+        // Connect each orphan to the next one in a chain
+        for (let i = 0; i < orphanCharacters.length - 1; i++) {
+          edges.push({
+            id: `orphan-${i}`,
+            from: orphanCharacters[i],
+            to: orphanCharacters[i + 1],
+            color: 'transparent', // Invisible edge
+            width: 0,
+            hidden: true, // Hide the edge completely
+            smooth: { type: 'continuous' },
+          });
+        }
+        
+        // If we have more than 2 orphans, also connect the last to the first for a complete cycle
+        if (orphanCharacters.length > 2) {
+          edges.push({
+            id: `orphan-cycle`,
+            from: orphanCharacters[orphanCharacters.length - 1],
+            to: orphanCharacters[0],
+            color: 'transparent',
+            width: 0,
+            hidden: true,
+            smooth: { type: 'continuous' },
+          });
+        }
+      }
+    }
 
     return { nodes, edges };
   }, [bookData.characters, bookData.factions, bookData.relationships, bookData.chapters, selectedChapter, isClustered, isDarkMode]);
@@ -376,19 +447,22 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       enabled: true,
       solver: 'repulsion',
       repulsion: {
-        nodeDistance: 150,
-        centralGravity: 0.05,
-        springLength: 200,
-        springConstant: 0.01,
+        nodeDistance: 250, // Increased distance for connected nodes
+        centralGravity: 0.15, // Stronger gravity to pull unconnected nodes together
+        springLength: 180, // Longer spring length for connected nodes
+        springConstant: 0.02, // Lighter spring force to allow more distance
         damping: 0.9,
       },
     },
     interaction: {
       hover: true,
       tooltipDelay: 200,
+      dragNodes: true, // Enable node dragging
+      dragView: true, // Enable view dragging
+      zoomView: true, // Enable zooming
     },
     manipulation: {
-      enabled: false, // Disable node manipulation but enable zoom controls
+      enabled: false, // Disable manipulation controls but keep node dragging
     },
 
   }), [bookData.factions, isDarkMode]);
@@ -488,14 +562,24 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         maxHeight: 'calc(100vh - 40px)',
       }}>
         {/* Character List */}
-        <CharacterList 
-          characters={bookData.characters} 
-          bookData={fullBookData}
-          onCharacterClick={(character) => {
-            setSelectedCharacter(character);
-            setIsDetailsPanelOpen(true);
-          }}
-        />
+        {(() => {
+          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+          // Filter characters to only show those that appear in the current chapter
+          const chapterCharacters = bookData.characters.filter(character => {
+            return currentChapter?.characters && currentChapter.characters.includes(character.id);
+          });
+          
+          return (
+            <CharacterList 
+              characters={chapterCharacters} 
+              bookData={fullBookData}
+              onCharacterClick={(character) => {
+                setSelectedCharacter(character);
+                setIsDetailsPanelOpen(true);
+              }}
+            />
+          );
+        })()}
 
         {/* Faction List */}
         {(() => {
@@ -529,8 +613,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         {/* Location List */}
         {(() => {
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          // Always show LocationList in preview mode, or if there are locations
-          return (isPreview || (bookData.locations && bookData.locations.length > 0)) ? (
+          // Always show LocationList for consistent UI
+          return (
             <LocationList 
               locations={currentChapter?.locations || []} 
               chapterTitle={currentChapter?.title || 'All Locations'}
@@ -538,7 +622,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               bookData={bookData}
               isPreview={isPreview}
             />
-          ) : null;
+          );
         })()}
       </div>
 
@@ -570,6 +654,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
         flexDirection: 'column',
         gap: '4px',
       }}>
+        
+
         <button
           onClick={() => {
             const newZoom = Math.min(currentZoom * 1.2, 5); // Max zoom 5x

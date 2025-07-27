@@ -4,7 +4,7 @@
   "title": "BookVis Book Data Schema",
   "description": "Schema for BookVis book visualization data format",
   "type": "object",
-  "required": ["book", "locations", "characters", "factions", "relationships", "chapters"],
+  "required": ["book", "locations", "characters", "factions", "relationships", "chapters", "hierarchy"],
   "properties": {
     "book": {
       "type": "object",
@@ -222,15 +222,15 @@
     },
     "hierarchy": {
       "type": "array",
-      "description": "Chapter hierarchy (optional - can be auto-generated)",
+      "description": "Chapter hierarchy defining the structure of chapters, parts, and other book divisions",
       "items": {
         "type": "object",
         "required": ["chapter_id", "type"],
         "properties": {
           "chapter_id": {
             "type": "string",
-            "description": "ID of the chapter",
-            "pattern": "^chapter-[0-9]+$"
+            "description": "ID of the chapter, part, or other structural element",
+            "pattern": "^(chapter-[0-9]+|part-[0-9]+|epilogue)$"
           },
           "type": {
             "type": "string",

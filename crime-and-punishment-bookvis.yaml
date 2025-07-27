@@ -1,0 +1,1260 @@
+book:
+  id: "crime-and-punishment"
+  title: "Crime and Punishment"
+  author:
+    id: "fyodor-dostoevsky"
+    name: "Fyodor Dostoevsky"
+
+map_url: "https://example.com/crime-and-punishment-map.jpg"
+
+characters:
+  # Main Characters
+  - id: "rodion-raskolnikov"
+    name: "Rodion Raskolnikov"
+    description: "A poor former student who commits murder and struggles with guilt"
+    aliases: ["Rodya", "Rodka"]
+    factions: ["students", "criminals", "poor", "intellectuals"]
+    faction_join_chapters:
+      students: "chapter-1"
+      criminals: "chapter-2"
+      poor: "chapter-1"
+      intellectuals: "chapter-1"
+    attributes: ["Student", "Murderer", "Tortured", "Intellectual", "Proud", "Isolated"]
+
+  - id: "sonya-marmeladov"
+    name: "Sonya Marmeladov"
+    description: "A young prostitute who becomes Raskolnikov's confidante and spiritual guide"
+    aliases: ["Sonya"]
+    factions: ["prostitutes", "religious", "family"]
+    faction_join_chapters:
+      prostitutes: "chapter-2"
+      religious: "chapter-2"
+      family: "chapter-2"
+    attributes: ["Prostitute", "Religious", "Kind", "Sacrificial", "Pure", "Redemptive"]
+
+  - id: "porfiry-petrovich"
+    name: "Porfiry Petrovich"
+    description: "The investigating magistrate who uses psychological tactics to catch Raskolnikov"
+    aliases: ["Porfiry"]
+    factions: ["police", "investigators"]
+    faction_join_chapters:
+      police: "chapter-3"
+      investigators: "chapter-3"
+    attributes: ["Investigator", "Clever", "Psychological", "Just", "Patient", "Manipulative"]
+
+  - id: "dmitri-razumikhin"
+    name: "Dmitri Razumikhin"
+    description: "Raskolnikov's loyal friend and fellow student who defends him"
+    aliases: ["Razumikhin"]
+    factions: ["students", "friends"]
+    faction_join_chapters:
+      students: "chapter-2"
+      friends: "chapter-2"
+    attributes: ["Student", "Loyal", "Generous", "Optimistic", "Protective", "Honest"]
+
+  - id: "avdotya-raskolnikov"
+    name: "Avdotya Raskolnikov"
+    description: "Raskolnikov's beautiful and intelligent sister who comes to St. Petersburg"
+    aliases: ["Dunya"]
+    factions: ["family", "bourgeois", "suitors"]
+    faction_join_chapters:
+      family: "chapter-4"
+      bourgeois: "chapter-4"
+      suitors: "chapter-4"
+    attributes: ["Sister", "Beautiful", "Intelligent", "Loving", "Proud", "Determined"]
+
+  - id: "pyotr-luzhin"
+    name: "Pyotr Luzhin"
+    description: "Dunya's fiancé, a wealthy lawyer with selfish motives"
+    aliases: ["Luzhin"]
+    factions: ["lawyers", "bourgeois", "suitors"]
+    faction_join_chapters:
+      lawyers: "chapter-2"
+      bourgeois: "chapter-2"
+      suitors: "chapter-2"
+    attributes: ["Lawyer", "Wealthy", "Proud", "Calculating", "Selfish", "Manipulative"]
+
+  - id: "arkady-svidrigailov"
+    name: "Arkady Svidrigailov"
+    description: "A wealthy landowner with a dark past who becomes obsessed with Dunya"
+    aliases: ["Svidrigailov"]
+    factions: ["landowners", "criminals", "suitors"]
+    faction_join_chapters:
+      landowners: "chapter-2"
+      criminals: "chapter-2"
+      suitors: "chapter-5"
+    attributes: ["Landowner", "Wealthy", "Corrupt", "Suicidal", "Obsessive", "Dark"]
+
+  # Marmeladov Family
+  - id: "semyon-marmeladov"
+    name: "Semyon Marmeladov"
+    description: "Sonya's alcoholic father who dies tragically"
+    aliases: ["Marmeladov"]
+    factions: ["alcoholics", "family", "poor"]
+    faction_join_chapters:
+      alcoholics: "chapter-4"
+      family: "chapter-4"
+      poor: "chapter-4"
+    attributes: ["Alcoholic", "Father", "Pitiful", "Tragic", "Remorseful", "Weak"]
+
+  - id: "katerina-marmeladov"
+    name: "Katerina Marmeladov"
+    description: "Sonya's proud but poor stepmother who dies of consumption"
+    aliases: ["Katerina"]
+    factions: ["family", "poor", "sick"]
+    faction_join_chapters:
+      family: "chapter-5"
+      poor: "chapter-5"
+      sick: "chapter-5"
+    attributes: ["Proud", "Poor", "Step-mother", "Tragic", "Ill", "Desperate"]
+
+  - id: "polya-marmeladov"
+    name: "Polya Marmeladov"
+    description: "Sonya's younger sister, one of the Marmeladov children"
+    aliases: ["Polya"]
+    factions: ["family", "poor"]
+    faction_join_chapters:
+      family: "chapter-2"
+      poor: "chapter-2"
+    attributes: ["Child", "Sister", "Poor", "Innocent", "Dependent"]
+
+  - id: "kolenka-marmeladov"
+    name: "Kolenka Marmeladov"
+    description: "Sonya's younger brother, one of the Marmeladov children"
+    aliases: ["Kolenka"]
+    factions: ["family", "poor"]
+    faction_join_chapters:
+      family: "chapter-2"
+      poor: "chapter-2"
+    attributes: ["Child", "Brother", "Poor", "Innocent", "Dependent"]
+
+  # Raskolnikov Family
+  - id: "pulcheria-raskolnikov"
+    name: "Pulcheria Raskolnikov"
+    description: "Raskolnikov's loving mother who worries about her son"
+    aliases: ["Mother"]
+    factions: ["family", "poor"]
+    faction_join_chapters:
+      family: "chapter-1"
+      poor: "chapter-1"
+    attributes: ["Mother", "Loving", "Worried", "Devoted", "Naive", "Protective"]
+
+  # Victims and Key Characters
+  - id: "alyona-ivanovna"
+    name: "Alyona Ivanovna"
+    description: "The old pawnbroker who is murdered by Raskolnikov"
+    aliases: ["Pawnbroker", "Old Woman"]
+    factions: ["victims", "merchants"]
+    faction_join_chapters:
+      victims: "chapter-1"
+      merchants: "chapter-1"
+    attributes: ["Victim", "Pawnbroker", "Old", "Greedy", "Cruel", "Dead"]
+
+  - id: "lizaveta"
+    name: "Lizaveta"
+    description: "Alyona's simple-minded sister who is also murdered by Raskolnikov"
+    aliases: ["Lizaveta"]
+    factions: ["victims", "servants"]
+    faction_join_chapters:
+      victims: "chapter-1"
+      servants: "chapter-1"
+    attributes: ["Victim", "Simple", "Innocent", "Servant", "Dead", "Pitiful"]
+
+  # Police and Officials
+  - id: "zametov"
+    name: "Zametov"
+    description: "A police clerk who becomes suspicious of Raskolnikov"
+    aliases: ["Zametov"]
+    factions: ["police", "officials"]
+    faction_join_chapters:
+      police: "chapter-3"
+      officials: "chapter-3"
+    attributes: ["Police", "Clerk", "Suspicious", "Observant", "Young", "Ambitious"]
+
+  - id: "nikolai"
+    name: "Nikolai"
+    description: "A painter who falsely confesses to the murders"
+    aliases: ["Nikolai"]
+    factions: ["workers", "suspects"]
+    faction_join_chapters:
+      workers: "chapter-4"
+      suspects: "chapter-4"
+    attributes: ["Painter", "Worker", "Confessor", "Mistaken", "Religious", "Guilty"]
+
+  - id: "ilya-petrovich"
+    name: "Ilya Petrovich"
+    description: "A police officer who questions Raskolnikov"
+    aliases: ["Ilya Petrovich"]
+    factions: ["police", "officers"]
+    faction_join_chapters:
+      police: "chapter-3"
+      officers: "chapter-3"
+    attributes: ["Police", "Officer", "Suspicious", "Direct", "Professional"]
+
+  # Servants and Minor Characters
+  - id: "nastasya-petrovna"
+    name: "Nastasya Petrovna"
+    description: "The landlady's servant who helps Raskolnikov"
+    aliases: ["Nastasya"]
+    factions: ["servants", "poor"]
+    faction_join_chapters:
+      servants: "chapter-1"
+      poor: "chapter-1"
+    attributes: ["Servant", "Kind", "Helpful", "Simple", "Gossipy", "Curious"]
+
+  - id: "praskovya-pavlovna"
+    name: "Praskovya Pavlovna"
+    description: "Raskolnikov's landlady who is suspicious of him"
+    aliases: ["Landlady"]
+    factions: ["landlords", "bourgeois"]
+    faction_join_chapters:
+      landlords: "chapter-1"
+      bourgeois: "chapter-1"
+    attributes: ["Landlady", "Suspicious", "Gossipy", "Demanding", "Practical"]
+
+  # Additional Characters
+  - id: "lebeziatnikov"
+    name: "Lebeziatnikov"
+    description: "A young radical who lives with Luzhin"
+    aliases: ["Lebeziatnikov"]
+    factions: ["radicals", "students"]
+    faction_join_chapters:
+      radicals: "chapter-2"
+      students: "chapter-2"
+    attributes: ["Radical", "Student", "Idealistic", "Young", "Progressive"]
+
+  - id: "marfa-petrovna"
+    name: "Marfa Petrovna"
+    description: "Svidrigailov's deceased wife who haunts him"
+    aliases: ["Marfa Petrovna"]
+    factions: ["landowners", "wives"]
+    faction_join_chapters:
+      landowners: "chapter-5"
+      wives: "chapter-5"
+    attributes: ["Deceased", "Wife", "Haunting", "Victim", "Rich", "Dead"]
+
+  - id: "dunya-svidrigailov"
+    name: "Dunya Svidrigailov"
+    description: "Svidrigailov's young ward who he abused"
+    aliases: ["Dunya Svidrigailov"]
+    factions: ["victims", "family"]
+    faction_join_chapters:
+      victims: "chapter-5"
+      family: "chapter-5"
+    attributes: ["Victim", "Ward", "Abused", "Young", "Innocent", "Tragic"]
+
+  - id: "mikolka"
+    name: "Mikolka"
+    description: "A peasant who confesses to the murders"
+    aliases: ["Mikolka"]
+    factions: ["peasants", "confessors"]
+    faction_join_chapters:
+      peasants: "chapter-4"
+      confessors: "chapter-4"
+    attributes: ["Peasant", "Confessor", "Mistaken", "Religious", "Guilty", "Simple"]
+
+chapters:
+  - id: "part-1"
+    title: "Part I"
+    type: "part"
+    level: 0
+    index: 1
+
+  - id: "chapter-1"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 2
+    characters: ["rodion-raskolnikov", "pulcheria-raskolnikov", "nastasya-petrovna", "alyona-ivanovna", "lizaveta"]
+    locations: ["rasskolnikov-room", "pawnbroker-apartment", "pawnbroker-room", "lizaveta-room", "courtyard", "staircase"]
+
+  - id: "chapter-2"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 3
+    characters: ["rodion-raskolnikov", "sonya-marmeladov", "dmitri-razumikhin", "pyotr-luzhin", "arkady-svidrigailov", "semyon-marmeladov", "polya-marmeladov", "kolenka-marmeladov"]
+    locations: ["street", "main-street", "tavern", "razumikhin-room", "marmeladov-apartment"]
+
+  - id: "chapter-3"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 4
+    characters: ["porfiry-petrovich", "sonya-marmeladov", "zametov", "ilya-petrovich"]
+    locations: ["police-station", "porfiry-office", "investigation-room"]
+
+  - id: "chapter-4"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 5
+    characters: ["avdotya-raskolnikov", "semyon-marmeladov", "nikolai", "mikolka"]
+    locations: ["marmeladov-apartment", "katerina-room", "sonya-room", "dunya-room"]
+
+  - id: "chapter-5"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 6
+    characters: ["katerina-marmeladov", "arkady-svidrigailov", "marfa-petrovna", "dunya-svidrigailov"]
+    locations: ["church", "cemetery", "hospital"]
+
+  - id: "chapter-6"
+    title: "Chapter 6"
+    type: "chapter"
+    level: 1
+    index: 7
+    characters: ["rodion-raskolnikov", "praskovya-pavlovna"]
+    locations: ["rasskolnikov-room", "boarding-house", "landlady-apartment"]
+
+  - id: "chapter-7"
+    title: "Chapter 7"
+    type: "chapter"
+    level: 1
+    index: 8
+    characters: ["rodion-raskolnikov"]
+    locations: ["street", "bridge", "neva-river", "embankment"]
+
+  - id: "part-2"
+    title: "Part II"
+    type: "part"
+    level: 0
+    index: 9
+
+  - id: "chapter-8"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 10
+    characters: ["dmitri-razumikhin", "lebeziatnikov"]
+    locations: ["razumikhin-room", "university", "library"]
+
+  - id: "chapter-9"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 11
+    characters: ["pyotr-luzhin", "avdotya-raskolnikov"]
+    locations: ["luzhin-apartment", "restaurant", "coffee-house"]
+
+  - id: "chapter-10"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 12
+    characters: ["porfiry-petrovich", "dmitri-razumikhin"]
+    locations: ["police-station", "investigation-room"]
+
+  - id: "chapter-11"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 13
+    characters: ["rodion-raskolnikov", "sonya-marmeladov"]
+    locations: ["sonya-room", "church", "cemetery"]
+
+  - id: "chapter-12"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 14
+    characters: ["porfiry-petrovich", "rodion-raskolnikov"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-13"
+    title: "Chapter 6"
+    type: "chapter"
+    level: 1
+    index: 15
+    characters: ["rodion-raskolnikov", "dmitri-razumikhin"]
+    locations: ["street", "bridge", "neva-river"]
+
+  - id: "chapter-14"
+    title: "Chapter 7"
+    type: "chapter"
+    level: 1
+    index: 16
+    characters: ["arkady-svidrigailov", "avdotya-raskolnikov"]
+    locations: ["svidrigailov-hotel", "street", "bridge"]
+
+  - id: "part-3"
+    title: "Part III"
+    type: "part"
+    level: 0
+    index: 17
+
+  - id: "chapter-15"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 18
+    characters: ["rodion-raskolnikov", "sonya-marmeladov"]
+    locations: ["sonya-room", "church", "cemetery"]
+
+  - id: "chapter-16"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 19
+    characters: ["porfiry-petrovich", "rodion-raskolnikov"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-17"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 20
+    characters: ["dmitri-razumikhin", "porfiry-petrovich"]
+    locations: ["razumikhin-room", "university", "library"]
+
+  - id: "chapter-18"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 21
+    characters: ["avdotya-raskolnikov", "pyotr-luzhin"]
+    locations: ["dunya-room", "luzhin-apartment", "restaurant"]
+
+  - id: "chapter-19"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 22
+    characters: ["avdotya-raskolnikov", "pyotr-luzhin"]
+    locations: ["dunya-room", "luzhin-apartment", "coffee-house"]
+
+  - id: "chapter-20"
+    title: "Chapter 6"
+    type: "chapter"
+    level: 1
+    index: 23
+    characters: ["arkady-svidrigailov"]
+    locations: ["svidrigailov-hotel", "restaurant", "tavern"]
+
+  - id: "part-4"
+    title: "Part IV"
+    type: "part"
+    level: 0
+    index: 24
+
+  - id: "chapter-21"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 25
+    characters: ["sonya-marmeladov"]
+    locations: ["sonya-room", "marmeladov-apartment", "katerina-room"]
+
+  - id: "chapter-22"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 26
+    characters: ["katerina-marmeladov"]
+    locations: ["church", "cemetery", "hospital"]
+
+  - id: "chapter-23"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 27
+    characters: ["rodion-raskolnikov"]
+    locations: ["street", "market", "shop"]
+
+  - id: "chapter-24"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 28
+    characters: ["rodion-raskolnikov"]
+    locations: ["rasskolnikov-room", "corridor", "entrance-hall"]
+
+  - id: "chapter-25"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 29
+    characters: ["semyon-marmeladov", "katerina-marmeladov"]
+    locations: ["marmeladov-apartment", "katerina-room", "hospital"]
+
+  - id: "chapter-26"
+    title: "Chapter 6"
+    type: "chapter"
+    level: 1
+    index: 30
+    characters: ["katerina-marmeladov"]
+    locations: ["katerina-room", "cemetery", "church"]
+
+  - id: "part-5"
+    title: "Part V"
+    type: "part"
+    level: 0
+    index: 31
+
+  - id: "chapter-27"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 32
+    characters: ["sonya-marmeladov"]
+    locations: ["sonya-room", "street", "bridge"]
+
+  - id: "chapter-28"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 33
+    characters: ["porfiry-petrovich"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-29"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 34
+    characters: ["rodion-raskolnikov"]
+    locations: ["street", "market", "shop"]
+
+  - id: "chapter-30"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 35
+    characters: ["rodion-raskolnikov"]
+    locations: ["rasskolnikov-room", "corridor", "entrance-hall"]
+
+  - id: "chapter-31"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 36
+    characters: ["sonya-marmeladov"]
+    locations: ["sonya-room", "church", "cemetery"]
+
+  - id: "part-6"
+    title: "Part VI"
+    type: "part"
+    level: 0
+    index: 37
+
+  - id: "chapter-32"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 38
+    characters: ["porfiry-petrovich"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-33"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 39
+    characters: ["porfiry-petrovich", "rodion-raskolnikov"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-34"
+    title: "Chapter 3"
+    type: "chapter"
+    level: 1
+    index: 40
+    characters: ["rodion-raskolnikov"]
+    locations: ["street", "bridge", "neva-river"]
+
+  - id: "chapter-35"
+    title: "Chapter 4"
+    type: "chapter"
+    level: 1
+    index: 41
+    characters: ["arkady-svidrigailov"]
+    locations: ["svidrigailov-hotel", "street", "bridge"]
+
+  - id: "chapter-36"
+    title: "Chapter 5"
+    type: "chapter"
+    level: 1
+    index: 42
+    characters: ["sonya-marmeladov"]
+    locations: ["sonya-room", "church", "cemetery"]
+
+  - id: "chapter-37"
+    title: "Chapter 6"
+    type: "chapter"
+    level: 1
+    index: 43
+    characters: ["porfiry-petrovich"]
+    locations: ["porfiry-office", "police-station", "investigation-room"]
+
+  - id: "chapter-38"
+    title: "Chapter 7"
+    type: "chapter"
+    level: 1
+    index: 44
+    characters: ["rodion-raskolnikov"]
+    locations: ["street", "market", "shop"]
+
+  - id: "chapter-39"
+    title: "Chapter 8"
+    type: "chapter"
+    level: 1
+    index: 45
+    characters: ["rodion-raskolnikov"]
+    locations: ["rasskolnikov-room", "corridor", "entrance-hall"]
+
+  - id: "epilogue"
+    title: "Epilogue"
+    type: "part"
+    level: 0
+    index: 46
+
+  - id: "chapter-40"
+    title: "Chapter 1"
+    type: "chapter"
+    level: 1
+    index: 47
+    characters: ["rodion-raskolnikov", "sonya-marmeladov"]
+    locations: ["siberia", "prison-camp", "prison-yard"]
+
+  - id: "chapter-41"
+    title: "Chapter 2"
+    type: "chapter"
+    level: 1
+    index: 48
+    characters: ["rodion-raskolnikov", "sonya-marmeladov"]
+    locations: ["prison-camp", "prison-cell", "prison-chapel"]
+
+factions:
+  - id: "students"
+    title: "Students"
+    description: "University students and intellectuals"
+    color: "#4A90E2"
+
+  - id: "criminals"
+    title: "Criminals"
+    description: "Those who have committed crimes or are suspected"
+    color: "#D0021B"
+
+  - id: "police"
+    title: "Police"
+    description: "Law enforcement officials"
+    color: "#7ED321"
+
+  - id: "family"
+    title: "Family"
+    description: "Family members and relatives"
+    color: "#F5A623"
+
+  - id: "poor"
+    title: "Poor"
+    description: "Those living in poverty"
+    color: "#9013FE"
+
+  - id: "religious"
+    title: "Religious"
+    description: "Those with strong religious beliefs"
+    color: "#50E3C2"
+
+  - id: "victims"
+    title: "Victims"
+    description: "Those who have been victimized"
+    color: "#FF6B6B"
+
+  - id: "landowners"
+    title: "Landowners"
+    description: "Wealthy property owners"
+    color: "#8B4513"
+
+  - id: "servants"
+    title: "Servants"
+    description: "Domestic workers and servants"
+    color: "#696969"
+
+  - id: "merchants"
+    title: "Merchants"
+    description: "Business owners and traders"
+    color: "#FFD700"
+
+  - id: "workers"
+    title: "Workers"
+    description: "Working class individuals"
+    color: "#FF8C00"
+
+  - id: "radicals"
+    title: "Radicals"
+    description: "Political radicals and reformers"
+    color: "#FF1493"
+
+  - id: "suitors"
+    title: "Suitors"
+    description: "Those seeking marriage or relationships"
+    color: "#FF69B4"
+
+  - id: "intellectuals"
+    title: "Intellectuals"
+    description: "Educated thinkers and philosophers"
+    color: "#4169E1"
+
+  - id: "prostitutes"
+    title: "Prostitutes"
+    description: "Sex workers"
+    color: "#FF6347"
+
+  - id: "investigators"
+    title: "Investigators"
+    description: "Those investigating crimes"
+    color: "#20B2AA"
+
+  - id: "friends"
+    title: "Friends"
+    description: "Close friends and companions"
+    color: "#00CED1"
+
+  - id: "bourgeois"
+    title: "Bourgeois"
+    description: "Middle class individuals"
+    color: "#DDA0DD"
+
+  - id: "alcoholics"
+    title: "Alcoholics"
+    description: "Those struggling with alcoholism"
+    color: "#CD853F"
+
+  - id: "sick"
+    title: "Sick"
+    description: "Those who are ill or dying"
+    color: "#FF6B6B"
+
+  - id: "landlords"
+    title: "Landlords"
+    description: "Property owners and landlords"
+    color: "#DEB887"
+
+  - id: "officers"
+    title: "Officers"
+    description: "Police officers and military"
+    color: "#556B2F"
+
+  - id: "peasants"
+    title: "Peasants"
+    description: "Rural working class"
+    color: "#8B7355"
+
+  - id: "confessors"
+    title: "Confessors"
+    description: "Those who confess to crimes"
+    color: "#DC143C"
+
+  - id: "wives"
+    title: "Wives"
+    description: "Married women"
+    color: "#FFC0CB"
+
+  - id: "lawyers"
+    title: "Lawyers"
+    description: "Legal professionals and attorneys"
+    color: "#2E8B57"
+
+  - id: "officials"
+    title: "Officials"
+    description: "Government officials and bureaucrats"
+    color: "#4682B4"
+
+  - id: "suspects"
+    title: "Suspects"
+    description: "Those suspected of crimes"
+    color: "#FF4500"
+
+relationships:
+  # Raskolnikov's Relationships
+  - character1: "rodion-raskolnikov"
+    character2: "sonya-marmeladov"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Raskolnikov meets Sonya and begins to confide in her"
+      - chapter: "chapter-15"
+        description: "Raskolnikov confesses his crime to Sonya"
+      - chapter: "chapter-41"
+        description: "Sonya follows Raskolnikov to Siberia and supports his redemption"
+
+  - character1: "rodion-raskolnikov"
+    character2: "porfiry-petrovich"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Porfiry begins investigating Raskolnikov"
+      - chapter: "chapter-16"
+        description: "Porfiry uses psychological tactics to pressure Raskolnikov"
+      - chapter: "chapter-33"
+        description: "Porfiry confronts Raskolnikov with evidence"
+
+  - character1: "rodion-raskolnikov"
+    character2: "dmitri-razumikhin"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Razumikhin helps Raskolnikov when he is ill"
+      - chapter: "chapter-8"
+        description: "Razumikhin defends Raskolnikov to others"
+      - chapter: "chapter-17"
+        description: "Razumikhin continues to support his friend despite suspicions"
+
+  - character1: "rodion-raskolnikov"
+    character2: "avdotya-raskolnikov"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Dunya arrives in St. Petersburg to see her brother"
+      - chapter: "chapter-9"
+        description: "Raskolnikov tries to prevent Dunya's engagement to Luzhin"
+      - chapter: "chapter-18"
+        description: "Dunya learns about her brother's crime"
+
+  - character1: "rodion-raskolnikov"
+    character2: "pulcheria-raskolnikov"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Raskolnikov receives a letter from his mother"
+      - chapter: "chapter-4"
+        description: "Raskolnikov meets his mother and sister"
+
+  - character1: "rodion-raskolnikov"
+    character2: "alyona-ivanovna"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Raskolnikov murders the old pawnbroker"
+
+  - character1: "rodion-raskolnikov"
+    character2: "lizaveta"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Raskolnikov also murders Lizaveta who witnesses the crime"
+
+  - character1: "rodion-raskolnikov"
+    character2: "nastasya-petrovna"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Nastasya helps Raskolnikov and becomes suspicious"
+
+  - character1: "rodion-raskolnikov"
+    character2: "praskovya-pavlovna"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Raskolnikov's landlady becomes suspicious of him"
+
+  # Sonya's Relationships
+  - character1: "sonya-marmeladov"
+    character2: "semyon-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Sonya supports her alcoholic father"
+      - chapter: "chapter-3"
+        description: "Marmeladov dies, leaving Sonya to support the family"
+
+  - character1: "sonya-marmeladov"
+    character2: "katerina-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Sonya supports her stepmother and siblings"
+      - chapter: "chapter-25"
+        description: "Katerina becomes increasingly ill and desperate"
+      - chapter: "chapter-26"
+        description: "Katerina dies, leaving Sonya alone"
+
+  - character1: "sonya-marmeladov"
+    character2: "polya-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Sonya cares for her younger sister"
+
+  - character1: "sonya-marmeladov"
+    character2: "kolenka-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Sonya cares for her younger brother"
+
+  # Dunya's Relationships
+  - character1: "avdotya-raskolnikov"
+    character2: "pyotr-luzhin"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Dunya becomes engaged to Luzhin"
+      - chapter: "chapter-9"
+        description: "Luzhin reveals his true manipulative nature"
+      - chapter: "chapter-19"
+        description: "Dunya breaks off the engagement"
+
+  - character1: "avdotya-raskolnikov"
+    character2: "arkady-svidrigailov"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Svidrigailov becomes obsessed with Dunya"
+      - chapter: "chapter-20"
+        description: "Svidrigailov tries to blackmail Dunya"
+      - chapter: "chapter-35"
+        description: "Svidrigailov commits suicide after being rejected"
+
+  - character1: "avdotya-raskolnikov"
+    character2: "pulcheria-raskolnikov"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Dunya arrives with her mother to see Raskolnikov"
+
+  # Police Relationships
+  - character1: "porfiry-petrovich"
+    character2: "dmitri-razumikhin"
+    descriptions:
+      - chapter: "chapter-10"
+        description: "Porfiry questions Razumikhin about Raskolnikov"
+      - chapter: "chapter-17"
+        description: "Razumikhin defends Raskolnikov to Porfiry"
+
+  - character1: "porfiry-petrovich"
+    character2: "zametov"
+    descriptions:
+      - chapter: "chapter-3"
+        description: "Porfiry works with Zametov on the investigation"
+
+  - character1: "porfiry-petrovich"
+    character2: "ilya-petrovich"
+    descriptions:
+      - chapter: "chapter-3"
+        description: "Porfiry collaborates with Ilya Petrovich"
+
+  - character1: "zametov"
+    character2: "rodion-raskolnikov"
+    descriptions:
+      - chapter: "chapter-3"
+        description: "Zametov becomes suspicious of Raskolnikov"
+
+  # Confessors and Suspects
+  - character1: "nikolai"
+    character2: "porfiry-petrovich"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Nikolai falsely confesses to the murders"
+
+  - character1: "mikolka"
+    character2: "porfiry-petrovich"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Mikolka also confesses to the murders"
+
+  # Svidrigailov's Relationships
+  - character1: "arkady-svidrigailov"
+    character2: "marfa-petrovna"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Svidrigailov is haunted by his deceased wife"
+
+  - character1: "arkady-svidrigailov"
+    character2: "dunya-svidrigailov"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Svidrigailov abused his young ward"
+
+  # Luzhin's Relationships
+  - character1: "pyotr-luzhin"
+    character2: "lebeziatnikov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Luzhin lives with the radical Lebeziatnikov"
+
+  # Marmeladov Family Relationships
+  - character1: "semyon-marmeladov"
+    character2: "katerina-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Marmeladov's relationship with his wife"
+
+  - character1: "katerina-marmeladov"
+    character2: "polya-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Katerina cares for her stepdaughter"
+
+  - character1: "katerina-marmeladov"
+    character2: "kolenka-marmeladov"
+    descriptions:
+      - chapter: "chapter-2"
+        description: "Katerina cares for her stepson"
+
+  # Additional Relationships
+  - character1: "nastasya-petrovna"
+    character2: "praskovya-pavlovna"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Nastasya works for the landlady"
+
+  - character1: "dmitri-razumikhin"
+    character2: "avdotya-raskolnikov"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Razumikhin falls in love with Dunya"
+
+  - character1: "sonya-marmeladov"
+    character2: "rodion-raskolnikov"
+    descriptions:
+      - chapter: "chapter-4"
+        description: "Sonya becomes Raskolnikov's spiritual guide"
+
+  - character1: "arkady-svidrigailov"
+    character2: "sonya-marmeladov"
+    descriptions:
+      - chapter: "chapter-5"
+        description: "Svidrigailov offers to help Sonya's family"
+
+  - character1: "pyotr-luzhin"
+    character2: "rodion-raskolnikov"
+    descriptions:
+      - chapter: "chapter-9"
+        description: "Luzhin tries to frame Sonya to discredit Raskolnikov"
+
+  - character1: "porfiry-petrovich"
+    character2: "rodion-raskolnikov"
+    descriptions:
+      - chapter: "chapter-16"
+        description: "Porfiry uses psychological manipulation on Raskolnikov"
+
+  - character1: "dmitri-razumikhin"
+    character2: "porfiry-petrovich"
+    descriptions:
+      - chapter: "chapter-17"
+        description: "Razumikhin defends Raskolnikov to Porfiry"
+
+  - character1: "avdotya-raskolnikov"
+    character2: "arkady-svidrigailov"
+    descriptions:
+      - chapter: "chapter-20"
+        description: "Svidrigailov tries to blackmail Dunya"
+
+  - character1: "sonya-marmeladov"
+    character2: "katerina-marmeladov"
+    descriptions:
+      - chapter: "chapter-25"
+        description: "Sonya cares for her dying stepmother"
+
+  - character1: "rodion-raskolnikov"
+    character2: "sonya-marmeladov"
+    descriptions:
+      - chapter: "chapter-41"
+        description: "Sonya follows Raskolnikov to Siberia"
+
+locations:
+  - id: "rasskolnikov-room"
+    name: "Raskolnikov's Room"
+    description: "Raskolnikov's small, cramped apartment"
+
+  - id: "pawnbroker-apartment"
+    name: "Pawnbroker's Apartment"
+    description: "Alyona Ivanovna's apartment where the murder occurs"
+
+  - id: "pawnbroker-room"
+    name: "Pawnbroker's Room"
+    description: "The specific room where Alyona is murdered"
+
+  - id: "lizaveta-room"
+    name: "Lizaveta's Room"
+    description: "Lizaveta's room where she is also murdered"
+
+  - id: "courtyard"
+    name: "Courtyard"
+    description: "The courtyard of the apartment building"
+
+  - id: "staircase"
+    name: "Staircase"
+    description: "The staircase in the apartment building"
+
+  - id: "street"
+    name: "Street"
+    description: "The streets of St. Petersburg"
+
+  - id: "main-street"
+    name: "Main Street"
+    description: "The main thoroughfare of St. Petersburg"
+
+  - id: "tavern"
+    name: "Tavern"
+    description: "The tavern where Marmeladov drinks"
+
+  - id: "razumikhin-room"
+    name: "Razumikhin's Room"
+    description: "Razumikhin's apartment"
+
+  - id: "marmeladov-apartment"
+    name: "Marmeladov Apartment"
+    description: "The Marmeladov family's apartment"
+
+  - id: "katerina-room"
+    name: "Katerina's Room"
+    description: "Katerina Marmeladov's room"
+
+  - id: "sonya-room"
+    name: "Sonya's Room"
+    description: "Sonya's small room"
+
+  - id: "dunya-room"
+    name: "Dunya's Room"
+    description: "Dunya's room at the boarding house"
+
+  - id: "police-station"
+    name: "Police Station"
+    description: "The police station where investigations occur"
+
+  - id: "porfiry-office"
+    name: "Porfiry's Office"
+    description: "Porfiry Petrovich's office"
+
+  - id: "investigation-room"
+    name: "Investigation Room"
+    description: "The room where investigations are conducted"
+
+  - id: "church"
+    name: "Church"
+    description: "The church where religious ceremonies occur"
+
+  - id: "cemetery"
+    name: "Cemetery"
+    description: "The cemetery where burials take place"
+
+  - id: "hospital"
+    name: "Hospital"
+    description: "The hospital where the sick are treated"
+
+  - id: "boarding-house"
+    name: "Boarding House"
+    description: "The boarding house where characters stay"
+
+  - id: "landlady-apartment"
+    name: "Landlady's Apartment"
+    description: "The landlady's apartment"
+
+  - id: "bridge"
+    name: "Bridge"
+    description: "A bridge over the Neva River"
+
+  - id: "neva-river"
+    name: "Neva River"
+    description: "The Neva River flowing through St. Petersburg"
+
+  - id: "embankment"
+    name: "Embankment"
+    description: "The embankment along the Neva River"
+
+  - id: "university"
+    name: "University"
+    description: "The university where students study"
+
+  - id: "library"
+    name: "Library"
+    description: "The library where students read"
+
+  - id: "luzhin-apartment"
+    name: "Luzhin's Apartment"
+    description: "Luzhin's apartment"
+
+  - id: "restaurant"
+    name: "Restaurant"
+    description: "A restaurant where characters dine"
+
+  - id: "coffee-house"
+    name: "Coffee House"
+    description: "A coffee house where characters meet"
+
+mapUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/St_Petersburg_Map_1900.jpg/1200px-St_Petersburg_Map_1900.jpg"
+
+# Chapter hierarchy
+hierarchy:
+  - chapter_id: "part-1"
+    type: "part"
+  - chapter_id: "chapter-1"
+    type: "chapter"
+  - chapter_id: "chapter-2"
+    type: "chapter"
+  - chapter_id: "chapter-3"
+    type: "chapter"
+  - chapter_id: "chapter-4"
+    type: "chapter"
+  - chapter_id: "chapter-5"
+    type: "chapter"
+  - chapter_id: "chapter-6"
+    type: "chapter"
+  - chapter_id: "chapter-7"
+    type: "chapter"
+  - chapter_id: "part-2"
+    type: "part"
+  - chapter_id: "chapter-8"
+    type: "chapter"
+  - chapter_id: "chapter-9"
+    type: "chapter"
+  - chapter_id: "chapter-10"
+    type: "chapter"
+  - chapter_id: "chapter-11"
+    type: "chapter"
+  - chapter_id: "chapter-12"
+    type: "chapter"
+  - chapter_id: "chapter-13"
+    type: "chapter"
+  - chapter_id: "chapter-14"
+    type: "chapter"
+  - chapter_id: "part-3"
+    type: "part"
+  - chapter_id: "chapter-15"
+    type: "chapter"
+  - chapter_id: "chapter-16"
+    type: "chapter"
+  - chapter_id: "chapter-17"
+    type: "chapter"
+  - chapter_id: "chapter-18"
+    type: "chapter"
+  - chapter_id: "chapter-19"
+    type: "chapter"
+  - chapter_id: "chapter-20"
+    type: "chapter"
+  - chapter_id: "part-4"
+    type: "part"
+  - chapter_id: "chapter-21"
+    type: "chapter"
+  - chapter_id: "chapter-22"
+    type: "chapter"
+  - chapter_id: "chapter-23"
+    type: "chapter"
+  - chapter_id: "chapter-24"
+    type: "chapter"
+  - chapter_id: "chapter-25"
+    type: "chapter"
+  - chapter_id: "chapter-26"
+    type: "chapter"
+  - chapter_id: "part-5"
+    type: "part"
+  - chapter_id: "chapter-27"
+    type: "chapter"
+  - chapter_id: "chapter-28"
+    type: "chapter"
+  - chapter_id: "chapter-29"
+    type: "chapter"
+  - chapter_id: "chapter-30"
+    type: "chapter"
+  - chapter_id: "chapter-31"
+    type: "chapter"
+  - chapter_id: "part-6"
+    type: "part"
+  - chapter_id: "chapter-32"
+    type: "chapter"
+  - chapter_id: "chapter-33"
+    type: "chapter"
+  - chapter_id: "chapter-34"
+    type: "chapter"
+  - chapter_id: "chapter-35"
+    type: "chapter"
+  - chapter_id: "chapter-36"
+    type: "chapter"
+  - chapter_id: "chapter-37"
+    type: "chapter"
+  - chapter_id: "chapter-38"
+    type: "chapter"
+  - chapter_id: "chapter-39"
+    type: "chapter"
+  - chapter_id: "epilogue"
+    type: "part"
+  - chapter_id: "chapter-40"
+    type: "chapter"
+  - chapter_id: "chapter-41"
+    type: "chapter" 

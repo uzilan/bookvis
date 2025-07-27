@@ -72,21 +72,142 @@ export class FirebaseService {
         throw new Error('User must be authenticated to save books');
       }
 
+      console.log('🔍 Starting saveBook...');
+      
+      // Clean the data to remove undefined values
+      const cleanBookData = this.cleanBookDataForFirebase(bookData);
+      console.log('🧹 Cleaned data keys:', Object.keys(cleanBookData));
+      console.log('🧹 Has hierarchy?', 'hierarchy' in cleanBookData);
+      console.log('🧹 Hierarchy value:', cleanBookData.hierarchy);
+
       const bookRef = doc(db, 'bookvis', bookData.book.id);
       const firebaseBookData = {
-        ...bookData,
+        ...cleanBookData,
         ownerId: currentUser.uid,
         ownerEmail: currentUser.email,
         isPublic: isPublic,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       };
+      console.log('🔥 Firebase data keys:', Object.keys(firebaseBookData));
       
       await setDoc(bookRef, firebaseBookData);
       console.log(`Book "${bookData.book.title}" saved successfully`);
     } catch (error) {
       console.error('Error saving book:', error);
       throw new Error(`Failed to save book: ${error}`);
+    }
+  }
+
+  /**
+   * Clean BookData object to remove undefined values for Firebase
+   */
+  private static cleanBookDataForFirebase(bookData: BookData): Record<string, unknown> {
+    const cleanData: Record<string, unknown> = {};
+    
+    // Clean book object (required field)
+    cleanData.book = {
+      id: bookData.book.id,
+      title: bookData.book.title,
+      author: bookData.book.author
+    };
+
+    // Clean characters array (required field)
+    cleanData.characters = bookData.characters.map(char => ({
+      id: char.id,
+      name: char.name,
+      description: char.description,
+      aliases: char.aliases || [],
+      factions: char.factions || [],
+      factionJoinChapters: char.factionJoinChapters || {},
+      attributes: char.attributes || []
+    }));
+
+    // Clean chapters array (required field)
+    cleanData.chapters = bookData.chapters.map(chapter => ({
+      book: chapter.book,
+      id: chapter.id,
+      title: chapter.title,
+      index: chapter.index,
+      type: chapter.type,
+      level: chapter.level || 0, // Provide default value for level
+      locations: chapter.locations || [],
+      characters: chapter.characters || []
+    }));
+
+    // Clean factions array (required field)
+    cleanData.factions = bookData.factions.map(faction => ({
+      id: faction.id,
+      title: faction.title,
+      description: faction.description,
+      color: faction.color
+    }));
+
+    // Clean relationships array (required field)
+    cleanData.relationships = bookData.relationships.map(rel => ({
+      character1: {
+        id: rel.character1.id,
+        name: rel.character1.name
+      },
+      character2: {
+        id: rel.character2.id,
+        name: rel.character2.name
+      },
+      descriptions: rel.descriptions.map(desc => ({
+        chapter: desc.chapter,
+        description: desc.description
+      }))
+    }));
+
+    // Clean locations array (required field)
+    cleanData.locations = bookData.locations.map(location => ({
+      id: location.id,
+      name: location.name,
+      description: location.description
+    }));
+
+    // Clean hierarchy array (required field)
+    cleanData.hierarchy = bookData.hierarchy.map((item: { chapter_id: string; type: string }) => ({
+      chapter_id: item.chapter_id,
+      type: item.type
+    }));
+
+    // Add mapUrl if it exists
+    if (bookData.mapUrl) {
+      cleanData.mapUrl = bookData.mapUrl;
+    }
+
+    // Log any undefined values
+    console.log('🔍 Checking for undefined values in cleaned data:');
+    this.logUndefinedValues(cleanData as Record<string, unknown>);
+    
+    return cleanData;
+  }
+
+  /**
+   * Log undefined values in an object
+   */
+  private static logUndefinedValues(obj: Record<string, unknown>, path: string = ''): void {
+    if (obj === null || obj === undefined) {
+      console.log(`❌ UNDEFINED at ${path}: ${obj}`);
+      return;
+    }
+    
+    if (Array.isArray(obj)) {
+      obj.forEach((item, index) => {
+        this.logUndefinedValues(item, `${path}[${index}]`);
+      });
+    }
+    
+    if (typeof obj === 'object') {
+      for (const [key, value] of Object.entries(obj)) {
+        const currentPath = path ? `${path}.${key}` : key;
+        if (value === undefined) {
+          console.log(`❌ UNDEFINED at ${currentPath}: ${value}`);
+        } else {
+          this.logUndefinedValues(value, currentPath);
+        }
+      }
     }
   }
 
@@ -133,13 +254,28 @@ export class FirebaseService {
       const books: BookData[] = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
+        
+        // Reconstruct path property for chapters if hierarchy exists
+        let chapters = data.chapters;
+        if (data.hierarchy && Array.isArray(data.hierarchy)) {
+          chapters = data.chapters.map((chapter: Record<string, unknown>) => {
+            // Build path from hierarchy
+            const path = this.buildPathFromHierarchy(chapter.id as string, data.hierarchy, data.chapters);
+            return {
+              ...chapter,
+              path: path
+            };
+          });
+        }
+        
         const bookData = {
           book: data.book,
           characters: data.characters,
-          chapters: data.chapters,
+          chapters: chapters,
           factions: data.factions,
           relationships: data.relationships,
           locations: data.locations || [], // Include locations with fallback to empty array
+          hierarchy: data.hierarchy || [], // Include hierarchy
           mapUrl: data.mapUrl, // Include mapUrl field
           ownerId: data.ownerId,
           ownerEmail: data.ownerEmail,
@@ -169,6 +305,43 @@ export class FirebaseService {
       console.error('Error fetching books:', error);
       throw new Error(`Failed to fetch books: ${error}`);
     }
+  }
+
+  /**
+   * Build path from hierarchy for a chapter
+   */
+  private static buildPathFromHierarchy(chapterId: string, hierarchy: Record<string, unknown>[], chapters: Record<string, unknown>[]): string[] {
+    const path: string[] = [];
+    let currentLevel = -1;
+    
+    // Find the chapter in hierarchy and build path backwards
+    for (let i = hierarchy.length - 1; i >= 0; i--) {
+      const item = hierarchy[i];
+      if (item.chapter_id === chapterId) {
+        // Found our chapter, now build path backwards
+        currentLevel = i;
+        break;
+      }
+    }
+    
+    if (currentLevel === -1) {
+      // Chapter not found in hierarchy, return just the title
+      const chapter = chapters.find((ch: any) => ch.id === chapterId);
+      return chapter ? [chapter.title] : [];
+    }
+    
+    // Find the immediate parent part by looking backwards from current position
+    for (let i = currentLevel - 1; i >= 0; i--) {
+      const item = hierarchy[i];
+      const chapter = chapters.find((ch: any) => ch.id === item.chapter_id);
+      if (chapter && item.type === 'part') {
+        // Found the immediate parent part, add it to path
+        path.unshift(chapter.title);
+        break; // Stop after finding the first (immediate) parent part
+      }
+    }
+    
+    return path;
   }
 
   /**
@@ -292,7 +465,15 @@ export class FirebaseService {
       }
 
       await setDoc(bookRef, { 
-        ...bookData, 
+        book: bookData.book,
+        characters: bookData.characters,
+        chapters: bookData.chapters,
+        factions: bookData.factions,
+        relationships: bookData.relationships,
+        locations: bookData.locations,
+        mapUrl: bookData.mapUrl,
+        ownerId: bookData.ownerId,
+        ownerEmail: bookData.ownerEmail,
         isPublic: isPublic, 
         updatedAt: new Date() 
       });
