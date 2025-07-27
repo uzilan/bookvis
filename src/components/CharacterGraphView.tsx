@@ -9,7 +9,6 @@ import type { BookData } from '../models/BookData';
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { FirebaseService } from '../services/firebase.ts';
 import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
-import { aliceBookData } from '../books/aliceData';
 
 export const CharacterGraphView: React.FC = () => {
   const { bookId } = useParams<{ bookId?: string }>();
@@ -53,8 +52,8 @@ export const CharacterGraphView: React.FC = () => {
         setLoading(true);
         const books = await FirebaseService.getAllBooks();
         
-        // Add local books (Alice) to the books list
-        const allBooks = [aliceBookData, ...books];
+        // Use only Firebase books
+        const allBooks = books;
         
 
         
@@ -105,11 +104,6 @@ export const CharacterGraphView: React.FC = () => {
 
   // Get the appropriate book data based on selected book
   const getBookData = (book: Book): BookData | null => {
-    // Special handling for Alice book to avoid data corruption
-    if (book.id === 'alice') {
-      return aliceBookData;
-    }
-    
     return bookDataMap[book.id] || null;
   };
 

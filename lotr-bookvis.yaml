@@ -1,0 +1,1283 @@
+book:
+  id: "lotr"
+  title: "The Lord of the Rings"
+  author:
+    id: "jrr-tolkien"
+    name: "J.R.R. Tolkien"
+
+map_url: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Middle-earth_map.svg/1200px-Middle-earth_map.svg.png"
+
+characters:
+  # Main Characters
+  - id: "frodo-baggins"
+    name: "Frodo Baggins"
+    description: "Hobbit of the Shire, Ring-bearer who must destroy the One Ring"
+    aliases: ["Frodo", "Ring-bearer"]
+    factions: ["hobbits", "fellowship"]
+    faction_join_chapters:
+      hobbits: "chapter-1"
+      fellowship: "chapter-15"
+    attributes: ["Hobbit", "Ring-bearer", "Brave", "Selfless", "Corrupted by Ring"]
+
+  - id: "samwise-gamgee"
+    name: "Samwise Gamgee"
+    description: "Frodo's loyal gardener and companion"
+    aliases: ["Sam", "Sam Gamgee"]
+    factions: ["hobbits", "fellowship"]
+    faction_join_chapters:
+      hobbits: "chapter-1"
+      fellowship: "chapter-15"
+    attributes: ["Hobbit", "Loyal", "Brave", "Protective", "Faithful"]
+
+  - id: "gandalf"
+    name: "Gandalf"
+    description: "The Grey Wizard, guide and protector of the free peoples"
+    aliases: ["Gandalf the Grey", "Mithrandir", "Olorin"]
+    factions: ["wizards", "fellowship"]
+    faction_join_chapters:
+      wizards: "chapter-1"
+      fellowship: "chapter-15"
+    attributes: ["Wizard", "Wise", "Powerful", "Protective", "Guide"]
+
+  - id: "aragorn"
+    name: "Aragorn"
+    description: "Ranger of the North, heir to the throne of Gondor"
+    aliases: ["Strider", "Elessar", "King Elessar", "Thorongil"]
+    factions: ["rangers", "fellowship", "gondor"]
+    faction_join_chapters:
+      rangers: "chapter-10"
+      fellowship: "chapter-15"
+      gondor: "chapter-10"
+    attributes: ["Ranger", "King", "Warrior", "Healer"]
+
+  - id: "legolas"
+    name: "Legolas"
+    description: "Elf from Mirkwood, member of the fellowship"
+    aliases: ["Prince of Mirkwood"]
+    factions: ["elves", "fellowship"]
+    faction_join_chapters:
+      elves: "chapter-15"
+      fellowship: "chapter-15"
+    attributes: ["Elf", "Archer", "Agile", "Immortal"]
+
+  - id: "gimli"
+    name: "Gimli"
+    description: "Dwarf from the Lonely Mountain, member of the fellowship"
+    aliases: ["Son of Glóin"]
+    factions: ["dwarves", "fellowship"]
+    faction_join_chapters:
+      dwarves: "chapter-15"
+      fellowship: "chapter-15"
+    attributes: ["Dwarf", "Warrior", "Loyal", "Proud"]
+
+  - id: "boromir"
+    name: "Boromir"
+    description: "Captain of Gondor, member of the fellowship"
+    aliases: ["Captain of Gondor"]
+    factions: ["gondor", "fellowship"]
+    faction_join_chapters:
+      gondor: "chapter-15"
+      fellowship: "chapter-15"
+    attributes: ["Warrior", "Proud", "Tempted by Ring", "Noble"]
+
+  - id: "meriadoc-brandybuck"
+    name: "Meriadoc Brandybuck"
+    description: "Hobbit of the Shire, friend of Frodo"
+    aliases: ["Merry", "Master Brandybuck"]
+    factions: ["hobbits", "fellowship"]
+    faction_join_chapters:
+      hobbits: "chapter-1"
+      fellowship: "chapter-15"
+    attributes: ["Hobbit", "Brave", "Loyal", "Noble"]
+
+  - id: "peregrin-took"
+    name: "Peregrin Took"
+    description: "Hobbit of the Shire, friend of Frodo"
+    aliases: ["Pippin", "Master Took"]
+    factions: ["hobbits", "fellowship"]
+    faction_join_chapters:
+      hobbits: "chapter-1"
+      fellowship: "chapter-15"
+    attributes: ["Hobbit", "Curious", "Loyal", "Young"]
+
+  - id: "gollum"
+    name: "Gollum"
+    description: "Former hobbit corrupted by the Ring, guides Frodo to Mount Doom"
+    aliases: ["Sméagol", "Stinker", "Slinker"]
+    factions: ["corrupted"]
+    faction_join_chapters:
+      corrupted: "chapter-34"
+    attributes: ["Corrupted", "Split Personality", "Ring-obsessed", "Tragic"]
+
+  - id: "sauron"
+    name: "Sauron"
+    description: "The Dark Lord, creator of the One Ring"
+    aliases: ["Dark Lord", "Lord of Mordor", "The Eye"]
+    factions: ["dark-forces"]
+    faction_join_chapters:
+      dark-forces: "chapter-2"
+    attributes: ["Dark Lord", "Powerful", "Corrupted", "Evil"]
+
+  - id: "saruman"
+    name: "Saruman"
+    description: "The White Wizard, corrupted by power"
+    aliases: ["Saruman the White", "Curunír"]
+    factions: ["wizards", "dark-forces"]
+    faction_join_chapters:
+      wizards: "chapter-27"
+      dark-forces: "chapter-32"
+    attributes: ["Wizard", "Corrupted", "Power-hungry", "Traitor"]
+
+  - id: "theoden"
+    name: "Théoden"
+    description: "King of Rohan"
+    aliases: ["King of Rohan"]
+    factions: ["rohan"]
+    faction_join_chapters:
+      rohan: "chapter-28"
+    attributes: ["King", "Noble", "Warrior", "Leader"]
+
+  - id: "eowyn"
+    name: "Éowyn"
+    description: "Princess of Rohan, shieldmaiden"
+    aliases: ["Shieldmaiden of Rohan"]
+    factions: ["rohan"]
+    faction_join_chapters:
+      rohan: "chapter-28"
+    attributes: ["Princess", "Shieldmaiden", "Brave", "Warrior"]
+
+  - id: "faramir"
+    name: "Faramir"
+    description: "Captain of Gondor, son of Denethor"
+    aliases: ["Captain of Gondor"]
+    factions: ["gondor"]
+    faction_join_chapters:
+      gondor: "chapter-38"
+    attributes: ["Captain", "Noble", "Wise", "Warrior"]
+
+  - id: "denethor"
+    name: "Denethor"
+    description: "Steward of Gondor, father of Faramir"
+    aliases: ["Steward of Gondor"]
+    factions: ["gondor"]
+    faction_join_chapters:
+      gondor: "chapter-44"
+    attributes: ["Steward", "Proud", "Despairing", "Noble"]
+
+factions:
+  - id: "hobbits"
+    title: "Hobbits"
+    description: "Small, peaceful folk of the Shire."
+    color: "#D2B48C"
+
+  - id: "fellowship"
+    title: "The Fellowship"
+    description: "The nine companions chosen to destroy the Ring."
+    color: "#4169E1"
+
+  - id: "wizards"
+    title: "Wizards"
+    description: "The Istari, powerful beings sent to guide Middle-earth."
+    color: "#9932CC"
+
+  - id: "rangers"
+    title: "Rangers"
+    description: "Protectors of the North, descendants of Númenor."
+    color: "#228B22"
+
+  - id: "elves"
+    title: "Elves"
+    description: "Immortal beings of great wisdom and beauty."
+    color: "#32CD32"
+
+  - id: "dwarves"
+    title: "Dwarves"
+    description: "Stout warriors and craftsmen of the mountains."
+    color: "#CD853F"
+
+  - id: "gondor"
+    title: "Gondor"
+    description: "The greatest kingdom of Men in Middle-earth."
+    color: "#DC143C"
+
+  - id: "rohan"
+    title: "Rohan"
+    description: "The kingdom of the horse-lords."
+    color: "#DAA520"
+
+  - id: "corrupted"
+    title: "Corrupted"
+    description: "Those corrupted by the power of the Ring."
+    color: "#696969"
+
+  - id: "dark-forces"
+    title: "Dark Forces"
+    description: "Servants of Sauron and evil."
+    color: "#4A5D5D"
+
+chapters:
+  # Book 1: The Fellowship of the Ring
+  - id: "book-1"
+    title: "The Fellowship of the Ring"
+    type: "book"
+    level: 0
+
+  # Part 1: The Ring Sets Out
+  - id: "part-1"
+    title: "The Ring Sets Out"
+    type: "part"
+    level: 1
+
+  - id: "chapter-1"
+    title: "A Long-expected Party"
+    type: "chapter"
+    level: 2
+    location_ids: ["bag-end", "hobbiton", "shire"]
+
+  - id: "chapter-2"
+    title: "The Shadow of the Past"
+    type: "chapter"
+    level: 2
+    location_ids: ["bag-end", "hobbiton", "shire"]
+
+  - id: "chapter-3"
+    title: "Three is Company"
+    type: "chapter"
+    level: 2
+    location_ids: ["shire", "hobbiton", "bywater", "green-dragon-inn"]
+
+  - id: "chapter-4"
+    title: "A Short Cut to Mushrooms"
+    type: "chapter"
+    level: 2
+    location_ids: ["shire", "buckland", "brandy-hall"]
+
+  - id: "chapter-5"
+    title: "A Conspiracy Unmasked"
+    type: "chapter"
+    level: 2
+    location_ids: ["buckland", "brandy-hall", "crickhollow"]
+
+  - id: "chapter-6"
+    title: "The Old Forest"
+    type: "chapter"
+    level: 2
+    location_ids: ["old-forest", "withywindle"]
+
+  - id: "chapter-7"
+    title: "In the House of Tom Bombadil"
+    type: "chapter"
+    level: 2
+    location_ids: ["tom-bombadil-house", "old-forest"]
+
+  - id: "chapter-8"
+    title: "Fog on the Barrow-downs"
+    type: "chapter"
+    level: 2
+    location_ids: ["barrow-downs"]
+
+  - id: "chapter-9"
+    title: "At the Sign of the Prancing Pony"
+    type: "chapter"
+    level: 2
+    location_ids: ["bree", "prancing-pony"]
+
+  - id: "chapter-10"
+    title: "Strider"
+    type: "chapter"
+    level: 2
+    location_ids: ["bree", "prancing-pony"]
+
+  - id: "chapter-11"
+    title: "A Knife in the Dark"
+    type: "chapter"
+    level: 2
+    location_ids: ["weathertop"]
+
+  - id: "chapter-12"
+    title: "Flight to the Ford"
+    type: "chapter"
+    level: 2
+    location_ids: ["ford-of-bruinen"]
+
+  # Part 2: The Ring Goes South
+  - id: "part-2"
+    title: "The Ring Goes South"
+    type: "part"
+    level: 1
+
+  - id: "chapter-13"
+    title: "Many Meetings"
+    type: "chapter"
+    level: 2
+    location_ids: ["rivendell", "last-homely-house"]
+
+  - id: "chapter-14"
+    title: "The Council of Elrond"
+    type: "chapter"
+    level: 2
+    location_ids: ["rivendell", "last-homely-house"]
+
+  - id: "chapter-15"
+    title: "The Ring Goes South"
+    type: "chapter"
+    level: 2
+    location_ids: ["misty-mountains"]
+
+  - id: "chapter-16"
+    title: "A Journey in the Dark"
+    type: "chapter"
+    level: 2
+    location_ids: ["moria", "west-gate", "chamber-of-mazarbul"]
+
+  - id: "chapter-17"
+    title: "The Bridge of Khazad-dûm"
+    type: "chapter"
+    level: 2
+    location_ids: ["moria", "bridge-of-khazad-dum"]
+
+  - id: "chapter-18"
+    title: "Lothlórien"
+    type: "chapter"
+    level: 2
+    location_ids: ["lothlorien", "caras-galadhon"]
+
+  - id: "chapter-19"
+    title: "The Mirror of Galadriel"
+    type: "chapter"
+    level: 2
+    location_ids: ["lothlorien", "mirror-of-galadriel"]
+
+  - id: "chapter-20"
+    title: "Farewell to Lórien"
+    type: "chapter"
+    level: 2
+    location_ids: ["lothlorien"]
+
+  - id: "chapter-21"
+    title: "The Great River"
+    type: "chapter"
+    level: 2
+    location_ids: ["anduin-river"]
+
+  - id: "chapter-22"
+    title: "The Breaking of the Fellowship"
+    type: "chapter"
+    level: 2
+    location_ids: ["amon-hen", "anduin-river"]
+
+  # Book 2: The Two Towers
+  - id: "book-2"
+    title: "The Two Towers"
+    type: "book"
+    level: 0
+
+  # Part 3: The Treason of Isengard
+  - id: "part-3"
+    title: "The Treason of Isengard"
+    type: "part"
+    level: 1
+
+  - id: "chapter-23"
+    title: "The Departure of Boromir"
+    type: "chapter"
+    level: 2
+    location_ids: ["amon-hen"]
+
+  - id: "chapter-24"
+    title: "The Riders of Rohan"
+    type: "chapter"
+    level: 2
+    location_ids: ["rohan", "edoras"]
+
+  - id: "chapter-25"
+    title: "The Uruk-hai"
+    type: "chapter"
+    level: 2
+    location_ids: ["rohan"]
+
+  - id: "chapter-26"
+    title: "Treebeard"
+    type: "chapter"
+    level: 2
+    location_ids: ["fangorn-forest", "entmoot"]
+
+  - id: "chapter-27"
+    title: "The White Rider"
+    type: "chapter"
+    level: 2
+    location_ids: ["fangorn-forest"]
+
+  - id: "chapter-28"
+    title: "The King of the Golden Hall"
+    type: "chapter"
+    level: 2
+    location_ids: ["edoras", "golden-hall"]
+
+  - id: "chapter-29"
+    title: "Helm's Deep"
+    type: "chapter"
+    level: 2
+    location_ids: ["helms-deep", "hornburg"]
+
+  - id: "chapter-30"
+    title: "The Road to Isengard"
+    type: "chapter"
+    level: 2
+    location_ids: ["isengard", "orthanc"]
+
+  - id: "chapter-31"
+    title: "Flotsam and Jetsam"
+    type: "chapter"
+    level: 2
+    location_ids: ["isengard", "orthanc"]
+
+  - id: "chapter-32"
+    title: "The Voice of Saruman"
+    type: "chapter"
+    level: 2
+    location_ids: ["isengard", "orthanc"]
+
+  - id: "chapter-33"
+    title: "The Palantír"
+    type: "chapter"
+    level: 2
+    location_ids: ["isengard", "orthanc"]
+
+  # Part 4: The Ring Goes East
+  - id: "part-4"
+    title: "The Ring Goes East"
+    type: "part"
+    level: 1
+
+  - id: "chapter-34"
+    title: "The Taming of Sméagol"
+    type: "chapter"
+    level: 2
+    location_ids: ["emyn-muil"]
+
+  - id: "chapter-35"
+    title: "The Passage of the Marshes"
+    type: "chapter"
+    level: 2
+    location_ids: ["dead-marshes"]
+
+  - id: "chapter-36"
+    title: "The Black Gate is Closed"
+    type: "chapter"
+    level: 2
+    location_ids: ["black-gate", "mordor"]
+
+  - id: "chapter-37"
+    title: "Of Herbs and Stewed Rabbit"
+    type: "chapter"
+    level: 2
+    location_ids: ["ithilien"]
+
+  - id: "chapter-38"
+    title: "The Window on the West"
+    type: "chapter"
+    level: 2
+    location_ids: ["henneth-annun", "ithilien"]
+
+  - id: "chapter-39"
+    title: "The Forbidden Pool"
+    type: "chapter"
+    level: 2
+    location_ids: ["henneth-annun"]
+
+  - id: "chapter-40"
+    title: "Journey to the Cross-roads"
+    type: "chapter"
+    level: 2
+    location_ids: ["cross-roads", "minas-morgul"]
+
+  - id: "chapter-41"
+    title: "The Stairs of Cirith Ungol"
+    type: "chapter"
+    level: 2
+    location_ids: ["stairs-of-cirith-ungol"]
+
+  - id: "chapter-42"
+    title: "Shelob's Lair"
+    type: "chapter"
+    level: 2
+    location_ids: ["shelob-lair", "cirith-ungol"]
+
+  - id: "chapter-43"
+    title: "The Choices of Master Samwise"
+    type: "chapter"
+    level: 2
+    location_ids: ["tower-of-cirith-ungol"]
+
+  # Book 3: The Return of the King
+  - id: "book-3"
+    title: "The Return of the King"
+    type: "book"
+    level: 0
+
+  # Part 5: The War of the Ring
+  - id: "part-5"
+    title: "The War of the Ring"
+    type: "part"
+    level: 1
+
+  - id: "chapter-44"
+    title: "Minas Tirith"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith", "white-tower"]
+
+  - id: "chapter-45"
+    title: "The Passing of the Grey Company"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith", "dunharrow", "paths-of-dead"]
+
+  - id: "chapter-46"
+    title: "The Muster of Rohan"
+    type: "chapter"
+    level: 2
+    location_ids: ["edoras", "rohan"]
+
+  - id: "chapter-47"
+    title: "The Siege of Gondor"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith", "pelennor-fields", "osgiliath"]
+
+  - id: "chapter-48"
+    title: "The Ride of the Rohirrim"
+    type: "chapter"
+    level: 2
+    location_ids: ["pelennor-fields", "minas-tirith"]
+
+  - id: "chapter-49"
+    title: "The Battle of the Pelennor Fields"
+    type: "chapter"
+    level: 2
+    location_ids: ["pelennor-fields", "minas-tirith"]
+
+  - id: "chapter-50"
+    title: "The Pyre of Denethor"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith"]
+
+  - id: "chapter-51"
+    title: "The Houses of Healing"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith", "houses-of-healing"]
+
+  - id: "chapter-52"
+    title: "The Last Debate"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith"]
+
+  - id: "chapter-53"
+    title: "The Black Gate Opens"
+    type: "chapter"
+    level: 2
+    location_ids: ["black-gate", "mordor"]
+
+  # Part 6: The End of the Third Age
+  - id: "part-6"
+    title: "The End of the Third Age"
+    type: "part"
+    level: 1
+
+  - id: "chapter-54"
+    title: "Mount Doom"
+    type: "chapter"
+    level: 2
+    location_ids: ["mount-doom", "sammath-naur"]
+
+  - id: "chapter-55"
+    title: "The Field of Cormallen"
+    type: "chapter"
+    level: 2
+    location_ids: ["field-of-cormallen"]
+
+  - id: "chapter-56"
+    title: "The Steward and the King"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith"]
+
+  - id: "chapter-57"
+    title: "Many Partings"
+    type: "chapter"
+    level: 2
+    location_ids: ["minas-tirith", "rivendell"]
+
+  - id: "chapter-58"
+    title: "Homeward Bound"
+    type: "chapter"
+    level: 2
+    location_ids: ["shire", "bag-end"]
+
+  - id: "chapter-59"
+    title: "The Scouring of the Shire"
+    type: "chapter"
+    level: 2
+    location_ids: ["shire", "hobbiton", "bywater"]
+
+  - id: "chapter-60"
+    title: "The Grey Havens"
+    type: "chapter"
+    level: 2
+    location_ids: ["grey-havens"]
+
+hierarchy:
+  # Book 1: The Fellowship of the Ring
+  - chapter_id: "book-1"
+    type: "book"
+    level: 0
+
+  # Part 1: The Ring Sets Out
+  - chapter_id: "part-1"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-1"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-2"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-3"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-4"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-5"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-6"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-7"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-8"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-9"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-10"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-11"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-12"
+    type: "chapter"
+    level: 2
+
+  # Part 2: The Ring Goes South
+  - chapter_id: "part-2"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-13"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-14"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-15"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-16"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-17"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-18"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-19"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-20"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-21"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-22"
+    type: "chapter"
+    level: 2
+
+  # Book 2: The Two Towers
+  - chapter_id: "book-2"
+    type: "book"
+    level: 0
+
+  # Part 3: The Treason of Isengard
+  - chapter_id: "part-3"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-23"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-24"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-25"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-26"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-27"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-28"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-29"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-30"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-31"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-32"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-33"
+    type: "chapter"
+    level: 2
+
+  # Part 4: The Ring Goes East
+  - chapter_id: "part-4"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-34"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-35"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-36"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-37"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-38"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-39"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-40"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-41"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-42"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-43"
+    type: "chapter"
+    level: 2
+
+  # Book 3: The Return of the King
+  - chapter_id: "book-3"
+    type: "book"
+    level: 0
+
+  # Part 5: The War of the Ring
+  - chapter_id: "part-5"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-44"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-45"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-46"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-47"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-48"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-49"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-50"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-51"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-52"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-53"
+    type: "chapter"
+    level: 2
+
+  # Part 6: The End of the Third Age
+  - chapter_id: "part-6"
+    type: "part"
+    level: 1
+
+  - chapter_id: "chapter-54"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-55"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-56"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-57"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-58"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-59"
+    type: "chapter"
+    level: 2
+
+  - chapter_id: "chapter-60"
+    type: "chapter"
+    level: 2
+
+relationships:
+  - character1_id: "frodo-baggins"
+    character2_id: "samwise-gamgee"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Master and servant, become close friends"
+      - chapter: "chapter-34"
+        description: "Sam becomes Frodo's protector"
+      - chapter: "chapter-54"
+        description: "Sam carries Frodo to Mount Doom"
+
+  - character1_id: "frodo-baggins"
+    character2_id: "gandalf"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Gandalf guides Frodo on his quest"
+      - chapter: "chapter-14"
+        description: "Gandalf helps form the Fellowship"
+
+  - character1_id: "frodo-baggins"
+    character2_id: "aragorn"
+    descriptions:
+      - chapter: "chapter-10"
+        description: "Aragorn protects Frodo as Strider"
+      - chapter: "chapter-14"
+        description: "Aragorn joins the Fellowship"
+
+  - character1_id: "frodo-baggins"
+    character2_id: "gollum"
+    descriptions:
+      - chapter: "chapter-34"
+        description: "Frodo pities and spares Gollum"
+      - chapter: "chapter-44"
+        description: "Gollum betrays Frodo to Shelob"
+      - chapter: "chapter-58"
+        description: "Gollum takes the Ring and falls into Mount Doom"
+
+  - character1_id: "aragorn"
+    character2_id: "legolas"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Fellowship members and close friends"
+      - chapter: "chapter-24"
+        description: "Together track the Uruk-hai"
+
+  - character1_id: "aragorn"
+    character2_id: "gimli"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Fellowship members, develop friendship"
+      - chapter: "chapter-24"
+        description: "Together track the Uruk-hai"
+
+  - character1_id: "legolas"
+    character2_id: "gimli"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Elf and dwarf, overcome ancient enmity"
+      - chapter: "chapter-24"
+        description: "Develop deep friendship during the quest"
+
+  - character1_id: "meriadoc-brandybuck"
+    character2_id: "peregrin-took"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Best friends and cousins"
+      - chapter: "chapter-24"
+        description: "Captured together by Uruk-hai"
+
+  - character1_id: "boromir"
+    character2_id: "frodo-baggins"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Boromir is tempted by the Ring"
+      - chapter: "chapter-22"
+        description: "Boromir tries to take the Ring from Frodo"
+
+  - character1_id: "theoden"
+    character2_id: "eowyn"
+    descriptions:
+      - chapter: "chapter-29"
+        description: "Uncle and niece, king and princess"
+      - chapter: "chapter-51"
+        description: "Éowyn fights to protect her uncle's kingdom"
+
+  - character1_id: "faramir"
+    character2_id: "denethor"
+    descriptions:
+      - chapter: "chapter-39"
+        description: "Father and son, steward and captain"
+      - chapter: "chapter-52"
+        description: "Denethor despairs over Faramir's injury"
+
+  - character1_id: "saruman"
+    character2_id: "gandalf"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Former allies, now enemies"
+      - chapter: "chapter-33"
+        description: "Saruman tries to corrupt Gandalf"
+
+  - character1_id: "sauron"
+    character2_id: "frodo-baggins"
+    descriptions:
+      - chapter: "chapter-1"
+        description: "Sauron seeks the Ring that Frodo carries"
+      - chapter: "chapter-58"
+        description: "Final confrontation at Mount Doom"
+
+  - character1_id: "gollum"
+    character2_id: "samwise-gamgee"
+    descriptions:
+      - chapter: "chapter-35"
+        description: "Sam distrusts Gollum as guide"
+      - chapter: "chapter-44"
+        description: "Sam fights Gollum to protect Frodo"
+
+locations:
+  - id: "middle-earth"
+    name: "Middle-earth"
+    description: "The main continent where the story takes place."
+
+  - id: "shire"
+    name: "The Shire"
+    description: "The homeland of the hobbits, a peaceful region of rolling hills."
+
+  - id: "bag-end"
+    name: "Bag End"
+    description: "Frodo's home in Hobbiton, a comfortable hobbit-hole."
+
+  - id: "hobbiton"
+    name: "Hobbiton"
+    description: "A village in the Shire where Bag End is located."
+
+  - id: "green-dragon-inn"
+    name: "The Green Dragon Inn"
+    description: "A popular tavern in Bywater, frequented by hobbits."
+
+  - id: "bywater"
+    name: "Bywater"
+    description: "A village in the Shire near Hobbiton."
+
+  - id: "buckland"
+    name: "Buckland"
+    description: "A region of the Shire east of the Brandywine River."
+
+  - id: "brandy-hall"
+    name: "Brandy Hall"
+    description: "The ancestral home of the Brandybuck family in Buckland."
+
+  - id: "crickhollow"
+    name: "Crickhollow"
+    description: "A house in Buckland where Frodo pretends to live."
+
+  - id: "brandywine-river"
+    name: "Brandywine River"
+    description: "A major river that forms the eastern border of the Shire."
+
+  - id: "old-forest"
+    name: "The Old Forest"
+    description: "A mysterious and dangerous forest east of the Shire."
+
+  - id: "withywindle"
+    name: "Withywindle"
+    description: "A river that flows through the Old Forest."
+
+  - id: "tom-bombadil-house"
+    name: "Tom Bombadil's House"
+    description: "The home of Tom Bombadil and Goldberry in the Old Forest."
+
+  - id: "barrow-downs"
+    name: "Barrow-downs"
+    description: "Ancient burial mounds haunted by barrow-wights."
+
+  - id: "bree"
+    name: "Bree"
+    description: "A town at the crossroads of major roads, home to both men and hobbits."
+
+  - id: "prancing-pony"
+    name: "The Prancing Pony"
+    description: "An inn in Bree where travelers gather."
+
+  - id: "weathertop"
+    name: "Weathertop"
+    description: "A hill with ancient ruins, site of a battle with the Nazgûl."
+
+  - id: "ford-of-bruinen"
+    name: "Ford of Bruinen"
+    description: "A river crossing where the Nazgûl are swept away."
+
+  - id: "rivendell"
+    name: "Rivendell"
+    description: "The hidden refuge of Elrond, a valley of the elves."
+
+  - id: "last-homely-house"
+    name: "The Last Homely House"
+    description: "Elrond's house in Rivendell."
+
+  - id: "misty-mountains"
+    name: "Misty Mountains"
+    description: "A great mountain range that must be crossed."
+
+  - id: "moria"
+    name: "Moria"
+    description: "The ancient dwarf kingdom, now a dark and dangerous place."
+
+  - id: "west-gate"
+    name: "West Gate of Moria"
+    description: "The entrance to Moria, sealed by magic."
+
+  - id: "chamber-of-mazarbul"
+    name: "Chamber of Mazarbul"
+    description: "A chamber in Moria where Balin's tomb is found."
+
+  - id: "bridge-of-khazad-dum"
+    name: "Bridge of Khazad-dûm"
+    description: "A narrow bridge over a chasm in Moria."
+
+  - id: "lothlorien"
+    name: "Lothlórien"
+    description: "The realm of the Galadhrim elves, protected by Galadriel."
+
+  - id: "caras-galadhon"
+    name: "Caras Galadhon"
+    description: "The capital city of Lothlórien, built in the trees."
+
+  - id: "mirror-of-galadriel"
+    name: "Mirror of Galadriel"
+    description: "A magical basin that shows visions of the past and future."
+
+  - id: "anduin-river"
+    name: "Anduin River"
+    description: "The Great River that flows through Middle-earth."
+
+  - id: "amon-hen"
+    name: "Amon Hen"
+    description: "The Hill of Sight, where the Fellowship breaks up."
+
+  - id: "rohan"
+    name: "Rohan"
+    description: "The kingdom of the horse-lords, allies of Gondor."
+
+  - id: "edoras"
+    name: "Edoras"
+    description: "The capital city of Rohan, built on a hill."
+
+  - id: "golden-hall"
+    name: "The Golden Hall"
+    description: "Meduseld, the great hall of the kings of Rohan."
+
+  - id: "helms-deep"
+    name: "Helm's Deep"
+    description: "A fortress in a valley, site of a great battle."
+
+  - id: "hornburg"
+    name: "The Hornburg"
+    description: "The fortress at Helm's Deep."
+
+  - id: "isengard"
+    name: "Isengard"
+    description: "The fortress of Saruman, surrounded by a ring of stone."
+
+  - id: "orthanc"
+    name: "Orthanc"
+    description: "The black tower at the center of Isengard."
+
+  - id: "fangorn-forest"
+    name: "Fangorn Forest"
+    description: "An ancient forest inhabited by the Ents."
+
+  - id: "entmoot"
+    name: "Entmoot"
+    description: "A gathering place of the Ents in Fangorn."
+
+  - id: "dead-marshes"
+    name: "Dead Marshes"
+    description: "A treacherous wetland filled with the bodies of ancient battles."
+
+  - id: "emyn-muil"
+    name: "Emyn Muil"
+    description: "Rocky hills on the border of Gondor."
+
+  - id: "black-gate"
+    name: "The Black Gate"
+    description: "The main entrance to Mordor, heavily guarded."
+
+  - id: "mordor"
+    name: "Mordor"
+    description: "The dark land ruled by Sauron."
+
+  - id: "mount-doom"
+    name: "Mount Doom"
+    description: "The volcano where the One Ring was forged and must be destroyed."
+
+  - id: "barad-dur"
+    name: "Barad-dûr"
+    description: "Sauron's dark tower in Mordor."
+
+  - id: "eye-of-sauron"
+    name: "The Eye of Sauron"
+    description: "Sauron's all-seeing eye atop Barad-dûr."
+
+  - id: "minas-tirith"
+    name: "Minas Tirith"
+    description: "The capital city of Gondor, the White City."
+
+  - id: "white-tower"
+    name: "The White Tower"
+    description: "The great tower in Minas Tirith."
+
+  - id: "pelennor-fields"
+    name: "Pelennor Fields"
+    description: "The plains outside Minas Tirith, site of a great battle."
+
+  - id: "osgiliath"
+    name: "Osgiliath"
+    description: "The ruined former capital of Gondor."
+
+  - id: "minas-morgul"
+    name: "Minas Morgul"
+    description: "The city of the Nazgûl, once Minas Ithil."
+
+  - id: "cirith-ungol"
+    name: "Cirith Ungol"
+    description: "A pass and tower on the border of Mordor."
+
+  - id: "shelob-lair"
+    name: "Shelob's Lair"
+    description: "The cave of the giant spider Shelob."
+
+  - id: "ithilien"
+    name: "Ithilien"
+    description: "A region of Gondor, once fair but now under threat."
+
+  - id: "henneth-annun"
+    name: "Henneth Annûn"
+    description: "A hidden refuge in Ithilien."
+
+  - id: "cross-roads"
+    name: "The Cross-roads"
+    description: "A junction of roads near Minas Morgul."
+
+  - id: "stairs-of-cirith-ungol"
+    name: "Stairs of Cirith Ungol"
+    description: "A steep stairway leading to the tower."
+
+  - id: "tower-of-cirith-ungol"
+    name: "Tower of Cirith Ungol"
+    description: "A tower guarding the pass into Mordor."
+
+  - id: "sammath-naur"
+    name: "Sammath Naur"
+    description: "The Cracks of Doom, the chamber inside Mount Doom."
+
+  - id: "field-of-cormallen"
+    name: "Field of Cormallen"
+    description: "A field where the heroes are honored after victory."
+
+  - id: "houses-of-healing"
+    name: "Houses of Healing"
+    description: "The hospital in Minas Tirith."
+
+  - id: "grey-havens"
+    name: "The Grey Havens"
+    description: "The port where elves depart for the Undying Lands." 

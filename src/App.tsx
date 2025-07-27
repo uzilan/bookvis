@@ -8,7 +8,6 @@ import type { BookData } from './models/BookData';
 import type { SchemaBookData } from './schema/models/SchemaBookData';
 import { FirebaseService } from './services/firebase.ts';
 import { convertBookDataToSchema } from './utils/schemaToBookDataConverter';
-import { aliceBookData } from './books/aliceData';
 
 console.log('🔧 App.tsx is being imported');
 
@@ -33,8 +32,8 @@ function App() {
         setLoading(true);
         const books = await FirebaseService.getAllBooks();
         
-        // Add local books (Alice) to the books list
-        const allBooks = [aliceBookData, ...books];
+        // Use only Firebase books
+        const allBooks = books;
         setBooksFromFirebase(allBooks);
         
         // Set the first book as selected if we have books and no book is currently selected
