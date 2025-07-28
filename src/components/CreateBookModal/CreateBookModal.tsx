@@ -12,7 +12,7 @@ import {
   Typography
 } from '@mui/material';
 import { AddAuthorModal } from '../AddAuthorModal';
-import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab, CharactersTab, RelationshipsTab } from './index';
+import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab, CharactersTab, RelationshipsTab, CharactersInChaptersTab } from './index';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData, SchemaAuthor } from '../../schema/models';
 import type { BookData } from '../../models/BookData';
@@ -305,42 +305,15 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       </DialogTitle>
       <DialogContent sx={{ 
         display: 'flex', 
-        flexDirection: 'column', 
         height: '600px', 
         p: 0,
         backgroundColor: 'var(--color-background)',
         color: 'var(--color-text)'
       }}>
-        {/* Tabs - Always visible */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', px: 2, pt: 2 }}>
-          <Tabs 
-            value={currentTab} 
-            onChange={handleTabChange}
-            sx={{
-              '& .MuiTab-root': {
-                color: 'var(--color-textSecondary)',
-              },
-              '& .Mui-selected': {
-                color: 'var(--color-text) !important',
-              },
-              '& .MuiTabs-indicator': {
-                backgroundColor: 'var(--color-primary)',
-              },
-            }}
-          >
-            <Tab label="Book Info" />
-            <Tab label={`Locations (${bookData.locations?.length || 0})`} />
-            <Tab label={`Factions (${bookData.factions?.length || 0})`} />
-            <Tab label={`Characters (${bookData.characters?.length || 0})`} />
-            <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
-            <Tab label={`Relationships (${bookData.relationships?.length || 0})`} />
-          </Tabs>
-        </Box>
-
-
-
-        {/* Scrollable Content */}
-        <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
+        {/* Main Content Area */}
+        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          {/* Scrollable Content */}
+          <Box sx={{ flex: 1, overflow: 'auto', p: 2 }}>
           {currentTab === 0 && (
             <BookInfoTab
               authors={authors}
@@ -368,14 +341,14 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           )}
 
           {currentTab === 3 && (
-            <CharactersTab
+            <ChaptersTab
               bookData={bookData}
               setBookData={setBookData}
             />
           )}
 
           {currentTab === 4 && (
-            <ChaptersTab
+            <CharactersTab
               bookData={bookData}
               setBookData={setBookData}
             />
@@ -387,6 +360,61 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
               setBookData={setBookData}
             />
           )}
+
+          {currentTab === 6 && (
+            <CharactersInChaptersTab
+              bookData={bookData}
+              setBookData={setBookData}
+            />
+          )}
+          </Box>
+        </Box>
+        
+        {/* Vertical Tabs on the Right */}
+        <Box sx={{ 
+          width: '200px', 
+          borderLeft: 1, 
+          borderColor: 'divider',
+          backgroundColor: 'var(--color-surface)'
+        }}>
+          <Tabs 
+            value={currentTab} 
+            onChange={handleTabChange}
+            orientation="vertical"
+            sx={{
+              '& .MuiTab-root': {
+                color: 'var(--color-textSecondary)',
+                alignItems: 'flex-start',
+                textAlign: 'left',
+                padding: '12px 16px',
+                minHeight: '48px',
+                borderBottom: '1px solid var(--color-border)',
+              },
+              '& .Mui-selected': {
+                color: 'var(--color-text) !important',
+                backgroundColor: 'var(--color-hover)',
+              },
+              '& .MuiTabs-indicator': {
+                backgroundColor: 'var(--color-primary)',
+                left: 0,
+                width: '4px',
+              },
+            }}
+          >
+            <Tab label="Info" />
+            <Tab label={`Locations (${bookData.locations?.length || 0})`} />
+            <Tab label={`Factions (${bookData.factions?.length || 0})`} />
+            <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
+            <Tab label={`Characters (${bookData.characters?.length || 0})`} />
+            <Tab label={`Relationships (${bookData.relationships?.length || 0})`} />
+            <Tab label={`Chapter Cast (${bookData.chapters?.filter(chapter => {
+              const hierarchyItem = bookData.hierarchy?.find(h => h.chapter_id === chapter.id);
+              return hierarchyItem?.type === 'chapter' && (chapter.characters?.length || 0) > 0;
+            }).length || 0}/${bookData.chapters?.filter(chapter => {
+              const hierarchyItem = bookData.hierarchy?.find(h => h.chapter_id === chapter.id);
+              return hierarchyItem?.type === 'chapter';
+            }).length || 0})`} />
+          </Tabs>
         </Box>
       </DialogContent>
       <DialogActions>

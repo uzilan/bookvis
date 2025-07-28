@@ -37,7 +37,6 @@ export const CharacterGraphView: React.FC = () => {
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const [previewBookData, setPreviewBookData] = useState<BookData | null>(null);
   const [initialModalData, setInitialModalData] = useState<SchemaBookData | undefined>(undefined);
-  const [previewTimestamp, setPreviewTimestamp] = useState<number>(0);
   const hasSetInitialBook = useRef(false);
 
   // Fetch books from Firebase on component mount (skip if in preview mode)
@@ -203,12 +202,10 @@ export const CharacterGraphView: React.FC = () => {
     
     // Clear any existing preview data first
     setPreviewBookData(null);
-    setPreviewTimestamp(0);
     
     // Use setTimeout to ensure the clear happens before setting new data
     setTimeout(() => {
       setPreviewBookData(previewData);
-      setPreviewTimestamp(Date.now());
     }, 0);
   };
 
@@ -227,7 +224,6 @@ export const CharacterGraphView: React.FC = () => {
       setIsCreateBookModalOpen(true);
     }
     setPreviewBookData(null);
-    setPreviewTimestamp(0);
   };
 
   const handleCloseCreateBookModal = () => {

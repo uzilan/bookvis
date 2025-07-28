@@ -84,7 +84,10 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
       // For string chapter IDs, find the target chapter and current chapter
       const targetChapter = chapters.find(ch => ch.id === joinChapter);
       const currentChapter = chapters.find(ch => ch.id === selectedChapter);
-      return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+      
+      console.log('Faction filtering debug - factionId:', factionId, 'joinChapter:', joinChapter, 'targetChapter:', targetChapter?.id, 'targetChapterIndex:', targetChapter?.index, 'currentChapter:', currentChapter?.id, 'currentChapterIndex:', currentChapter?.index, 'result:', targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && targetChapter.index <= currentChapter.index);
+      
+      return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
              targetChapter.index <= currentChapter.index;
     }
     return false;
@@ -93,6 +96,8 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
   const characterFactions = currentFactionIds.map(factionId => 
     factions.find(f => f.id === factionId)
   ).filter(Boolean) as Faction[];
+
+  console.log('CharacterDetailsPanel debug - characterName:', character.name, 'allFactions:', character.factions, 'factionJoinChapters:', character.factionJoinChapters, 'currentFactionIds:', currentFactionIds, 'characterFactions:', characterFactions.map(f => f.title), 'selectedChapter:', selectedChapter);
 
   // Find chapters where this character is mentioned
   const characterMentionedChapters = chapters.filter(ch => 

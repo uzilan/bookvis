@@ -4,6 +4,7 @@ export { FactionsTab } from './FactionsTab';
 export { ChaptersTab } from './ChaptersTab';
 export { CharactersTab } from './CharactersTab';
 export { RelationshipsTab } from './RelationshipsTab';
+export { CharactersInChaptersTab } from './CharactersInChaptersTab';
 export { LocationSelectorModal } from './LocationSelectorModal';
 export { DevelopmentDataViewer } from './DevelopmentDataViewer';
 export { CreateBookModal } from './CreateBookModal'; 

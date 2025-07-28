@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip, Divider } from '@mui/material';
+import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
-import { CharacterSelectorModal } from './CharacterSelectorModal';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import type { SchemaChapter } from '../../schema/models/SchemaChapter';
 import type { SchemaHierarchyItem, SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
-
 
 interface ChaptersTabProps {
   bookData: SchemaBookData;
@@ -18,7 +16,6 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   bookData,
   setBookData
 }) => {
-
   const [newChapterTitle, setNewChapterTitle] = useState('');
   const [selectedHierarchyType, setSelectedHierarchyType] = useState<SchemaHierarchyType>('chapter');
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
@@ -27,13 +24,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   const [editingTitle, setEditingTitle] = useState('');
   const [editingType, setEditingType] = useState<SchemaHierarchyType>('chapter');
   const [editingLocations, setEditingLocations] = useState<string[]>([]);
-  const [editingCharacters, setEditingCharacters] = useState<string[]>([]);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [locationModalTitle, setLocationModalTitle] = useState('');
   const [newChapterLocations, setNewChapterLocations] = useState<string[]>([]);
-  const [isCharacterModalOpen, setIsCharacterModalOpen] = useState(false);
-  const [characterModalTitle, setCharacterModalTitle] = useState('');
-  const [newChapterCharacters, setNewChapterCharacters] = useState<string[]>([]);
 
   const handleAddChapter = () => {
     if (newChapterTitle.trim()) {
@@ -41,7 +34,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         id: `chapter-${bookData.chapters.length + 1}`,
         title: newChapterTitle.trim(),
         locations: newChapterLocations,
-        characters: newChapterCharacters
+        characters: []
       };
 
       const newHierarchyItem: SchemaHierarchyItem = {
@@ -57,11 +50,8 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
 
       setNewChapterTitle('');
       setNewChapterLocations([]);
-      setNewChapterCharacters([]);
     }
   };
-
-
 
   const buildHierarchyTree = (): Array<{ item: SchemaHierarchyItem; chapter: SchemaChapter; level: number }> => {
     const tree: Array<{ item: SchemaHierarchyItem; chapter: SchemaChapter; level: number }> = [];
@@ -93,13 +83,10 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     return tree;
   };
 
-
-
-
-
   const handleRemoveFromHierarchy = (chapterId: string) => {
     setBookData(prev => ({
       ...prev,
+      chapters: prev.chapters.filter(ch => ch.id !== chapterId),
       hierarchy: prev.hierarchy?.filter(item => item.chapter_id !== chapterId) || []
     }));
   };
@@ -123,6 +110,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   const handleDrop = (e: React.DragEvent, targetChapterId: string) => {
     e.preventDefault();
     if (draggedItem && draggedItem !== targetChapterId) {
+      // Reorder hierarchy
       const hierarchy = bookData.hierarchy || [];
       const draggedIndex = hierarchy.findIndex(item => item.chapter_id === draggedItem);
       const targetIndex = hierarchy.findIndex(item => item.chapter_id === targetChapterId);
@@ -148,7 +136,6 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle(currentTitle);
     setEditingType(currentType);
     setEditingLocations(chapter?.locations || []);
-    setEditingCharacters(chapter?.characters || []);
   };
 
   const handleSaveEdit = () => {
@@ -157,7 +144,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
         ...prev,
         chapters: prev.chapters.map(chapter => 
           chapter.id === editingChapterId 
-            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [], characters: editingType === 'chapter' ? editingCharacters : [] }
+            ? { ...chapter, title: editingTitle.trim(), locations: editingType === 'chapter' ? editingLocations : [], characters: [] }
             : chapter
         ),
         hierarchy: prev.hierarchy?.map(item => 
@@ -171,7 +158,6 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle('');
     setEditingType('chapter');
     setEditingLocations([]);
-    setEditingCharacters([]);
   };
 
   const handleCancelEdit = () => {
@@ -179,17 +165,15 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
     setEditingTitle('');
     setEditingType('chapter');
     setEditingLocations([]);
-    setEditingCharacters([]);
   };
-
-
 
   const handleOpenLocationModal = (title: string, isForNewChapter: boolean = false) => {
     setLocationModalTitle(title);
     setIsLocationModalOpen(true);
     // Set the initial locations based on whether we're creating or editing
     if (isForNewChapter) {
-      setEditingLocations(newChapterLocations);
+      // For new chapters, we don't need to set editingLocations since we're not editing
+      // The modal will use newChapterLocations as the initial value
     }
   };
 
@@ -199,20 +183,6 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
       setEditingLocations(selectedLocationIds);
     } else {
       setNewChapterLocations(selectedLocationIds);
-    }
-  };
-
-  const handleOpenCharacterModal = (title: string) => {
-    setCharacterModalTitle(title);
-    setIsCharacterModalOpen(true);
-  };
-
-  const handleCharacterModalSave = (selectedCharacterIds: string[]) => {
-    // Check if we're editing an existing chapter or creating a new one
-    if (editingChapterId) {
-      setEditingCharacters(selectedCharacterIds);
-    } else {
-      setNewChapterCharacters(selectedCharacterIds);
     }
   };
 
@@ -298,444 +268,313 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               <MenuItem value="chapter">Chapter</MenuItem>
             </Select>
           </FormControl>
-          
-          {/* Locations Row - Always show, but read-only for non-chapters */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2" sx={{ minWidth: 80 }}>
-              Locations:
+
+          {/* Locations */}
+          <Box>
+            <Typography variant="body2" sx={{ mb: 1, color: 'var(--color-textSecondary)' }}>
+              Locations
             </Typography>
-            {selectedHierarchyType === 'chapter' ? (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => handleOpenLocationModal(`Select Locations for New Chapter`, true)}
-              >
-                {newChapterLocations.length} selected
-              </Button>
-            ) : (
-              <Button
-                size="small"
-                variant="outlined"
-                disabled
-                title={`Locations are only available for chapters. ${selectedHierarchyType.charAt(0).toUpperCase() + selectedHierarchyType.slice(1)}s are organizational structures.`}
-                sx={{ 
-                  cursor: 'help',
-                  '&:hover': {
-                    backgroundColor: 'action.hover'
-                  }
-                }}
-              >
-                Not available
-              </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => handleOpenLocationModal(`Select Locations for New Chapter`, true)}
+              sx={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text)',
+                '&:hover': {
+                  borderColor: 'var(--color-primary)',
+                  backgroundColor: 'var(--color-hover)',
+                }
+              }}
+            >
+              {newChapterLocations.length > 0 ? `${newChapterLocations.length} selected` : 'Select Locations'}
+            </Button>
+            {newChapterLocations.length > 0 && (
+              <Box sx={{ mt: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                {newChapterLocations.map(locationId => {
+                  const location = bookData.locations.find(l => l.id === locationId);
+                  return location ? (
+                    <Chip
+                      key={locationId}
+                      label={location.name}
+                      size="small"
+                      sx={{
+                        backgroundColor: 'var(--color-surface)',
+                        color: 'var(--color-text)',
+                        border: '1px solid var(--color-border)',
+                        fontSize: '0.75rem'
+                      }}
+                    />
+                  ) : null;
+                })}
+              </Box>
             )}
           </Box>
-          
-          {/* Characters Row - Always show, but read-only for non-chapters */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2" sx={{ minWidth: 80 }}>
-              Characters:
-            </Typography>
-            {selectedHierarchyType === 'chapter' ? (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => handleOpenCharacterModal(`Select Characters for New Chapter`)}
-              >
-                {newChapterCharacters.length} selected
-              </Button>
-            ) : (
-              <Button
-                size="small"
-                variant="outlined"
-                disabled
-                title={`Characters are only available for chapters. ${selectedHierarchyType.charAt(0).toUpperCase() + selectedHierarchyType.slice(1)}s are organizational structures.`}
-                sx={{ 
-                  cursor: 'help',
-                  '&:hover': {
-                    backgroundColor: 'action.hover'
-                  }
-                }}
-              >
-                Not available
-              </Button>
-            )}
-          </Box>
-          
-          {/* Add Button */}
+
           <Button
             variant="contained"
             onClick={handleAddChapter}
             disabled={!newChapterTitle.trim()}
             sx={{
-              backgroundColor: 'var(--color-buttonActive)',
-              color: 'white',
-              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-primary)',
+              color: 'var(--color-onPrimary)',
               '&:hover': {
-                backgroundColor: 'var(--color-buttonActiveHover)',
-                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-primaryHover)',
               },
               '&:disabled': {
                 backgroundColor: 'var(--color-disabled)',
                 color: 'var(--color-onDisabled)',
-                border: '1px solid var(--color-border)',
-              },
+              }
             }}
           >
-            Add
+            Add Chapter
           </Button>
         </Box>
       </Box>
 
-      {/* Divider between columns */}
-      <Divider 
-        orientation="vertical" 
-        flexItem 
-        sx={{ 
-          backgroundColor: 'var(--color-border)',
-        }}
-      />
-
-      {/* Right Column - Book Structure Tree */}
+      {/* Right Column - Chapter List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Typography variant="subtitle1" gutterBottom>
-          Book Structure Tree (drag to reorder):
+          Chapters ({bookData.chapters.length})
         </Typography>
-
-        {/* Tree View */}
-        <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-          <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1 }}>
-            {buildHierarchyTree().map(({ item, chapter, level }) => (
-              <Box
-                key={item.chapter_id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, item.chapter_id)}
-                onDragOver={(e) => handleDragOver(e, item.chapter_id)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, item.chapter_id)}
-                onClick={() => handleStartEditing(item.chapter_id, chapter.title, item.type)}
-                sx={{
-                  display: 'flex',
-                  justifyContent: editingChapterId === item.chapter_id ? 'flex-start' : 'space-between',
-                  alignItems: 'flex-start',
-                  py: 0.5,
-                  pl: editingChapterId === item.chapter_id ? 0 : level * 2,
-                  cursor: editingChapterId === item.chapter_id ? 'default' : 'grab',
-                  backgroundColor: dragOverItem === item.chapter_id ? '#e3f2fd' : 'var(--color-surface)',
-                  border: dragOverItem === item.chapter_id ? '2px dashed #1976d2' : '1px solid var(--color-border)',
-                  borderRadius: 1,
-                  '&:hover': { 
-                    backgroundColor: dragOverItem === item.chapter_id ? '#e3f2fd' : 
-                      editingChapterId === item.chapter_id ? 'transparent' : 'var(--color-hover) !important'
-                  },
-                  '&:active': { cursor: 'grabbing' }
-                }}
-              >
-                {editingChapterId !== item.chapter_id && (
-                  <DragIndicatorIcon 
-                    sx={{ 
-                      mr: 1, 
-                      color: 'var(--color-textSecondary)',
-                      fontSize: '16px'
-                    }} 
+        
+        <Box sx={{ flex: 1, overflow: 'auto' }}>
+          {buildHierarchyTree().map(({ item, chapter, level }) => (
+            <Box
+              key={chapter.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, chapter.id)}
+              onDragOver={(e) => handleDragOver(e, chapter.id)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, chapter.id)}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                p: 1,
+                mb: 1,
+                backgroundColor: dragOverItem === chapter.id ? 'var(--color-hover) !important' : 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 1,
+                cursor: 'grab',
+                '&:hover': {
+                  backgroundColor: 'var(--color-hover) !important',
+                },
+                                 pl: editingChapterId === chapter.id ? 2 : 2 + level * 2
+              }}
+            >
+                             {editingChapterId !== chapter.id && (
+                 <DragIndicatorIcon 
+                   sx={{ 
+                     color: 'var(--color-textSecondary)',
+                     cursor: 'grab'
+                   }} 
+                 />
+               )}
+              
+              {editingChapterId === chapter.id ? (
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <TextField
+                    fullWidth
+                    label="Chapter Title"
+                    placeholder="Enter chapter title"
+                    value={editingTitle}
+                    onChange={(e) => setEditingTitle(e.target.value)}
+                    sx={{
+                      '& .MuiInputLabel-root': {
+                        color: 'var(--color-textSecondary)',
+                      },
+                      '& .MuiInputBase-input': {
+                        color: 'var(--color-textSecondary) !important',
+                      },
+                      '& .MuiInputBase-input::placeholder': {
+                        color: 'var(--color-textSecondary)',
+                      },
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          border: '1px solid #e0e0e0 !important',
+                        },
+                        '&:hover fieldset': {
+                          border: '1px solid #e0e0e0 !important',
+                        },
+                        '&.Mui-focused fieldset': {
+                          border: '1px solid #1976d2 !important',
+                        },
+                      },
+                    }}
                   />
-                )}
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  {editingChapterId === item.chapter_id ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
-                      {/* Title Input */}
-                      <TextField
-                        fullWidth
-                        label="Chapter Title"
-                        placeholder="Enter chapter title"
-                        value={editingTitle}
-                        onChange={(e) => setEditingTitle(e.target.value)}
-                        onKeyPress={(e) => {
-                          if (e.key === 'Enter') {
-                            handleSaveEdit();
-                          } else if (e.key === 'Escape') {
-                            handleCancelEdit();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        autoFocus
-                        sx={{ 
-                          '& .MuiInputLabel-root': {
-                            color: 'var(--color-textSecondary)',
-                          },
-                          '& .MuiInputBase-input': {
-                            color: 'var(--color-textSecondary) !important',
-                          },
-                          '& .MuiInputBase-input::placeholder': {
-                            color: 'var(--color-textSecondary)',
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&:hover fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&.Mui-focused fieldset': {
-                              border: '1px solid #1976d2 !important',
-                            },
-                          },
-                        }}
-                      />
-                      
-                      {/* Type Select */}
-                      <FormControl 
-                        fullWidth
-                        sx={{ 
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&:hover fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&.Mui-focused fieldset': {
-                              border: '1px solid #1976d2 !important',
-                            },
-                          },
-                        }}
-                      >
-                        <InputLabel sx={{ color: 'var(--color-textSecondary)' }}>Type</InputLabel>
-                        <Select
-                          value={editingType}
-                          label="Type"
-                          onChange={(e) => setEditingType(e.target.value as SchemaHierarchyType)}
-                          onClick={(e) => e.stopPropagation()}
-                          sx={{
-                            '& .MuiInputBase-input': {
-                              color: 'var(--color-textSecondary) !important',
-                            },
-                            '& .MuiSelect-select': {
-                              color: level === 0 ? 'var(--color-primary)' : 'var(--color-textSecondary) !important',
-                            },
-                          }}
-                        >
-                          <MenuItem value="volume">Volume</MenuItem>
-                          <MenuItem value="book">Book</MenuItem>
-                          <MenuItem value="part">Part</MenuItem>
-                          <MenuItem value="chapter">Chapter</MenuItem>
-                        </Select>
-                      </FormControl>
-                      
-                      {/* Locations Button */}
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="body2" sx={{ minWidth: 80 }}>
-                          Locations:
-                        </Typography>
-                        {editingType === 'chapter' ? (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleOpenLocationModal(`Select Locations for "${editingTitle}"`, false);
-                            }}
-                          >
-                            {editingLocations.length} selected
-                          </Button>
-                        ) : (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            disabled
-                            title={`Locations are only available for chapters. ${editingType.charAt(0).toUpperCase() + editingType.slice(1)}s are organizational structures.`}
-                            sx={{ 
-                              cursor: 'help',
-                              '&:hover': {
-                                backgroundColor: 'action.hover'
-                              }
-                            }}
-                          >
-                            Not available
-                          </Button>
-                        )}
-                      </Box>
-                      
-                      {/* Characters Button */}
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="body2" sx={{ minWidth: 80 }}>
-                          Characters:
-                        </Typography>
-                        {editingType === 'chapter' ? (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleOpenCharacterModal(`Select Characters for "${editingTitle}"`);
-                            }}
-                          >
-                            {editingCharacters.length} selected
-                          </Button>
-                        ) : (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            disabled
-                            title={`Characters are only available for chapters. ${editingType.charAt(0).toUpperCase() + editingType.slice(1)}s are organizational structures.`}
-                            sx={{ 
-                              cursor: 'help',
-                              '&:hover': {
-                                backgroundColor: 'action.hover'
-                              }
-                            }}
-                          >
-                            Not available
-                          </Button>
-                        )}
-                      </Box>
-                      
-                      {/* Buttons Row */}
-                      <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Button 
-                          size="small" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSaveEdit();
-                          }}
-                          sx={{
-                            backgroundColor: 'var(--color-buttonActive)',
-                            color: 'white',
-                            border: '1px solid var(--color-border)',
-                            '&:hover': {
-                              backgroundColor: 'var(--color-buttonActiveHover)',
-                              border: '1px solid var(--color-border)',
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                        <Button 
-                          size="small" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCancelEdit();
-                          }}
-                          sx={{
-                            backgroundColor: 'var(--color-surface)',
-                            color: 'var(--color-text)',
-                            border: '1px solid var(--color-border)',
-                            '&:hover': {
-                              backgroundColor: 'var(--color-hover)',
-                            },
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      </Box>
-                    </Box>
-                  ) : (
-                    <>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          fontWeight: level === 0 ? 'bold' : 'normal',
-                          color: level === 0 ? 'var(--color-primary)' : 'var(--color-text)'
-                        }}
-                      >
-                        {chapter.title}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        sx={{ ml: 1, color: 'var(--color-textSecondary)' }}
-                      >
-                        ({item.type})
-                      </Typography>
-                      {chapter.locations && chapter.locations.length > 0 && (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, ml: 1 }}>
-                          {chapter.locations.map((locationId) => {
-                            const location = bookData.locations.find(loc => loc.id === locationId);
-                            return (
-                              <Chip 
-                                key={locationId} 
-                                label={location?.name || locationId} 
-                                size="small"
-                                variant="outlined"
-                                sx={{ 
-                                  fontSize: '0.7rem', 
-                                  height: '20px',
-                                  color: 'var(--color-text)',
-                                  borderColor: 'var(--color-border)',
-                                  '& .MuiChip-label': {
-                                    color: 'var(--color-text)',
-                                  }
-                                }}
-                              />
-                            );
-                          })}
-                        </Box>
-                      )}
-                      {chapter.characters && chapter.characters.length > 0 && (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, ml: 1 }}>
-                          {chapter.characters.map((characterId) => {
-                            const character = bookData.characters.find(char => char.id === characterId);
-                            return (
-                              <Chip 
-                                key={characterId} 
-                                label={character?.name || characterId} 
-                                size="small"
-                                variant="outlined"
-                                sx={{ 
-                                  fontSize: '0.7rem', 
-                                  height: '20px',
-                                  color: 'var(--color-text)',
-                                  borderColor: 'var(--color-border)',
-                                  '& .MuiChip-label': {
-                                    color: 'var(--color-text)',
-                                  }
-                                }}
-                              />
-                            );
-                          })}
-                        </Box>
-                      )}
-                    </>
-                  )}
-                </Box>
-                {editingChapterId !== item.chapter_id && (
-                  <IconButton
-                    size="small"
-                    onClick={() => handleRemoveFromHierarchy(item.chapter_id)}
-                    color="error"
+                  
+                  <FormControl 
+                    fullWidth
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                          border: '1px solid #e0e0e0 !important',
+                        },
+                        '&:hover fieldset': {
+                          border: '1px solid #e0e0e0 !important',
+                        },
+                        '&.Mui-focused fieldset': {
+                          border: '1px solid #1976d2 !important',
+                        },
+                      },
+                    }}
                   >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                )}
-              </Box>
-            ))}
-            {buildHierarchyTree().length === 0 && (
-              <Typography variant="body2" sx={{ textAlign: 'center', py: 2, color: 'var(--color-textSecondary)' }}>
-                No structure defined yet. Add chapters above to build your book structure.
-              </Typography>
-            )}
-          </Box>
+                    <InputLabel sx={{ color: 'var(--color-textSecondary)' }}>Type</InputLabel>
+                    <Select
+                      value={editingType}
+                      label="Type"
+                      onChange={(e) => setEditingType(e.target.value as SchemaHierarchyType)}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                        '& .MuiSelect-select': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
+                      }}
+                    >
+                      <MenuItem value="volume">Volume</MenuItem>
+                      <MenuItem value="book">Book</MenuItem>
+                      <MenuItem value="part">Part</MenuItem>
+                      <MenuItem value="chapter">Chapter</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <Box>
+                    <Typography variant="body2" sx={{ mb: 1, color: 'var(--color-textSecondary)' }}>
+                      Locations
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleOpenLocationModal(`Select Locations for "${editingTitle}"`)}
+                      sx={{
+                        borderColor: 'var(--color-border)',
+                        color: 'var(--color-text)',
+                        '&:hover': {
+                          borderColor: 'var(--color-primary)',
+                          backgroundColor: 'var(--color-hover)',
+                        }
+                      }}
+                    >
+                      {editingLocations.length > 0 ? `${editingLocations.length} selected` : 'Select Locations'}
+                    </Button>
+                    {editingLocations.length > 0 && (
+                      <Box sx={{ mt: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                        {editingLocations.map(locationId => {
+                          const location = bookData.locations.find(l => l.id === locationId);
+                          return location ? (
+                            <Chip
+                              key={locationId}
+                              label={location.name}
+                              size="small"
+                              sx={{
+                                backgroundColor: 'var(--color-surface)',
+                                color: 'var(--color-text)',
+                                border: '1px solid var(--color-border)',
+                                fontSize: '0.75rem'
+                              }}
+                            />
+                          ) : null;
+                        })}
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={handleSaveEdit}
+                      sx={{
+                        backgroundColor: 'var(--color-primary)',
+                        color: 'var(--color-onPrimary)',
+                        '&:hover': {
+                          backgroundColor: 'var(--color-primaryHover)',
+                        }
+                      }}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={handleCancelEdit}
+                      sx={{
+                        borderColor: 'var(--color-border)',
+                        color: 'var(--color-text)',
+                        '&:hover': {
+                          borderColor: 'var(--color-primary)',
+                          backgroundColor: 'var(--color-hover)',
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                                 <>
+                   <Box sx={{ flex: 1, cursor: 'pointer' }} onClick={() => handleStartEditing(chapter.id, chapter.title, item.type)}>
+                     <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                       {chapter.title}
+                     </Typography>
+                     <Typography variant="body2" color="text.secondary">
+                       Type: {item.type}
+                     </Typography>
+                     {chapter.locations && chapter.locations.length > 0 && (
+                       <Box sx={{ mt: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                         {chapter.locations.map(locationId => {
+                           const location = bookData.locations.find(l => l.id === locationId);
+                           return location ? (
+                             <Chip
+                               key={locationId}
+                               label={location.name}
+                               size="small"
+                               sx={{
+                                 backgroundColor: 'var(--color-surface)',
+                                 color: 'var(--color-text)',
+                                 border: '1px solid var(--color-border)',
+                                 fontSize: '0.75rem'
+                               }}
+                             />
+                           ) : null;
+                         })}
+                       </Box>
+                     )}
+                   </Box>
+                   
+                   <IconButton
+                     size="small"
+                     onClick={(e) => {
+                       e.stopPropagation();
+                       handleRemoveFromHierarchy(chapter.id);
+                     }}
+                     sx={{
+                       color: 'var(--color-textSecondary)',
+                       '&:hover': {
+                         backgroundColor: 'var(--color-hover)',
+                       }
+                     }}
+                   >
+                     <DeleteIcon />
+                   </IconButton>
+                 </>
+              )}
+            </Box>
+          ))}
         </Box>
       </Box>
-
-
 
       {/* Location Selector Modal */}
       <LocationSelectorModal
         open={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
-        onSave={handleLocationModalSave}
-        bookData={bookData}
-        initialSelectedLocationIds={editingLocations}
         title={locationModalTitle}
-      />
-
-      {/* Character Selector Modal */}
-      <CharacterSelectorModal
-        open={isCharacterModalOpen}
-        onClose={() => setIsCharacterModalOpen(false)}
-        onSave={handleCharacterModalSave}
         bookData={bookData}
-        initialSelectedCharacterIds={editingCharacters}
-        title={characterModalTitle}
+        initialSelectedLocationIds={editingChapterId ? editingLocations : newChapterLocations}
+        onSave={handleLocationModalSave}
       />
     </Box>
   );
