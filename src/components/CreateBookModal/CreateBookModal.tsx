@@ -68,6 +68,25 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       if (initialData) {
         setBookData(initialData);
         setSelectedAuthor(initialData.book.author.id);
+      } else {
+        // Reset to initial state when creating a new book
+        setBookData({
+          book: {
+            id: '',
+            title: '',
+            author: {
+              id: '',
+              name: ''
+            }
+          },
+          locations: [],
+          characters: [],
+          factions: [],
+          relationships: [],
+          chapters: [],
+          hierarchy: []
+        });
+        setSelectedAuthor('');
       }
     }
   }, [open, initialData]);
@@ -231,7 +250,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         ...bookData,
         book: {
           id: bookData.book.id || 'preview-book',
-          title: bookData.book.title || 'Untitled Book',
+          title: bookData.book.title,
           author: {
             id: bookData.book.author.id || 'preview-author',
             name: bookData.book.author.name || 'Unknown Author'

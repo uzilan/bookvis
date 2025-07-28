@@ -245,8 +245,6 @@ export const CharacterGraphView: React.FC = () => {
 
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
-
-      
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
           key={previewBookData ? `preview-${previewBookData.book.id}-${previewTimestamp}` : selectedBook?.id || 'no-book'}

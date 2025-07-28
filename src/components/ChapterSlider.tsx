@@ -247,6 +247,32 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
           {isPreview ? 'Return to Editor' : 'Back to Home'}
         </Button>
       </Box>
+
+      {/* Book Title and Author */}
+      <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            fontSize: 16, 
+            fontWeight: 'bold', 
+            color: 'var(--color-primary)',
+            mb: 0.5,
+            lineHeight: 1.2
+          }}
+        >
+          {selectedBook.title || (isPreview ? 'Untitled Book' : selectedBook.title)}
+        </Typography>
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            fontSize: 12, 
+            color: 'var(--color-textSecondary)',
+            lineHeight: 1.2
+          }}
+        >
+          by {selectedBook.author.name || 'Unknown Author'}
+        </Typography>
+      </Box>
       {/* Book Selector */}
       {showBookSelector && (
         <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>

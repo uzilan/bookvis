@@ -326,14 +326,14 @@ export class FirebaseService {
     
     if (currentLevel === -1) {
       // Chapter not found in hierarchy, return just the title
-      const chapter = chapters.find((ch: any) => ch.id === chapterId);
-      return chapter ? [chapter.title] : [];
+      const chapter = chapters.find((ch: Record<string, unknown>) => ch.id === chapterId);
+      return chapter ? [chapter.title as string] : [];
     }
     
     // Find the immediate parent part by looking backwards from current position
     for (let i = currentLevel - 1; i >= 0; i--) {
       const item = hierarchy[i];
-      const chapter = chapters.find((ch: any) => ch.id === item.chapter_id);
+      const chapter = chapters.find((ch: Record<string, unknown>) => ch.id === item.chapter_id);
       if (chapter && item.type === 'part') {
         // Found the immediate parent part, add it to path
         path.unshift(chapter.title);

@@ -219,416 +219,356 @@ chapters:
   # Book 1: The Fellowship of the Ring
   - id: "book-1"
     title: "The Fellowship of the Ring"
-    type: "book"
-    level: 0
+    locations: []
+    characters: []
 
   # Part 1: The Ring Sets Out
   - id: "part-1"
     title: "The Ring Sets Out"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-1"
     title: "A Long-expected Party"
-    type: "chapter"
-    level: 2
-    location_ids: ["bag-end", "hobbiton", "shire"]
+    locations: ["bag-end", "hobbiton", "shire"]
+    characters: ["frodo-baggins", "bilbo-baggins", "gandalf", "samwise-gamgee"]
 
   - id: "chapter-2"
     title: "The Shadow of the Past"
-    type: "chapter"
-    level: 2
-    location_ids: ["bag-end", "hobbiton", "shire"]
+    locations: ["bag-end", "hobbiton", "shire"]
+    characters: ["frodo-baggins", "gandalf", "samwise-gamgee"]
 
   - id: "chapter-3"
     title: "Three is Company"
-    type: "chapter"
-    level: 2
-    location_ids: ["shire", "hobbiton", "bywater", "green-dragon-inn"]
+    locations: ["shire", "hobbiton", "bywater", "green-dragon-inn"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-4"
     title: "A Short Cut to Mushrooms"
-    type: "chapter"
-    level: 2
-    location_ids: ["shire", "buckland", "brandy-hall"]
+    locations: ["shire", "buckland", "brandy-hall"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-5"
     title: "A Conspiracy Unmasked"
-    type: "chapter"
-    level: 2
-    location_ids: ["buckland", "brandy-hall", "crickhollow"]
+    locations: ["buckland", "brandy-hall", "crickhollow"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-6"
     title: "The Old Forest"
-    type: "chapter"
-    level: 2
-    location_ids: ["old-forest", "withywindle"]
+    locations: ["old-forest", "withywindle"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-7"
     title: "In the House of Tom Bombadil"
-    type: "chapter"
-    level: 2
-    location_ids: ["tom-bombadil-house", "old-forest"]
+    locations: ["tom-bombadil-house", "old-forest"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-8"
     title: "Fog on the Barrow-downs"
-    type: "chapter"
-    level: 2
-    location_ids: ["barrow-downs"]
+    locations: ["barrow-downs"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-9"
     title: "At the Sign of the Prancing Pony"
-    type: "chapter"
-    level: 2
-    location_ids: ["bree", "prancing-pony"]
+    locations: ["bree", "prancing-pony"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-10"
     title: "Strider"
-    type: "chapter"
-    level: 2
-    location_ids: ["bree", "prancing-pony"]
+    locations: ["bree", "prancing-pony"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn"]
 
   - id: "chapter-11"
     title: "A Knife in the Dark"
-    type: "chapter"
-    level: 2
-    location_ids: ["weathertop"]
+    locations: ["weathertop"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn"]
 
   - id: "chapter-12"
     title: "Flight to the Ford"
-    type: "chapter"
-    level: 2
-    location_ids: ["ford-of-bruinen"]
+    locations: ["ford-of-bruinen"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn"]
 
   # Part 2: The Ring Goes South
   - id: "part-2"
     title: "The Ring Goes South"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-13"
     title: "Many Meetings"
-    type: "chapter"
-    level: 2
-    location_ids: ["rivendell", "last-homely-house"]
+    locations: ["rivendell", "last-homely-house"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "bilbo-baggins"]
 
   - id: "chapter-14"
     title: "The Council of Elrond"
-    type: "chapter"
-    level: 2
-    location_ids: ["rivendell", "last-homely-house"]
+    locations: ["rivendell", "last-homely-house"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-15"
     title: "The Ring Goes South"
-    type: "chapter"
-    level: 2
-    location_ids: ["misty-mountains"]
+    locations: ["misty-mountains"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-16"
     title: "A Journey in the Dark"
-    type: "chapter"
-    level: 2
-    location_ids: ["moria", "west-gate", "chamber-of-mazarbul"]
+    locations: ["moria", "west-gate", "chamber-of-mazarbul"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-17"
     title: "The Bridge of Khazad-dûm"
-    type: "chapter"
-    level: 2
-    location_ids: ["moria", "bridge-of-khazad-dum"]
+    locations: ["moria", "bridge-of-khazad-dum"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-18"
     title: "Lothlórien"
-    type: "chapter"
-    level: 2
-    location_ids: ["lothlorien", "caras-galadhon"]
+    locations: ["lothlorien", "caras-galadhon"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-19"
     title: "The Mirror of Galadriel"
-    type: "chapter"
-    level: 2
-    location_ids: ["lothlorien", "mirror-of-galadriel"]
+    locations: ["lothlorien", "mirror-of-galadriel"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-20"
     title: "Farewell to Lórien"
-    type: "chapter"
-    level: 2
-    location_ids: ["lothlorien"]
+    locations: ["lothlorien"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-21"
     title: "The Great River"
-    type: "chapter"
-    level: 2
-    location_ids: ["anduin-river"]
+    locations: ["anduin-river"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   - id: "chapter-22"
     title: "The Breaking of the Fellowship"
-    type: "chapter"
-    level: 2
-    location_ids: ["amon-hen", "anduin-river"]
+    locations: ["amon-hen", "anduin-river"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "aragorn", "gandalf", "legolas", "gimli", "boromir"]
 
   # Book 2: The Two Towers
   - id: "book-2"
     title: "The Two Towers"
-    type: "book"
-    level: 0
+    locations: []
+    characters: []
 
   # Part 3: The Treason of Isengard
   - id: "part-3"
     title: "The Treason of Isengard"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-23"
     title: "The Departure of Boromir"
-    type: "chapter"
-    level: 2
-    location_ids: ["amon-hen"]
+    locations: ["amon-hen"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-24"
     title: "The Riders of Rohan"
-    type: "chapter"
-    level: 2
-    location_ids: ["rohan", "edoras"]
+    locations: ["rohan", "edoras"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-25"
     title: "The Uruk-hai"
-    type: "chapter"
-    level: 2
-    location_ids: ["rohan"]
+    locations: ["rohan"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-26"
     title: "Treebeard"
-    type: "chapter"
-    level: 2
-    location_ids: ["fangorn-forest", "entmoot"]
+    locations: ["fangorn-forest", "entmoot"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-27"
     title: "The White Rider"
-    type: "chapter"
-    level: 2
-    location_ids: ["fangorn-forest"]
+    locations: ["fangorn-forest"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf"]
 
   - id: "chapter-28"
     title: "The King of the Golden Hall"
-    type: "chapter"
-    level: 2
-    location_ids: ["edoras", "golden-hall"]
+    locations: ["edoras", "golden-hall"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn"]
 
   - id: "chapter-29"
     title: "Helm's Deep"
-    type: "chapter"
-    level: 2
-    location_ids: ["helms-deep", "hornburg"]
+    locations: ["helms-deep", "hornburg"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn"]
 
   - id: "chapter-30"
     title: "The Road to Isengard"
-    type: "chapter"
-    level: 2
-    location_ids: ["isengard", "orthanc"]
+    locations: ["isengard", "orthanc"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn"]
 
   - id: "chapter-31"
     title: "Flotsam and Jetsam"
-    type: "chapter"
-    level: 2
-    location_ids: ["isengard", "orthanc"]
+    locations: ["isengard", "orthanc"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn"]
 
   - id: "chapter-32"
     title: "The Voice of Saruman"
-    type: "chapter"
-    level: 2
-    location_ids: ["isengard", "orthanc"]
+    locations: ["isengard", "orthanc"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn", "saruman"]
 
   - id: "chapter-33"
     title: "The Palantír"
-    type: "chapter"
-    level: 2
-    location_ids: ["isengard", "orthanc"]
+    locations: ["isengard", "orthanc"]
+    characters: ["aragorn", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took", "gandalf", "theoden", "eowyn", "saruman"]
 
   # Part 4: The Ring Goes East
   - id: "part-4"
     title: "The Ring Goes East"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-34"
     title: "The Taming of Sméagol"
-    type: "chapter"
-    level: 2
-    location_ids: ["emyn-muil"]
+    locations: ["emyn-muil"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-35"
     title: "The Passage of the Marshes"
-    type: "chapter"
-    level: 2
-    location_ids: ["dead-marshes"]
+    locations: ["dead-marshes"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-36"
     title: "The Black Gate is Closed"
-    type: "chapter"
-    level: 2
-    location_ids: ["black-gate", "mordor"]
+    locations: ["black-gate", "mordor"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-37"
     title: "Of Herbs and Stewed Rabbit"
-    type: "chapter"
-    level: 2
-    location_ids: ["ithilien"]
+    locations: ["ithilien"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-38"
     title: "The Window on the West"
-    type: "chapter"
-    level: 2
-    location_ids: ["henneth-annun", "ithilien"]
+    locations: ["henneth-annun", "ithilien"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum", "faramir"]
 
   - id: "chapter-39"
     title: "The Forbidden Pool"
-    type: "chapter"
-    level: 2
-    location_ids: ["henneth-annun"]
+    locations: ["henneth-annun"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum", "faramir"]
 
   - id: "chapter-40"
     title: "Journey to the Cross-roads"
-    type: "chapter"
-    level: 2
-    location_ids: ["cross-roads", "minas-morgul"]
+    locations: ["cross-roads", "minas-morgul"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-41"
     title: "The Stairs of Cirith Ungol"
-    type: "chapter"
-    level: 2
-    location_ids: ["stairs-of-cirith-ungol"]
+    locations: ["stairs-of-cirith-ungol"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-42"
     title: "Shelob's Lair"
-    type: "chapter"
-    level: 2
-    location_ids: ["shelob-lair", "cirith-ungol"]
+    locations: ["shelob-lair", "cirith-ungol"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-43"
     title: "The Choices of Master Samwise"
-    type: "chapter"
-    level: 2
-    location_ids: ["tower-of-cirith-ungol"]
+    locations: ["tower-of-cirith-ungol"]
+    characters: ["samwise-gamgee"]
 
   # Book 3: The Return of the King
   - id: "book-3"
     title: "The Return of the King"
-    type: "book"
-    level: 0
+    locations: []
+    characters: []
 
   # Part 5: The War of the Ring
   - id: "part-5"
     title: "The War of the Ring"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-44"
     title: "Minas Tirith"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith", "white-tower"]
+    locations: ["minas-tirith", "white-tower"]
+    characters: ["aragorn", "gandalf", "denethor", "faramir"]
 
   - id: "chapter-45"
     title: "The Passing of the Grey Company"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith", "dunharrow", "paths-of-dead"]
+    locations: ["minas-tirith", "dunharrow", "paths-of-dead"]
+    characters: ["aragorn", "gandalf", "denethor", "faramir"]
 
   - id: "chapter-46"
     title: "The Muster of Rohan"
-    type: "chapter"
-    level: 2
-    location_ids: ["edoras", "rohan"]
+    locations: ["edoras", "rohan"]
+    characters: ["theoden", "eowyn", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-47"
     title: "The Siege of Gondor"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith", "pelennor-fields", "osgiliath"]
+    locations: ["minas-tirith", "pelennor-fields", "osgiliath"]
+    characters: ["aragorn", "gandalf", "denethor", "faramir", "theoden", "eowyn"]
 
   - id: "chapter-48"
     title: "The Ride of the Rohirrim"
-    type: "chapter"
-    level: 2
-    location_ids: ["pelennor-fields", "minas-tirith"]
+    locations: ["pelennor-fields", "minas-tirith"]
+    characters: ["theoden", "eowyn", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-49"
     title: "The Battle of the Pelennor Fields"
-    type: "chapter"
-    level: 2
-    location_ids: ["pelennor-fields", "minas-tirith"]
+    locations: ["pelennor-fields", "minas-tirith"]
+    characters: ["aragorn", "gandalf", "denethor", "faramir", "theoden", "eowyn", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-50"
     title: "The Pyre of Denethor"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith"]
+    locations: ["minas-tirith"]
+    characters: ["denethor", "faramir", "gandalf"]
 
   - id: "chapter-51"
     title: "The Houses of Healing"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith", "houses-of-healing"]
+    locations: ["minas-tirith", "houses-of-healing"]
+    characters: ["aragorn", "faramir", "eowyn", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-52"
     title: "The Last Debate"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith"]
+    locations: ["minas-tirith"]
+    characters: ["aragorn", "gandalf", "faramir", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-53"
     title: "The Black Gate Opens"
-    type: "chapter"
-    level: 2
-    location_ids: ["black-gate", "mordor"]
+    locations: ["black-gate", "mordor"]
+    characters: ["aragorn", "gandalf", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   # Part 6: The End of the Third Age
   - id: "part-6"
     title: "The End of the Third Age"
-    type: "part"
-    level: 1
+    locations: []
+    characters: []
 
   - id: "chapter-54"
     title: "Mount Doom"
-    type: "chapter"
-    level: 2
-    location_ids: ["mount-doom", "sammath-naur"]
+    locations: ["mount-doom", "sammath-naur"]
+    characters: ["frodo-baggins", "samwise-gamgee", "gollum"]
 
   - id: "chapter-55"
     title: "The Field of Cormallen"
-    type: "chapter"
-    level: 2
-    location_ids: ["field-of-cormallen"]
+    locations: ["field-of-cormallen"]
+    characters: ["frodo-baggins", "samwise-gamgee", "aragorn", "gandalf", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-56"
     title: "The Steward and the King"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith"]
+    locations: ["minas-tirith"]
+    characters: ["aragorn", "faramir", "eowyn"]
 
   - id: "chapter-57"
     title: "Many Partings"
-    type: "chapter"
-    level: 2
-    location_ids: ["minas-tirith", "rivendell"]
+    locations: ["minas-tirith", "rivendell"]
+    characters: ["frodo-baggins", "samwise-gamgee", "aragorn", "gandalf", "legolas", "gimli", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-58"
     title: "Homeward Bound"
-    type: "chapter"
-    level: 2
-    location_ids: ["shire", "bag-end"]
+    locations: ["shire", "bag-end"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-59"
     title: "The Scouring of the Shire"
-    type: "chapter"
-    level: 2
-    location_ids: ["shire", "hobbiton", "bywater"]
+    locations: ["shire", "hobbiton", "bywater"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took"]
 
   - id: "chapter-60"
     title: "The Grey Havens"
-    type: "chapter"
-    level: 2
-    location_ids: ["grey-havens"]
+    locations: ["grey-havens"]
+    characters: ["frodo-baggins", "samwise-gamgee", "meriadoc-brandybuck", "peregrin-took", "gandalf", "bilbo-baggins"]
 
 hierarchy:
   # Book 1: The Fellowship of the Ring
@@ -917,8 +857,8 @@ hierarchy:
     level: 2
 
 relationships:
-  - character1_id: "frodo-baggins"
-    character2_id: "samwise-gamgee"
+  - character1: "frodo-baggins"
+    character2: "samwise-gamgee"
     descriptions:
       - chapter: "chapter-1"
         description: "Master and servant, become close friends"
@@ -927,24 +867,24 @@ relationships:
       - chapter: "chapter-54"
         description: "Sam carries Frodo to Mount Doom"
 
-  - character1_id: "frodo-baggins"
-    character2_id: "gandalf"
+  - character1: "frodo-baggins"
+    character2: "gandalf"
     descriptions:
       - chapter: "chapter-1"
         description: "Gandalf guides Frodo on his quest"
       - chapter: "chapter-14"
         description: "Gandalf helps form the Fellowship"
 
-  - character1_id: "frodo-baggins"
-    character2_id: "aragorn"
+  - character1: "frodo-baggins"
+    character2: "aragorn"
     descriptions:
       - chapter: "chapter-10"
         description: "Aragorn protects Frodo as Strider"
       - chapter: "chapter-14"
         description: "Aragorn joins the Fellowship"
 
-  - character1_id: "frodo-baggins"
-    character2_id: "gollum"
+  - character1: "frodo-baggins"
+    character2: "gollum"
     descriptions:
       - chapter: "chapter-34"
         description: "Frodo pities and spares Gollum"
@@ -953,80 +893,80 @@ relationships:
       - chapter: "chapter-58"
         description: "Gollum takes the Ring and falls into Mount Doom"
 
-  - character1_id: "aragorn"
-    character2_id: "legolas"
+  - character1: "aragorn"
+    character2: "legolas"
     descriptions:
       - chapter: "chapter-1"
         description: "Fellowship members and close friends"
       - chapter: "chapter-24"
         description: "Together track the Uruk-hai"
 
-  - character1_id: "aragorn"
-    character2_id: "gimli"
+  - character1: "aragorn"
+    character2: "gimli"
     descriptions:
       - chapter: "chapter-1"
         description: "Fellowship members, develop friendship"
       - chapter: "chapter-24"
         description: "Together track the Uruk-hai"
 
-  - character1_id: "legolas"
-    character2_id: "gimli"
+  - character1: "legolas"
+    character2: "gimli"
     descriptions:
       - chapter: "chapter-1"
         description: "Elf and dwarf, overcome ancient enmity"
       - chapter: "chapter-24"
         description: "Develop deep friendship during the quest"
 
-  - character1_id: "meriadoc-brandybuck"
-    character2_id: "peregrin-took"
+  - character1: "meriadoc-brandybuck"
+    character2: "peregrin-took"
     descriptions:
       - chapter: "chapter-1"
         description: "Best friends and cousins"
       - chapter: "chapter-24"
         description: "Captured together by Uruk-hai"
 
-  - character1_id: "boromir"
-    character2_id: "frodo-baggins"
+  - character1: "boromir"
+    character2: "frodo-baggins"
     descriptions:
       - chapter: "chapter-1"
         description: "Boromir is tempted by the Ring"
       - chapter: "chapter-22"
         description: "Boromir tries to take the Ring from Frodo"
 
-  - character1_id: "theoden"
-    character2_id: "eowyn"
+  - character1: "theoden"
+    character2: "eowyn"
     descriptions:
       - chapter: "chapter-29"
         description: "Uncle and niece, king and princess"
       - chapter: "chapter-51"
         description: "Éowyn fights to protect her uncle's kingdom"
 
-  - character1_id: "faramir"
-    character2_id: "denethor"
+  - character1: "faramir"
+    character2: "denethor"
     descriptions:
       - chapter: "chapter-39"
         description: "Father and son, steward and captain"
       - chapter: "chapter-52"
         description: "Denethor despairs over Faramir's injury"
 
-  - character1_id: "saruman"
-    character2_id: "gandalf"
+  - character1: "saruman"
+    character2: "gandalf"
     descriptions:
       - chapter: "chapter-1"
         description: "Former allies, now enemies"
       - chapter: "chapter-33"
         description: "Saruman tries to corrupt Gandalf"
 
-  - character1_id: "sauron"
-    character2_id: "frodo-baggins"
+  - character1: "sauron"
+    character2: "frodo-baggins"
     descriptions:
       - chapter: "chapter-1"
         description: "Sauron seeks the Ring that Frodo carries"
       - chapter: "chapter-58"
         description: "Final confrontation at Mount Doom"
 
-  - character1_id: "gollum"
-    character2_id: "samwise-gamgee"
+  - character1: "gollum"
+    character2: "samwise-gamgee"
     descriptions:
       - chapter: "chapter-35"
         description: "Sam distrusts Gollum as guide"

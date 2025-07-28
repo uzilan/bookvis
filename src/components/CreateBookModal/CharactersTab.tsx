@@ -36,6 +36,8 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   const [editingCharacterAttributes, setEditingCharacterAttributes] = useState<string[]>([]);
   const [editingAttribute, setEditingAttribute] = useState('');
   
+
+  
   // Faction membership state
   interface FactionMembership {
     factionId: string;
@@ -122,7 +124,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
     setEditingCharacterDescription('');
     setEditingCharacterAliases([]);
     setEditingAlias('');
-    setEditingCharacterFirstAppearance('');
     setEditingCharacterAttributes([]);
     setEditingAttribute('');
     setEditingCharacterFactions([]);
@@ -134,7 +135,6 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
     setEditingCharacterDescription('');
     setEditingCharacterAliases([]);
     setEditingAlias('');
-    setEditingCharacterFirstAppearance('');
     setEditingCharacterAttributes([]);
     setEditingAttribute('');
     setEditingCharacterFactions([]);
@@ -325,50 +325,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
             }}
           />
           
-          {/* First Appearance Section */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <TextField
-              select
-              size="small"
-              label="First Appearance Chapter"
-              value={newCharacterFirstAppearance}
-              onChange={(e) => setNewCharacterFirstAppearance(e.target.value)}
-              sx={{ 
-                flex: 1,
-                '& .MuiInputLabel-root': {
-                  color: 'var(--color-textSecondary)',
-                },
-                '& .MuiInputBase-input': {
-                  color: 'var(--color-textSecondary) !important',
-                },
-                '& .MuiSelect-select': {
-                  color: 'var(--color-textSecondary) !important',
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    border: '1px solid #e0e0e0 !important',
-                  },
-                  '&:hover fieldset': {
-                    border: '1px solid #e0e0e0 !important',
-                  },
-                  '&.Mui-focused fieldset': {
-                    border: '1px solid #1976d2 !important',
-                  },
-                },
-              }}
-            >
-              <MenuItem value="">
-                <em>Select a chapter</em>
-              </MenuItem>
-              {buildHierarchyTree()
-                .filter(({ item }) => item.type === 'chapter')
-                .map(({ item, chapter }) => (
-                  <MenuItem key={item.chapter_id} value={item.chapter_id}>
-                    {chapter.title}
-                  </MenuItem>
-                ))}
-            </TextField>
-          </Box>
+
           
           {/* Aliases Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -790,49 +747,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                     />
                     
                     {/* First Appearance Section for Editing */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                      <TextField
-                        select
-                        size="small"
-                        label="First Appearance Chapter"
-                        value={editingCharacterFirstAppearance}
-                        onChange={(e) => setEditingCharacterFirstAppearance(e.target.value)}
-                        sx={{ 
-                          flex: 1,
-                          '& .MuiInputLabel-root': {
-                            color: 'var(--color-textSecondary)',
-                          },
-                          '& .MuiInputBase-input': {
-                            color: 'var(--color-textSecondary) !important',
-                          },
-                          '& .MuiSelect-select': {
-                            color: 'var(--color-textSecondary) !important',
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&:hover fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&.Mui-focused fieldset': {
-                              border: '1px solid #1976d2 !important',
-                            },
-                          },
-                        }}
-                      >
-                        <MenuItem value="">
-                          <em>Select a chapter</em>
-                        </MenuItem>
-                        {buildHierarchyTree()
-                          .filter(({ item }) => item.type === 'chapter')
-                          .map(({ item, chapter }) => (
-                            <MenuItem key={item.chapter_id} value={item.chapter_id}>
-                              {chapter.title}
-                            </MenuItem>
-                          ))}
-                      </TextField>
-                    </Box>
+
                     
                     {/* Aliases Section */}
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
