@@ -7,6 +7,11 @@ import type { Faction } from '../models/Faction';
 import type { Location } from '../models/Location';
 
 export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
+  // Validate that we have the required data
+  if (!schemaData.hierarchy || schemaData.hierarchy.length === 0) {
+    throw new Error('Book data is missing hierarchy. This indicates a bug in the chapter creation process.');
+  }
+
   // Convert Book
   const book: Book = {
     id: schemaData.book.id || 'preview-book',
@@ -100,6 +105,7 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
     factions,
     relationships,
     locations,
+    hierarchy: schemaData.hierarchy,
     mapUrl: schemaData.map_url
   };
 }

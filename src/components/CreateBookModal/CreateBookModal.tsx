@@ -104,7 +104,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     }
   };
 
-  const handleCreateBook = () => {
+  const handleCreateBook = async () => {
     const missing: string[] = [];
 
     // Validate basic book information
@@ -137,7 +137,12 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       missing.push('At least one relationship');
     }
 
-
+    // Validate character assignments to chapters
+    const totalCharacterAssignments = bookData.chapters?.reduce((total, chapter) => 
+      total + (chapter.characters?.length || 0), 0) || 0;
+    if (totalCharacterAssignments === 0) {
+      missing.push('At least one character must be assigned to a chapter');
+    }
 
     if (missing.length > 0) {
       setMissingRequirements(missing);
@@ -145,8 +150,28 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       return;
     }
 
-    // TODO: Save the complete book data to Firebase or your storage
-    onClose();
+    try {
+      setLoading(true);
+      
+      // Generate a unique book ID
+      const bookId = `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Convert schema data to BookData format
+      const bookDataForSave = convertSchemaToBookData(bookData);
+      bookDataForSave.book.id = bookId;
+      
+      // Save to Firebase
+      await FirebaseService.saveBook(bookDataForSave, false); // false = private by default
+      
+      console.log('Book saved successfully:', bookDataForSave.book.title);
+      onClose();
+    } catch (error) {
+      console.error('Error saving book:', error);
+      // You might want to show an error message to the user here
+      alert(`Failed to save book: ${error}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCancelClick = () => {
