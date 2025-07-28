@@ -6,9 +6,12 @@ import {
   Button,
   Chip,
   MenuItem,
-  Divider
+  Divider,
+  IconButton
 } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData, SchemaCharacter, SchemaChapter, SchemaHierarchyItem } from '../../schema/models';
+import { fuzzySearch } from '../../utils/fuzzySearch';
 
 
 
@@ -35,6 +38,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   const [newAttribute, setNewAttribute] = useState('');
   const [editingCharacterAttributes, setEditingCharacterAttributes] = useState<string[]>([]);
   const [editingAttribute, setEditingAttribute] = useState('');
+  const [characterFilterText, setCharacterFilterText] = useState('');
   
 
   
@@ -704,12 +708,51 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
 
       {/* Right Column - Characters List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Current Characters ({bookData.characters.length})
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="subtitle1">
+            Current Characters ({bookData.characters.length})
+          </Typography>
+          <TextField
+            size="small"
+            placeholder="Filter characters..."
+            value={characterFilterText}
+            onChange={(e) => setCharacterFilterText(e.target.value)}
+            sx={{ 
+              minWidth: '200px',
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'var(--color-primary)',
+                },
+              },
+            }}
+          />
+        </Box>
         {bookData.characters.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
-            {bookData.characters.map((character) => (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '800px', overflowY: 'auto' }}>
+            {fuzzySearch(
+              bookData.characters,
+              bookData.characters,
+              characterFilterText,
+              true,
+              { 
+                keys: ['name', 'description', 'aliases'],
+                threshold: 0.6
+              }
+            )
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((character) => (
               <Box
                 key={character.id}
                 sx={{
@@ -1186,13 +1229,14 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                   </Box>
                 )}
                 {editingCharacterId !== character.id && (
-                  <Button
+                  <IconButton
                     size="small"
                     color="error"
                     onClick={() => handleDeleteCharacter(character.id)}
+                    title="Delete Character"
                   >
-                    Remove
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 )}
               </Box>
             ))}

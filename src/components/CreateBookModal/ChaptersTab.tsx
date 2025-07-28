@@ -574,16 +574,12 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                    
                    <IconButton
                      size="small"
+                     color="error"
                      onClick={(e) => {
                        e.stopPropagation();
                        handleRemoveFromHierarchy(chapter.id);
                      }}
-                     sx={{
-                       color: 'var(--color-textSecondary)',
-                       '&:hover': {
-                         backgroundColor: 'var(--color-hover)',
-                       }
-                     }}
+                     title="Delete Chapter"
                    >
                      <DeleteIcon />
                    </IconButton>

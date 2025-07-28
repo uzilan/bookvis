@@ -65,7 +65,7 @@ export class FirebaseService {
   /**
    * Save a book to Firebase
    */
-  static async saveBook(bookData: BookData, isPublic: boolean = false): Promise<void> {
+  static async saveBook(bookData: BookData, isPublic: boolean = false, status: 'draft' | 'published' = 'published'): Promise<void> {
     try {
       const currentUser = this.getCurrentUser();
       if (!currentUser) {
@@ -86,6 +86,7 @@ export class FirebaseService {
         ownerId: currentUser.uid,
         ownerEmail: currentUser.email,
         isPublic: isPublic,
+        status: status,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -280,6 +281,7 @@ export class FirebaseService {
           ownerId: data.ownerId,
           ownerEmail: data.ownerEmail,
           isPublic: data.isPublic || false,
+          status: data.status || 'published',
           createdAt: data.createdAt,
           updatedAt: data.updatedAt
         };
@@ -342,6 +344,66 @@ export class FirebaseService {
     }
     
     return path;
+  }
+
+  /**
+   * Fetch user's draft books from Firebase
+   */
+  static async getUserDrafts(): Promise<BookData[]> {
+    try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to fetch drafts');
+      }
+
+      const booksRef = collection(db, 'bookvis');
+      const q = query(booksRef, orderBy('updatedAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      
+      const drafts: BookData[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        
+        // Only include drafts owned by the current user
+        if (data.ownerId === currentUser.uid && data.status === 'draft') {
+          // Reconstruct path property for chapters if hierarchy exists
+          let chapters = data.chapters;
+          if (data.hierarchy && Array.isArray(data.hierarchy)) {
+            chapters = data.chapters.map((chapter: Record<string, unknown>) => {
+              const path = this.buildPathFromHierarchy(chapter.id as string, data.hierarchy, data.chapters);
+              return {
+                ...chapter,
+                path: path
+              };
+            });
+          }
+          
+          const bookData = {
+            book: data.book,
+            characters: data.characters,
+            chapters: chapters,
+            factions: data.factions,
+            relationships: data.relationships,
+            locations: data.locations || [],
+            hierarchy: data.hierarchy || [],
+            mapUrl: data.mapUrl,
+            ownerId: data.ownerId,
+            ownerEmail: data.ownerEmail,
+            isPublic: data.isPublic || false,
+            status: data.status || 'draft',
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt
+          };
+
+          drafts.push(bookData);
+        }
+      });
+      
+      return drafts;
+    } catch (error) {
+      console.error('Error fetching drafts:', error);
+      throw new Error(`Failed to fetch drafts: ${error}`);
+    }
   }
 
   /**

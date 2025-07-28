@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData, SchemaRelationship, SchemaRelationshipDescription, SchemaHierarchyItem, SchemaChapter } from '../../schema/models';
+import { fuzzySearch } from '../../utils/fuzzySearch';
 
 
 
@@ -35,6 +36,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
   const [editingRelationshipDescriptions, setEditingRelationshipDescriptions] = useState<SchemaRelationshipDescription[]>([]);
   const [editingDescriptionChapter, setEditingDescriptionChapter] = useState('');
   const [editingDescriptionText, setEditingDescriptionText] = useState('');
+  const [relationshipFilterText, setRelationshipFilterText] = useState('');
 
   const buildHierarchyTree = (): Array<{ item: SchemaHierarchyItem; chapter: SchemaChapter; level: number }> => {
     const tree: Array<{ item: SchemaHierarchyItem; chapter: SchemaChapter; level: number }> = [];
@@ -142,6 +144,33 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
         description: newDescriptionText
       };
       setNewRelationshipDescriptions(prev => [...prev, newDescription]);
+      
+      // Automatically assign both characters to the chapter if they aren't already assigned
+      if (newRelationshipCharacter1 && newRelationshipCharacter2) {
+        setBookData(prev => ({
+          ...prev,
+          chapters: prev.chapters.map(chapter => {
+            if (chapter.id === newDescriptionChapter) {
+              const characters = chapter.characters || [];
+              const updatedCharacters = [...characters];
+              
+              // Add first character if not already assigned
+              if (!characters.includes(newRelationshipCharacter1)) {
+                updatedCharacters.push(newRelationshipCharacter1);
+              }
+              
+              // Add second character if not already assigned
+              if (!characters.includes(newRelationshipCharacter2)) {
+                updatedCharacters.push(newRelationshipCharacter2);
+              }
+              
+              return { ...chapter, characters: updatedCharacters };
+            }
+            return chapter;
+          })
+        }));
+      }
+      
       setNewDescriptionChapter('');
       setNewDescriptionText('');
     }
@@ -154,6 +183,33 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
         description: editingDescriptionText
       };
       setEditingRelationshipDescriptions(prev => [...prev, newDescription]);
+      
+      // Automatically assign both characters to the chapter if they aren't already assigned
+      if (editingRelationshipCharacter1 && editingRelationshipCharacter2) {
+        setBookData(prev => ({
+          ...prev,
+          chapters: prev.chapters.map(chapter => {
+            if (chapter.id === editingDescriptionChapter) {
+              const characters = chapter.characters || [];
+              const updatedCharacters = [...characters];
+              
+              // Add first character if not already assigned
+              if (!characters.includes(editingRelationshipCharacter1)) {
+                updatedCharacters.push(editingRelationshipCharacter1);
+              }
+              
+              // Add second character if not already assigned
+              if (!characters.includes(editingRelationshipCharacter2)) {
+                updatedCharacters.push(editingRelationshipCharacter2);
+              }
+              
+              return { ...chapter, characters: updatedCharacters };
+            }
+            return chapter;
+          })
+        }));
+      }
+      
       setEditingDescriptionChapter('');
       setEditingDescriptionText('');
     }
@@ -170,6 +226,26 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
   const getCharacterName = (characterId: string) => {
     const character = bookData.characters.find(c => c.id === characterId);
     return character ? character.name : characterId;
+  };
+
+  const getCharactersWithExistingRelationships = (characterId: string): string[] => {
+    const existingRelationships = bookData.relationships.filter(relationship => 
+      relationship.character1 === characterId || relationship.character2 === characterId
+    );
+    
+    return existingRelationships.map(relationship => 
+      relationship.character1 === characterId ? relationship.character2 : relationship.character1
+    );
+  };
+
+  // Create searchable relationship objects for fuzzy search
+  const getSearchableRelationships = () => {
+    return bookData.relationships.map(relationship => ({
+      ...relationship,
+      character1Name: getCharacterName(relationship.character1),
+      character2Name: getCharacterName(relationship.character2),
+      descriptionText: relationship.descriptions.map(desc => desc.description).join(' ')
+    }));
   };
 
   // Reset second character when first character changes
@@ -262,7 +338,13 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               <em>Select second character</em>
             </MenuItem>
             {bookData.characters
-              .filter(character => character.id !== newRelationshipCharacter1)
+              .filter(character => {
+                if (character.id === newRelationshipCharacter1) return false;
+                if (!newRelationshipCharacter1) return true;
+                
+                const charactersWithExistingRelationships = getCharactersWithExistingRelationships(newRelationshipCharacter1);
+                return !charactersWithExistingRelationships.includes(character.id);
+              })
               .map((character) => (
                 <MenuItem key={character.id} value={character.id}>
                   {character.name}
@@ -270,7 +352,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               ))}
           </TextField>
           <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
-            Select the second character in this relationship (automatically excludes the first character)
+            Select the second character in this relationship (excludes the first character and characters with existing relationships)
           </Typography>
 
           {/* Relationship Descriptions for New Relationship */}
@@ -447,12 +529,50 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
 
       {/* Right Column - Relationships List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Current Relationships ({bookData.relationships.length})
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="subtitle1">
+            Current Relationships ({bookData.relationships.length})
+          </Typography>
+          <TextField
+            size="small"
+            placeholder="Filter relationships..."
+            value={relationshipFilterText}
+            onChange={(e) => setRelationshipFilterText(e.target.value)}
+            sx={{ 
+              minWidth: '200px',
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'var(--color-primary)',
+                },
+              },
+            }}
+          />
+        </Box>
         {bookData.relationships.length > 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
-            {bookData.relationships.map((relationship) => {
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '800px', overflowY: 'auto' }}>
+            {fuzzySearch(
+              getSearchableRelationships(),
+              getSearchableRelationships(),
+              relationshipFilterText,
+              true,
+              { 
+                keys: ['character1Name', 'character2Name', 'descriptionText'],
+                threshold: 0.6
+              }
+            )
+              .map((relationship) => {
               const relationshipId = `${relationship.character1}-${relationship.character2}`;
               const isEditing = editingRelationshipId === relationshipId;
 
@@ -544,11 +664,22 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           },
                         }}
                       >
-                        {bookData.characters.map((character) => (
-                          <MenuItem key={character.id} value={character.id}>
-                            {character.name}
-                          </MenuItem>
-                        ))}
+                        {bookData.characters
+                          .filter(character => {
+                            if (character.id === editingRelationshipCharacter1) return false;
+                            if (!editingRelationshipCharacter1) return true;
+                            
+                            // Don't exclude the current second character when editing
+                            if (character.id === editingRelationshipCharacter2) return true;
+                            
+                            const charactersWithExistingRelationships = getCharactersWithExistingRelationships(editingRelationshipCharacter1);
+                            return !charactersWithExistingRelationships.includes(character.id);
+                          })
+                          .map((character) => (
+                            <MenuItem key={character.id} value={character.id}>
+                              {character.name}
+                            </MenuItem>
+                          ))}
                       </TextField>
 
                       {/* Relationship Descriptions */}
@@ -761,21 +892,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                     </Box>
                   )}
                   {editingRelationshipId !== relationshipId && (
-                    <Button
+                    <IconButton
                       size="small"
                       color="error"
                       onClick={() => handleDeleteRelationship(relationshipId)}
-                      sx={{
-                        backgroundColor: 'var(--color-error)',
-                        color: 'var(--color-onError)',
-                        border: '1px solid var(--color-border)',
-                        '&:hover': {
-                          backgroundColor: 'var(--color-errorHover)',
-                        },
-                      }}
+                      title="Delete Relationship"
                     >
-                      Remove
-                    </Button>
+                      <DeleteIcon />
+                    </IconButton>
                   )}
                 </Box>
               );

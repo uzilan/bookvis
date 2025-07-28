@@ -33,6 +33,7 @@ import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { loadBookDataFromYamlString } from '../utils/yamlParser';
+import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
 
 export const HomePage: React.FC = () => {
   const { user, loading, signInWithGoogle, signOut, isAuthenticated } = useAuth();
@@ -94,7 +95,6 @@ export const HomePage: React.FC = () => {
       filteredAuthors = allAuthors.filter(author => myAuthorIds.includes(author.id));
     } else {
       // When toggle is off, show all authors and books
-      filteredBooks = allBooks;
       filteredAuthors = allAuthors;
     }
     
@@ -116,8 +116,23 @@ export const HomePage: React.FC = () => {
       ]);
       setAuthors(fetchedAuthors);
       setAllAuthors(fetchedAuthors);
-      setAllBooks(fetchedBooks);
-      setBooks(fetchedBooks);
+      
+      // Combine published books and drafts
+      let allBooksData = fetchedBooks;
+      if (isAuthenticated) {
+        try {
+          const fetchedDrafts = await FirebaseService.getUserDrafts();
+          // Combine published books and drafts, avoiding duplicates
+          const draftIds = new Set(fetchedDrafts.map(draft => draft.book.id));
+          const publishedBooks = fetchedBooks.filter(book => !draftIds.has(book.book.id));
+          allBooksData = [...publishedBooks, ...fetchedDrafts];
+        } catch (error) {
+          console.error('Error fetching drafts:', error);
+        }
+      }
+      
+      setAllBooks(allBooksData);
+      setBooks(allBooksData);
       setHasFetchedData(true);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -192,7 +207,17 @@ export const HomePage: React.FC = () => {
   };
 
   const handleBookClick = (book: BookData) => {
-    navigate(`/visualize/${book.book.id}`);
+    if (book.status === 'draft') {
+      // For drafts, open the editor with the book data
+      const schemaBookData = convertBookDataToSchema(book);
+      setIsCreateBookModalOpen(true);
+      // We'll need to pass the data to the modal
+      // For now, we'll store it in session storage and the modal will pick it up
+      sessionStorage.setItem('bookvis-draft-book', JSON.stringify(schemaBookData));
+    } else {
+      // For published books, navigate to visualization
+      navigate(`/visualize/${book.book.id}`);
+    }
   };
 
   const handleAuthorClick = (authorId: string) => {
@@ -581,19 +606,43 @@ export const HomePage: React.FC = () => {
                           <Typography variant="h6" component="h3" sx={{ flex: 1 }}>
                             {bookData.book.title}
                           </Typography>
-                          {isAuthenticated && isOwnBook(bookData) && (
-                            <Box sx={{ display: 'flex', gap: 0.5 }}>
-                              <IconButton
-                                size="small"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleUpdateVisibility(bookData);
-                                }}
-                                title={bookData.isPublic ? 'Make Private' : 'Make Public'}
-                                sx={{ color: 'var(--color-textSecondary)' }}
-                              >
-                                {bookData.isPublic ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                              </IconButton>
+                          <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'flex-start' }}>
+                            {bookData.status === 'draft' && (
+                              <Chip 
+                                label="Draft" 
+                                size="small" 
+                                color="secondary" 
+                                variant="outlined"
+                                sx={{ fontSize: '0.7rem', height: '20px' }}
+                              />
+                            )}
+                            {isAuthenticated && isOwnBook(bookData) && bookData.status !== 'draft' && (
+                              <>
+                                <IconButton
+                                  size="small"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleUpdateVisibility(bookData);
+                                  }}
+                                  title={bookData.isPublic ? 'Make Private' : 'Make Public'}
+                                  sx={{ color: 'var(--color-textSecondary)' }}
+                                >
+                                  {bookData.isPublic ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                </IconButton>
+                                <IconButton
+                                  size="small"
+                                  color="error"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteBook(bookData);
+                                  }}
+                                  title="Delete Book"
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </>
+                            )}
+                            {isAuthenticated && isOwnBook(bookData) && bookData.status === 'draft' && (
                               <IconButton
                                 size="small"
                                 color="error"
@@ -601,12 +650,12 @@ export const HomePage: React.FC = () => {
                                   e.stopPropagation();
                                   handleDeleteBook(bookData);
                                 }}
-                                title="Delete Book"
+                                title="Delete Draft"
                               >
                                 <DeleteIcon />
                               </IconButton>
-                            </Box>
-                          )}
+                            )}
+                          </Box>
                         </Box>
                         
                         <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)' }} gutterBottom>

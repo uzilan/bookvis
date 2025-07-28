@@ -324,11 +324,15 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       
       // Only show relationships where both characters appear in the current chapter
       if (character1Appears && character2Appears) {
+        // Find the description that matches the current chapter
+        const chapterDescription = rel.descriptions.find(desc => desc.chapter === selectedChapter);
+        const label = chapterDescription?.description || '';
+        
         edges.push({
           id: `rel-${index}`,
           from: rel.character1.id,
           to: rel.character2.id,
-          label: rel.descriptions[0]?.description || 'Related',
+          label: label,
           color: '#888',
           width: 2,
           font: { 

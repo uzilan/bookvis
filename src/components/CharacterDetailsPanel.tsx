@@ -256,8 +256,9 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
               {characterRelationships.map((rel, index) => {
                 const otherCharacter = rel.character1.id === character.id ? rel.character2 : rel.character1;
                 
-                // Use the first description since both characters are present in the current chapter
-                const relevantDescription = rel.descriptions[0]?.description || 'Related';
+                // Find the description that matches the current chapter
+                const chapterDescription = rel.descriptions.find(desc => desc.chapter === selectedChapter);
+                const relevantDescription = chapterDescription?.description || '';
                 
                 return (
                   <ListItem key={index} sx={{ py: 0.5 }}>

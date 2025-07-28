@@ -4,9 +4,12 @@ import {
   Typography,
   TextField,
   Button,
-  Divider
+  Divider,
+  IconButton
 } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
+import { fuzzySearch } from '../../utils/fuzzySearch';
 
 
 interface FactionsTabProps {
@@ -75,6 +78,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
   const [newFactionName, setNewFactionName] = useState('');
   const [newFactionDescription, setNewFactionDescription] = useState('');
   const [newFactionColor, setNewFactionColor] = useState(generateRandomColor());
+  const [factionFilterText, setFactionFilterText] = useState('');
 
   const handleAddFaction = (factionName: string, description: string = '', color: string = '') => {
     const newFaction = {
@@ -289,16 +293,55 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
 
       {/* Right Column - Factions List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Current Factions ({bookData.factions.length})
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="subtitle1">
+            Current Factions ({bookData.factions.length})
+          </Typography>
+          <TextField
+            size="small"
+            placeholder="Filter factions..."
+            value={factionFilterText}
+            onChange={(e) => setFactionFilterText(e.target.value)}
+            sx={{ 
+              minWidth: '200px',
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'var(--color-primary)',
+                },
+              },
+            }}
+          />
+        </Box>
         {bookData.factions.length === 0 ? (
           <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)' }}>
             No factions added yet.
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
-            {bookData.factions.map((faction) => (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '800px', overflowY: 'auto' }}>
+            {fuzzySearch(
+              bookData.factions,
+              bookData.factions,
+              factionFilterText,
+              true,
+              { 
+                keys: ['title', 'description'],
+                threshold: 0.6
+              }
+            )
+              .sort((a, b) => a.title.localeCompare(b.title))
+              .map((faction) => (
               <Box
                 key={faction.id}
                 sx={{
@@ -467,13 +510,14 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                   </Box>
                 )}
                 {editingFactionId !== faction.id && (
-                  <Button
+                  <IconButton
                     size="small"
                     color="error"
                     onClick={() => handleRemoveFaction(faction.id)}
+                    title="Delete Faction"
                   >
-                    Remove
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 )}
               </Box>
             ))}

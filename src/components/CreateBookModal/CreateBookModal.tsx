@@ -98,50 +98,49 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     }
   };
 
-  // Fetch authors when modal opens and restore initial data if provided
+  // Fetch authors when modal opens and restore data (prioritize session storage over initialData)
   useEffect(() => {
     if (open) {
       fetchAuthors();
-      // Restore initial data if provided (when returning from preview)
-      if (initialData) {
+      
+      // Always try to load from session storage first (it has the most recent data)
+      const savedData = loadFromSessionStorage();
+      if (savedData) {
+        isLoadingFromSessionRef.current = true;
+        setBookData(savedData);
+        // Don't set selectedAuthor here, let the useEffect handle it after authors are loaded
+        setLoadedFromSession(true);
+        // Reset the loading flag after a short delay to allow the data to be set
+        setTimeout(() => {
+          isLoadingFromSessionRef.current = false;
+        }, 100);
+      } else if (initialData) {
+        // Only use initialData if no session storage data exists
         setBookData(initialData);
         setSelectedAuthor(initialData.book.author.id);
         setLoadedFromSession(false);
         isLoadingFromSessionRef.current = false;
       } else {
-        // Try to load from session storage first
-        const savedData = loadFromSessionStorage();
-        if (savedData) {
-          isLoadingFromSessionRef.current = true;
-          setBookData(savedData);
-          // Don't set selectedAuthor here, let the useEffect handle it after authors are loaded
-          setLoadedFromSession(true);
-          // Reset the loading flag after a short delay to allow the data to be set
-          setTimeout(() => {
-            isLoadingFromSessionRef.current = false;
-          }, 100);
-        } else {
-          // Reset to initial state when creating a new book
-          setBookData({
-            book: {
+        // Reset to initial state when creating a new book
+        setBookData({
+          book: {
+            id: '',
+            title: '',
+            author: {
               id: '',
-              title: '',
-              author: {
-                id: '',
-                name: ''
-              }
-            },
-            locations: [],
-            characters: [],
-            factions: [],
-            relationships: [],
-            chapters: [],
-            hierarchy: []
-          });
-          setSelectedAuthor('');
-          setLoadedFromSession(false);
-          isLoadingFromSessionRef.current = false;
-        }
+              name: ''
+            }
+          },
+          locations: [],
+          characters: [],
+          factions: [],
+          relationships: [],
+          chapters: [],
+          hierarchy: []
+        });
+        setSelectedAuthor('');
+        setLoadedFromSession(false);
+        isLoadingFromSessionRef.current = false;
       }
     }
   }, [open, initialData]);
@@ -231,6 +230,30 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     }
   };
 
+  const handleSaveDraft = async () => {
+    try {
+      setLoading(true);
+      
+      // Generate a unique book ID
+      const bookId = `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Convert schema data to BookData format
+      const bookDataForSave = convertSchemaToBookData(bookData);
+      bookDataForSave.book.id = bookId;
+      
+      // Save to Firebase as draft
+      await FirebaseService.saveBook(bookDataForSave, false, 'draft'); // false = private, 'draft' = draft status
+      
+      clearSessionStorage(); // Clear session storage after successful save
+      onClose();
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      alert(`Failed to save draft: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateBook = async () => {
     const missing: string[] = [];
 
@@ -288,8 +311,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       bookDataForSave.book.id = bookId;
       
       // Save to Firebase
-      await FirebaseService.saveBook(bookDataForSave, false); // false = private by default
-      
+      await FirebaseService.saveBook(bookDataForSave, false, 'published'); // false = private by default, 'published' = published status
       
       clearSessionStorage(); // Clear session storage after successful save
       onClose();
@@ -599,6 +621,15 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           sx={{ minWidth: '120px' }}
         >
           Preview
+        </Button>
+        <Button 
+          onClick={handleSaveDraft}
+          color="secondary"
+          variant="outlined"
+          disabled={loading || !bookData.book.title.trim()}
+          sx={{ minWidth: '120px' }}
+        >
+          Save as Draft
         </Button>
         <Button 
           onClick={handleCreateBook} 

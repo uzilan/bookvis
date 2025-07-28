@@ -4,9 +4,12 @@ import {
   Typography,
   TextField,
   Button,
-  Divider
+  Divider,
+  IconButton
 } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
+import { fuzzySearch } from '../../utils/fuzzySearch';
 
 
 interface LocationsTabProps {
@@ -24,6 +27,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
   const [editingLocationDescription, setEditingLocationDescription] = useState('');
   const [newLocationName, setNewLocationName] = useState('');
   const [newLocationDescription, setNewLocationDescription] = useState('');
+  const [locationFilterText, setLocationFilterText] = useState('');
 
   const handleAddLocation = (locationName: string, description: string = '') => {
     const newLocation = {
@@ -196,16 +200,55 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
 
       {/* Right Column - Locations List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="subtitle1" gutterBottom>
-          Current Locations ({bookData.locations.length})
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="subtitle1">
+            Current Locations ({bookData.locations.length})
+          </Typography>
+          <TextField
+            size="small"
+            placeholder="Filter locations..."
+            value={locationFilterText}
+            onChange={(e) => setLocationFilterText(e.target.value)}
+            sx={{ 
+              minWidth: '200px',
+              '& .MuiInputBase-input': {
+                color: 'var(--color-text)',
+              },
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'var(--color-border)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'var(--color-primary)',
+                },
+              },
+            }}
+          />
+        </Box>
         {bookData.locations.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
             No locations added yet.
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '400px', overflowY: 'auto' }}>
-            {bookData.locations.map((location) => (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: '800px', overflowY: 'auto' }}>
+            {fuzzySearch(
+              bookData.locations,
+              bookData.locations,
+              locationFilterText,
+              true,
+              { 
+                keys: ['name', 'description'],
+                threshold: 0.6
+              }
+            )
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((location) => (
               <Box
                 key={location.id}
                 sx={{
@@ -333,20 +376,14 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                   </Box>
                 )}
                 {editingLocationId !== location.id && (
-                  <Button
+                  <IconButton
                     size="small"
                     color="error"
                     onClick={() => handleRemoveLocation(location.id)}
-                    sx={{
-                      backgroundColor: 'var(--color-error)',
-                      color: 'var(--color-onError)',
-                      '&:hover': {
-                        backgroundColor: 'var(--color-errorHover)',
-                      },
-                    }}
+                    title="Delete Location"
                   >
-                    Remove
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 )}
               </Box>
             ))}

@@ -15,6 +15,8 @@ export interface HierarchyItem {
   type: string;
 }
 
+export type BookStatus = 'draft' | 'published';
+
 export interface BookData {
   book: Book;
   characters: Character[];
@@ -27,6 +29,7 @@ export interface BookData {
   ownerId?: string;
   ownerEmail?: string;
   isPublic?: boolean;
+  status?: BookStatus;
   createdAt?: Date;
   updatedAt?: Date;
   deleted?: boolean;
