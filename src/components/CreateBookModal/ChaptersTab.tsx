@@ -40,8 +40,8 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
       const newChapter: SchemaChapter = {
         id: `chapter-${bookData.chapters.length + 1}`,
         title: newChapterTitle.trim(),
-        locations: selectedHierarchyType === 'chapter' ? newChapterLocations : [],
-        characters: selectedHierarchyType === 'chapter' ? newChapterCharacters : []
+        locations: newChapterLocations,
+        characters: newChapterCharacters
       };
 
       const newHierarchyItem: SchemaHierarchyItem = {
@@ -57,6 +57,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
 
       setNewChapterTitle('');
       setNewChapterLocations([]);
+      setNewChapterCharacters([]);
     }
   };
 
@@ -209,19 +210,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
   const handleCharacterModalSave = (selectedCharacterIds: string[]) => {
     // Check if we're editing an existing chapter or creating a new one
     if (editingChapterId) {
-      // Handle editing existing chapter characters
-      const chapterIndex = bookData.chapters.findIndex(ch => ch.id === editingChapterId);
-      if (chapterIndex !== -1) {
-        const updatedChapters = [...bookData.chapters];
-        updatedChapters[chapterIndex] = {
-          ...updatedChapters[chapterIndex],
-          characters: selectedCharacterIds
-        };
-        setBookData(prev => ({
-          ...prev,
-          chapters: updatedChapters
-        }));
-      }
+      setEditingCharacters(selectedCharacterIds);
     } else {
       setNewChapterCharacters(selectedCharacterIds);
     }
@@ -426,16 +415,17 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                 onClick={() => handleStartEditing(item.chapter_id, chapter.title, item.type)}
                 sx={{
                   display: 'flex',
-                  alignItems: 'center',
+                  justifyContent: editingChapterId === item.chapter_id ? 'flex-start' : 'space-between',
+                  alignItems: 'flex-start',
                   py: 0.5,
-                  pl: level * 2,
+                  pl: editingChapterId === item.chapter_id ? 0 : level * 2,
                   cursor: editingChapterId === item.chapter_id ? 'default' : 'grab',
-                  backgroundColor: dragOverItem === item.chapter_id ? '#e3f2fd' : 'transparent',
-                  border: dragOverItem === item.chapter_id ? '2px dashed #1976d2' : '2px solid transparent',
+                  backgroundColor: dragOverItem === item.chapter_id ? '#e3f2fd' : 'var(--color-surface)',
+                  border: dragOverItem === item.chapter_id ? '2px dashed #1976d2' : '1px solid var(--color-border)',
                   borderRadius: 1,
                   '&:hover': { 
                     backgroundColor: dragOverItem === item.chapter_id ? '#e3f2fd' : 
-                      editingChapterId === item.chapter_id ? 'transparent' : '#f0f0f0'
+                      editingChapterId === item.chapter_id ? 'transparent' : 'var(--color-hover) !important'
                   },
                   '&:active': { cursor: 'grabbing' }
                 }}
@@ -444,84 +434,92 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                   <DragIndicatorIcon 
                     sx={{ 
                       mr: 1, 
-                      color: 'text.secondary',
+                      color: 'var(--color-textSecondary)',
                       fontSize: '16px'
                     }} 
                   />
                 )}
-                <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                   {editingChapterId === item.chapter_id ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
-                      {/* Title and Type Row */}
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <TextField
-                          size="small"
-                          value={editingTitle}
-                          onChange={(e) => setEditingTitle(e.target.value)}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') {
-                              handleSaveEdit();
-                            } else if (e.key === 'Escape') {
-                              handleCancelEdit();
-                            }
-                          }}
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+                      {/* Title Input */}
+                      <TextField
+                        fullWidth
+                        label="Chapter Title"
+                        placeholder="Enter chapter title"
+                        value={editingTitle}
+                        onChange={(e) => setEditingTitle(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            handleSaveEdit();
+                          } else if (e.key === 'Escape') {
+                            handleCancelEdit();
+                          }
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                        autoFocus
+                        sx={{ 
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiInputBase-input::placeholder': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
+                      />
+                      
+                      {/* Type Select */}
+                      <FormControl 
+                        fullWidth
+                        sx={{ 
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
+                      >
+                        <InputLabel sx={{ color: 'var(--color-textSecondary)' }}>Type</InputLabel>
+                        <Select
+                          value={editingType}
+                          label="Type"
+                          onChange={(e) => setEditingType(e.target.value as SchemaHierarchyType)}
                           onClick={(e) => e.stopPropagation()}
-                          autoFocus
-                          sx={{ 
-                            flex: 1,
+                          sx={{
                             '& .MuiInputBase-input': {
-                              color: 'var(--color-text)',
+                              color: 'var(--color-textSecondary) !important',
                             },
-                            '& .MuiOutlinedInput-root': {
-                              '& fieldset': {
-                                border: '1px solid #e0e0e0 !important',
-                              },
-                              '&:hover fieldset': {
-                                border: '1px solid #e0e0e0 !important',
-                              },
-                              '&.Mui-focused fieldset': {
-                                border: '1px solid #1976d2 !important',
-                              },
-                            },
-                          }}
-                        />
-                        <FormControl 
-                          size="small" 
-                          sx={{ 
-                            minWidth: 100,
-                            '& .MuiOutlinedInput-root': {
-                              '& fieldset': {
-                                border: '1px solid #e0e0e0 !important',
-                              },
-                              '&:hover fieldset': {
-                                border: '1px solid #e0e0e0 !important',
-                              },
-                              '&.Mui-focused fieldset': {
-                                border: '1px solid #1976d2 !important',
-                              },
+                            '& .MuiSelect-select': {
+                              color: level === 0 ? 'var(--color-primary)' : 'var(--color-textSecondary) !important',
                             },
                           }}
                         >
-                          <Select
-                            value={editingType}
-                            onChange={(e) => setEditingType(e.target.value as SchemaHierarchyType)}
-                            onClick={(e) => e.stopPropagation()}
-                            sx={{
-                              '& .MuiInputBase-input': {
-                                color: 'var(--color-text)',
-                              },
-                              '& .MuiSelect-select': {
-                                color: level === 0 ? 'var(--color-primary)' : 'var(--color-text)',
-                              },
-                            }}
-                          >
-                            <MenuItem value="volume">Volume</MenuItem>
-                            <MenuItem value="book">Book</MenuItem>
-                            <MenuItem value="part">Part</MenuItem>
-                            <MenuItem value="chapter">Chapter</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
+                          <MenuItem value="volume">Volume</MenuItem>
+                          <MenuItem value="book">Book</MenuItem>
+                          <MenuItem value="part">Part</MenuItem>
+                          <MenuItem value="chapter">Chapter</MenuItem>
+                        </Select>
+                      </FormControl>
                       
                       {/* Locations Button */}
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -657,7 +655,39 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                                 label={location?.name || locationId} 
                                 size="small"
                                 variant="outlined"
-                                sx={{ fontSize: '0.7rem', height: '20px' }}
+                                sx={{ 
+                                  fontSize: '0.7rem', 
+                                  height: '20px',
+                                  color: 'var(--color-text)',
+                                  borderColor: 'var(--color-border)',
+                                  '& .MuiChip-label': {
+                                    color: 'var(--color-text)',
+                                  }
+                                }}
+                              />
+                            );
+                          })}
+                        </Box>
+                      )}
+                      {chapter.characters && chapter.characters.length > 0 && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, ml: 1 }}>
+                          {chapter.characters.map((characterId) => {
+                            const character = bookData.characters.find(char => char.id === characterId);
+                            return (
+                              <Chip 
+                                key={characterId} 
+                                label={character?.name || characterId} 
+                                size="small"
+                                variant="outlined"
+                                sx={{ 
+                                  fontSize: '0.7rem', 
+                                  height: '20px',
+                                  color: 'var(--color-text)',
+                                  borderColor: 'var(--color-border)',
+                                  '& .MuiChip-label': {
+                                    color: 'var(--color-text)',
+                                  }
+                                }}
                               />
                             );
                           })}
@@ -666,13 +696,15 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                     </>
                   )}
                 </Box>
-                <IconButton
-                  size="small"
-                  onClick={() => handleRemoveFromHierarchy(item.chapter_id)}
-                  color="error"
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
+                {editingChapterId !== item.chapter_id && (
+                  <IconButton
+                    size="small"
+                    onClick={() => handleRemoveFromHierarchy(item.chapter_id)}
+                    color="error"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                )}
               </Box>
             ))}
             {buildHierarchyTree().length === 0 && (

@@ -114,8 +114,8 @@ export const CharacterGraphView: React.FC = () => {
   // Reset chapter when switching books (but not on initial load)
   React.useEffect(() => {
     if (bookData && bookData.chapters.length > 0) {
-      // In preview mode, always set the first chapter
-      if (previewBookData || previewDataFromUrl || isPreviewFromLocation || hasSetInitialBook.current) {
+      // Only reset chapter when switching books, not when in preview mode
+      if (!previewBookData && !previewDataFromUrl && !isPreviewFromLocation && hasSetInitialBook.current) {
         // Find the first actual chapter (not book or part)
         const firstChapter = bookData.chapters.find(ch => ch.id.startsWith('chapter-')) || bookData.chapters[0];
         setSelectedChapter(firstChapter.id);
@@ -247,7 +247,7 @@ export const CharacterGraphView: React.FC = () => {
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <CharacterGraph
-          key={previewBookData ? `preview-${previewBookData.book.id}-${previewTimestamp}` : selectedBook?.id || 'no-book'}
+          key={previewBookData ? `preview-${previewBookData.book.id}` : selectedBook?.id || 'no-book'}
           bookData={displayBookData}
           fullBookData={displayBookData}
           selectedChapter={selectedChapter}

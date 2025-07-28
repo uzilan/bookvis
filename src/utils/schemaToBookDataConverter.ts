@@ -77,13 +77,19 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
   });
 
   // Build chapter hierarchy and set indices
-  if (schemaData.hierarchy) {
+  if (schemaData.hierarchy && schemaData.hierarchy.length > 0) {
     schemaData.hierarchy.forEach((item, index) => {
       const chapter = chapters.find(ch => ch.id === item.chapter_id);
       if (chapter) {
         chapter.index = index;
         chapter.type = item.type;
       }
+    });
+  } else {
+    // If no hierarchy provided, create one from chapters
+    chapters.forEach((chapter, index) => {
+      chapter.index = index;
+      chapter.type = 'chapter';
     });
   }
 
@@ -153,12 +159,18 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
     }))
   }));
 
-  // Build hierarchy from chapters
-  const hierarchy = bookData.chapters.map((chapter, index) => ({
-    chapter_id: chapter.id,
-    type: chapter.type || 'chapter',
-    index
-  }));
+  // Use existing hierarchy or build from chapters
+  const hierarchy = bookData.hierarchy && bookData.hierarchy.length > 0 
+    ? bookData.hierarchy.map((item, index) => ({
+        chapter_id: item.chapter_id,
+        type: item.type,
+        index
+      }))
+    : bookData.chapters.map((chapter, index) => ({
+        chapter_id: chapter.id,
+        type: chapter.type || 'chapter',
+        index
+      }));
 
   return {
     book,

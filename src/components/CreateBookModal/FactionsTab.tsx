@@ -186,17 +186,20 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
               }}
             />
             <Box
-              sx={{
+                            sx={{
                 position: 'relative',
-                width: '60px',
-                height: '56px',
+                width: '65px',
+                height: '55px',
                 borderRadius: '50%',
                 backgroundColor: newFactionColor,
                 border: '2px solid #ccc',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                padding: 0,
+                margin: 0,
+                boxSizing: 'border-box'
               }}
             >
               <input
@@ -294,7 +297,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                 key={faction.id}
                 sx={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: editingFactionId === faction.id ? 'flex-start' : 'space-between',
                   alignItems: 'center',
                   p: 1,
                   border: '1px solid var(--color-border)',
@@ -302,7 +305,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                   backgroundColor: 'var(--color-surface)',
                   cursor: editingFactionId === faction.id ? 'default' : 'pointer',
                   '&:hover': {
-                    backgroundColor: editingFactionId === faction.id ? 'var(--color-surface)' : 'var(--color-hover)'
+                    backgroundColor: editingFactionId === faction.id ? 'var(--color-surface) !important' : 'var(--color-hover) !important'
                   }
                 }}
                 onClick={() => {
@@ -312,15 +315,14 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                 }}
               >
                 {editingFactionId === faction.id ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       <TextField
-                        size="small"
-                        label="Name"
+                        fullWidth
+                        label="Faction Name"
                         value={editingFactionName}
                         onChange={(e) => setEditingFactionName(e.target.value)}
-                        sx={{ 
-                          flex: 1,
+                        sx={{
                           '& .MuiInputLabel-root': {
                             color: 'var(--color-textSecondary)',
                           },
@@ -343,15 +345,18 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                       <Box
                         sx={{
                           position: 'relative',
-                          width: '60px',
-                          height: '56px',
+                          width: '65px',
+                          height: '55px',
                           borderRadius: '50%',
                           backgroundColor: editingFactionColor,
                           border: '2px solid #ccc',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
+                          padding: 0,
+                          margin: 0,
+                          boxSizing: 'border-box'
                         }}
                       >
                         <input
@@ -369,8 +374,8 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                       </Box>
                     </Box>
                     <TextField
-                      size="small"
-                      label="Description"
+                      fullWidth
+                      label="Description (optional)"
                       value={editingFactionDescription}
                       onChange={(e) => setEditingFactionDescription(e.target.value)}
                       placeholder="Enter faction description"
@@ -455,14 +460,15 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                     )}
                   </Box>
                 )}
-                <Button
-                  size="small"
-                  color="error"
-                  onClick={() => handleRemoveFaction(faction.id)}
-                  disabled={editingFactionId === faction.id}
-                >
-                  Remove
-                </Button>
+                {editingFactionId !== faction.id && (
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => handleRemoveFaction(faction.id)}
+                  >
+                    Remove
+                  </Button>
+                )}
               </Box>
             ))}
           </Box>

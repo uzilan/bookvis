@@ -264,7 +264,8 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         characters: bookData.characters.length > 0 ? bookData.characters : [],
         locations: bookData.locations.length > 0 ? bookData.locations : [],
         factions: bookData.factions.length > 0 ? bookData.factions : [],
-        relationships: bookData.relationships.length > 0 ? bookData.relationships : []
+        relationships: bookData.relationships.length > 0 ? bookData.relationships : [],
+        hierarchy: bookData.hierarchy || []
       };
 
       const convertedBookData = convertSchemaToBookData(previewData);
@@ -329,9 +330,9 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           >
             <Tab label="Book Info" />
             <Tab label={`Locations (${bookData.locations?.length || 0})`} />
-            <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
             <Tab label={`Factions (${bookData.factions?.length || 0})`} />
             <Tab label={`Characters (${bookData.characters?.length || 0})`} />
+            <Tab label={`Chapters (${bookData.chapters?.length || 0})`} />
             <Tab label={`Relationships (${bookData.relationships?.length || 0})`} />
           </Tabs>
         </Box>
@@ -360,21 +361,21 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           )}
 
           {currentTab === 2 && (
-            <ChaptersTab
-              bookData={bookData}
-              setBookData={setBookData}
-            />
-          )}
-
-          {currentTab === 3 && (
             <FactionsTab
               bookData={bookData}
               setBookData={setBookData}
             />
           )}
 
-          {currentTab === 4 && (
+          {currentTab === 3 && (
             <CharactersTab
+              bookData={bookData}
+              setBookData={setBookData}
+            />
+          )}
+
+          {currentTab === 4 && (
+            <ChaptersTab
               bookData={bookData}
               setBookData={setBookData}
             />

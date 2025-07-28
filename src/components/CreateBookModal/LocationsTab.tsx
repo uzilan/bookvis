@@ -204,7 +204,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                 key={location.id}
                 sx={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: editingLocationId === location.id ? 'flex-start' : 'space-between',
                   alignItems: 'center',
                   p: 1,
                   border: '1px solid var(--color-border)',
@@ -212,7 +212,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                   backgroundColor: 'var(--color-surface)',
                   cursor: editingLocationId === location.id ? 'default' : 'pointer',
                   '&:hover': {
-                    backgroundColor: editingLocationId === location.id ? 'var(--color-surface)' : 'var(--color-hover)'
+                    backgroundColor: editingLocationId === location.id ? 'var(--color-surface) !important' : 'var(--color-hover) !important'
                   }
                 }}
                 onClick={() => {
@@ -222,15 +222,14 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                 }}
               >
                 {editingLocationId === location.id ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <Box sx={{ display: 'flex', gap: 1 }}>
                       <TextField
-                        size="small"
-                        label="Name"
+                        fullWidth
+                        label="Location Name"
                         value={editingLocationName}
                         onChange={(e) => setEditingLocationName(e.target.value)}
-                        sx={{ 
-                          flex: 1,
+                        sx={{
                           '& .MuiInputLabel-root': {
                             color: 'var(--color-textSecondary)',
                           },
@@ -252,8 +251,8 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
                       />
                     </Box>
                     <TextField
-                      size="small"
-                      label="Description"
+                      fullWidth
+                      label="Description (optional)"
                       value={editingLocationDescription}
                       onChange={(e) => setEditingLocationDescription(e.target.value)}
                       placeholder="Enter location description"

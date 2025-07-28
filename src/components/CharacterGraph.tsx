@@ -181,11 +181,19 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           // For string chapter IDs, find the target chapter and current chapter
           const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+          return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
                  targetChapter.index <= currentChapter.index;
         }
         return false;
       });
+      
+      // Debug logging
+      if (character.factions.length > 0 && currentFactions.length === 0) {
+        console.log(`Character ${character.name} has factions:`, character.factions);
+        console.log(`Faction join chapters:`, character.factionJoinChapters);
+        console.log(`Current chapter:`, selectedChapter);
+        console.log(`Current chapter index:`, bookData.chapters.find(ch => ch.id === selectedChapter)?.index);
+      }
       
       const primaryFaction = currentFactions[0] || character.factions[0];
       if (primaryFaction) {
@@ -223,11 +231,13 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
           // For string chapter IDs, find the target chapter and current chapter
           const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+          return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
                  targetChapter.index <= currentChapter.index;
         }
         return false;
       });
+      
+
       
       const factionColors = currentFactions
         .map(fid => {

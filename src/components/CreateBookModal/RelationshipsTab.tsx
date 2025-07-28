@@ -372,7 +372,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                       label={bookData.chapters.find(ch => ch.id === description.chapter)?.title || description.chapter}
                       size="small"
                       variant="outlined"
-                      sx={{ minWidth: '120px' }}
+                      sx={{ 
+                        minWidth: '120px',
+                        color: 'var(--color-text)',
+                        borderColor: 'var(--color-border)',
+                        '& .MuiChip-label': {
+                          color: 'var(--color-text)',
+                        }
+                      }}
                     />
                     <Typography variant="body2" sx={{ flex: 1 }}>
                       {description.description}
@@ -460,7 +467,6 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
                       <TextField
                         select
-                        size="small"
                         label="First Character"
                         value={editingRelationshipCharacter1}
                         onChange={(e) => setEditingRelationshipCharacter1(e.target.value)}
@@ -496,7 +502,6 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                       </TextField>
                       <TextField
                         select
-                        size="small"
                         label="Second Character"
                         value={editingRelationshipCharacter2}
                         onChange={(e) => setEditingRelationshipCharacter2(e.target.value)}
@@ -583,7 +588,6 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                             ))}
                         </TextField>
                         <TextField
-                          size="small"
                           label="Description"
                           value={editingDescriptionText}
                           onChange={(e) => setEditingDescriptionText(e.target.value)}
@@ -645,7 +649,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                                   label={bookData.chapters.find(ch => ch.id === description.chapter)?.title || description.chapter}
                                   size="small"
                                   variant="outlined"
-                                  sx={{ minWidth: '120px' }}
+                                  sx={{ 
+                                    minWidth: '120px',
+                                    color: 'var(--color-text)',
+                                    borderColor: 'var(--color-border)',
+                                    '& .MuiChip-label': {
+                                      color: 'var(--color-text)',
+                                    }
+                                  }}
                                 />
                                 <Typography variant="body2" sx={{ flex: 1 }}>
                                   {description.description}
@@ -709,7 +720,16 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                                 label={bookData.chapters.find(ch => ch.id === description.chapter)?.title || description.chapter}
                                 size="small"
                                 variant="outlined"
-                                sx={{ fontSize: '0.7rem', height: '20px', minWidth: '100px' }}
+                                sx={{ 
+                                  fontSize: '0.7rem', 
+                                  height: '20px', 
+                                  minWidth: '100px',
+                                  color: 'var(--color-text)',
+                                  borderColor: 'var(--color-border)',
+                                  '& .MuiChip-label': {
+                                    color: 'var(--color-text)',
+                                  }
+                                }}
                               />
                               <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'var(--color-textSecondary)' }}>
                                 {description.description}

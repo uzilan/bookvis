@@ -669,7 +669,7 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 key={character.id}
                 sx={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: editingCharacterId === character.id ? 'flex-start' : 'space-between',
                   alignItems: 'flex-start',
                   p: 1,
                   border: '1px solid var(--color-border)',
@@ -687,14 +687,13 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                 }}
               >
                 {editingCharacterId === character.id ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <TextField
-                      size="small"
-                      label="Name"
+                      fullWidth
+                      label="Character Name"
                       value={editingCharacterName}
                       onChange={(e) => setEditingCharacterName(e.target.value)}
-                      sx={{ 
-                        flex: 1,
+                      sx={{
                         '& .MuiInputLabel-root': {
                           color: 'var(--color-textSecondary)',
                         },
@@ -715,13 +714,13 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                       }}
                     />
                     <TextField
-                      size="small"
-                      label="Description"
+                      fullWidth
+                      label="Character Description"
                       value={editingCharacterDescription}
                       onChange={(e) => setEditingCharacterDescription(e.target.value)}
                       placeholder="Enter character description"
                       multiline
-                      rows={2}
+                      rows={3}
                       sx={{
                         '& .MuiInputLabel-root': {
                           color: 'var(--color-textSecondary)',
@@ -792,6 +791,19 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                           variant="outlined"
                           onClick={handleAddAlias}
                           disabled={!editingAlias.trim()}
+                          sx={{
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-hover)',
+                            },
+                            '&:disabled': {
+                              backgroundColor: 'var(--color-disabled)',
+                              color: 'var(--color-onDisabled)',
+                              border: '1px solid var(--color-border)',
+                            },
+                          }}
                         >
                           Add
                         </Button>
@@ -865,6 +877,19 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
                           variant="outlined"
                           onClick={handleAddAttribute}
                           disabled={!editingAttribute.trim()}
+                          sx={{
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            '&:hover': {
+                              backgroundColor: 'var(--color-hover)',
+                            },
+                            '&:disabled': {
+                              backgroundColor: 'var(--color-disabled)',
+                              color: 'var(--color-onDisabled)',
+                              border: '1px solid var(--color-border)',
+                            },
+                          }}
                         >
                           Add
                         </Button>

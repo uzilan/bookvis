@@ -5,6 +5,7 @@
 - **Make small, focused changes**: Break down complex tasks into smaller, manageable pieces
 - **Seek confirmation before major changes**: Ask for approval before implementing significant modifications
 - **Explain your reasoning**: Always explain why you're making changes and what they accomplish
+- **Find the root cause**: Instead of using workarounds, identify and solve the real underlying issue
 
 ## Code Quality
 - **Keep functions small and modular**: Write focused, single-purpose functions that are easy to understand and test
