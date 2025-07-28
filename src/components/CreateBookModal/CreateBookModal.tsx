@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -41,6 +41,11 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
   const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [showRequirementsDialog, setShowRequirementsDialog] = useState(false);
   const [missingRequirements, setMissingRequirements] = useState<string[]>([]);
+  const [loadedFromSession, setLoadedFromSession] = useState(false);
+  const isLoadingFromSessionRef = useRef(false);
+  
+  // Session storage key for book data
+  const SESSION_STORAGE_KEY = 'bookvis-draft-book';
   
   // SchemaBookData instance that we'll populate step by step
   const [bookData, setBookData] = useState<SchemaBookData>({
@@ -60,6 +65,39 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     hierarchy: []
   });
 
+  // Save book data to session storage
+  const saveToSessionStorage = (data: SchemaBookData) => {
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(data));
+    } catch (error) {
+      console.error('Failed to save book data to session storage:', error);
+    }
+  };
+
+  // Load book data from session storage
+  const loadFromSessionStorage = (): SchemaBookData | null => {
+    try {
+      const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        return parsed;
+      }
+      return null;
+    } catch (error) {
+      console.error('Failed to load book data from session storage:', error);
+      return null;
+    }
+  };
+
+  // Clear session storage
+  const clearSessionStorage = () => {
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to clear session storage:', error);
+    }
+  };
+
   // Fetch authors when modal opens and restore initial data if provided
   useEffect(() => {
     if (open) {
@@ -68,28 +106,117 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       if (initialData) {
         setBookData(initialData);
         setSelectedAuthor(initialData.book.author.id);
+        setLoadedFromSession(false);
+        isLoadingFromSessionRef.current = false;
       } else {
-        // Reset to initial state when creating a new book
-        setBookData({
-          book: {
-            id: '',
-            title: '',
-            author: {
+        // Try to load from session storage first
+        const savedData = loadFromSessionStorage();
+        if (savedData) {
+          isLoadingFromSessionRef.current = true;
+          setBookData(savedData);
+          // Don't set selectedAuthor here, let the useEffect handle it after authors are loaded
+          setLoadedFromSession(true);
+          // Reset the loading flag after a short delay to allow the data to be set
+          setTimeout(() => {
+            isLoadingFromSessionRef.current = false;
+          }, 100);
+        } else {
+          // Reset to initial state when creating a new book
+          setBookData({
+            book: {
               id: '',
-              name: ''
-            }
-          },
-          locations: [],
-          characters: [],
-          factions: [],
-          relationships: [],
-          chapters: [],
-          hierarchy: []
-        });
-        setSelectedAuthor('');
+              title: '',
+              author: {
+                id: '',
+                name: ''
+              }
+            },
+            locations: [],
+            characters: [],
+            factions: [],
+            relationships: [],
+            chapters: [],
+            hierarchy: []
+          });
+          setSelectedAuthor('');
+          setLoadedFromSession(false);
+          isLoadingFromSessionRef.current = false;
+        }
       }
     }
   }, [open, initialData]);
+
+  // Save book data to session storage whenever it changes
+  useEffect(() => {
+    if (open && bookData && !isLoadingFromSessionRef.current) {
+      saveToSessionStorage(bookData);
+    }
+  }, [bookData, open]);
+
+  // Ensure author from session storage exists in authors list
+  useEffect(() => {
+    if (loadedFromSession && bookData.book.author.id) {
+      if (authors.length > 0) {
+        // Authors are loaded, check if our author exists
+        const authorExists = authors.find(author => author.id === bookData.book.author.id);
+        
+        if (!authorExists && bookData.book.author.name) {
+          // Add the author from session storage to the authors list
+          const sessionAuthor: Author = {
+            id: bookData.book.author.id,
+            name: bookData.book.author.name
+          };
+          setAuthors(prev => [...prev, sessionAuthor]);
+        }
+        // Ensure selectedAuthor is set to the author from session storage
+        if (bookData.book.author.id && selectedAuthor !== bookData.book.author.id) {
+          setSelectedAuthor(bookData.book.author.id);
+        }
+      } else {
+        // Authors are loaded but empty, or still loading
+        if (authors.length === 0 && bookData.book.author.id && bookData.book.author.name) {
+          // Authors list is empty but we have an author from session storage
+          // Add the author to the list
+          const sessionAuthor: Author = {
+            id: bookData.book.author.id,
+            name: bookData.book.author.name
+          };
+          setAuthors([sessionAuthor]);
+          setSelectedAuthor(bookData.book.author.id);
+        }
+      }
+    }
+  }, [loadedFromSession, bookData.book.author, authors, selectedAuthor]);
+
+  // Add beforeunload event listener to warn before navigating away
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // Check if we have unsaved changes (any data in the book)
+      const hasUnsavedChanges = bookData && (
+        bookData.book.title ||
+        bookData.locations.length > 0 ||
+        bookData.characters.length > 0 ||
+        bookData.factions.length > 0 ||
+        bookData.chapters.length > 0 ||
+        bookData.relationships.length > 0
+      );
+
+      if (open && hasUnsavedChanges) {
+        // Show browser's default confirmation dialog
+        event.preventDefault();
+        event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        return 'You have unsaved changes. Are you sure you want to leave?';
+      }
+    };
+
+    if (open) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [open, bookData]);
 
   const fetchAuthors = async () => {
     try {
@@ -164,6 +291,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       await FirebaseService.saveBook(bookDataForSave, false); // false = private by default
       
       console.log('Book saved successfully:', bookDataForSave.book.title);
+      clearSessionStorage(); // Clear session storage after successful save
       onClose();
     } catch (error) {
       console.error('Error saving book:', error);
@@ -182,6 +310,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     setShowCancelConfirmation(false);
     setSelectedAuthor('');
     setIsAddAuthorModalOpen(false);
+    clearSessionStorage(); // Clear session storage when cancelling
     setBookData({
       book: {
         id: '',
@@ -204,6 +333,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
   const handleClose = () => {
     setSelectedAuthor('');
     setIsAddAuthorModalOpen(false);
+    clearSessionStorage(); // Clear session storage when closing
     setBookData({
       book: {
         id: '',
@@ -327,6 +457,16 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         >
       <DialogTitle sx={{ color: 'var(--color-text)' }}>
         Create New Book
+        {loadedFromSession && (
+          <Typography variant="caption" sx={{ 
+            display: 'block', 
+            mt: 1, 
+            color: 'var(--color-textSecondary)',
+            fontStyle: 'italic'
+          }}>
+            📝 Draft restored from previous session
+          </Typography>
+        )}
       </DialogTitle>
       <DialogContent sx={{ 
         display: 'flex', 

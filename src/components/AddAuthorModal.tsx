@@ -47,15 +47,21 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
         onClose={handleClose}
         maxWidth="sm"
         fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text)',
+          }
+        }}
       >
-      <DialogTitle>
+      <DialogTitle sx={{ color: 'var(--color-text)' }}>
         Add New Author
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}>
         <Box sx={{ p: 2 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom sx={{ color: 'var(--color-text)' }}>
                 Author Information
               </Typography>
             </Box>
@@ -68,20 +74,58 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
                 onChange={(e) => setAuthorName(e.target.value)}
                 placeholder="Enter the author's full name"
                 autoFocus
+                sx={{
+                  '& .MuiInputLabel-root': {
+                    color: 'var(--color-textSecondary)',
+                  },
+                  '& .MuiInputBase-root': {
+                    color: 'var(--color-text)',
+                    '& fieldset': {
+                      borderColor: 'var(--color-border)',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'var(--color-border)',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'var(--color-primary)',
+                    },
+                  },
+                  '& .MuiInputBase-input': {
+                    color: 'var(--color-text)',
+                  },
+                }}
               />
             </Box>
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
+      <DialogActions sx={{ backgroundColor: 'var(--color-background)' }}>
+        <Button 
+          onClick={handleClose} 
+          sx={{ 
+            color: 'var(--color-textSecondary)',
+            '&:hover': {
+              backgroundColor: 'var(--color-hover)',
+            }
+          }}
+        >
           Cancel
         </Button>
         <Button 
           onClick={handleSubmit} 
-          color="primary" 
           variant="contained"
           disabled={!authorName.trim()}
+          sx={{
+            backgroundColor: 'var(--color-primary)',
+            color: 'var(--color-onPrimary)',
+            '&:hover': {
+              backgroundColor: 'var(--color-primaryHover)',
+            },
+            '&:disabled': {
+              backgroundColor: 'var(--color-disabled)',
+              color: 'var(--color-onDisabled)',
+            }
+          }}
         >
           Add Author
         </Button>

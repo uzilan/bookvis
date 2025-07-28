@@ -52,6 +52,7 @@ export const HomePage: React.FC = () => {
   const [bookFilterText, setBookFilterText] = useState('');
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const [hasFetchedData, setHasFetchedData] = useState(false);
+  const [draftBookData, setDraftBookData] = useState<any>(null);
   
   // YAML upload functionality
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -72,6 +73,12 @@ export const HomePage: React.FC = () => {
       fetchData();
     }
   }, [isAuthenticated, hasFetchedData]);
+
+  // Check for draft book data when component mounts
+  useEffect(() => {
+    const draft = checkForDraftBook();
+    setDraftBookData(draft);
+  }, []);
 
   // Filter authors and books based on toggle and author selection
   useEffect(() => {
@@ -207,6 +214,33 @@ export const HomePage: React.FC = () => {
 
   const handleCloseCreateBookModal = () => {
     setIsCreateBookModalOpen(false);
+    // Check for updated draft data after modal closes
+    const draft = checkForDraftBook();
+    setDraftBookData(draft);
+  };
+
+  // Check for draft book data in session storage
+  const checkForDraftBook = () => {
+    try {
+      const stored = sessionStorage.getItem('bookvis-draft-book');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Check if there's any meaningful data
+        const hasData = parsed && (
+          parsed.book?.title ||
+          parsed.locations?.length > 0 ||
+          parsed.characters?.length > 0 ||
+          parsed.factions?.length > 0 ||
+          parsed.chapters?.length > 0 ||
+          parsed.relationships?.length > 0
+        );
+        return hasData ? parsed : null;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error checking for draft book:', error);
+      return null;
+    }
   };
 
   // YAML upload handlers
@@ -413,7 +447,10 @@ export const HomePage: React.FC = () => {
                     size="small"
                     onClick={handleOpenCreateBookModal}
                   >
-                    Create New Book
+                    {draftBookData ? 
+                      `Continue creating "${draftBookData.book?.title || 'Untitled Book'}"` : 
+                      'Create New Book'
+                    }
                   </Button>
                   <Button
                     variant="outlined"
