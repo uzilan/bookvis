@@ -316,6 +316,9 @@ export const CharactersInChaptersTab: React.FC<CharactersInChaptersTabProps> = (
         <Typography variant="h6" sx={{ mb: 2 }}>
           Chapters
         </Typography>
+        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mb: 1 }}>
+          Click on a chapter to assign characters to it. Only actual chapters (not parts or books) can have characters assigned.
+        </Typography>
         <Paper sx={{ flex: 1, overflow: 'auto', minHeight: 0 }}>
           <List dense>
             {chapterTree.map(node => renderChapterNode(node))}
@@ -328,6 +331,9 @@ export const CharactersInChaptersTab: React.FC<CharactersInChaptersTabProps> = (
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
             Characters in "{selectedChapterData?.title}"
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mb: 1 }}>
+            Use the transfer lists to assign characters to this chapter. Click on characters or use the arrow buttons to move them between lists.
           </Typography>
           
           <Box sx={{ display: 'flex', gap: 1, flex: 1, minHeight: 0 }}>

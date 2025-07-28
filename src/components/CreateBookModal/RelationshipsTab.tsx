@@ -226,6 +226,9 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
               </MenuItem>
             ))}
           </TextField>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Select the first character in this relationship (e.g., "Frodo", "Gandalf", "Aragorn")
+          </Typography>
           <TextField
             select
             fullWidth
@@ -266,14 +269,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                 </MenuItem>
               ))}
           </TextField>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Select the second character in this relationship (automatically excludes the first character)
+          </Typography>
 
           {/* Relationship Descriptions for New Relationship */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)' }}>
+            <Typography variant="subtitle2" sx={{ color: 'var(--color-text)', fontWeight: 500, mt: 1 }}>
               Relationship Descriptions:
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', fontStyle: 'italic', mb: 1 }}>
-              Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
             </Typography>
             
             {/* Add New Description */}
@@ -371,6 +374,9 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             >
               Add Description
             </Button>
+            <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', fontStyle: 'italic', mt: 0.5 }}>
+              Add descriptions of how the relationship evolves throughout the story. Select a chapter and describe the relationship at that point.
+            </Typography>
 
             {/* Existing Descriptions */}
             {newRelationshipDescriptions.length > 0 && (

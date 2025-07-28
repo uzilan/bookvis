@@ -446,7 +446,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
             }
             handleClose();
           }}
-          maxWidth="md"
+          maxWidth="lg"
           fullWidth
           sx={{
             '& .MuiDialog-paper': {
@@ -470,7 +470,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       </DialogTitle>
       <DialogContent sx={{ 
         display: 'flex', 
-        height: '600px', 
+        height: '800px', 
         p: 0,
         backgroundColor: 'var(--color-background)',
         color: 'var(--color-text)'

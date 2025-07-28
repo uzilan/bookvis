@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip } from '@mui/material';
+import { Box, Typography, TextField, Button, IconButton, Select, MenuItem, FormControl, InputLabel, Chip, Divider } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { LocationSelectorModal } from './LocationSelectorModal';
@@ -230,6 +230,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Enter the title of your chapter (e.g., "The Fellowship of the Ring", "The Council of Elrond")
+          </Typography>
           
           {/* Type Select */}
           <FormControl 
@@ -260,6 +263,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                 '& .MuiSelect-select': {
                   color: 'var(--color-textSecondary) !important',
                 },
+                '& .MuiSelect-icon': {
+                  color: 'var(--color-textSecondary) !important',
+                },
               }}
             >
               <MenuItem value="volume">Volume</MenuItem>
@@ -268,6 +274,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               <MenuItem value="chapter">Chapter</MenuItem>
             </Select>
           </FormControl>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Choose the hierarchy level: Volume (largest), Book, Part, or Chapter (smallest unit)
+          </Typography>
 
           {/* Locations */}
           <Box>
@@ -277,7 +286,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
             <Button
               variant="outlined"
               size="small"
-              onClick={() => handleOpenLocationModal(`Select Locations for New Chapter`, true)}
+              onClick={() => handleOpenLocationModal(`Select Locations for "${newChapterTitle || 'New Chapter'}"`, true)}
               sx={{
                 borderColor: 'var(--color-border)',
                 color: 'var(--color-text)',
@@ -310,6 +319,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
               </Box>
             )}
           </Box>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Select locations where this chapter takes place (optional)
+          </Typography>
 
           <Button
             variant="contained"
@@ -334,6 +346,15 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
           </Button>
         </Box>
       </Box>
+
+      {/* Divider between columns */}
+      <Divider 
+        orientation="vertical" 
+        flexItem 
+        sx={{ 
+          backgroundColor: 'var(--color-border)',
+        }}
+      />
 
       {/* Right Column - Chapter List */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -435,6 +456,9 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                         '& .MuiSelect-select': {
                           color: 'var(--color-textSecondary) !important',
                         },
+                        '& .MuiSelect-icon': {
+                          color: 'var(--color-textSecondary) !important',
+                        },
                       }}
                     >
                       <MenuItem value="volume">Volume</MenuItem>
@@ -523,7 +547,7 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
                      <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
                        {chapter.title}
                      </Typography>
-                     <Typography variant="body2" color="text.secondary">
+                     <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)' }}>
                        Type: {item.type}
                      </Typography>
                      {chapter.locations && chapter.locations.length > 0 && (

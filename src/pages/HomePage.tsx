@@ -528,7 +528,7 @@ export const HomePage: React.FC = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body1" sx={{ textAlign: 'center', py: 4, color: 'var(--color-textSecondary)' }}>
                 No authors found. Create your first book to get started!
               </Typography>
             )}
@@ -620,7 +620,7 @@ export const HomePage: React.FC = () => {
                 ))}
               </Grid>
             ) : (
-              <Typography variant="body1" color="text.secondary" sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body1" sx={{ textAlign: 'center', py: 4, color: 'var(--color-textSecondary)' }}>
                 No books found. Create your first book to get started!
               </Typography>
             )}

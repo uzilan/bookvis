@@ -216,6 +216,9 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
               />
             </Box>
           </Box>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Enter the name of a faction in your story (e.g., "The Fellowship", "The Dark Forces", "The Elves"). You can accept the suggested color or choose a new one by clicking the color circle.
+          </Typography>
           <TextField
             fullWidth
             label="Description (optional)"
@@ -247,6 +250,9 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -1, mb: 1 }}>
+            Describe the faction's role, goals, or significance in the story
+          </Typography>
           
           <Button
             variant="contained"

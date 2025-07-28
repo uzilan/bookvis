@@ -7,7 +7,8 @@ import {
   MenuItem,
   TextField,
   CircularProgress,
-  Divider
+  Divider,
+  Typography
 } from '@mui/material';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
@@ -73,6 +74,9 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
               '& .MuiSelect-select': {
                 color: 'var(--color-text)',
               },
+              '& .MuiSelect-icon': {
+                color: 'var(--color-textSecondary) !important',
+              },
               '& .MuiOutlinedInput-root': {
                 '& fieldset': {
                   border: '1px solid #e0e0e0 !important',
@@ -111,6 +115,9 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             ]}
           </Select>
         </FormControl>
+        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: 1, display: 'block' }}>
+          Select the author of this book, or add a new author if they're not in the list
+        </Typography>
       </Box>
 
       <Box>
@@ -149,22 +156,21 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             },
           }}
         />
+        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: 1, display: 'block' }}>
+          Enter the title of your book (e.g., "The Lord of the Rings", "The Hobbit")
+        </Typography>
       </Box>
 
       <Box>
         <TextField
           fullWidth
           label="Map Link (optional)"
-          value={bookData.book.mapLink || ''}
+          value={bookData.map_url || ''}
           onChange={(e) => setBookData(prev => ({
             ...prev,
-            book: {
-              ...prev.book,
-              mapLink: e.target.value
-            }
+            map_url: e.target.value
           }))}
           placeholder="Enter a link to the book's map"
-          helperText="URL to a static image of the book's world map"
           sx={{
             '& .MuiInputLabel-root': {
               color: 'var(--color-textSecondary)',
@@ -173,9 +179,6 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
               color: 'var(--color-text)',
             },
             '& .MuiInputBase-input::placeholder': {
-              color: 'var(--color-textSecondary)',
-            },
-            '& .MuiFormHelperText-root': {
               color: 'var(--color-textSecondary)',
             },
             '& .MuiOutlinedInput-root': {
@@ -191,6 +194,9 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             },
           }}
         />
+        <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: 1, display: 'block' }}>
+          If available, add a URL to a static image of the book's world map
+        </Typography>
       </Box>
 
 

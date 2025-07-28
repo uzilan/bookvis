@@ -104,7 +104,11 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
   const handleDeleteCharacter = (characterId: string) => {
     setBookData(prev => ({
       ...prev,
-      characters: prev.characters.filter(character => character.id !== characterId)
+      characters: prev.characters.filter(character => character.id !== characterId),
+      chapters: prev.chapters.map(chapter => ({
+        ...chapter,
+        characters: (chapter.characters || []).filter(charId => charId !== characterId)
+      }))
     }));
   };
 
@@ -314,6 +318,9 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Enter the character's name (e.g., "Frodo Baggins", "Gandalf", "Aragorn")
+          </Typography>
           
           <TextField
             fullWidth
@@ -351,8 +358,10 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Describe the character's role, personality, background, or significance in the story
+          </Typography>
           
-
           
           {/* Aliases Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -439,6 +448,9 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               </Box>
             )}
           </Box>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Add alternative names or titles for the character (e.g., "The Grey Wizard", "Strider", "Ring-bearer")
+          </Typography>
           
           {/* Attributes Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -526,6 +538,9 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               </Box>
             )}
           </Box>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Add character traits, skills, or qualities (e.g., "Brave", "Intelligent", "Mysterious", "Skilled with a bow")
+          </Typography>
           
           {/* Factions Section for New Character */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -650,6 +665,9 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
               Add Faction
             </Button>
           </Box>
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            Assign the character to factions and specify which chapter they join each faction (optional)
+          </Typography>
           
           <Button
             variant="contained"

@@ -123,6 +123,9 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -1, mb: 1 }}>
+            Enter the name of a location in your story (e.g., "The Shire", "Mordor", "Rivendell")
+          </Typography>
           <TextField
             fullWidth
             label="Description (optional)"
@@ -154,6 +157,9 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
               },
             }}
           />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -1, mb: 1 }}>
+            Describe the location's significance, appearance, or role in the story
+          </Typography>
           
           <Button
             variant="contained"

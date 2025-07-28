@@ -68,23 +68,57 @@ export const LocationSelectorModal: React.FC<LocationSelectorModalProps> = ({
     onSelectAll?: () => void;
     onDeselectAll?: () => void;
   }) => (
-    <Paper sx={{ width: 200, height: 300, overflow: 'auto' }}>
-      <Box sx={{ p: 1, borderBottom: 1, borderColor: 'divider' }}>
-        <Typography variant="subtitle2">{title}</Typography>
+    <Paper sx={{ 
+      width: 200, 
+      height: 300, 
+      overflow: 'auto',
+      backgroundColor: 'var(--color-surface)',
+      border: '1px solid var(--color-border)'
+    }}>
+      <Box sx={{ 
+        p: 1, 
+        borderBottom: 1, 
+        borderColor: 'var(--color-border)',
+        backgroundColor: 'var(--color-surface)'
+      }}>
+        <Typography variant="subtitle2" sx={{ color: 'var(--color-text)' }}>{title}</Typography>
         {(onSelectAll || onDeselectAll) && (
-          <Button size="small" onClick={onSelectAll || onDeselectAll}>
+          <Button 
+            size="small" 
+            onClick={onSelectAll || onDeselectAll}
+            sx={{
+              color: 'var(--color-text)',
+              '&:hover': {
+                backgroundColor: 'var(--color-hover)',
+              }
+            }}
+          >
             {onSelectAll ? 'Select All' : 'Deselect All'}
           </Button>
         )}
       </Box>
-      <List dense>
+      <List dense sx={{ backgroundColor: 'var(--color-surface)' }}>
         {items.map((item) => (
           <ListItem
             key={item.id}
             onClick={() => onItemClick(item.id)}
-            sx={{ py: 0.5, cursor: 'pointer' }}
+            sx={{ 
+              py: 0.5, 
+              cursor: 'pointer',
+              color: 'var(--color-text)',
+              '&:hover': {
+                backgroundColor: 'var(--color-hover)',
+              }
+            }}
           >
-            <ListItemText primary={item.name} />
+            <ListItemText 
+              primary={item.name} 
+              sx={{ 
+                '& .MuiListItemText-primary': {
+                  color: 'var(--color-text)',
+                }
+              }}
+            />
           </ListItem>
         ))}
       </List>
@@ -92,9 +126,20 @@ export const LocationSelectorModal: React.FC<LocationSelectorModalProps> = ({
   );
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
+    <Dialog 
+      open={open} 
+      onClose={onClose} 
+      maxWidth="sm" 
+      fullWidth
+      sx={{
+        '& .MuiDialog-paper': {
+          backgroundColor: 'var(--color-background)',
+          color: 'var(--color-text)',
+        }
+      }}
+    >
+      <DialogTitle sx={{ color: 'var(--color-text)' }}>{title}</DialogTitle>
+      <DialogContent sx={{ backgroundColor: 'var(--color-background)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'center', py: 2 }}>
           <TransferList
             title="Available Locations"
@@ -102,6 +147,65 @@ export const LocationSelectorModal: React.FC<LocationSelectorModalProps> = ({
             onItemClick={(id) => handleLocationTransfer(id, 'add')}
             onSelectAll={() => handleLocationTransferAll('add')}
           />
+          
+          {/* Transfer Buttons */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                const availableLocations = bookData.locations
+                  .filter(location => !selectedLocationIds.includes(location.id))
+                  .map(location => location.id);
+                if (availableLocations.length > 0) {
+                  setSelectedLocationIds(prev => [...prev, ...availableLocations]);
+                }
+              }}
+              disabled={bookData.locations.filter(location => !selectedLocationIds.includes(location.id)).length === 0}
+              sx={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text)',
+                '&:hover': {
+                  borderColor: 'var(--color-primary)',
+                  backgroundColor: 'var(--color-hover)',
+                },
+                '&:disabled': {
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-textSecondary)',
+                }
+              }}
+            >
+              &gt;&gt;
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                const selectedLocations = bookData.locations
+                  .filter(location => selectedLocationIds.includes(location.id))
+                  .map(location => location.id);
+                if (selectedLocations.length > 0) {
+                  setSelectedLocationIds(prev => prev.filter(id => !selectedLocations.includes(id)));
+                }
+              }}
+              disabled={selectedLocationIds.length === 0}
+              sx={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text)',
+                '&:hover': {
+                  borderColor: 'var(--color-primary)',
+                  backgroundColor: 'var(--color-hover)',
+                },
+                '&:disabled': {
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-textSecondary)',
+                }
+              }}
+            >
+              &lt;&lt;
+            </Button>
+          </Box>
+          
           <TransferList
             title="Selected Locations"
             items={bookData.locations.filter(location => selectedLocationIds.includes(location.id))}
@@ -110,9 +214,29 @@ export const LocationSelectorModal: React.FC<LocationSelectorModalProps> = ({
           />
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained">
+      <DialogActions sx={{ backgroundColor: 'var(--color-background)' }}>
+        <Button 
+          onClick={onClose}
+          sx={{
+            color: 'var(--color-text)',
+            '&:hover': {
+              backgroundColor: 'var(--color-hover)',
+            }
+          }}
+        >
+          Cancel
+        </Button>
+        <Button 
+          onClick={handleSave} 
+          variant="contained"
+          sx={{
+            backgroundColor: 'var(--color-buttonActive)',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'var(--color-buttonActiveHover)',
+            }
+          }}
+        >
           Save
         </Button>
       </DialogActions>
