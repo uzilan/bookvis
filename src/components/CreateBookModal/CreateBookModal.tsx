@@ -290,7 +290,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       // Save to Firebase
       await FirebaseService.saveBook(bookDataForSave, false); // false = private by default
       
-      console.log('Book saved successfully:', bookDataForSave.book.title);
+      
       clearSessionStorage(); // Clear session storage after successful save
       onClose();
     } catch (error) {

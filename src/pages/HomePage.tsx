@@ -28,6 +28,7 @@ import { FirebaseService } from '../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import type { Author } from '../models/Author';
 import type { BookData } from '../models/BookData';
+import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -52,7 +53,7 @@ export const HomePage: React.FC = () => {
   const [bookFilterText, setBookFilterText] = useState('');
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const [hasFetchedData, setHasFetchedData] = useState(false);
-  const [draftBookData, setDraftBookData] = useState<any>(null);
+  const [draftBookData, setDraftBookData] = useState<SchemaBookData | null>(null);
   
   // YAML upload functionality
   const fileInputRef = useRef<HTMLInputElement>(null);

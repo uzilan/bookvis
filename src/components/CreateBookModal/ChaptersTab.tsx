@@ -316,15 +316,18 @@ export const ChaptersTab: React.FC<ChaptersTabProps> = ({
             onClick={handleAddChapter}
             disabled={!newChapterTitle.trim()}
             sx={{
-              backgroundColor: 'var(--color-primary)',
-              color: 'var(--color-onPrimary)',
+              backgroundColor: 'var(--color-buttonActive)',
+              color: 'white',
+              border: '1px solid var(--color-border)',
               '&:hover': {
-                backgroundColor: 'var(--color-primaryHover)',
+                backgroundColor: 'var(--color-buttonActiveHover)',
+                border: '1px solid var(--color-border)',
               },
               '&:disabled': {
                 backgroundColor: 'var(--color-disabled)',
                 color: 'var(--color-onDisabled)',
-              }
+                border: '1px solid var(--color-border)',
+              },
             }}
           >
             Add Chapter

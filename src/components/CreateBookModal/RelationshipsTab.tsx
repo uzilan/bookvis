@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -172,6 +172,13 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
     return character ? character.name : characterId;
   };
 
+  // Reset second character when first character changes
+  useEffect(() => {
+    if (newRelationshipCharacter2 === newRelationshipCharacter1 && newRelationshipCharacter1 !== '') {
+      setNewRelationshipCharacter2('');
+    }
+  }, [newRelationshipCharacter1, newRelationshipCharacter2]);
+
   return (
     <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
       {/* Left Column - Add Relationship Form */}
@@ -251,11 +258,13 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
             <MenuItem value="">
               <em>Select second character</em>
             </MenuItem>
-            {bookData.characters.map((character) => (
-              <MenuItem key={character.id} value={character.id}>
-                {character.name}
-              </MenuItem>
-            ))}
+            {bookData.characters
+              .filter(character => character.id !== newRelationshipCharacter1)
+              .map((character) => (
+                <MenuItem key={character.id} value={character.id}>
+                  {character.name}
+                </MenuItem>
+              ))}
           </TextField>
 
           {/* Relationship Descriptions for New Relationship */}

@@ -48,8 +48,9 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
 
   const handleAddCharacter = () => {
     if (newCharacterName.trim() && newCharacterDescription.trim()) {
+      const characterId = `character-${bookData.characters.length + 1}`;
       const newCharacter: SchemaCharacter = {
-        id: `character-${bookData.characters.length + 1}`,
+        id: characterId,
         name: newCharacterName.trim(),
         description: newCharacterDescription.trim(),
         aliases: newCharacterAliases,
@@ -61,16 +62,42 @@ export const CharactersTab: React.FC<CharactersTabProps> = ({
         attributes: newCharacterAttributes
       };
 
-      setBookData(prev => ({
-        ...prev,
-        characters: [...prev.characters, newCharacter]
-      }));
+      setBookData(prev => {
+        // First add the character
+        const updatedBookData = {
+          ...prev,
+          characters: [...prev.characters, newCharacter]
+        };
 
+        // Then automatically assign character to chapters based on faction memberships
+        const chaptersToUpdate = newCharacterFactions
+          .filter(fm => fm.factionId && fm.joinChapterId)
+          .map(fm => fm.joinChapterId);
+
+        if (chaptersToUpdate.length > 0) {
+          updatedBookData.chapters = updatedBookData.chapters.map(chapter => {
+            if (chaptersToUpdate.includes(chapter.id)) {
+              const characters = chapter.characters || [];
+              if (!characters.includes(characterId)) {
+                return { ...chapter, characters: [...characters, characterId] };
+              }
+            }
+            return chapter;
+          });
+        }
+
+        return updatedBookData;
+      });
+
+      // Reset all form fields
       setNewCharacterName('');
       setNewCharacterDescription('');
       setNewCharacterAliases([]);
       setNewCharacterAttributes([]);
       setNewCharacterFactions([]);
+      
+      // Ensure no character is in edit mode
+      setEditingCharacterId(null);
     }
   };
 

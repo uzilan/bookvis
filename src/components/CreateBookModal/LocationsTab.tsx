@@ -174,7 +174,7 @@ export const LocationsTab: React.FC<LocationsTabProps> = ({
               },
             }}
           >
-            Add
+            Add Location
           </Button>
         </Box>
       </Box>

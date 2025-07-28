@@ -267,7 +267,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
               },
             }}
           >
-            Add
+            Add Faction
           </Button>
         </Box>
       </Box>
