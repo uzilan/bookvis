@@ -15,9 +15,10 @@ import { AddAuthorModal } from '../AddAuthorModal';
 import { BookInfoTab, LocationsTab, FactionsTab, ChaptersTab, CharactersTab, RelationshipsTab, CharactersInChaptersTab } from './index';
 import type { Author } from '../../models/Author';
 import type { SchemaBookData, SchemaAuthor } from '../../schema/models';
+import type { SchemaHierarchyType } from '../../schema/models/SchemaHierarchy';
 import type { BookData } from '../../models/BookData';
 import { FirebaseService } from '../../services/firebase';
-import { convertSchemaToBookData } from '../../utils/schemaToBookDataConverter';
+import { convertSchemaToBookData, convertBookDataToSchema } from '../../utils/schemaToBookDataConverter';
 
 
 interface CreateBookModalProps {
@@ -121,36 +122,66 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         setLoadedFromSession(false);
         isLoadingFromSessionRef.current = false;
       } else {
-        // Reset to initial state when creating a new book
-        setBookData({
-          book: {
-            id: '',
-            title: '',
-            author: {
-              id: '',
-              name: ''
-            }
-          },
-          locations: [],
-          characters: [],
-          factions: [],
-          relationships: [],
-          chapters: [],
-          hierarchy: []
-        });
-        setSelectedAuthor('');
-        setLoadedFromSession(false);
-        isLoadingFromSessionRef.current = false;
+        // Check if there's an existing draft for this book
+        checkForExistingDraft();
       }
     }
   }, [open, initialData]);
 
+  // Check for existing draft when creating a new book
+  const checkForExistingDraft = async () => {
+    try {
+      // Only check if we have a title and author, and don't already have a book ID
+      if (bookData.book.title && bookData.book.author.id && !bookData.book.id) {
+        const draftId = `draft-${bookData.book.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${bookData.book.author.id}`;
+        const existingDraft = await FirebaseService.getDraftByBookId(draftId);
+        
+        if (existingDraft) {
+          // Convert the existing draft to schema format and load it
+          const schemaData = convertBookDataToSchema(existingDraft);
+          setBookData(schemaData);
+          setSelectedAuthor(schemaData.book.author.id);
+          setLoadedFromSession(false);
+          isLoadingFromSessionRef.current = false;
+          
+          // Show a message to the user
+          alert('Found an existing draft for this book. Your previous work has been loaded.');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking for existing draft:', error);
+      // Don't show error to user, just log it
+    }
+  };
+
   // Save book data to session storage whenever it changes
   useEffect(() => {
     if (open && bookData && !isLoadingFromSessionRef.current) {
-      saveToSessionStorage(bookData);
+      // Only save if we have meaningful data (not just empty initial state)
+      const hasMeaningfulData = bookData.book.title || 
+                               bookData.locations.length > 0 ||
+                               bookData.characters.length > 0 ||
+                               bookData.factions.length > 0 ||
+                               bookData.chapters.length > 0 ||
+                               bookData.relationships.length > 0;
+      
+      if (hasMeaningfulData) {
+        saveToSessionStorage(bookData);
+      }
     }
   }, [bookData, open]);
+
+  // Check for existing drafts when title or author changes
+  useEffect(() => {
+    if (open && bookData.book.title && bookData.book.author.id && !isLoadingFromSessionRef.current) {
+      // Debounce the check to avoid too many Firebase calls
+      const timeoutId = setTimeout(() => {
+        checkForExistingDraft();
+      }, 1000); // Wait 1 second after the user stops typing
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [bookData.book.title, bookData.book.author.id, open]);
 
   // Ensure author from session storage exists in authors list
   useEffect(() => {
@@ -168,8 +199,15 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
           setAuthors(prev => [...prev, sessionAuthor]);
         }
         // Ensure selectedAuthor is set to the author from session storage
+        // Only set if the author actually exists in the list
         if (bookData.book.author.id && selectedAuthor !== bookData.book.author.id) {
-          setSelectedAuthor(bookData.book.author.id);
+          const authorExists = authors.find(author => author.id === bookData.book.author.id);
+          if (authorExists) {
+            setSelectedAuthor(bookData.book.author.id);
+          } else {
+            // If author doesn't exist, clear the selection
+            setSelectedAuthor('');
+          }
         }
       } else {
         // Authors are loaded but empty, or still loading
@@ -234,15 +272,47 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     try {
       setLoading(true);
       
-      // Generate a unique book ID
-      const bookId = `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // Validate that we have at least a book title and author
+      if (!bookData.book.title.trim()) {
+        alert('Please enter a book title before saving as draft');
+        return;
+      }
+      
+      if (!bookData.book.author.id) {
+        alert('Please select an author before saving as draft');
+        return;
+      }
+      
+      // Generate a consistent book ID based on title and author for drafts
+      // This ensures drafts update the same book instead of creating new ones
+      const bookId = bookData.book.id || `draft-${bookData.book.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${bookData.book.author.id}`;
+      
+      // Ensure hierarchy is set before converting
+      const bookDataWithHierarchy = {
+        ...bookData,
+        hierarchy: bookData.hierarchy && bookData.hierarchy.length > 0 
+          ? bookData.hierarchy 
+          : bookData.chapters.map(chapter => ({
+              chapter_id: chapter.id,
+              type: 'chapter' as SchemaHierarchyType
+            }))
+      };
       
       // Convert schema data to BookData format
-      const bookDataForSave = convertSchemaToBookData(bookData);
+      const bookDataForSave = convertSchemaToBookData(bookDataWithHierarchy);
       bookDataForSave.book.id = bookId;
       
       // Save to Firebase as draft
       await FirebaseService.saveBook(bookDataForSave, false, 'draft'); // false = private, 'draft' = draft status
+      
+      // Update the book ID in our local state so future saves use the same ID
+      setBookData(prev => ({
+        ...prev,
+        book: {
+          ...prev.book,
+          id: bookId
+        }
+      }));
       
       clearSessionStorage(); // Clear session storage after successful save
       onClose();
@@ -303,8 +373,9 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     try {
       setLoading(true);
       
-      // Generate a unique book ID
-      const bookId = `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      // Generate a consistent book ID based on title and author for published books
+      // This ensures published books have consistent IDs
+      const bookId = bookData.book.id || `book-${bookData.book.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${bookData.book.author.id}-${Date.now()}`;
       
       // Convert schema data to BookData format
       const bookDataForSave = convertSchemaToBookData(bookData);
@@ -376,16 +447,23 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
   };
 
   const handleAuthorSelect = (authorId: string) => {
+    console.log('🔍 handleAuthorSelect called with:', authorId);
+    console.log('🔍 Current authors:', authors);
+    console.log('🔍 Current selectedAuthor:', selectedAuthor);
+    
     if (authorId === 'new-author') {
       setIsAddAuthorModalOpen(true);
     } else {
       setSelectedAuthor(authorId);
       const selectedAuthorData = authors.find(author => author.id === authorId);
+      console.log('🔍 Found selectedAuthorData:', selectedAuthorData);
+      
       if (selectedAuthorData) {
         const schemaAuthor: SchemaAuthor = {
           id: selectedAuthorData.id,
           name: selectedAuthorData.name
         };
+        console.log('🔍 Setting schemaAuthor:', schemaAuthor);
         setBookData(prev => ({
           ...prev,
           book: {

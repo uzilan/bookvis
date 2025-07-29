@@ -33,6 +33,11 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
   onAddAuthorClick
 }) => {
 
+  // Ensure selectedAuthor is valid (exists in authors list or is empty)
+  const validSelectedAuthor = selectedAuthor && authors.some(author => author.id === selectedAuthor) 
+    ? selectedAuthor 
+    : '';
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
@@ -63,7 +68,7 @@ export const BookInfoTab: React.FC<BookInfoTabProps> = ({
             Author
           </InputLabel>
           <Select
-            value={selectedAuthor}
+            value={validSelectedAuthor}
             onChange={(e) => onAuthorSelect(e.target.value)}
             disabled={loading}
             displayEmpty

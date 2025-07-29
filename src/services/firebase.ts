@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, getDocs, collection, query, orderBy } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDocs, collection, query, orderBy, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { 
   getAuth, 
@@ -72,13 +72,8 @@ export class FirebaseService {
         throw new Error('User must be authenticated to save books');
       }
 
-      console.log('🔍 Starting saveBook...');
-      
       // Clean the data to remove undefined values
       const cleanBookData = this.cleanBookDataForFirebase(bookData);
-      console.log('🧹 Cleaned data keys:', Object.keys(cleanBookData));
-      console.log('🧹 Has hierarchy?', 'hierarchy' in cleanBookData);
-      console.log('🧹 Hierarchy value:', cleanBookData.hierarchy);
 
       const bookRef = doc(db, 'bookvis', bookData.book.id);
       const firebaseBookData = {
@@ -90,7 +85,11 @@ export class FirebaseService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
-      console.log('🔥 Firebase data keys:', Object.keys(firebaseBookData));
+      
+      console.log('🔥 Firebase data to save:', JSON.stringify(firebaseBookData, null, 2));
+      
+      // Check for empty fields
+      this.checkForEmptyFields(firebaseBookData);
       
       await setDoc(bookRef, firebaseBookData);
       console.log(`Book "${bookData.book.title}" saved successfully`);
@@ -113,65 +112,122 @@ export class FirebaseService {
       author: bookData.book.author
     };
 
-    // Clean characters array (required field)
-    cleanData.characters = bookData.characters.map(char => ({
-      id: char.id,
-      name: char.name,
-      description: char.description,
-      aliases: char.aliases || [],
-      factions: char.factions || [],
-      factionJoinChapters: char.factionJoinChapters || {},
-      attributes: char.attributes || []
-    }));
+    // Clean characters array (only include if not empty)
+    if (bookData.characters.length > 0) {
+      cleanData.characters = bookData.characters.map(char => ({
+        id: char.id,
+        name: char.name,
+        description: char.description,
+        aliases: char.aliases && char.aliases.length > 0 ? char.aliases : undefined,
+        factions: char.factions && char.factions.length > 0 ? char.factions : undefined,
+        factionJoinChapters: char.factionJoinChapters && Object.keys(char.factionJoinChapters).length > 0 ? 
+          Object.fromEntries(
+            Object.entries(char.factionJoinChapters).filter(([key, value]) => 
+              value !== undefined && value !== null && value !== ''
+            )
+          ) : undefined,
+        attributes: char.attributes && char.attributes.length > 0 ? char.attributes : undefined
+      })).map(char => {
+        // Remove undefined and empty string values from character object
+        const cleanChar: Record<string, unknown> = {};
+        Object.entries(char).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            cleanChar[key] = value;
+          }
+        });
+        return cleanChar;
+      });
+    }
 
-    // Clean chapters array (required field)
-    cleanData.chapters = bookData.chapters.map(chapter => ({
-      book: chapter.book,
-      id: chapter.id,
-      title: chapter.title,
-      index: chapter.index,
-      type: chapter.type,
-      level: chapter.level || 0, // Provide default value for level
-      locations: chapter.locations || [],
-      characters: chapter.characters || []
-    }));
+    // Clean chapters array (only include if not empty)
+    if (bookData.chapters.length > 0) {
+      cleanData.chapters = bookData.chapters.map(chapter => ({
+        book: chapter.book,
+        id: chapter.id,
+        title: chapter.title,
+        index: chapter.index,
+        type: chapter.type,
+        level: chapter.level || 0, // Provide default value for level
+        locations: chapter.locations && chapter.locations.length > 0 ? chapter.locations.map(location => ({
+          id: location.id,
+          name: location.name,
+          description: location.description || undefined
+        })).filter(location => location.description !== undefined) : undefined,
+        characters: chapter.characters && chapter.characters.length > 0 ? chapter.characters : undefined
+      })).map(chapter => {
+        // Remove undefined and empty string values from chapter object
+        const cleanChapter: Record<string, unknown> = {};
+        Object.entries(chapter).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            cleanChapter[key] = value;
+          }
+        });
+        return cleanChapter;
+      });
+    }
 
-    // Clean factions array (required field)
-    cleanData.factions = bookData.factions.map(faction => ({
-      id: faction.id,
-      title: faction.title,
-      description: faction.description,
-      color: faction.color
-    }));
+    // Clean factions array (only include if not empty)
+    if (bookData.factions.length > 0) {
+      cleanData.factions = bookData.factions.map(faction => ({
+        id: faction.id,
+        title: faction.title,
+        description: faction.description || undefined,
+        color: faction.color
+      })).map(faction => {
+        // Remove undefined and empty string values from faction object
+        const cleanFaction: Record<string, unknown> = {};
+        Object.entries(faction).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            cleanFaction[key] = value;
+          }
+        });
+        return cleanFaction;
+      });
+    }
 
-    // Clean relationships array (required field)
-    cleanData.relationships = bookData.relationships.map(rel => ({
-      character1: {
-        id: rel.character1.id,
-        name: rel.character1.name
-      },
-      character2: {
-        id: rel.character2.id,
-        name: rel.character2.name
-      },
-      descriptions: rel.descriptions.map(desc => ({
-        chapter: desc.chapter,
-        description: desc.description
-      }))
-    }));
+    // Clean relationships array (only include if not empty)
+    if (bookData.relationships.length > 0) {
+      cleanData.relationships = bookData.relationships.map(rel => ({
+        character1: {
+          id: rel.character1.id,
+          name: rel.character1.name
+        },
+        character2: {
+          id: rel.character2.id,
+          name: rel.character2.name
+        },
+        descriptions: rel.descriptions.map(desc => ({
+          chapter: desc.chapter,
+          description: desc.description
+        }))
+      }));
+    }
 
-    // Clean locations array (required field)
-    cleanData.locations = bookData.locations.map(location => ({
-      id: location.id,
-      name: location.name,
-      description: location.description
-    }));
+    // Clean locations array (only include if not empty)
+    if (bookData.locations.length > 0) {
+      cleanData.locations = bookData.locations.map(location => ({
+        id: location.id,
+        name: location.name,
+        description: location.description || undefined
+      })).map(location => {
+        // Remove undefined and empty string values from location object
+        const cleanLocation: Record<string, unknown> = {};
+        Object.entries(location).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== '') {
+            cleanLocation[key] = value;
+          }
+        });
+        return cleanLocation;
+      });
+    }
 
-    // Clean hierarchy array (required field)
-    cleanData.hierarchy = bookData.hierarchy.map((item: { chapter_id: string; type: string }) => ({
-      chapter_id: item.chapter_id,
-      type: item.type
-    }));
+    // Clean hierarchy array (only include if not empty)
+    if (bookData.hierarchy.length > 0) {
+      cleanData.hierarchy = bookData.hierarchy.map((item: { chapter_id: string; type: string }) => ({
+        chapter_id: item.chapter_id,
+        type: item.type
+      }));
+    }
 
     // Add mapUrl if it exists
     if (bookData.mapUrl) {
@@ -189,25 +245,38 @@ export class FirebaseService {
    * Log undefined values in an object
    */
   private static logUndefinedValues(obj: Record<string, unknown>, path: string = ''): void {
-    if (obj === null || obj === undefined) {
-      console.log(`❌ UNDEFINED at ${path}: ${obj}`);
-      return;
+    for (const [key, value] of Object.entries(obj)) {
+      const currentPath = path ? `${path}.${key}` : key;
+      
+      if (value === undefined) {
+        console.error(`❌ Undefined value found at: ${currentPath}`);
+      } else if (value === null) {
+        console.error(`❌ Null value found at: ${currentPath}`);
+      } else if (value === '') {
+        console.error(`❌ Empty string found at: ${currentPath}`);
+      } else if (typeof value === 'object' && value !== null) {
+        this.logUndefinedValues(value as Record<string, unknown>, currentPath);
+      }
     }
-    
-    if (Array.isArray(obj)) {
-      obj.forEach((item, index) => {
-        this.logUndefinedValues(item, `${path}[${index}]`);
-      });
-    }
-    
-    if (typeof obj === 'object') {
-      for (const [key, value] of Object.entries(obj)) {
-        const currentPath = path ? `${path}.${key}` : key;
-        if (value === undefined) {
-          console.log(`❌ UNDEFINED at ${currentPath}: ${value}`);
-        } else {
-          this.logUndefinedValues(value, currentPath);
-        }
+  }
+
+  /**
+   * Check for empty fields in Firebase data
+   */
+  private static checkForEmptyFields(obj: Record<string, unknown>, path: string = ''): void {
+    for (const [key, value] of Object.entries(obj)) {
+      const currentPath = path ? `${path}.${key}` : key;
+      
+      if (value === undefined) {
+        console.error(`❌ EMPTY FIELD: ${currentPath} is undefined`);
+      } else if (value === null) {
+        console.error(`❌ EMPTY FIELD: ${currentPath} is null`);
+      } else if (value === '') {
+        console.error(`❌ EMPTY FIELD: ${currentPath} is empty string`);
+      } else if (Array.isArray(value) && value.length === 0) {
+        console.error(`❌ EMPTY FIELD: ${currentPath} is empty array`);
+      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        this.checkForEmptyFields(value as Record<string, unknown>, currentPath);
       }
     }
   }
@@ -316,29 +385,25 @@ export class FirebaseService {
     const path: string[] = [];
     let currentLevel = -1;
     
-    // Find the chapter in hierarchy and build path backwards
-    for (let i = hierarchy.length - 1; i >= 0; i--) {
-      const item = hierarchy[i];
-      if (item.chapter_id === chapterId) {
-        // Found our chapter, now build path backwards
+    // Find the current chapter's level in the hierarchy
+    for (let i = 0; i < hierarchy.length; i++) {
+      if (hierarchy[i].chapter_id === chapterId) {
         currentLevel = i;
         break;
       }
     }
     
     if (currentLevel === -1) {
-      // Chapter not found in hierarchy, return just the title
-      const chapter = chapters.find((ch: Record<string, unknown>) => ch.id === chapterId);
-      return chapter ? [chapter.title as string] : [];
+      return path; // Chapter not found in hierarchy
     }
     
-    // Find the immediate parent part by looking backwards from current position
+    // Walk up the hierarchy to find parent parts
     for (let i = currentLevel - 1; i >= 0; i--) {
       const item = hierarchy[i];
       const chapter = chapters.find((ch: Record<string, unknown>) => ch.id === item.chapter_id);
       if (chapter && item.type === 'part') {
         // Found the immediate parent part, add it to path
-        path.unshift(chapter.title);
+        path.unshift(chapter.title as string);
         break; // Stop after finding the first (immediate) parent part
       }
     }
@@ -362,7 +427,7 @@ export class FirebaseService {
       
       const drafts: BookData[] = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
+        const data = doc.data() as any;
         
         // Only include drafts owned by the current user
         if (data.ownerId === currentUser.uid && data.status === 'draft') {
@@ -378,7 +443,7 @@ export class FirebaseService {
             });
           }
           
-          const bookData = {
+          const bookData: BookData = {
             book: data.book,
             characters: data.characters,
             chapters: chapters,
@@ -403,6 +468,64 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error fetching drafts:', error);
       throw new Error(`Failed to fetch drafts: ${error}`);
+    }
+  }
+
+  /**
+   * Check if a draft exists for a given book ID
+   */
+  static async getDraftByBookId(bookId: string): Promise<BookData | null> {
+    try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to fetch drafts');
+      }
+
+      const bookRef = doc(db, 'bookvis', bookId);
+      const bookDoc = await getDoc(bookRef);
+      
+      if (bookDoc.exists()) {
+        const data = bookDoc.data() as any;
+        
+        // Only return if it's a draft owned by the current user
+        if (data.ownerId === currentUser.uid && data.status === 'draft') {
+          // Reconstruct path property for chapters if hierarchy exists
+          let chapters = data.chapters;
+          if (data.hierarchy && Array.isArray(data.hierarchy)) {
+            chapters = data.chapters.map((chapter: Record<string, unknown>) => {
+              const path = this.buildPathFromHierarchy(chapter.id as string, data.hierarchy, data.chapters);
+              return {
+                ...chapter,
+                path: path
+              };
+            });
+          }
+          
+          const bookData: BookData = {
+            book: data.book,
+            characters: data.characters,
+            chapters: chapters,
+            factions: data.factions,
+            relationships: data.relationships,
+            locations: data.locations || [],
+            hierarchy: data.hierarchy || [],
+            mapUrl: data.mapUrl,
+            ownerId: data.ownerId,
+            ownerEmail: data.ownerEmail,
+            isPublic: data.isPublic || false,
+            status: data.status || 'draft',
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt
+          };
+
+          return bookData;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error fetching draft by book ID:', error);
+      throw new Error(`Failed to fetch draft: ${error}`);
     }
   }
 
@@ -442,14 +565,13 @@ export class FirebaseService {
         throw new Error('User must be authenticated to delete books');
       }
 
-      // First, get the book to check ownership
       const bookRef = doc(db, 'bookvis', bookId);
       const bookDoc = await getDocs(collection(db, 'bookvis'));
       let bookData: BookData | null = null;
       
-      bookDoc.forEach((doc) => {
-        if (doc.id === bookId) {
-          const data = doc.data();
+      for (const docSnapshot of bookDoc.docs) {
+        if (docSnapshot.id === bookId) {
+          const data = docSnapshot.data() as any;
           bookData = {
             book: data.book,
             characters: data.characters,
@@ -464,8 +586,9 @@ export class FirebaseService {
             createdAt: data.createdAt,
             updatedAt: data.updatedAt
           } as BookData;
+          break;
         }
-      });
+      }
 
       if (!bookData) {
         throw new Error('Book not found');
@@ -498,9 +621,9 @@ export class FirebaseService {
       const bookDoc = await getDocs(collection(db, 'bookvis'));
       let bookData: BookData | null = null;
       
-      bookDoc.forEach((doc) => {
-        if (doc.id === bookId) {
-          const data = doc.data();
+      for (const docSnapshot of bookDoc.docs) {
+        if (docSnapshot.id === bookId) {
+          const data = docSnapshot.data() as any;
           bookData = {
             book: data.book,
             characters: data.characters,
@@ -515,8 +638,9 @@ export class FirebaseService {
             createdAt: data.createdAt,
             updatedAt: data.updatedAt
           } as BookData;
+          break;
         }
-      });
+      }
 
       if (!bookData) {
         throw new Error('Book not found');
