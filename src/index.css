@@ -3,39 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* Default light theme colors */
-  --color-primary: #1976d2;
-  --color-primaryHover: #1565c0;
-  --color-secondary: #dc004e;
-  --color-background: #ffffff;
-  --color-surface: #f5f5f5;
-  --color-text: #213547;
-  --color-textSecondary: #666666;
-  --color-border: #e0e0e0;
-  --color-shadow: rgba(0, 0, 0, 0.1);
-  --color-overlay: rgba(255, 255, 255, 0.9);
-  --color-buttonActive: #1565c0;
-  --color-buttonActiveHover: #0d47a1;
-
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-
-  color-scheme: light dark;
-  color: var(--color-text);
-  background-color: var(--color-background);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Dark mode overrides */
-.dark-mode {
+  /* Dark mode colors by default - no more light mode! */
   --color-primary: #90caf9;
   --color-primaryHover: #64b5f6;
   --color-secondary: #f48fb1;
@@ -48,6 +16,23 @@
   --color-overlay: rgba(18, 18, 18, 0.9);
   --color-buttonActive: #1976d2;
   --color-buttonActiveHover: #1565c0;
+  --color-backgroundHover: #1a1a1a;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  color-scheme: dark;
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -106,31 +91,31 @@ button:focus-visible {
 }
 
 /* Material-UI theme overrides for dark mode */
-.dark-mode .MuiPaper-root {
+.MuiPaper-root {
   background-color: var(--color-surface) !important;
   color: var(--color-text) !important;
 }
 
-.dark-mode .MuiDialog-paper {
+.MuiDialog-paper {
   background-color: var(--color-surface) !important;
   color: var(--color-text) !important;
 }
 
-.dark-mode .MuiTextField-root .MuiInputBase-root {
+.MuiTextField-root .MuiInputBase-root {
   background-color: var(--color-background) !important;
   color: var(--color-text) !important;
 }
 
-.dark-mode .MuiSelect-select {
+.MuiSelect-select {
   background-color: var(--color-background) !important;
   color: var(--color-text) !important;
 }
 
-.dark-mode .MuiMenuItem-root {
+.MuiMenuItem-root {
   color: var(--color-text) !important;
 }
 
-.dark-mode .MuiMenuItem-root:hover {
+.MuiMenuItem-root:hover {
   background-color: var(--color-overlay) !important;
 }
 
@@ -140,9 +125,9 @@ button:focus-visible {
 }
 
 /* Dark mode overrides for Vis.js edge labels */
-.dark-mode .vis-network .vis-edge-label,
-.dark-mode .vis-network .vis-edge .vis-label,
-.dark-mode .vis-network text {
+.vis-network .vis-edge-label,
+.vis-network .vis-edge .vis-label,
+.vis-network text {
   color: #ffffff !important;
   fill: #ffffff !important;
 }

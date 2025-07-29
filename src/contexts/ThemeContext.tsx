@@ -1,26 +1,5 @@
-import React, { useState, useEffect, type ReactNode } from 'react';
+import React, { useEffect, type ReactNode } from 'react';
 import { ThemeContext, type ThemeContextType, type Theme } from './ThemeContext';
-
-const lightTheme: Theme = {
-  colors: {
-    primary: '#1976d2',
-    secondary: '#dc004e',
-    background: '#ffffff',
-    surface: '#f5f5f5',
-    text: '#213547',
-    textSecondary: '#666666',
-    border: '#e0e0e0',
-    shadow: 'rgba(0, 0, 0, 0.1)',
-    overlay: 'rgba(255, 255, 255, 0.9)',
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-  },
-};
 
 const darkTheme: Theme = {
   colors: {
@@ -48,24 +27,19 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check localStorage first, then system preference
-    const saved = localStorage.getItem('darkMode');
-    if (saved !== null) {
-      return JSON.parse(saved);
-    }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
+  // Always use dark mode - no more light mode!
+  const isDarkMode = true;
+  const theme = darkTheme;
 
-  const theme = isDarkMode ? darkTheme : lightTheme;
-
+  // Remove toggle functionality since we're dark mode only
   const toggleTheme = () => {
-    setIsDarkMode((prev: boolean) => !prev);
+    // No-op since we're dark mode only
   };
 
-  // Update localStorage and CSS custom properties when theme changes
+  // Update CSS custom properties when component mounts
   useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+    // Always set dark mode in localStorage
+    localStorage.setItem('darkMode', 'true');
     
     // Update CSS custom properties
     const root = document.documentElement;
@@ -76,9 +50,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       root.style.setProperty(`--spacing-${key}`, value);
     });
     
-    // Update document body class for global styling
-    document.body.classList.toggle('dark-mode', isDarkMode);
-  }, [isDarkMode, theme]);
+    // Always set dark mode class
+    document.body.classList.add('dark-mode');
+  }, [theme]);
 
   const value: ThemeContextType = {
     isDarkMode,

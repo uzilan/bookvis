@@ -9,9 +9,32 @@ import {
   onAuthStateChanged,
   type User 
 } from 'firebase/auth';
-import type { BookData } from '../models/BookData';
+import type { BookData, RelationshipWithChapters } from '../models/BookData';
+import type { Book } from '../models/Book';
+import type { Character } from '../models/Character';
+import type { Chapter } from '../models/Chapter';
+import type { Faction } from '../models/Faction';
+import type { Location } from '../models/Location';
 import type { Author } from '../models/Author';
 import { firebaseConfig } from '../credentials.ts';
+
+// Interface for Firebase document data
+interface FirebaseBookData {
+  book: Book;
+  characters: Character[];
+  chapters: Chapter[];
+  factions: Faction[];
+  relationships: RelationshipWithChapters[];
+  locations: Location[];
+  hierarchy: Record<string, unknown>[];
+  mapUrl?: string;
+  ownerId: string;
+  ownerEmail: string;
+  isPublic: boolean;
+  status: 'draft' | 'published';
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -122,7 +145,7 @@ export class FirebaseService {
         factions: char.factions && char.factions.length > 0 ? char.factions : undefined,
         factionJoinChapters: char.factionJoinChapters && Object.keys(char.factionJoinChapters).length > 0 ? 
           Object.fromEntries(
-            Object.entries(char.factionJoinChapters).filter(([key, value]) => 
+            Object.entries(char.factionJoinChapters).filter(([, value]) => 
               value !== undefined && value !== null && value !== ''
             )
           ) : undefined,
@@ -323,7 +346,8 @@ export class FirebaseService {
       
       const books: BookData[] = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = doc.data() as any;
         
         // Reconstruct path property for chapters if hierarchy exists
         let chapters = data.chapters;
@@ -427,6 +451,7 @@ export class FirebaseService {
       
       const drafts: BookData[] = [];
       querySnapshot.forEach((doc) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = doc.data() as any;
         
         // Only include drafts owned by the current user
@@ -485,6 +510,7 @@ export class FirebaseService {
       const bookDoc = await getDoc(bookRef);
       
       if (bookDoc.exists()) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data = bookDoc.data() as any;
         
         // Only return if it's a draft owned by the current user
@@ -571,7 +597,7 @@ export class FirebaseService {
       
       for (const docSnapshot of bookDoc.docs) {
         if (docSnapshot.id === bookId) {
-          const data = docSnapshot.data() as any;
+          const data = docSnapshot.data() as FirebaseBookData;
           bookData = {
             book: data.book,
             characters: data.characters,
@@ -623,7 +649,7 @@ export class FirebaseService {
       
       for (const docSnapshot of bookDoc.docs) {
         if (docSnapshot.id === bookId) {
-          const data = docSnapshot.data() as any;
+          const data = docSnapshot.data() as FirebaseBookData;
           bookData = {
             book: data.book,
             characters: data.characters,

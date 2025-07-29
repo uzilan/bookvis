@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -66,6 +66,32 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
     hierarchy: []
   });
 
+  // Check for existing draft when creating a new book
+  const checkForExistingDraft = useCallback(async () => {
+    try {
+      // Only check if we have a title and author, and don't already have a book ID
+      if (bookData.book.title && bookData.book.author.id && !bookData.book.id) {
+        const draftId = `draft-${bookData.book.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${bookData.book.author.id}`;
+        const existingDraft = await FirebaseService.getDraftByBookId(draftId);
+        
+        if (existingDraft) {
+          // Convert the existing draft to schema format and load it
+          const schemaData = convertBookDataToSchema(existingDraft);
+          setBookData(schemaData);
+          setSelectedAuthor(schemaData.book.author.id);
+          setLoadedFromSession(false);
+          isLoadingFromSessionRef.current = false;
+          
+          // Show a message to the user
+          alert('Found an existing draft for this book. Your previous work has been loaded.');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking for existing draft:', error);
+      // Don't show error to user, just log it
+    }
+  }, [bookData.book.title, bookData.book.author.id, bookData.book.id]);
+  
   // Save book data to session storage
   const saveToSessionStorage = (data: SchemaBookData) => {
     try {
@@ -126,33 +152,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
         checkForExistingDraft();
       }
     }
-  }, [open, initialData]);
-
-  // Check for existing draft when creating a new book
-  const checkForExistingDraft = async () => {
-    try {
-      // Only check if we have a title and author, and don't already have a book ID
-      if (bookData.book.title && bookData.book.author.id && !bookData.book.id) {
-        const draftId = `draft-${bookData.book.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${bookData.book.author.id}`;
-        const existingDraft = await FirebaseService.getDraftByBookId(draftId);
-        
-        if (existingDraft) {
-          // Convert the existing draft to schema format and load it
-          const schemaData = convertBookDataToSchema(existingDraft);
-          setBookData(schemaData);
-          setSelectedAuthor(schemaData.book.author.id);
-          setLoadedFromSession(false);
-          isLoadingFromSessionRef.current = false;
-          
-          // Show a message to the user
-          alert('Found an existing draft for this book. Your previous work has been loaded.');
-        }
-      }
-    } catch (error) {
-      console.error('Error checking for existing draft:', error);
-      // Don't show error to user, just log it
-    }
-  };
+  }, [open, initialData, checkForExistingDraft]);
 
   // Save book data to session storage whenever it changes
   useEffect(() => {
@@ -181,7 +181,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       
       return () => clearTimeout(timeoutId);
     }
-  }, [bookData.book.title, bookData.book.author.id, open]);
+  }, [bookData.book.title, bookData.book.author.id, open, checkForExistingDraft]);
 
   // Ensure author from session storage exists in authors list
   useEffect(() => {

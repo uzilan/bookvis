@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -19,9 +19,22 @@ import {
   FormControlLabel,
   TextField,
   Alert,
-  Snackbar
+  Snackbar,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider
 } from '@mui/material';
-import { Google as GoogleIcon } from '@mui/icons-material';
+import { 
+  Google as GoogleIcon,
+  Info as InfoIcon,
+  Book as BookIcon,
+  People as PeopleIcon,
+  Timeline as TimelineIcon,
+  Close as CloseIcon
+} from '@mui/icons-material';
 import { Delete as DeleteIcon, Visibility as VisibilityIcon, VisibilityOff as VisibilityOffIcon, Upload as UploadIcon } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth';
 import { FirebaseService } from '../services/firebase';
@@ -31,7 +44,6 @@ import type { BookData } from '../models/BookData';
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
-import { ThemeToggle } from '../components/ThemeToggle';
 import { loadBookDataFromYamlString } from '../utils/yamlParser';
 import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
 
@@ -55,6 +67,8 @@ export const HomePage: React.FC = () => {
   const [isCreateBookModalOpen, setIsCreateBookModalOpen] = useState(false);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [draftBookData, setDraftBookData] = useState<SchemaBookData | null>(null);
+  const [infoDrawerOpen, setInfoDrawerOpen] = useState(false);
+  const [imagePopupOpen, setImagePopupOpen] = useState(false);
   
   // YAML upload functionality
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -69,45 +83,7 @@ export const HomePage: React.FC = () => {
     severity: 'info'
   });
 
-  // Fetch authors and books for all users (only once)
-  useEffect(() => {
-    if (!hasFetchedData) {
-      fetchData();
-    }
-  }, [isAuthenticated, hasFetchedData]);
-
-  // Check for draft book data when component mounts
-  useEffect(() => {
-    const draft = checkForDraftBook();
-    setDraftBookData(draft);
-  }, []);
-
-  // Filter authors and books based on toggle and author selection
-  useEffect(() => {
-    let filteredBooks = allBooks;
-    let filteredAuthors = allAuthors;
-    
-    // Filter by ownership if toggle is on and user is authenticated
-    if (showOnlyMyBooks && isAuthenticated && user) {
-      filteredBooks = allBooks.filter(book => book.ownerId === user.uid);
-      // Get unique author IDs from filtered books
-      const myAuthorIds = [...new Set(filteredBooks.map(book => book.book.author.id))];
-      filteredAuthors = allAuthors.filter(author => myAuthorIds.includes(author.id));
-    } else {
-      // When toggle is off, show all authors and books
-      filteredAuthors = allAuthors;
-    }
-    
-    // Filter books by author if selected
-    if (selectedAuthor) {
-      filteredBooks = filteredBooks.filter(book => book.book.author.id === selectedAuthor);
-    }
-    
-    setBooks(filteredBooks);
-    setAuthors(filteredAuthors);
-  }, [allBooks, allAuthors, showOnlyMyBooks, selectedAuthor, isAuthenticated, user]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoadingData(true);
       const [fetchedAuthors, fetchedBooks] = await Promise.all([
@@ -139,7 +115,45 @@ export const HomePage: React.FC = () => {
     } finally {
       setLoadingData(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  // Fetch authors and books for all users (only once)
+  useEffect(() => {
+    if (!hasFetchedData) {
+      fetchData();
+    }
+  }, [hasFetchedData, fetchData]);
+
+  // Check for draft book data when component mounts
+  useEffect(() => {
+    const draft = checkForDraftBook();
+    setDraftBookData(draft);
+  }, []);
+
+  // Filter authors and books based on toggle and author selection
+  useEffect(() => {
+    let filteredBooks = allBooks;
+    let filteredAuthors = allAuthors;
+    
+    // Filter by ownership if toggle is on and user is authenticated
+    if (showOnlyMyBooks && isAuthenticated && user) {
+      filteredBooks = allBooks.filter(book => book.ownerId === user.uid);
+      // Get unique author IDs from filtered books
+      const myAuthorIds = [...new Set(filteredBooks.map(book => book.book.author.id))];
+      filteredAuthors = allAuthors.filter(author => myAuthorIds.includes(author.id));
+    } else {
+      // When toggle is off, show all authors and books
+      filteredAuthors = allAuthors;
+    }
+    
+    // Filter books by author if selected
+    if (selectedAuthor) {
+      filteredBooks = filteredBooks.filter(book => book.book.author.id === selectedAuthor);
+    }
+    
+    setBooks(filteredBooks);
+    setAuthors(filteredAuthors);
+  }, [allBooks, allAuthors, showOnlyMyBooks, selectedAuthor, isAuthenticated, user]);
 
   const handleSignIn = async () => {
     try {
@@ -374,8 +388,56 @@ export const HomePage: React.FC = () => {
       alignItems: 'center',
       justifyContent: 'center',
       py: 4,
-      width: '100%'
+      width: '100%',
+      position: 'relative'
     }}>
+      {/* Info Indicator */}
+      <Box sx={{
+        position: 'fixed',
+        right: infoDrawerOpen ? '400px' : '0px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        zIndex: 1000,
+        display: { xs: 'none', md: 'block' }
+      }}>
+        <Button
+          onClick={() => setInfoDrawerOpen(!infoDrawerOpen)}
+          sx={{
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
+            transform: 'rotate(180deg)',
+            color: 'var(--color-textSecondary)',
+            border: '2px solid var(--color-textSecondary)',
+            borderRadius: '8px 0 0 8px',
+            px: 2,
+            py: 3,
+            backgroundColor: 'var(--color-background)',
+            '&:hover': {
+              backgroundColor: 'var(--color-backgroundHover)',
+              color: 'var(--color-primary)',
+              borderColor: 'var(--color-primary)'
+            },
+            transition: 'all 0.3s ease-in-out'
+          }}
+        >
+          {infoDrawerOpen ? (
+            <>
+              <CloseIcon sx={{ transform: 'rotate(90deg)', mb: 1 }} />
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                CLOSE
+              </Typography>
+            </>
+          ) : (
+            <>
+              <InfoIcon sx={{ transform: 'rotate(90deg)', mb: 1 }} />
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                INFO
+              </Typography>
+            </>
+          )}
+        </Button>
+      </Box>
+
       <Container maxWidth="lg" sx={{ 
         textAlign: 'center',
         display: 'flex',
@@ -390,18 +452,53 @@ export const HomePage: React.FC = () => {
             justifyContent: 'center', 
             alignItems: 'center',
             position: 'relative',
-            mb: 2
+            mb: 2,
+            gap: 3
           }}>
             <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
               BookVis
             </Typography>
+            
+            {/* Relationships Image */}
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              maxWidth: '120px',
+              transition: 'transform 0.3s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)'
+              }
+            }}>
+              <img 
+                src="/relationships.png" 
+                alt="Character Relationships" 
+                style={{ 
+                  width: '100%',
+                  maxWidth: '100px',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                  transition: 'box-shadow 0.3s ease-in-out'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                }}
+              />
+            </Box>
+            
             <Box sx={{ 
               position: 'absolute', 
               right: 0,
               top: '50%',
-              transform: 'translateY(-50%)'
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              gap: 1
             }}>
-              <ThemeToggle />
+              
             </Box>
           </Box>
           <Typography variant="h5" sx={{ color: 'var(--color-text)' }} gutterBottom>
@@ -761,6 +858,184 @@ export const HomePage: React.FC = () => {
           }}
         />
       )}
+
+      {/* Info Drawer */}
+      <Drawer
+        anchor="right"
+        open={infoDrawerOpen}
+        onClose={() => setInfoDrawerOpen(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: { xs: '100%', sm: '400px' },
+            maxWidth: '500px',
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text)'
+          }
+        }}
+      >
+        <Box sx={{ p: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
+              About BookVis
+            </Typography>
+            <IconButton onClick={() => setInfoDrawerOpen(false)} sx={{ color: 'var(--color-textSecondary)' }}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          
+          <Typography variant="body1" sx={{ mb: 3, color: 'var(--color-textSecondary)' }}>
+            BookVis is a powerful tool for authors and readers to visualize character relationships and story structures in books.
+          </Typography>
+          
+          {/* Application Screenshot */}
+          <Box sx={{ mb: 3 }}>
+            <img 
+              src="/application.png" 
+              alt="BookVis Application Interface" 
+              style={{ 
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                cursor: 'pointer',
+                transition: 'transform 0.2s ease-in-out'
+              }}
+              onClick={() => setImagePopupOpen(true)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.02)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            />
+          </Box>
+          
+          {/* Features List */}
+          <List sx={{ width: '100%' }}>
+            <ListItem sx={{ px: 0 }}>
+              <ListItemIcon>
+                <BookIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Book Management" 
+                secondary="Create and manage your books with an intuitive interface. Add characters, locations, and chapters with ease."
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    color: 'var(--color-text)'
+                  },
+                  '& .MuiListItemText-secondary': {
+                    color: 'var(--color-textSecondary)'
+                  }
+                }}
+              />
+            </ListItem>
+            
+            <Divider sx={{ my: 1 }} />
+            
+            <ListItem sx={{ px: 0 }}>
+              <ListItemIcon>
+                <PeopleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Character Relationships" 
+                secondary=""
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    color: 'var(--color-text)'
+                  },
+                  '& .MuiListItemText-secondary': {
+                    color: 'var(--color-textSecondary)'
+                  }
+                }}
+              />
+            </ListItem>
+            
+            <Divider sx={{ my: 1 }} />
+            
+            <ListItem sx={{ px: 0 }}>
+              <ListItemIcon>
+                <TimelineIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Story Timeline" 
+                secondary="Track character appearances and relationship developments throughout your story with chapter-based visualization."
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    color: 'var(--color-text)'
+                  },
+                  '& .MuiListItemText-secondary': {
+                    color: 'var(--color-textSecondary)'
+                  }
+                }}
+              />
+            </ListItem>
+          </List>
+          
+          <Box sx={{ mt: 3, pt: 2, borderTop: '1px solid var(--color-border)' }}>
+            <Typography variant="body2" sx={{ color: 'var(--color-textSecondary)', mb: 2 }}>
+              Ready to start visualizing your story?
+            </Typography>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={() => {
+                setInfoDrawerOpen(false);
+                handleOpenCreateBookModal();
+              }}
+            >
+              Create Your First Book
+            </Button>
+          </Box>
+        </Box>
+      </Drawer>
+
+      {/* Image Popup Modal */}
+      <Dialog
+        open={imagePopupOpen}
+        onClose={() => setImagePopupOpen(false)}
+        maxWidth={false}
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            backgroundColor: 'var(--color-background)',
+            color: 'var(--color-text)',
+            maxWidth: '95vw',
+            maxHeight: '95vh',
+            width: '95vw',
+            height: '95vh'
+          }
+        }}
+      >
+        <DialogTitle sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          color: 'var(--color-text)'
+        }}>
+          BookVis Application Interface
+          <IconButton 
+            onClick={() => setImagePopupOpen(false)}
+            sx={{ color: 'var(--color-textSecondary)' }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center', p: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img 
+            src="/application.png" 
+            alt="BookVis Application Interface" 
+            style={{ 
+              width: '100%',
+              maxWidth: '1800px',
+              maxHeight: '90vh',
+              height: 'auto',
+              borderRadius: '8px',
+              boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+              objectFit: 'contain'
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 }; 
