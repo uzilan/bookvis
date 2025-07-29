@@ -41,6 +41,7 @@ interface YamlBookData {
   relationships: Array<{
     character1: string;
     character2: string;
+    defaultDescription?: string;
     descriptions: Array<{
       chapter: string;
       description: string;
@@ -177,6 +178,7 @@ export function parseYamlToBookData(yamlContent: string): BookData {
     return {
       character1,
       character2,
+      defaultDescription: rel.defaultDescription,
       descriptions: rel.descriptions.map(desc => ({
         chapter: desc.chapter,
         description: desc.description,

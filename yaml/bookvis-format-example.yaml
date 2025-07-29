@@ -82,6 +82,7 @@ factions:
 relationships:
   - character1: "alice"
     character2: "white-rabbit"
+    defaultDescription: "Alice follows the White Rabbit on various adventures throughout Wonderland"
     descriptions:
       - chapter: "chapter-1"
         description: "Alice follows the White Rabbit down the rabbit hole."

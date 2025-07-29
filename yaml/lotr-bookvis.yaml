@@ -859,6 +859,7 @@ hierarchy:
 relationships:
   - character1: "frodo-baggins"
     character2: "samwise-gamgee"
+    defaultDescription: "Master and servant who become inseparable friends and companions on the quest to destroy the Ring"
     descriptions:
       - chapter: "chapter-1"
         description: "Master and servant, become close friends"
@@ -869,6 +870,7 @@ relationships:
 
   - character1: "frodo-baggins"
     character2: "gandalf"
+    defaultDescription: "Wise wizard who guides and protects Frodo throughout his journey"
     descriptions:
       - chapter: "chapter-1"
         description: "Gandalf guides Frodo on his quest"
@@ -877,6 +879,7 @@ relationships:
 
   - character1: "frodo-baggins"
     character2: "aragorn"
+    defaultDescription: "Frodo's protector and guide, who later becomes king"
     descriptions:
       - chapter: "chapter-10"
         description: "Aragorn protects Frodo as Strider"
@@ -885,6 +888,7 @@ relationships:
 
   - character1: "frodo-baggins"
     character2: "gollum"
+    defaultDescription: "Frodo pities and tries to redeem the corrupted creature who once owned the Ring"
     descriptions:
       - chapter: "chapter-34"
         description: "Frodo pities and spares Gollum"
@@ -895,6 +899,7 @@ relationships:
 
   - character1: "aragorn"
     character2: "legolas"
+    defaultDescription: "Elf and man who form a strong friendship as members of the Fellowship"
     descriptions:
       - chapter: "chapter-1"
         description: "Fellowship members and close friends"
@@ -903,6 +908,7 @@ relationships:
 
   - character1: "aragorn"
     character2: "gimli"
+    defaultDescription: "Man and dwarf who overcome ancient prejudices to become close friends"
     descriptions:
       - chapter: "chapter-1"
         description: "Fellowship members, develop friendship"
@@ -911,6 +917,7 @@ relationships:
 
   - character1: "legolas"
     character2: "gimli"
+    defaultDescription: "Elf and dwarf who overcome ancient enmity to become the closest of friends"
     descriptions:
       - chapter: "chapter-1"
         description: "Elf and dwarf, overcome ancient enmity"
@@ -919,6 +926,7 @@ relationships:
 
   - character1: "meriadoc-brandybuck"
     character2: "peregrin-took"
+    defaultDescription: "Best friends and cousins who share adventures and dangers together"
     descriptions:
       - chapter: "chapter-1"
         description: "Best friends and cousins"
@@ -927,6 +935,7 @@ relationships:
 
   - character1: "boromir"
     character2: "frodo-baggins"
+    defaultDescription: "Boromir is tempted by the Ring's power and ultimately tries to take it from Frodo"
     descriptions:
       - chapter: "chapter-1"
         description: "Boromir is tempted by the Ring"
@@ -935,6 +944,7 @@ relationships:
 
   - character1: "theoden"
     character2: "eowyn"
+    defaultDescription: "Uncle and niece, king and princess who love and protect each other"
     descriptions:
       - chapter: "chapter-29"
         description: "Uncle and niece, king and princess"
@@ -943,6 +953,7 @@ relationships:
 
   - character1: "faramir"
     character2: "denethor"
+    defaultDescription: "Father and son with a complex relationship marked by Denethor's favoritism of Boromir"
     descriptions:
       - chapter: "chapter-39"
         description: "Father and son, steward and captain"
@@ -951,6 +962,7 @@ relationships:
 
   - character1: "saruman"
     character2: "gandalf"
+    defaultDescription: "Former allies and fellow wizards who become enemies as Saruman falls to corruption"
     descriptions:
       - chapter: "chapter-1"
         description: "Former allies, now enemies"
@@ -959,6 +971,7 @@ relationships:
 
   - character1: "sauron"
     character2: "frodo-baggins"
+    defaultDescription: "The Dark Lord seeks the Ring that Frodo carries, creating a constant threat and connection"
     descriptions:
       - chapter: "chapter-1"
         description: "Sauron seeks the Ring that Frodo carries"
@@ -967,6 +980,7 @@ relationships:
 
   - character1: "gollum"
     character2: "samwise-gamgee"
+    defaultDescription: "Sam distrusts and dislikes Gollum, seeing him as a threat to Frodo"
     descriptions:
       - chapter: "chapter-35"
         description: "Sam distrusts Gollum as guide"

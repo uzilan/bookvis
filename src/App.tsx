@@ -9,8 +9,6 @@ import type { SchemaBookData } from './schema/models/SchemaBookData';
 import { FirebaseService } from './services/firebase.ts';
 import { convertBookDataToSchema } from './utils/schemaToBookDataConverter';
 
-console.log('🔧 App.tsx is being imported');
-
 function App() {
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
@@ -165,7 +163,8 @@ function App() {
     chapters: [],
     factions: [],
     relationships: [],
-    locations: []
+    locations: [],
+    hierarchy: []
   };
   
 

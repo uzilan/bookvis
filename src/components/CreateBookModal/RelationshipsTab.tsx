@@ -28,12 +28,14 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
   const [newRelationshipCharacter1, setNewRelationshipCharacter1] = useState('');
   const [newRelationshipCharacter2, setNewRelationshipCharacter2] = useState('');
   const [newRelationshipDescriptions, setNewRelationshipDescriptions] = useState<SchemaRelationshipDescription[]>([]);
+  const [newRelationshipDefaultDescription, setNewRelationshipDefaultDescription] = useState('');
   const [newDescriptionChapter, setNewDescriptionChapter] = useState('');
   const [newDescriptionText, setNewDescriptionText] = useState('');
   const [editingRelationshipId, setEditingRelationshipId] = useState<string | null>(null);
   const [editingRelationshipCharacter1, setEditingRelationshipCharacter1] = useState('');
   const [editingRelationshipCharacter2, setEditingRelationshipCharacter2] = useState('');
   const [editingRelationshipDescriptions, setEditingRelationshipDescriptions] = useState<SchemaRelationshipDescription[]>([]);
+  const [editingRelationshipDefaultDescription, setEditingRelationshipDefaultDescription] = useState('');
   const [editingDescriptionChapter, setEditingDescriptionChapter] = useState('');
   const [editingDescriptionText, setEditingDescriptionText] = useState('');
   const [relationshipFilterText, setRelationshipFilterText] = useState('');
@@ -72,6 +74,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
       const newRelationship: SchemaRelationship = {
         character1: newRelationshipCharacter1,
         character2: newRelationshipCharacter2,
+        defaultDescription: newRelationshipDefaultDescription || undefined,
         descriptions: newRelationshipDescriptions
       };
 
@@ -83,6 +86,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
       setNewRelationshipCharacter1('');
       setNewRelationshipCharacter2('');
       setNewRelationshipDescriptions([]);
+      setNewRelationshipDefaultDescription('');
       setNewDescriptionChapter('');
       setNewDescriptionText('');
     }
@@ -103,6 +107,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
     setEditingRelationshipCharacter1(relationship.character1);
     setEditingRelationshipCharacter2(relationship.character2);
     setEditingRelationshipDescriptions([...relationship.descriptions]);
+    setEditingRelationshipDefaultDescription(relationship.defaultDescription || '');
   };
 
   const handleSaveRelationshipEdit = () => {
@@ -110,22 +115,27 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
       setBookData(prev => ({
         ...prev,
         relationships: prev.relationships.map(relationship => {
-          const oldId = `${relationship.character1}-${relationship.character2}`;
-          if (oldId === editingRelationshipId) {
+          const relationshipId = `${relationship.character1}-${relationship.character2}`;
+          if (relationshipId === editingRelationshipId) {
             return {
               character1: editingRelationshipCharacter1,
               character2: editingRelationshipCharacter2,
+              defaultDescription: editingRelationshipDefaultDescription || undefined,
               descriptions: editingRelationshipDescriptions
             };
           }
           return relationship;
         })
       }));
+
+      setEditingRelationshipId(null);
+      setEditingRelationshipCharacter1('');
+      setEditingRelationshipCharacter2('');
+      setEditingRelationshipDescriptions([]);
+      setEditingRelationshipDefaultDescription('');
+      setEditingDescriptionChapter('');
+      setEditingDescriptionText('');
     }
-    setEditingRelationshipId(null);
-    setEditingRelationshipCharacter1('');
-    setEditingRelationshipCharacter2('');
-    setEditingRelationshipDescriptions([]);
   };
 
   const handleCancelRelationshipEdit = () => {
@@ -133,6 +143,9 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
     setEditingRelationshipCharacter1('');
     setEditingRelationshipCharacter2('');
     setEditingRelationshipDescriptions([]);
+    setEditingRelationshipDefaultDescription('');
+    setEditingDescriptionChapter('');
+    setEditingDescriptionText('');
   };
 
 
@@ -353,6 +366,39 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
           </TextField>
           <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
             Select the second character in this relationship (excludes the first character and characters with existing relationships)
+          </Typography>
+
+          {/* Default Description Field */}
+          <TextField
+            fullWidth
+            label="Default Description (Optional)"
+            value={newRelationshipDefaultDescription}
+            onChange={(e) => setNewRelationshipDefaultDescription(e.target.value)}
+            placeholder="e.g., 'Best friends who support each other'"
+            multiline
+            rows={2}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: 'var(--color-textSecondary)',
+              },
+              '& .MuiInputBase-input': {
+                color: 'var(--color-textSecondary) !important',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&:hover fieldset': {
+                  border: '1px solid #e0e0e0 !important',
+                },
+                '&.Mui-focused fieldset': {
+                  border: '1px solid #1976d2 !important',
+                },
+              },
+            }}
+          />
+          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+            This description will be used when no chapter-specific description is available
           </Typography>
 
           {/* Relationship Descriptions for New Relationship */}
@@ -682,6 +728,36 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           ))}
                       </TextField>
 
+                      {/* Default Description Field for Editing */}
+                      <TextField
+                        fullWidth
+                        label="Default Description (Optional)"
+                        value={editingRelationshipDefaultDescription}
+                        onChange={(e) => setEditingRelationshipDefaultDescription(e.target.value)}
+                        placeholder="e.g., 'Best friends who support each other'"
+                        multiline
+                        rows={2}
+                        sx={{
+                          '& .MuiInputLabel-root': {
+                            color: 'var(--color-textSecondary)',
+                          },
+                          '& .MuiInputBase-input': {
+                            color: 'var(--color-textSecondary) !important',
+                          },
+                          '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&:hover fieldset': {
+                              border: '1px solid #e0e0e0 !important',
+                            },
+                            '&.Mui-focused fieldset': {
+                              border: '1px solid #1976d2 !important',
+                            },
+                          },
+                        }}
+                      />
+
                       {/* Relationship Descriptions */}
                       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)' }}>
@@ -858,6 +934,31 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                       <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
                         {getCharacterName(relationship.character1)} ↔ {getCharacterName(relationship.character2)}
                       </Typography>
+                      
+                      {/* Default Description Display */}
+                      {relationship.defaultDescription && (
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                          <Chip
+                            label="Default"
+                            size="small"
+                            variant="outlined"
+                            sx={{ 
+                              fontSize: '0.7rem', 
+                              height: '20px', 
+                              minWidth: '60px',
+                              color: 'var(--color-primary)',
+                              borderColor: 'var(--color-primary)',
+                              '& .MuiChip-label': {
+                                color: 'var(--color-primary)',
+                              }
+                            }}
+                          />
+                          <Typography variant="caption" sx={{ fontSize: '0.7rem', color: 'var(--color-textSecondary)' }}>
+                            {relationship.defaultDescription}
+                          </Typography>
+                        </Box>
+                      )}
+                      
                       {relationship.descriptions.length > 0 && (
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                           {relationship.descriptions.map((description, index) => (
@@ -884,7 +985,7 @@ export const RelationshipsTab: React.FC<RelationshipsTabProps> = ({
                           ))}
                         </Box>
                       )}
-                      {relationship.descriptions.length === 0 && (
+                      {relationship.descriptions.length === 0 && !relationship.defaultDescription && (
                         <Typography variant="caption" sx={{ fontStyle: 'italic', color: 'var(--color-textSecondary)' }}>
                           No relationship descriptions added yet.
                         </Typography>

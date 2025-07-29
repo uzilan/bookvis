@@ -45,7 +45,7 @@ All YAML files must follow the schema defined in `src/schema/bookvis-schema.json
 - **factions:** Array of faction definitions with colors
 - **chapters:** Array of chapter objects with hierarchy levels
 - **hierarchy:** Array defining the book's structure (book/part/chapter)
-- **relationships:** Array of character relationships with chapter descriptions
+- **relationships:** Array of character relationships with chapter descriptions and optional default descriptions
 - **locations:** Array of location objects (optional)
 - **map_url:** URL to a map image (optional)
 
@@ -55,4 +55,5 @@ All YAML files must follow the schema defined in `src/schema/bookvis-schema.json
 - Use `part-1`, `part-2`, etc. for part IDs
 - Use `book-1`, `book-2`, etc. for book IDs
 - Ensure all character IDs in relationships match character definitions
-- Ensure all faction IDs in characters match faction definitions 
+- Ensure all faction IDs in characters match faction definitions
+- Use `defaultDescription` in relationships to provide a fallback description when no chapter-specific description exists 

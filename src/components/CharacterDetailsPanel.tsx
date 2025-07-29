@@ -72,32 +72,20 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
 
   // Filter factions based on current chapter - only show factions the character has joined by this chapter
   const currentFactionIds = character.factions.filter(factionId => {
-    const joinChapter = character.factionJoinChapters?.[factionId];
+    // Check if character should be in this faction at this chapter
+    const joinChapter = character.factionJoinChapters[factionId];
     if (!joinChapter) return false;
     
-    // Handle both number (backward compatibility) and string (chapter ID) values
-    if (typeof joinChapter === 'number') {
-      // For backward compatibility with numeric chapter indices
-      const currentChapter = chapters.find(ch => ch.id === selectedChapter);
-      return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
-    } else if (typeof joinChapter === 'string') {
-      // For string chapter IDs, find the target chapter and current chapter
-      const targetChapter = chapters.find(ch => ch.id === joinChapter);
-      const currentChapter = chapters.find(ch => ch.id === selectedChapter);
-      
-      console.log('Faction filtering debug - factionId:', factionId, 'joinChapter:', joinChapter, 'targetChapter:', targetChapter?.id, 'targetChapterIndex:', targetChapter?.index, 'currentChapter:', currentChapter?.id, 'currentChapterIndex:', currentChapter?.index, 'result:', targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && targetChapter.index <= currentChapter.index);
-      
-      return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
-             targetChapter.index <= currentChapter.index;
-    }
-    return false;
+    const targetChapter = chapters.find(ch => ch.id === joinChapter);
+    const currentChapter = chapters.find(ch => ch.id === selectedChapter);
+    
+    return targetChapter && targetChapter.index && currentChapter && currentChapter.index && 
+           targetChapter.index <= currentChapter.index;
   });
 
   const characterFactions = currentFactionIds.map(factionId => 
     factions.find(f => f.id === factionId)
   ).filter(Boolean) as Faction[];
-
-  console.log('CharacterDetailsPanel debug - characterName:', character.name, 'allFactions:', character.factions, 'factionJoinChapters:', character.factionJoinChapters, 'currentFactionIds:', currentFactionIds, 'characterFactions:', characterFactions.map(f => f.title), 'selectedChapter:', selectedChapter);
 
   // Find chapters where this character is mentioned
   const characterMentionedChapters = chapters.filter(ch => 
@@ -258,7 +246,8 @@ export const CharacterDetailsPanel: React.FC<CharacterDetailsPanelProps> = ({
                 
                 // Find the description that matches the current chapter
                 const chapterDescription = rel.descriptions.find(desc => desc.chapter === selectedChapter);
-                const relevantDescription = chapterDescription?.description || '';
+                // Use chapter-specific description if available, otherwise use default description
+                const relevantDescription = chapterDescription?.description || rel.defaultDescription || '';
                 
                 return (
                   <ListItem key={index} sx={{ py: 0.5 }}>

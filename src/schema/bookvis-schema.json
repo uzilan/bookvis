@@ -163,6 +163,10 @@
             "description": "ID of the second character in the relationship",
             "pattern": "^[a-z0-9-]+$"
           },
+          "defaultDescription": {
+            "type": "string",
+            "description": "Default description that applies when no chapter-specific description exists"
+          },
           "descriptions": {
             "type": "array",
             "description": "Evolution of the relationship across chapters",

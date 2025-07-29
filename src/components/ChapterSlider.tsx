@@ -186,14 +186,16 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
     setExpandedNodes(newExpanded);
   }, [chapters, currentChapter]);
 
-  const handleToggleExpanded = (nodeTitle: string) => {
-    const newExpanded = new Set(expandedNodes);
-    if (newExpanded.has(nodeTitle)) {
-      newExpanded.delete(nodeTitle);
-    } else {
-      newExpanded.add(nodeTitle);
-    }
-    setExpandedNodes(newExpanded);
+  const handleNodeToggle = (nodeId: string) => {
+    setExpandedNodes(prev => {
+      const newExpanded = new Set(prev);
+      if (newExpanded.has(nodeId)) {
+        newExpanded.delete(nodeId);
+      } else {
+        newExpanded.add(nodeId);
+      }
+      return newExpanded;
+    });
   };
 
   return (
@@ -220,12 +222,9 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
           variant="outlined"
           startIcon={isPreview ? <span style={{ fontSize: '16px' }}>✏️</span> : <HomeIcon />}
           onClick={() => {
-            console.log('ChapterSlider button clicked:', { isPreview, onExitPreview: !!onExitPreview });
             if (isPreview && onExitPreview) {
-              console.log('Calling onExitPreview');
               onExitPreview();
             } else {
-              console.log('Navigating to home');
               navigate('/');
             }
           }}
@@ -350,7 +349,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
             onSelect={onChange}
             level={node.level}
             expandedNodes={expandedNodes}
-            onToggleExpanded={handleToggleExpanded}
+            onToggleExpanded={handleNodeToggle}
           />
         ))}
       </Box>

@@ -447,31 +447,20 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
   };
 
   const handleAuthorSelect = (authorId: string) => {
-    console.log('🔍 handleAuthorSelect called with:', authorId);
-    console.log('🔍 Current authors:', authors);
-    console.log('🔍 Current selectedAuthor:', selectedAuthor);
-    
-    if (authorId === 'new-author') {
-      setIsAddAuthorModalOpen(true);
-    } else {
-      setSelectedAuthor(authorId);
-      const selectedAuthorData = authors.find(author => author.id === authorId);
-      console.log('🔍 Found selectedAuthorData:', selectedAuthorData);
+    const selectedAuthorData = authors.find(author => author.id === authorId);
+    if (selectedAuthorData) {
+      const schemaAuthor = {
+        id: selectedAuthorData.id,
+        name: selectedAuthorData.name
+      };
       
-      if (selectedAuthorData) {
-        const schemaAuthor: SchemaAuthor = {
-          id: selectedAuthorData.id,
-          name: selectedAuthorData.name
-        };
-        console.log('🔍 Setting schemaAuthor:', schemaAuthor);
-        setBookData(prev => ({
-          ...prev,
-          book: {
-            ...prev.book,
-            author: schemaAuthor
-          }
-        }));
-      }
+      setBookData(prev => ({
+        ...prev,
+        book: {
+          ...prev.book,
+          author: schemaAuthor
+        }
+      }));
     }
   };
 

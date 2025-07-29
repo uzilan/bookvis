@@ -161,39 +161,24 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       });
     }
 
-    // Debug: Log available chapters
-
     
     // Group characters by faction for clustering
     const factionGroups: Record<string, Character[]> = {};
     bookData.characters.forEach((character) => {
       // Filter factions based on current chapter
       const currentFactions = character.factions.filter(factionId => {
-        const joinChapter = character.factionJoinChapters?.[factionId];
-        if (!joinChapter) return false;
-        
-        // Handle both number (backward compatibility) and string (chapter ID) values
-        if (typeof joinChapter === 'number') {
-          // For backward compatibility with numeric chapter indices
+        let shouldAdd = false;
+        // Check if character should be visible at this chapter
+        const characterJoinChapter = character.factionJoinChapters?.[factionId];
+        if (characterJoinChapter) {
+          const targetChapter = bookData.chapters.find(ch => ch.id === characterJoinChapter);
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
-        } else if (typeof joinChapter === 'string') {
-          // For string chapter IDs, find the target chapter and current chapter
-          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
-          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
-                 targetChapter.index <= currentChapter.index;
+          if (targetChapter && targetChapter.index && currentChapter && currentChapter.index) {
+            shouldAdd = targetChapter.index <= currentChapter.index;
+          }
         }
-        return false;
+        return shouldAdd;
       });
-      
-      // Debug logging
-      if (character.factions.length > 0 && currentFactions.length === 0) {
-        console.log(`Character ${character.name} has factions:`, character.factions);
-        console.log(`Faction join chapters:`, character.factionJoinChapters);
-        console.log(`Current chapter:`, selectedChapter);
-        console.log(`Current chapter index:`, bookData.chapters.find(ch => ch.id === selectedChapter)?.index);
-      }
       
       const primaryFaction = currentFactions[0] || character.factions[0];
       if (primaryFaction) {
@@ -219,22 +204,17 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       
       // Filter factions based on current chapter
       const currentFactions = character.factions.filter(factionId => {
-        const joinChapter = character.factionJoinChapters?.[factionId];
-        if (!joinChapter) return false;
-        
-        // Handle both number (backward compatibility) and string (chapter ID) values
-        if (typeof joinChapter === 'number') {
-          // For backward compatibility with numeric chapter indices
+        let shouldAdd = false;
+        // Check if character should be visible at this chapter
+        const characterJoinChapter = character.factionJoinChapters?.[factionId];
+        if (characterJoinChapter) {
+          const targetChapter = bookData.chapters.find(ch => ch.id === characterJoinChapter);
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return currentChapter && typeof currentChapter.index === 'number' && joinChapter <= currentChapter.index;
-        } else if (typeof joinChapter === 'string') {
-          // For string chapter IDs, find the target chapter and current chapter
-          const targetChapter = bookData.chapters.find(ch => ch.id === joinChapter);
-          const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
-          return targetChapter && targetChapter.index !== undefined && currentChapter && currentChapter.index !== undefined && 
-                 targetChapter.index <= currentChapter.index;
+          if (targetChapter && targetChapter.index && currentChapter && currentChapter.index) {
+            shouldAdd = targetChapter.index <= currentChapter.index;
+          }
         }
-        return false;
+        return shouldAdd;
       });
       
 
@@ -326,7 +306,8 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
       if (character1Appears && character2Appears) {
         // Find the description that matches the current chapter
         const chapterDescription = rel.descriptions.find(desc => desc.chapter === selectedChapter);
-        const label = chapterDescription?.description || '';
+        // Use chapter-specific description if available, otherwise use default description
+        const label = chapterDescription?.description || rel.defaultDescription || '';
         
         edges.push({
           id: `rel-${index}`,

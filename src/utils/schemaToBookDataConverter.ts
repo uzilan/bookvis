@@ -1,4 +1,5 @@
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
+import type { SchemaHierarchyType } from '../schema/models/SchemaHierarchy';
 import type { BookData, RelationshipWithChapters } from '../models/BookData';
 import type { Book } from '../models/Book';
 import type { Character } from '../models/Character';
@@ -26,11 +27,11 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
   const characters: Character[] = schemaData.characters.map(char => ({
     id: char.id,
     name: char.name,
-    description: char.description || undefined,
-    aliases: char.aliases || [],
-    attributes: char.attributes || [],
-    factions: char.factions || [],
-    factionJoinChapters: char.faction_join_chapters || {}
+    description: char.description || '',
+    aliases: char.aliases,
+    attributes: char.attributes,
+    factions: char.factions,
+    factionJoinChapters: char.faction_join_chapters
   }));
 
   // Convert Locations first (needed for chapters)
@@ -41,11 +42,11 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
   }));
 
   // Convert Chapters
-  const chapters: Chapter[] = schemaData.chapters.map(chapter => ({
+  const chapters: Chapter[] = schemaData.chapters.map((chapter, index) => ({
     book: book,
     id: chapter.id,
     title: chapter.title,
-    index: 0, // Will be set based on hierarchy
+    index: index,
     type: 'chapter',
     locations: (chapter.locations || []).map(locationId => {
       const location = locations.find(loc => loc.id === locationId);
@@ -58,7 +59,7 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
   const factions: Faction[] = schemaData.factions.map(faction => ({
     id: faction.id,
     title: faction.title,
-    description: faction.description || undefined,
+    description: faction.description || '',
     color: faction.color
   }));
 
@@ -77,7 +78,8 @@ export function convertSchemaToBookData(schemaData: SchemaBookData): BookData {
       descriptions: rel.descriptions.map(desc => ({
         chapter: desc.chapter,
         description: desc.description
-      }))
+      })),
+      defaultDescription: rel.defaultDescription
     };
   });
 
@@ -129,14 +131,16 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
     aliases: char.aliases,
     attributes: char.attributes,
     factions: char.factions,
-    faction_join_chapters: char.factionJoinChapters
+    faction_join_chapters: Object.fromEntries(
+      Object.entries(char.factionJoinChapters).map(([key, value]) => [key, String(value)])
+    )
   }));
 
   // Convert Chapters
   const chapters = bookData.chapters.map(chapter => ({
     id: chapter.id,
     title: chapter.title,
-    locations: chapter.locations.map(location => location.id),
+    locations: (chapter.locations || []).map(location => location.id),
     characters: chapter.characters || []
   }));
 
@@ -159,8 +163,9 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
   const relationships = bookData.relationships.map(rel => ({
     character1: rel.character1.id,
     character2: rel.character2.id,
+    defaultDescription: rel.defaultDescription,
     descriptions: rel.descriptions.map(desc => ({
-      chapter: desc.chapter,
+      chapter: String(desc.chapter),
       description: desc.description
     }))
   }));
@@ -169,12 +174,12 @@ export function convertBookDataToSchema(bookData: BookData): SchemaBookData {
   const hierarchy = bookData.hierarchy && bookData.hierarchy.length > 0 
     ? bookData.hierarchy.map((item, index) => ({
         chapter_id: item.chapter_id,
-        type: item.type,
+        type: item.type as SchemaHierarchyType,
         index
       }))
     : bookData.chapters.map((chapter, index) => ({
         chapter_id: chapter.id,
-        type: chapter.type || 'chapter',
+        type: (chapter.type || 'chapter') as SchemaHierarchyType,
         index
       }));
 

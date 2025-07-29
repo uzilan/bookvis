@@ -8,6 +8,7 @@ export interface RelationshipWithChapters {
   character1: Character;
   character2: Character;
   descriptions: { chapter: number | string; description: string }[]; // number for backward compatibility, string for chapter IDs
+  defaultDescription?: string; // Default description when no chapter-specific description exists
 }
 
 export interface HierarchyItem {

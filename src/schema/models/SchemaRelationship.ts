@@ -16,6 +16,8 @@ export interface SchemaRelationship {
   character1: string;
   /** ID of the second character in the relationship */
   character2: string;
+  /** Default description that applies when no chapter-specific description exists */
+  defaultDescription?: string;
   /** Evolution of the relationship across chapters */
   descriptions: SchemaRelationshipDescription[];
 } 

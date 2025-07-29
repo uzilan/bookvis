@@ -41,7 +41,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
 export class FirebaseService {
   /**
@@ -49,8 +48,8 @@ export class FirebaseService {
    */
   static async signInWithGoogle(): Promise<User> {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log('Successfully signed in with Google:', result.user.displayName);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
       return result.user;
     } catch (error) {
       console.error('Error signing in with Google:', error);
@@ -64,7 +63,6 @@ export class FirebaseService {
   static async signOut(): Promise<void> {
     try {
       await signOut(auth);
-      console.log('Successfully signed out');
     } catch (error) {
       console.error('Error signing out:', error);
       throw new Error(`Failed to sign out: ${error}`);
@@ -109,13 +107,7 @@ export class FirebaseService {
         updatedAt: new Date().toISOString()
       };
       
-      console.log('🔥 Firebase data to save:', JSON.stringify(firebaseBookData, null, 2));
-      
-      // Check for empty fields
-      this.checkForEmptyFields(firebaseBookData);
-      
       await setDoc(bookRef, firebaseBookData);
-      console.log(`Book "${bookData.book.title}" saved successfully`);
     } catch (error) {
       console.error('Error saving book:', error);
       throw new Error(`Failed to save book: ${error}`);
@@ -219,6 +211,7 @@ export class FirebaseService {
           id: rel.character2.id,
           name: rel.character2.name
         },
+        defaultDescription: rel.defaultDescription,
         descriptions: rel.descriptions.map(desc => ({
           chapter: desc.chapter,
           description: desc.description
@@ -256,52 +249,8 @@ export class FirebaseService {
     if (bookData.mapUrl) {
       cleanData.mapUrl = bookData.mapUrl;
     }
-
-    // Log any undefined values
-    console.log('🔍 Checking for undefined values in cleaned data:');
-    this.logUndefinedValues(cleanData as Record<string, unknown>);
     
     return cleanData;
-  }
-
-  /**
-   * Log undefined values in an object
-   */
-  private static logUndefinedValues(obj: Record<string, unknown>, path: string = ''): void {
-    for (const [key, value] of Object.entries(obj)) {
-      const currentPath = path ? `${path}.${key}` : key;
-      
-      if (value === undefined) {
-        console.error(`❌ Undefined value found at: ${currentPath}`);
-      } else if (value === null) {
-        console.error(`❌ Null value found at: ${currentPath}`);
-      } else if (value === '') {
-        console.error(`❌ Empty string found at: ${currentPath}`);
-      } else if (typeof value === 'object' && value !== null) {
-        this.logUndefinedValues(value as Record<string, unknown>, currentPath);
-      }
-    }
-  }
-
-  /**
-   * Check for empty fields in Firebase data
-   */
-  private static checkForEmptyFields(obj: Record<string, unknown>, path: string = ''): void {
-    for (const [key, value] of Object.entries(obj)) {
-      const currentPath = path ? `${path}.${key}` : key;
-      
-      if (value === undefined) {
-        console.error(`❌ EMPTY FIELD: ${currentPath} is undefined`);
-      } else if (value === null) {
-        console.error(`❌ EMPTY FIELD: ${currentPath} is null`);
-      } else if (value === '') {
-        console.error(`❌ EMPTY FIELD: ${currentPath} is empty string`);
-      } else if (Array.isArray(value) && value.length === 0) {
-        console.error(`❌ EMPTY FIELD: ${currentPath} is empty array`);
-      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-        this.checkForEmptyFields(value as Record<string, unknown>, currentPath);
-      }
-    }
   }
 
   /**
@@ -312,7 +261,6 @@ export class FirebaseService {
       const storageRef = ref(storage, `bookvis/${bookId}/${imageName}`);
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      console.log(`Image uploaded successfully: ${downloadURL}`);
       return downloadURL;
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -625,7 +573,6 @@ export class FirebaseService {
       }
 
       await setDoc(bookRef, { deleted: true, deletedAt: new Date() });
-      console.log(`Book "${bookData.book.title}" marked as deleted`);
     } catch (error) {
       console.error('Error deleting book:', error);
       throw new Error(`Failed to delete book: ${error}`);
@@ -689,7 +636,6 @@ export class FirebaseService {
         isPublic: isPublic, 
         updatedAt: new Date() 
       });
-      console.log(`Book "${bookData.book.title}" visibility updated to ${isPublic ? 'public' : 'private'}`);
     } catch (error) {
       console.error('Error updating book visibility:', error);
       throw new Error(`Failed to update book visibility: ${error}`);
