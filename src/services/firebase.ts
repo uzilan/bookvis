@@ -202,21 +202,29 @@ export class FirebaseService {
 
     // Clean relationships array (only include if not empty)
     if (bookData.relationships.length > 0) {
-      cleanData.relationships = bookData.relationships.map(rel => ({
-        character1: {
-          id: rel.character1.id,
-          name: rel.character1.name
-        },
-        character2: {
-          id: rel.character2.id,
-          name: rel.character2.name
-        },
-        defaultDescription: rel.defaultDescription,
-        descriptions: rel.descriptions.map(desc => ({
-          chapter: desc.chapter,
-          description: desc.description
-        }))
-      }));
+      cleanData.relationships = bookData.relationships.map(rel => {
+        const relationship: Record<string, unknown> = {
+          character1: {
+            id: rel.character1.id,
+            name: rel.character1.name
+          },
+          character2: {
+            id: rel.character2.id,
+            name: rel.character2.name
+          },
+          descriptions: rel.descriptions.map(desc => ({
+            chapter: desc.chapter,
+            description: desc.description
+          }))
+        };
+        
+        // Only include defaultDescription if it's not undefined
+        if (rel.defaultDescription !== undefined) {
+          relationship.defaultDescription = rel.defaultDescription;
+        }
+        
+        return relationship;
+      });
     }
 
     // Clean locations array (only include if not empty)
@@ -639,6 +647,115 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error updating book visibility:', error);
       throw new Error(`Failed to update book visibility: ${error}`);
+    }
+  }
+
+  /**
+   * Get a single book by ID
+   */
+  static async getBook(id: string): Promise<BookData | null> {
+    try {
+      const bookRef = doc(db, 'bookvis', id);
+      const bookDoc = await getDoc(bookRef);
+      
+      if (bookDoc.exists()) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = bookDoc.data() as any;
+        
+        // Reconstruct path property for chapters if hierarchy exists
+        let chapters = data.chapters;
+        if (data.hierarchy && Array.isArray(data.hierarchy)) {
+          chapters = data.chapters.map((chapter: Record<string, unknown>) => {
+            const path = this.buildPathFromHierarchy(chapter.id as string, data.hierarchy, data.chapters);
+            return {
+              ...chapter,
+              path: path
+            };
+          });
+        }
+        
+        const bookData: BookData = {
+          book: data.book,
+          characters: data.characters,
+          chapters: chapters,
+          factions: data.factions,
+          relationships: data.relationships,
+          locations: data.locations || [],
+          hierarchy: data.hierarchy || [],
+          mapUrl: data.mapUrl,
+          ownerId: data.ownerId,
+          ownerEmail: data.ownerEmail,
+          isPublic: data.isPublic || false,
+          status: data.status || 'published',
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt
+        };
+
+        return bookData;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error fetching book:', error);
+      throw new Error(`Failed to fetch book: ${error}`);
+    }
+  }
+
+  /**
+   * Update an existing book
+   */
+  static async updateBook(id: string, bookData: Partial<BookData>): Promise<void> {
+    try {
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User must be authenticated to update books');
+      }
+
+      // Get the existing book data
+      const existingBook = await this.getBook(id);
+      if (!existingBook) {
+        throw new Error('Book not found');
+      }
+
+      // Check ownership
+      if (existingBook.ownerId !== currentUser.uid) {
+        throw new Error('You can only update your own books');
+      }
+
+      // Merge the existing data with the updates
+      const updatedData = {
+        ...existingBook,
+        ...bookData,
+        updatedAt: new Date()
+      };
+
+      // Clean the data for Firebase
+      const cleanBookData = this.cleanBookDataForFirebase(updatedData as BookData);
+
+      const bookRef = doc(db, 'bookvis', id);
+      await setDoc(bookRef, {
+        ...cleanBookData,
+        ownerId: currentUser.uid,
+        ownerEmail: currentUser.email,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error updating book:', error);
+      throw new Error(`Failed to update book: ${error}`);
+    }
+  }
+
+  /**
+   * Check if a book exists
+   */
+  static async bookExists(id: string): Promise<boolean> {
+    try {
+      const bookRef = doc(db, 'bookvis', id);
+      const bookDoc = await getDoc(bookRef);
+      return bookDoc.exists();
+    } catch (error) {
+      console.error('Error checking if book exists:', error);
+      throw new Error(`Failed to check if book exists: ${error}`);
     }
   }
 }

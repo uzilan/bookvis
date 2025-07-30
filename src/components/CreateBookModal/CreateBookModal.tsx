@@ -529,7 +529,7 @@ export const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       {open && (
         <Dialog
           open={open}
-          onClose={(event, reason) => {
+          onClose={(_event, reason) => {
             if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
               return; // Prevent closing on backdrop click or escape key
             }
