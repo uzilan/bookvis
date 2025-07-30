@@ -586,8 +586,24 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               const characterAppearsInChapter = bookData.chapters.some(ch => 
                 ch.id === selectedChapter && ch.characters && ch.characters.includes(character.id)
               );
-              // Check if character belongs to this faction
+              
+              // Check if character belongs to this faction AND has joined by current chapter
               const characterBelongsToFaction = character.factions.includes(faction.id);
+              if (!characterBelongsToFaction) return false;
+              
+              // Check faction join timing
+              const characterJoinChapter = character.factionJoinChapters?.[faction.id];
+              if (characterJoinChapter) {
+                const targetChapter = bookData.chapters.find(ch => ch.id === characterJoinChapter);
+                const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
+                if (targetChapter && targetChapter.index && currentChapter && currentChapter.index) {
+                  return targetChapter.index <= currentChapter.index;
+                }
+                // If we have a join chapter but can't compare, don't show the faction
+                return false;
+              }
+              
+              // If no join chapter specified, assume they belong from the start
               return characterAppearsInChapter && characterBelongsToFaction;
             });
           });
