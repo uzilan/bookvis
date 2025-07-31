@@ -9,6 +9,7 @@ import { LocationList } from './LocationList';
 import { FactionList } from './FactionList';
 import { CharacterList } from './CharacterList';
 import { useTheme } from '../hooks/useTheme';
+import { classes } from '../styles';
 
 
 
@@ -530,13 +531,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      background: 'var(--color-background)',
-      overflow: 'hidden',
-      position: 'relative',
-    }}>
+    <div className={classes.characterGraphContainer}>
       
 
 
@@ -545,17 +540,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
 
       {/* Sidebar Panels Wrapper */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        right: '50px',
-        width: '240px',
-        zIndex: 1002,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-        maxHeight: 'calc(100vh - 40px)',
-      }}>
+      <div className={classes.sidebarPanelsWrapper}>
         {/* Character List */}
         {(() => {
           const currentChapter = bookData.chapters.find(ch => ch.id === selectedChapter);
@@ -640,33 +625,11 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
 
       <div
         ref={networkRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 1,
-        }}
+        className={classes.graphContainer}
       />
 
       {/* Custom Zoom Controls */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '300px',
-        zIndex: 100,
-        background: 'white',
-        padding: '3px',
-        borderRadius: '6px',
-        border: '1px solid #ccc',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-      }}>
-        
-
+      <div className={classes.zoomControls}>
         <button
           onClick={() => {
             const newZoom = Math.min(currentZoom * 1.2, 5); // Max zoom 5x
@@ -679,20 +642,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               }
             });
           }}
-          style={{
-            width: '32px',
-            height: '32px',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '18px',
-            color: 'var(--color-text)',
-            fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          className={classes.zoomButton}
         >
           +
         </button>
@@ -708,20 +658,7 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               }
             });
           }}
-          style={{
-            width: '32px',
-            height: '32px',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '18px',
-            color: 'var(--color-text)',
-            fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          className={classes.zoomButton}
         >
           −
         </button>
@@ -746,37 +683,26 @@ export const CharacterGraph: React.FC<CharacterGraphProps> = ({
               });
             }, 350); // Wait for fit animation to complete
           }}
-          style={{
-            width: '32px',
-            height: '32px',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '18px',
-            color: 'var(--color-text)',
-            fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          className={classes.zoomButton}
         >
           ⤢
         </button>
       </div>
 
-      <ChapterSlider
-        chapters={bookData.chapters}
-        value={selectedChapter}
-        onChange={onChapterChange}
-        books={books}
-        selectedBook={isPreview ? bookData.book : selectedBook}
-        onBookChange={onBookChange}
-        onCreateBook={onCreateBook}
-        showBookSelector={false}
-        isPreview={isPreview}
-        onExitPreview={onExitPreview}
-      />
+      <div className={classes.chapterSliderContainer}>
+        <ChapterSlider
+          chapters={bookData.chapters}
+          value={selectedChapter}
+          onChange={onChapterChange}
+          books={books}
+          selectedBook={isPreview ? bookData.book : selectedBook}
+          onBookChange={onBookChange}
+          onCreateBook={onCreateBook}
+          showBookSelector={false}
+          isPreview={isPreview}
+          onExitPreview={onExitPreview}
+        />
+      </div>
       <CharacterDetailsPanel
         character={selectedCharacter}
         factions={bookData.factions}

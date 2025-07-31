@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { BookData } from '../models/BookData';
+import { classes } from '../styles';
 
 interface WorldMapProps {
   chapterId: string;
@@ -37,25 +38,12 @@ export const WorldMap: React.FC<WorldMapProps> = ({ bookData }) => {
   }
   
   return (
-    <div style={{
-      width: '100%',
-      height: '80px',
-      border: '1px solid #e0e0e0',
-      borderRadius: '4px',
-      overflow: 'hidden',
-      position: 'relative'
-    }}>
-
+    <div className={classes.worldMapContainer}>
       <img 
         src={mapUrl}
         alt="World Map"
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center',
-          display: imageLoaded ? 'block' : 'none'
-        }}
+        className={classes.worldMapImage}
+        style={{ display: imageLoaded ? 'block' : 'none' }}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />

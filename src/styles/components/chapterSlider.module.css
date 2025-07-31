@@ -1,0 +1,50 @@
+/* ChapterSlider Component Styles */
+
+.chapterItem {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.chapterItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.chapterItem.selected {
+  background-color: var(--color-buttonActive);
+}
+
+.chapterItem.part {
+  padding: 12px 0px 4px 0px;
+}
+
+.chapterTitle {
+  font-size: 11px;
+  color: var(--color-text);
+  font-weight: normal;
+  text-decoration: none;
+  flex: 1;
+  text-align: left;
+}
+
+.chapterTitle.selected {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.chapterTitle.book {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.chapterTitle.part {
+  font-weight: bold;
+}
+
+.chapterIcon {
+  font-size: 16px;
+} 

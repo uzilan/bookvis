@@ -4,6 +4,7 @@ import type { Character } from '../models/Character';
 import type { BookData } from '../models/BookData';
 import type { Faction } from '../models/Faction';
 import { fuzzySearch } from '../utils/fuzzySearch';
+import { classes } from '../styles';
 
 interface CharacterListProps {
   characters: Character[];
@@ -35,28 +36,9 @@ export const CharacterList: React.FC<CharacterListProps> = ({
   }, [allCharacters, characters, filterText, showAllCharacters]);
 
   return (
-    <div style={{
-      background: 'var(--color-surface)',
-      padding: '12px 16px',
-      borderRadius: '8px',
-      border: '2px solid var(--color-border)',
-      boxShadow: '0 4px 8px var(--color-shadow)',
-      width: '100%',
-      height: '30vh',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
+    <div className={classes.container}>
       {/* Header */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '8px',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        color: 'var(--color-text)',
-        textAlign: 'left'
-      }}>
+      <div className={classes.header}>
         <span>Characters:</span>
         <FormControl size="small">
           <RadioGroup
@@ -111,35 +93,18 @@ export const CharacterList: React.FC<CharacterListProps> = ({
       </div>
 
               {/* Filter Input */}
-        <div style={{ marginBottom: '8px' }}>
+        <div className={classes.filterContainer}>
           <input
             type="text"
             placeholder="Filter characters..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            style={{
-              width: '90%',
-              padding: '4px 8px',
-              fontSize: '11px',
-              border: '1px solid var(--color-border)',
-              borderRadius: '4px',
-              backgroundColor: 'var(--color-background)',
-              color: 'var(--color-text)'
-            }}
+            className={classes.filterInput}
           />
         </div>
 
       {/* Characters List */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        marginBottom: '8px',
-        flex: 1,
-        overflowY: 'auto',
-        scrollbarWidth: 'thin',
-        scrollbarColor: '#888 #f1f1f1'
-      }}>
+      <div className={classes.scrollableList}>
         {displayCharacters.length > 0 ? (
           displayCharacters.map((character: Character) => {
             // Get character's current factions and their colors
@@ -154,70 +119,30 @@ export const CharacterList: React.FC<CharacterListProps> = ({
               <div
                 key={character.id}
                 onClick={() => onCharacterClick(character)}
-                style={{
-                  padding: '8px',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  backgroundColor: 'var(--color-surface)',
-                  transition: 'background-color 0.2s',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '11px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-surface)';
-                }}
+                className={classes.listItem}
               >
                 {/* Character Icon */}
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '10px',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  background: factionColors.length > 0 ? factionColors[0] : '#999',
-                  border: '1px solid var(--color-border)'
-                }}>
+                <div 
+                  className={classes.characterIcon}
+                  style={{
+                    background: factionColors.length > 0 ? factionColors[0] : '#999',
+                  }}
+                >
                   {character.name.charAt(0).toUpperCase()}
                 </div>
 
                 {/* Character Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontWeight: 'bold',
-                    color: 'var(--color-text)',
-                    fontSize: '11px',
-                    marginBottom: '2px',
-                    textAlign: 'left'
-                  }}>
+                <div className={classes.characterInfo}>
+                  <div className={classes.characterName}>
                     {character.name}
                   </div>
                   {character.aliases.length > 0 && (
-                    <div style={{
-                      fontSize: '9px',
-                      color: 'var(--color-textSecondary)',
-                      fontStyle: 'italic',
-                      textAlign: 'left'
-                    }}>
+                    <div className={classes.characterDescription}>
                       {character.aliases.join(', ')}
                     </div>
                   )}
                   {currentFactions.length > 0 && (
-                    <div style={{
-                      fontSize: '9px',
-                      color: 'var(--color-textSecondary)',
-                      marginTop: '2px',
-                      textAlign: 'left'
-                    }}>
+                    <div className={classes.characterDescription}>
                       {currentFactions.map((f: Faction) => f.title).join(', ')}
                     </div>
                   )}
@@ -226,13 +151,7 @@ export const CharacterList: React.FC<CharacterListProps> = ({
             );
           })
         ) : (
-          <div style={{
-            padding: '12px',
-            textAlign: 'left',
-            color: 'var(--color-textSecondary)',
-            fontSize: '11px',
-            fontStyle: 'italic'
-          }}>
+          <div className={classes.emptyState}>
             {filterText ? 'No characters match your filter' : 'No characters available'}
           </div>
         )}

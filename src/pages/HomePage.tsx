@@ -46,6 +46,7 @@ import { fuzzySearch } from '../utils/fuzzySearch';
 import { CreateBookModal } from '../components/CreateBookModal';
 import { loadBookDataFromYamlString } from '../utils/yamlParser';
 import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
+import { classes, combineClasses, materialUITheme } from '../styles';
 
 export const HomePage: React.FC = () => {
   const { user, loading, signInWithGoogle, signOut, isAuthenticated } = useAuth();
@@ -381,56 +382,24 @@ export const HomePage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      py: 4,
-      width: '100%',
-      position: 'relative'
-    }}>
+    <Box className={classes.homePageMainContainer}>
       {/* Info Indicator */}
-      <Box sx={{
-        position: 'fixed',
-        right: infoDrawerOpen ? '400px' : '0px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 1000,
-        display: { xs: 'none', md: 'block' }
-      }}>
+      <Box className={combineClasses(classes.homePageInfoButton, infoDrawerOpen && 'open')}>
         <Button
           onClick={() => setInfoDrawerOpen(!infoDrawerOpen)}
-          sx={{
-            writingMode: 'vertical-rl',
-            textOrientation: 'mixed',
-            transform: 'rotate(180deg)',
-            color: 'var(--color-textSecondary)',
-            border: '2px solid var(--color-textSecondary)',
-            borderRadius: '8px 0 0 8px',
-            px: 2,
-            py: 3,
-            backgroundColor: 'var(--color-background)',
-            '&:hover': {
-              backgroundColor: 'var(--color-backgroundHover)',
-              color: 'var(--color-primary)',
-              borderColor: 'var(--color-primary)'
-            },
-            transition: 'all 0.3s ease-in-out'
-          }}
+          className={classes.homePageInfoButtonContent}
         >
           {infoDrawerOpen ? (
             <>
-              <CloseIcon sx={{ transform: 'rotate(90deg)', mb: 1 }} />
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              <CloseIcon className={classes.homePageInfoButtonIcon} />
+              <Typography variant="body2" className={classes.homePageInfoButtonText}>
                 CLOSE
               </Typography>
             </>
           ) : (
             <>
-              <InfoIcon sx={{ transform: 'rotate(90deg)', mb: 1 }} />
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              <InfoIcon className={classes.homePageInfoButtonIcon} />
+              <Typography variant="body2" className={classes.homePageInfoButtonText}>
                 INFO
               </Typography>
             </>
@@ -438,66 +407,24 @@ export const HomePage: React.FC = () => {
         </Button>
       </Box>
 
-      <Container maxWidth="lg" sx={{ 
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%'
-      }}>
+      <Container maxWidth="lg" className={classes.homePageContentContainer}>
         {/* Header */}
-        <Box sx={{ mb: 6, position: 'relative' }}>
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'center',
-            position: 'relative',
-            mb: 2,
-            gap: 3
-          }}>
-            <Typography variant="h2" component="h1" sx={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
+        <Box className={classes.homePageHeader}>
+          <Box className={classes.homePageHeroSection}>
+            <Typography variant="h2" component="h1" className={classes.homePageTitle}>
               BookVis
             </Typography>
             
             {/* Relationships Image */}
-            <Box sx={{ 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: 'center',
-              maxWidth: '120px',
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                transform: 'translateY(-2px)'
-              }
-            }}>
+            <Box className={classes.homePageHeroImageWrapper}>
               <img 
                 src="/relationships.png" 
                 alt="Character Relationships" 
-                style={{ 
-                  width: '100%',
-                  maxWidth: '100px',
-                  height: 'auto',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                  transition: 'box-shadow 0.3s ease-in-out'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.15)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                }}
+                className={classes.homePageHeroImage}
               />
             </Box>
             
-            <Box sx={{ 
-              position: 'absolute', 
-              right: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              display: 'flex',
-              gap: 1
-            }}>
+            <Box className={classes.homePageHeroActions}>
               
             </Box>
           </Box>
@@ -939,14 +866,7 @@ export const HomePage: React.FC = () => {
               <ListItemText 
                 primary="Character Relationships" 
                 secondary=""
-                sx={{
-                  '& .MuiListItemText-primary': {
-                    color: 'var(--color-text)'
-                  },
-                  '& .MuiListItemText-secondary': {
-                    color: 'var(--color-textSecondary)'
-                  }
-                }}
+                sx={materialUITheme.listItemText}
               />
             </ListItem>
             
@@ -959,14 +879,7 @@ export const HomePage: React.FC = () => {
               <ListItemText 
                 primary="Story Timeline" 
                 secondary="Track character appearances and relationship developments throughout your story with chapter-based visualization."
-                sx={{
-                  '& .MuiListItemText-primary': {
-                    color: 'var(--color-text)'
-                  },
-                  '& .MuiListItemText-secondary': {
-                    color: 'var(--color-textSecondary)'
-                  }
-                }}
+                sx={materialUITheme.listItemText}
               />
             </ListItem>
           </List>
@@ -996,9 +909,9 @@ export const HomePage: React.FC = () => {
         maxWidth={false}
         fullWidth
         sx={{
+          ...materialUITheme.dialog,
           '& .MuiDialog-paper': {
-            backgroundColor: 'var(--color-background)',
-            color: 'var(--color-text)',
+            ...materialUITheme.dialog['& .MuiDialog-paper'],
             maxWidth: '95vw',
             maxHeight: '95vh',
             width: '95vw',
@@ -1010,7 +923,7 @@ export const HomePage: React.FC = () => {
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          color: 'var(--color-text)'
+          ...materialUITheme.dialogTitle
         }}>
           BookVis Application Interface
           <IconButton 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import { Google as GoogleIcon } from '@mui/icons-material';
+import { Loading } from './Loading';
 import { useAuth } from '../hooks/useAuth';
 
 export const LoginButton: React.FC = () => {
@@ -25,13 +26,7 @@ export const LoginButton: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography variant="body2" color="text.secondary">
-          Loading...
-        </Typography>
-      </Box>
-    );
+    return <Loading message="Loading..." size="small" />;
   }
 
   if (isAuthenticated && user) {

@@ -3,11 +3,13 @@ import './App.css';
 import { CharacterGraph } from './components/CharacterGraph';
 import { CreateBookModal } from './components/CreateBookModal';
 import { LoginButton } from './components/LoginButton';
+import { FirebaseLoading, FirebaseNoData } from './components/Loading';
 import type { Book } from './models/Book';
 import type { BookData } from './models/BookData';
 import type { SchemaBookData } from './schema/models/SchemaBookData';
 import { FirebaseService } from './services/firebase.ts';
 import { convertBookDataToSchema } from './utils/schemaToBookDataConverter';
+import { classes } from './styles';
 
 function App() {
   const [selectedChapter, setSelectedChapter] = useState<string>('chapter-1');
@@ -88,11 +90,11 @@ function App() {
 
   // Show loading or no data message if no book data
   if (loading) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>Loading books from Firebase...</div>;
+    return <FirebaseLoading />;
   }
 
   if (!bookData || !selectedBook) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
+    return <FirebaseNoData />;
   }
 
   // Find the current chapter by matching selectedChapter with id
@@ -182,22 +184,13 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ width: '100vw', height: '100vh' }}>
+    <div className={`App ${classes.appContainer}`}>
       {/* Login Button - Top Right Corner */}
-      <div style={{ 
-        position: 'absolute', 
-        top: '20px', 
-        right: '20px', 
-        zIndex: 1003,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        padding: '10px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-      }}>
+      <div className={classes.loginButtonContainer}>
         <LoginButton />
       </div>
       
-      <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      <div className={classes.appContent}>
         <CharacterGraph
           key={previewBookData ? `preview-${previewBookData.book.id}` : selectedBook?.id || 'no-book'}
           bookData={filteredBookData}

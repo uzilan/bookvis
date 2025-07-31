@@ -4,6 +4,7 @@ import type { Location } from '../models/Location';
 import type { BookData } from '../models/BookData';
 import { WorldMap } from './WorldMap';
 import { fuzzySearch } from '../utils/fuzzySearch';
+import { classes } from '../styles';
 
 interface LocationListProps {
   locations: Location[];
@@ -47,24 +48,9 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
     }
     // Show empty state for preview mode
     return (
-      <div style={{
-        background: 'var(--color-surface)',
-        padding: '12px 16px',
-        borderRadius: '8px',
-        border: '2px solid var(--color-border)',
-        boxShadow: '0 4px 8px var(--color-shadow)',
-        width: '100%',
-        height: '30vh',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '6px' 
-        }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
+      <div className={classes.container}>
+        <div className={classes.header}>
+          <div className={classes.title}>
             Locations:
           </div>
           <FormControl size="small">
@@ -120,21 +106,13 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         </div>
         
         {/* Filter Input */}
-        <div style={{ marginBottom: '8px' }}>
+        <div className={classes.filterContainer}>
           <input
             type="text"
             placeholder="Filter locations..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-            style={{
-              width: '90%',
-              padding: '4px 8px',
-              fontSize: '11px',
-              border: '1px solid var(--color-border)',
-              borderRadius: '4px',
-              backgroundColor: 'var(--color-background)',
-              color: 'var(--color-text)'
-            }}
+            className={classes.filterInput}
           />
         </div>
         <div style={{ 
@@ -164,24 +142,9 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
 
   return (
     <>
-      <div style={{
-        background: 'var(--color-surface)',
-        padding: '12px 16px',
-        borderRadius: '8px',
-        border: '2px solid var(--color-border)',
-        boxShadow: '0 4px 8px var(--color-shadow)',
-        width: '100%',
-        height: '30vh',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '6px' 
-        }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
+      <div className={classes.container}>
+        <div className={classes.header}>
+          <div className={classes.title}>
             Locations:
           </div>
           <FormControl size="small">
@@ -237,41 +200,18 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         </div>
         
         {/* Filter Input */}
-        <div style={{ marginBottom: '8px' }}>
+        <div className={classes.filterContainer}>
           <input
             type="text"
             placeholder="Filter locations..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-                          style={{
-                width: '90%',
-                padding: '4px 8px',
-                fontSize: '11px',
-                border: '1px solid var(--color-border)',
-                borderRadius: '4px',
-                backgroundColor: 'var(--color-background)',
-                color: 'var(--color-text)'
-              }}
+            className={classes.filterInput}
           />
         </div>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '4px', 
-          marginBottom: '8px',
-                  flex: 1,
-        overflowY: 'auto',
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#c1c1c1 #f1f1f1'
-        }}>
+        <div className={classes.scrollableList}>
           {displayLocations.length === 0 ? (
-            <div style={{
-              fontSize: '11px',
-              color: 'var(--color-textSecondary)',
-              padding: '8px',
-              textAlign: 'left',
-              fontStyle: 'italic'
-            }}>
+            <div className={classes.emptyState}>
               No locations match your filter
             </div>
           ) : (
@@ -279,49 +219,15 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
             <div key={location.id}>
               <div 
                 onClick={() => toggleLocation(location.id)}
-                style={{ 
-                  fontSize: '12px', 
-                  color: 'var(--color-text)', 
-                  fontWeight: '500',
-                  padding: '6px 8px',
-                  backgroundColor: 'var(--color-surface)',
-                  borderRadius: '4px',
-                  border: '1px solid var(--color-border)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  transition: 'background-color 0.2s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-surface)';
-                }}
+                className={classes.listItem}
               >
-                <span style={{ textAlign: 'left' }}>📍 {location.name}</span>
-                <span style={{ 
-                  fontSize: '12px', 
-                  color: 'var(--color-textSecondary)',
-                  transition: 'transform 0.2s ease',
-                  transform: expandedLocations.has(location.id) ? 'rotate(90deg)' : 'rotate(0deg)'
-                }}>
+                <span className={classes.locationName}>📍 {location.name}</span>
+                <span className={expandedLocations.has(location.id) ? classes.iconExpanded : classes.iconCollapsed}>
                   ▶
                 </span>
               </div>
               {expandedLocations.has(location.id) && location.description && (
-                <div style={{
-                  fontSize: '11px',
-                  color: 'var(--color-textSecondary)',
-                  padding: '6px 8px',
-                  marginTop: '3px',
-                  backgroundColor: 'var(--color-background)',
-                  borderRadius: '4px',
-                  border: '1px solid var(--color-border)',
-                  lineHeight: '1.3',
-                  textAlign: 'left'
-                }}>
+                <div className={classes.expandedContent}>
                   {location.description}
                 </div>
               )}
@@ -331,15 +237,10 @@ export const LocationList: React.FC<LocationListProps> = ({ locations, chapterId
         </div>
         
         {/* Map Section */}
-        <div style={{
-          borderTop: '1px solid var(--color-border)',
-          paddingTop: '6px',
-          marginTop: '6px',
-          flexShrink: 0
-        }}>
+        <div className={classes.sectionHeader}>
           <div 
             onClick={() => setIsMapModalOpen(true)}
-            style={{ cursor: 'pointer' }}
+            className={classes.button}
           >
             <WorldMap chapterId={chapterId} bookData={bookData} />
           </div>

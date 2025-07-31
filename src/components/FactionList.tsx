@@ -4,6 +4,7 @@ import type { Faction } from '../models/Faction';
 import type { BookData } from '../models/BookData';
 import type { Character } from '../models/Character';
 import { fuzzySearch } from '../utils/fuzzySearch';
+import { classes } from '../styles';
 
 interface FactionListProps {
   factions: Faction[];
@@ -51,24 +52,9 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
   };
 
   return (
-    <div style={{
-      background: 'var(--color-surface)',
-      padding: '12px 16px',
-      borderRadius: '8px',
-      border: '2px solid var(--color-border)',
-      boxShadow: '0 4px 8px var(--color-shadow)',
-      width: '100%',
-      height: '30vh',
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '8px' 
-        }}>
-          <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--color-text)', textAlign: 'left' }}>
+    <div className={classes.container}>
+        <div className={classes.header}>
+          <div className={classes.title}>
             Factions:
           </div>
           <FormControl size="small">
@@ -124,40 +110,18 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
         </div>
         
         {/* Filter Input */}
-        <div style={{ marginBottom: '8px' }}>
+        <div className={classes.filterContainer}>
           <input
             type="text"
             placeholder="Filter factions..."
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
-                          style={{
-                width: '90%',
-                padding: '4px 8px',
-                fontSize: '11px',
-                border: '1px solid var(--color-border)',
-                borderRadius: '4px',
-                backgroundColor: 'var(--color-background)',
-                color: 'var(--color-text)'
-              }}
+            className={classes.filterInput}
           />
         </div>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '8px',
-          flex: 1,
-          overflowY: 'auto',
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#c1c1c1 #f1f1f1'
-        }}>
+        <div className={classes.scrollableList}>
           {displayFactions.length === 0 ? (
-            <div style={{
-              fontSize: '11px',
-              color: 'var(--color-textSecondary)',
-              padding: '8px',
-              textAlign: 'left',
-              fontStyle: 'italic'
-            }}>
+            <div className={classes.emptyState}>
               {filterText ? 'No factions match your filter' : 'No factions available'}
             </div>
           ) : (
@@ -165,63 +129,23 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
           <div key={faction.id}>
             <div 
               onClick={() => toggleFaction(faction.id)}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px',
-                cursor: 'pointer',
-                padding: '6px 8px',
-                borderRadius: '4px',
-                transition: 'background-color 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-overlay)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
+              className={classes.listItem}
             >
-              <div style={{
-                width: '16px',
-                height: '16px',
-                backgroundColor: faction.color,
-                border: '2px solid var(--color-border)',
-                borderRadius: '3px',
-              }} />
-              <span style={{ 
-                fontSize: '13px', 
-                color: 'var(--color-text)', 
-                fontWeight: '500',
-                flex: 1,
-                textAlign: 'left'
-              }}>
+              <div 
+                className={classes.factionColor}
+                style={{ backgroundColor: faction.color }}
+              />
+              <span className={classes.factionTitle}>
                 {faction.title}
               </span>
-              <span style={{ 
-                fontSize: '12px', 
-                color: '#666',
-                transition: 'transform 0.2s ease',
-                transform: expandedFactions.has(faction.id) ? 'rotate(90deg)' : 'rotate(0deg)'
-              }}>
+              <span className={expandedFactions.has(faction.id) ? classes.iconExpanded : classes.iconCollapsed}>
                 ▶
               </span>
             </div>
             {expandedFactions.has(faction.id) && (
-              <div style={{
-                fontSize: '12px',
-                color: '#666',
-                padding: '8px 12px',
-                marginTop: '4px',
-                marginLeft: '24px',
-                backgroundColor: '#f1f3f4',
-                borderRadius: '4px',
-                border: '1px solid #e0e0e0',
-                lineHeight: '1.4',
-                position: 'relative',
-                zIndex: 1005
-              }}>
+              <div className={classes.expandedContent}>
                 {faction.description && (
-                  <div style={{ marginBottom: '8px', textAlign: 'left' }}>
+                  <div className={classes.description}>
                     {faction.description}
                   </div>
                 )}
@@ -235,55 +159,19 @@ export const FactionList: React.FC<FactionListProps> = ({ factions, bookData, is
                   if (factionCharacters.length > 0) {
                     return (
                       <div>
-                        <div style={{ 
-                          fontSize: '11px', 
-                          fontWeight: 'bold', 
-                          color: '#333',
-                          marginBottom: '4px',
-                          borderTop: '1px solid #e0e0e0',
-                          paddingTop: '6px',
-                          textAlign: 'left'
-                        }}>
+                        <div className={classes.sectionTitle}>
                           Characters ({factionCharacters.length}):
                         </div>
-                        <div style={{ 
-                          display: 'flex', 
-                          flexDirection: 'column', 
-                          gap: '2px' 
-                        }}>
+                        <div className={classes.sectionList}>
                           {factionCharacters.map(character => (
-                            <div key={character.id} style={{
-                              fontSize: '11px',
-                              color: '#555',
-                              padding: '2px 0',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              cursor: onCharacterClick ? 'pointer' : 'default',
-                              textAlign: 'left'
-                            }}
-                            onClick={() => onCharacterClick?.(character)}
-                            onMouseEnter={(e) => {
-                              if (onCharacterClick) {
-                                e.currentTarget.style.color = '#007bff';
-                                e.currentTarget.style.textDecoration = 'underline';
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (onCharacterClick) {
-                                e.currentTarget.style.color = '#555';
-                                e.currentTarget.style.textDecoration = 'none';
-                              }
-                            }}
+                            <div key={character.id} 
+                              className={classes.sectionItem}
+                              onClick={() => onCharacterClick?.(character)}
                             >
-                              <span style={{ fontSize: '8px' }}>👤</span>
+                              <span className={classes.sectionIcon}>👤</span>
                               <span>{character.name}</span>
                               {character.aliases.length > 0 && (
-                                <span style={{ 
-                                  fontSize: '10px', 
-                                  color: '#888',
-                                  fontStyle: 'italic'
-                                }}>
+                                <span className={classes.sectionAlias}>
                                   ({character.aliases[0]})
                                 </span>
                               )}

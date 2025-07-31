@@ -8,6 +8,7 @@ import { buildChapterTree, type ChapterNode } from '../utils/chapterHierarchy';
 import AddIcon from '@mui/icons-material/Add';
 import { Home as HomeIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { classes } from '../styles';
 
 interface ChapterSliderProps {
   chapters: Chapter[];
@@ -54,22 +55,9 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   
 
   return (
-    <div style={{ width: '100%' }}>
+    <div>
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          padding: node.chapter.type === 'part' ? '12px 0px 4px 0px' : '4px 0px',
-          borderRadius: '4px',
-          backgroundColor: isSelected ? 'var(--color-buttonActive)' : 'transparent',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-buttonActive)' : 'rgba(0, 0, 0, 0.04)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = isSelected ? 'var(--color-buttonActive)' : 'transparent';
-        }}
+        className={`${classes.chapterItem} ${isSelected ? classes.chapterItemSelected : ''} ${node.chapter.type === 'part' ? classes.chapterItemPart : ''}`}
         onClick={() => {
           if (hasChildren) {
             onToggleExpanded(node.chapter.title);
@@ -82,18 +70,7 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
         
         <Typography
           variant={node.chapter.type === 'book' ? 'h6' : 'body2'}
-          style={{
-            fontSize: node.chapter.type === 'book' ? 14 : 11,
-            color: isSelected ? 'white' : 'var(--color-text)',
-            fontWeight: isSelected ? 'bold' : (
-              node.chapter.type === 'book' ? 'bold' : 
-              node.chapter.type === 'part' ? 'bold' : 
-              'normal'
-            ),
-            textDecoration: isSelected ? 'underline' : 'none',
-            flex: 1,
-            textAlign: 'left',
-          }}
+          className={`${classes.chapterTitle} ${isSelected ? classes.chapterTitleSelected : ''} ${node.chapter.type === 'book' ? classes.chapterTitleBook : ''} ${node.chapter.type === 'part' ? classes.chapterTitlePart : ''}`}
         >
           {node.chapter.title}
         </Typography>
@@ -220,7 +197,7 @@ export const ChapterSlider: React.FC<ChapterSliderProps> = ({
       <Box sx={{ mb: 3, pb: 2, borderBottom: '1px solid #eee' }}>
         <Button
           variant="outlined"
-          startIcon={isPreview ? <span style={{ fontSize: '16px' }}>✏️</span> : <HomeIcon />}
+          startIcon={isPreview ? <span className={classes.chapterIcon}>✏️</span> : <HomeIcon />}
           onClick={() => {
             if (isPreview && onExitPreview) {
               onExitPreview();

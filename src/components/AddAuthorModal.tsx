@@ -4,12 +4,13 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
   Button,
   Box,
-  Typography,
-  TextField
+  Typography
 } from '@mui/material';
 import type { Author } from '../models/Author';
+import { materialUITheme } from '../styles';
 
 interface AddAuthorModalProps {
   open: boolean;
@@ -22,7 +23,7 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
   onClose,
   onAuthorAdded
 }) => {
-  const [authorName, setAuthorName] = useState<string>('');
+  const [authorName, setAuthorName] = useState('');
 
   const handleSubmit = () => {
     if (authorName.trim()) {
@@ -31,7 +32,8 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
         name: authorName.trim()
       };
       onAuthorAdded(newAuthor);
-      handleClose();
+      setAuthorName('');
+      onClose();
     }
   };
 
@@ -47,17 +49,12 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
         onClose={handleClose}
         maxWidth="sm"
         fullWidth
-        sx={{
-          '& .MuiDialog-paper': {
-            backgroundColor: 'var(--color-background)',
-            color: 'var(--color-text)',
-          }
-        }}
+        sx={materialUITheme.dialog}
       >
-      <DialogTitle sx={{ color: 'var(--color-text)' }}>
+      <DialogTitle sx={materialUITheme.dialogTitle}>
         Add New Author
       </DialogTitle>
-      <DialogContent sx={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}>
+      <DialogContent sx={materialUITheme.dialogContent}>
         <Box sx={{ p: 2 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box>
@@ -74,40 +71,16 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
                 onChange={(e) => setAuthorName(e.target.value)}
                 placeholder="Enter the author's full name"
                 autoFocus
-                sx={{
-                  '& .MuiInputLabel-root': {
-                    color: 'var(--color-textSecondary)',
-                  },
-                  '& .MuiInputBase-root': {
-                    color: 'var(--color-text)',
-                    '& fieldset': {
-                      borderColor: 'var(--color-border)',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: 'var(--color-border)',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'var(--color-primary)',
-                    },
-                  },
-                  '& .MuiInputBase-input': {
-                    color: 'var(--color-text)',
-                  },
-                }}
+                sx={materialUITheme.textFieldAlt}
               />
             </Box>
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: 'var(--color-background)' }}>
+      <DialogActions sx={materialUITheme.dialogActions}>
         <Button 
           onClick={handleClose} 
-          sx={{ 
-            color: 'var(--color-textSecondary)',
-            '&:hover': {
-              backgroundColor: 'var(--color-hover)',
-            }
-          }}
+          sx={materialUITheme.buttonSecondary}
         >
           Cancel
         </Button>
@@ -115,17 +88,7 @@ export const AddAuthorModal: React.FC<AddAuthorModalProps> = ({
           onClick={handleSubmit} 
           variant="contained"
           disabled={!authorName.trim()}
-          sx={{
-            backgroundColor: 'var(--color-primary)',
-            color: 'var(--color-onPrimary)',
-            '&:hover': {
-              backgroundColor: 'var(--color-primaryHover)',
-            },
-            '&:disabled': {
-              backgroundColor: 'var(--color-disabled)',
-              color: 'var(--color-onDisabled)',
-            }
-          }}
+          sx={materialUITheme.button}
         >
           Add Author
         </Button>

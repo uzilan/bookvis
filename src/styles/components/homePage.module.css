@@ -1,0 +1,267 @@
+/* HomePage Component Styles */
+
+.homePageMainContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
+  width: 100%;
+  position: relative;
+}
+
+.homePageContentContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.homePageHeader {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.homePageTitle {
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.homePageHeroSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 16px;
+  gap: 24px;
+}
+
+.homePageHeroImageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 120px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.homePageHeroImageWrapper:hover {
+  transform: translateY(-2px);
+}
+
+.homePageHeroImage {
+  width: 100%;
+  max-width: 100px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.homePageHeroImage:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.homePageHeroActions {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.homePageInfoButton {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .homePageInfoButton {
+    display: block;
+  }
+}
+
+.homePageInfoButton.open {
+  right: 400px;
+}
+
+.homePageInfoButtonContent {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  color: var(--color-textSecondary);
+  border: 2px solid var(--color-textSecondary);
+  border-radius: 8px 0 0 8px;
+  padding: 16px 8px;
+  background-color: var(--color-background);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.homePageInfoButtonContent:hover {
+  background-color: var(--color-backgroundHover);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.homePageInfoButtonIcon {
+  transform: rotate(90deg);
+  margin-bottom: 4px;
+}
+
+.homePageInfoButtonText {
+  font-weight: bold;
+}
+
+/* HomePage-specific components */
+.bookCard {
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.bookCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.bookCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.bookCardTitle {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.bookCardAuthor {
+  font-size: 14px;
+  color: var(--color-textSecondary);
+  margin-bottom: 8px;
+}
+
+.bookCardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.bookCardButton {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bookCardButton.primary {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+}
+
+.bookCardButton.secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.bookCardButton.danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.bookCardButton:hover {
+  opacity: 0.8;
+}
+
+.filterSection {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filterTitle {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.filterControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.uploadSection {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.uploadButton {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.uploadButton:hover {
+  background: var(--color-primaryDark);
+}
+
+.uploadStatus {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.uploadStatus.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.uploadStatus.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.uploadStatus.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+} 

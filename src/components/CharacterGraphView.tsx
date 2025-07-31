@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { CharacterGraph } from './CharacterGraph';
 import { CreateBookModal } from './CreateBookModal';
-
+import { FirebaseLoading, FirebaseNoData } from './Loading';
 
 import type { Book } from '../models/Book';
 import type { BookData } from '../models/BookData';
 import type { SchemaBookData } from '../schema/models/SchemaBookData';
 import { FirebaseService } from '../services/firebase.ts';
 import { convertBookDataToSchema } from '../utils/schemaToBookDataConverter';
+import { classes } from '../styles';
 
 export const CharacterGraphView: React.FC = () => {
   const { bookId } = useParams<{ bookId?: string }>();
@@ -131,11 +132,11 @@ export const CharacterGraphView: React.FC = () => {
 
   // Show loading or no data message if no book data
   if (loading && !previewBookData && !previewDataFromUrl && !isPreviewFromLocation) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>Loading books from Firebase...</div>;
+    return <FirebaseLoading />;
   }
 
   if (!bookData) {
-    return <div style={{ padding: '20px', textAlign: 'center' }}>No books available from Firebase.</div>;
+    return <FirebaseNoData />;
   }
 
   // Find the current chapter by matching selectedChapter with id
@@ -240,8 +241,8 @@ export const CharacterGraphView: React.FC = () => {
 
 
   return (
-    <div className="App" style={{ width: '100vw', height: '100vh' }}>
-      <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden' }}>
+    <div className={`App ${classes.appContainer}`}>
+      <div className={classes.appContent}>
         <CharacterGraph
           key={previewBookData ? `preview-${previewBookData.book.id}` : selectedBook?.id || 'no-book'}
           bookData={displayBookData}

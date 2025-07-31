@@ -10,6 +10,7 @@ import {
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import type { SchemaBookData } from '../../schema/models/SchemaBookData';
 import { fuzzySearch } from '../../utils/fuzzySearch';
+import { classes, materialUITheme } from '../../styles';
 
 
 interface FactionsTabProps {
@@ -146,15 +147,15 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 3, height: '100%' }}>
+    <Box className={classes.factionsTabContainer}>
       {/* Left Column - Add Faction Form */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box className={classes.factionsTabLeftColumn}>
         <Typography variant="subtitle1" gutterBottom>
           Add New Faction
         </Typography>
         
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box className={classes.factionsTabForm}>
+          <Box className={classes.factionsTabFormRow}>
             <TextField
               fullWidth
               label="Faction Name"
@@ -166,61 +167,21 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                   handleAddFactionWithForm();
                 }
               }}
-              sx={{
-                '& .MuiInputLabel-root': {
-                  color: 'var(--color-textSecondary)',
-                },
-                '& .MuiInputBase-input': {
-                  color: 'var(--color-textSecondary) !important',
-                },
-                '& .MuiInputBase-input::placeholder': {
-                  color: 'var(--color-textSecondary)',
-                },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    border: '1px solid #e0e0e0 !important',
-                  },
-                  '&:hover fieldset': {
-                    border: '1px solid #e0e0e0 !important',
-                  },
-                  '&.Mui-focused fieldset': {
-                    border: '1px solid #1976d2 !important',
-                  },
-                },
-              }}
+              sx={materialUITheme.textField}
             />
             <Box
-                            sx={{
-                position: 'relative',
-                width: '65px',
-                height: '55px',
-                borderRadius: '50%',
-                backgroundColor: newFactionColor,
-                border: '2px solid #ccc',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: 0,
-                margin: 0,
-                boxSizing: 'border-box'
-              }}
+              className={classes.factionsTabColorPicker}
+              style={{ backgroundColor: newFactionColor }}
             >
               <input
                 type="color"
                 value={newFactionColor}
                 onChange={(e) => setNewFactionColor(e.target.value)}
-                style={{
-                  position: 'absolute',
-                  opacity: 0,
-                  width: '100%',
-                  height: '100%',
-                  cursor: 'pointer'
-                }}
+                className={classes.factionsTabColorInput}
               />
             </Box>
           </Box>
-          <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -0.8, display: 'block' }}>
+          <Typography variant="caption" sx={materialUITheme.caption}>
             Enter the name of a faction in your story (e.g., "The Fellowship", "The Dark Forces", "The Elves"). You can accept the suggested color or choose a new one by clicking the color circle.
           </Typography>
           <TextField
@@ -231,28 +192,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
             onChange={(e) => setNewFactionDescription(e.target.value)}
             multiline
             rows={2}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: 'var(--color-textSecondary)',
-              },
-              '& .MuiInputBase-input': {
-                color: 'var(--color-textSecondary) !important',
-              },
-              '& .MuiInputBase-input::placeholder': {
-                color: 'var(--color-textSecondary)',
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  border: '1px solid #e0e0e0 !important',
-                },
-                '&:hover fieldset': {
-                  border: '1px solid #e0e0e0 !important',
-                },
-                '&.Mui-focused fieldset': {
-                  border: '1px solid #1976d2 !important',
-                },
-              },
-            }}
+            sx={materialUITheme.textField}
           />
           <Typography variant="caption" sx={{ color: 'var(--color-textSecondary)', mt: -1, mb: 1 }}>
             Describe the faction's role, goals, or significance in the story
@@ -262,20 +202,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
             variant="contained"
             onClick={handleAddFactionWithForm}
             disabled={!newFactionName.trim()}
-            sx={{
-              backgroundColor: 'var(--color-buttonActive)',
-              color: 'white',
-              border: '1px solid var(--color-border)',
-              '&:hover': {
-                backgroundColor: 'var(--color-buttonActiveHover)',
-                border: '1px solid var(--color-border)',
-              },
-              '&:disabled': {
-                backgroundColor: 'var(--color-disabled)',
-                color: 'var(--color-onDisabled)',
-                border: '1px solid var(--color-border)',
-              },
-            }}
+            className={classes.factionsTabButton}
           >
             Add Faction
           </Button>
@@ -286,14 +213,12 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
       <Divider 
         orientation="vertical" 
         flexItem 
-        sx={{ 
-          backgroundColor: 'var(--color-border)',
-        }}
+        className={classes.factionsTabDivider}
       />
 
       {/* Right Column - Factions List */}
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box className={classes.factionsTabRightColumn}>
+        <Box className={classes.factionsTabHeader}>
           <Typography variant="subtitle1">
             Current Factions ({bookData.factions.length})
           </Typography>
@@ -344,19 +269,7 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
               .map((faction) => (
               <Box
                 key={faction.id}
-                sx={{
-                  display: 'flex',
-                  justifyContent: editingFactionId === faction.id ? 'flex-start' : 'space-between',
-                  alignItems: 'center',
-                  p: 1,
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '4px',
-                  backgroundColor: 'var(--color-surface)',
-                  cursor: editingFactionId === faction.id ? 'default' : 'pointer',
-                  '&:hover': {
-                    backgroundColor: editingFactionId === faction.id ? 'var(--color-surface) !important' : 'var(--color-hover) !important'
-                  }
-                }}
+                className={classes.factionsTabFactionItem}
                 onClick={() => {
                   if (editingFactionId !== faction.id) {
                     handleStartEditingFaction(faction);
@@ -364,61 +277,24 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                 }}
               >
                 {editingFactionId === faction.id ? (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box className={classes.factionsTabForm}>
+                    <Box className={classes.factionsTabFormRow}>
                       <TextField
                         fullWidth
                         label="Faction Name"
                         value={editingFactionName}
                         onChange={(e) => setEditingFactionName(e.target.value)}
-                        sx={{
-                          '& .MuiInputLabel-root': {
-                            color: 'var(--color-textSecondary)',
-                          },
-                          '& .MuiInputBase-input': {
-                            color: 'var(--color-textSecondary) !important',
-                          },
-                          '& .MuiOutlinedInput-root': {
-                            '& fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&:hover fieldset': {
-                              border: '1px solid #e0e0e0 !important',
-                            },
-                            '&.Mui-focused fieldset': {
-                              border: '1px solid #1976d2 !important',
-                            },
-                          },
-                        }}
+                        sx={materialUITheme.textField}
                       />
                       <Box
-                        sx={{
-                          position: 'relative',
-                          width: '65px',
-                          height: '55px',
-                          borderRadius: '50%',
-                          backgroundColor: editingFactionColor,
-                          border: '2px solid #ccc',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          padding: 0,
-                          margin: 0,
-                          boxSizing: 'border-box'
-                        }}
+                        className={classes.factionsTabColorPicker}
+                        style={{ backgroundColor: editingFactionColor }}
                       >
                         <input
                           type="color"
                           value={editingFactionColor}
                           onChange={(e) => setEditingFactionColor(e.target.value)}
-                          style={{
-                            position: 'absolute',
-                            opacity: 0,
-                            width: '100%',
-                            height: '100%',
-                            cursor: 'pointer'
-                          }}
+                          className={classes.factionsTabColorInput}
                         />
                       </Box>
                     </Box>
@@ -430,80 +306,39 @@ export const FactionsTab: React.FC<FactionsTabProps> = ({
                       placeholder="Enter faction description"
                       multiline
                       rows={2}
-                      sx={{
-                        '& .MuiInputLabel-root': {
-                          color: 'var(--color-textSecondary)',
-                        },
-                        '& .MuiInputBase-input': {
-                          color: 'var(--color-textSecondary) !important',
-                        },
-                        '& .MuiInputBase-input::placeholder': {
-                          color: 'var(--color-textSecondary)',
-                        },
-                        '& .MuiOutlinedInput-root': {
-                          '& fieldset': {
-                            border: '1px solid #e0e0e0 !important',
-                          },
-                          '&:hover fieldset': {
-                            border: '1px solid #e0e0e0 !important',
-                          },
-                          '&.Mui-focused fieldset': {
-                            border: '1px solid #1976d2 !important',
-                          },
-                        },
-                      }}
+                      sx={materialUITheme.textField}
                     />
-                    <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Box className={classes.factionsTabButtonGroup}>
                       <Button
                         size="small"
                         color="primary"
                         onClick={() => handleSaveFactionEdit(faction.id)}
-                        sx={{
-                          backgroundColor: 'var(--color-buttonActive)',
-                          color: 'white',
-                          border: '1px solid var(--color-border)',
-                          '&:hover': {
-                            backgroundColor: 'var(--color-buttonActiveHover)',
-                            border: '1px solid var(--color-border)',
-                          },
-                        }}
+                        className={classes.factionsTabButton}
                       >
                         Save
                       </Button>
                       <Button
                         size="small"
                         onClick={handleCancelFactionEdit}
-                        sx={{
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                          border: '1px solid var(--color-border)',
-                          '&:hover': {
-                            backgroundColor: 'var(--color-hover)',
-                          },
-                        }}
+                        className={classes.factionsTabButtonSecondary}
                       >
                         Cancel
                       </Button>
                     </Box>
                   </Box>
                 ) : (
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box className={classes.factionsTabFactionItem}>
+                    <Box className={classes.factionsTabFactionHeader}>
                       <Box
-                        sx={{
-                          width: 16,
-                          height: 16,
-                          borderRadius: '50%',
-                          backgroundColor: faction.color,
-                          border: '1px solid #ccc'
-                        }}
+                        className={classes.factionsTabColorDot}
+                        style={{ backgroundColor: faction.color }}
                       />
-                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'var(--color-text)' }}>
+                      <Typography variant="body2" className={classes.textPrimary}>
                         {faction.title}
                       </Typography>
                     </Box>
                     {faction.description && (
-                      <Typography variant="caption" sx={{ ml: 2, color: 'var(--color-textSecondary)' }}>
+                      <Typography variant="caption" className={classes.textSecondary}>
                         {faction.description}
                       </Typography>
                     )}
